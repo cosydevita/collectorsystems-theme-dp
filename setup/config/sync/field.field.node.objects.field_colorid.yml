@@ -1,0 +1,23 @@
+uuid: 767da7c5-5a31-4856-b4a5-307b894cd31b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_colorid
+    - node.type.objects
+id: node.objects.field_colorid
+field_name: field_colorid
+entity_type: node
+bundle: objects
+label: ColorId
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,19 @@
+uuid: d80c43ad-b774-4add-ae5e-c20e2605ddbb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_createdbyusername
+    - node.type.groups
+id: node.groups.field_createdbyusername
+field_name: field_createdbyusername
+entity_type: node
+bundle: groups
+label: CreatedByUserName
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

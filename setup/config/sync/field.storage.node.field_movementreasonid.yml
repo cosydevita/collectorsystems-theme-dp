@@ -1,0 +1,20 @@
+uuid: c5ef17b0-54d0-4322-b889-e0b5400b5711
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_movementreasonid
+field_name: field_movementreasonid
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

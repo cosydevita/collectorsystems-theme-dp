@@ -1,0 +1,19 @@
+uuid: f1b33e15-96ff-4932-8043-429dcec5a900
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_objectdate
+    - node.type.objects
+id: node.objects.field_objectdate
+field_name: field_objectdate
+entity_type: node
+bundle: objects
+label: ObjectDate
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

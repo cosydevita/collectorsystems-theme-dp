@@ -1,0 +1,19 @@
+uuid: 64cd48c1-9faf-4dc8-ba64-5b1366feed19
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_thumbsizeurl
+    - node.type.exhibitions
+id: node.exhibitions.field_thumbsizeurl
+field_name: field_thumbsizeurl
+entity_type: node
+bundle: exhibitions
+label: ThumbSizeURL
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,19 @@
+uuid: 4e01fd78-f682-4623-a522-45184b5f0d46
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_nomenclatureobjectname
+    - node.type.objects
+id: node.objects.field_nomenclatureobjectname
+field_name: field_nomenclatureobjectname
+entity_type: node
+bundle: objects
+label: NomenclatureObjectName
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

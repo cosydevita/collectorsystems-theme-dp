@@ -1,0 +1,21 @@
+uuid: 4471839b-6d86-49fa-a61e-1d8bc9bd0eb9
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_exhibitionsubject
+field_name: field_exhibitionsubject
+entity_type: node
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

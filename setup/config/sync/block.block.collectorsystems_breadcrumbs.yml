@@ -1,0 +1,22 @@
+uuid: 0d7fd00f-67f5-4399-a224-8069d8da2c22
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - collectorsystems
+_core:
+  default_config_hash: y0bXRvKYQQKkf_RVxA3aOPGpIfKKsDOzzrWYCgjxJ9Y
+id: collectorsystems_breadcrumbs
+theme: collectorsystems
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }

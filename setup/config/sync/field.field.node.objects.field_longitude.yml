@@ -1,0 +1,19 @@
+uuid: 1eeb850a-0462-46db-86e9-29afd3241c44
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_longitude
+    - node.type.objects
+id: node.objects.field_longitude
+field_name: field_longitude
+entity_type: node
+bundle: objects
+label: Longitude
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

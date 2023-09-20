@@ -1,0 +1,22 @@
+1) copy config folder
+
+2) make changes in the settings.php for config path $settings['config_sync_directory'] = 'config/sync';
+
+3) copy modules folder
+
+4) copy theme folder
+
+5) remove the shortcut links from drupal site admin/config/user-interface/shortcut/manage/default/customize
+
+6) generate the uuid for current site and put in to the system.site config file
+
+drush config-get "system.site" uuid
+
+
+For drush install: https://drupalize.me/tutorial/install-drush-using-composer
+
+7) We need to run "drush cim" command
+
+8) /admin/config/custom_api_integration/settings run this url to add API details
+
+9) /admin/config/api/get_art get all data

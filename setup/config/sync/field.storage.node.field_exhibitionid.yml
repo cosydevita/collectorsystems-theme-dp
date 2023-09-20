@@ -1,0 +1,20 @@
+uuid: a4702f75-fa5f-4165-ac68-5f667ff0d8e0
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_exhibitionid
+field_name: field_exhibitionid
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

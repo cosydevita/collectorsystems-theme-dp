@@ -1,0 +1,25 @@
+uuid: 2bdb5d43-d05b-4967-8bf7-fd5e0a212c75
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_artistid
+    - node.type._artists
+id: node._artists.field_artistid
+field_name: field_artistid
+entity_type: node
+bundle: _artists
+label: ArtistId
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 12345
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

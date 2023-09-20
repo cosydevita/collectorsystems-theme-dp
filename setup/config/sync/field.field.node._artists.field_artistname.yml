@@ -1,0 +1,19 @@
+uuid: 10787141-2387-4e5a-acd4-cb2419a02678
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_artistname
+    - node.type._artists
+id: node._artists.field_artistname
+field_name: field_artistname
+entity_type: node
+bundle: _artists
+label: ArtistName
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,21 @@
+uuid: d8b6f992-ff9c-4f36-8ce1-2de22bdd3f76
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_locationconditiondate
+    - node.type.objects
+  module:
+    - datetime
+id: node.objects.field_locationconditiondate
+field_name: field_locationconditiondate
+entity_type: node
+bundle: objects
+label: LocationConditionDate
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

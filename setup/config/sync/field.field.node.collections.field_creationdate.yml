@@ -1,0 +1,21 @@
+uuid: 8bfaebd7-6b7c-417d-9285-9317b586c8f3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_creationdate
+    - node.type.collections
+  module:
+    - datetime
+id: node.collections.field_creationdate
+field_name: field_creationdate
+entity_type: node
+bundle: collections
+label: CreationDate
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

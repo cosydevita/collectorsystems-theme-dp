@@ -1,0 +1,19 @@
+uuid: ce2fe627-4df6-4e25-bdd9-035f5d1cd7b9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_catalognumber
+    - node.type.objects
+id: node.objects.field_catalognumber
+field_name: field_catalognumber
+entity_type: node
+bundle: objects
+label: CatalogNumber
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

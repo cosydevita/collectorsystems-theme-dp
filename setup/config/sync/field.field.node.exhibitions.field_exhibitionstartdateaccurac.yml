@@ -1,0 +1,19 @@
+uuid: d9cc86a9-6883-458f-aa97-ce0b91e45410
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_exhibitionstartdateaccurac
+    - node.type.exhibitions
+id: node.exhibitions.field_exhibitionstartdateaccurac
+field_name: field_exhibitionstartdateaccurac
+entity_type: node
+bundle: exhibitions
+label: ExhibitionStartDateAccuracy
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

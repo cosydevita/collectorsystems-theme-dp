@@ -1,0 +1,19 @@
+uuid: 03b542db-0bdc-4d25-ba8d-859c070f2266
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_groupdescription
+    - node.type.groups
+id: node.groups.field_groupdescription
+field_name: field_groupdescription
+entity_type: node
+bundle: groups
+label: GroupDescription
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

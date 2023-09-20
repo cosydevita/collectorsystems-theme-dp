@@ -1,0 +1,19 @@
+uuid: 444c9a0b-242d-44c1-a677-b38c95a775a9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_cityoforigin
+    - node.type.objects
+id: node.objects.field_cityoforigin
+field_name: field_cityoforigin
+entity_type: node
+bundle: objects
+label: CityOfOrigin
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

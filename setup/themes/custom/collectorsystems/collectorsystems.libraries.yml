@@ -1,0 +1,43 @@
+global-styling:
+  version: VERSION
+  css:
+    theme:
+      '//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css': { type: external}
+      assets/css/style.css: {}
+      assets/lib/animate/animate.css: {}
+      assets/lib/animate/animate.min.css: {}
+      assets/css/cs_theme_bootstrap-lightbox.css: {}
+      assets/css/cs_theme_bootstrap.min.css: {}
+      assets/css/cs_theme_select2.min.css: {}
+      assets/css/cs_theme_style.css: {}
+      assets/css/mobile.css: {}
+      assets/fontawesome/css/all.min.css: {}
+      assets/lib/owlcarousel/assets/owl.carousel.css: {}
+      assets/lib/owlcarousel/assets/owl.carousel.min.css: {}
+      assets/lib/owlcarousel/assets/owl.theme.default.css: {}
+      assets/lib/owlcarousel/assets/owl.theme.default.min.css: {}
+      assets/lib/owlcarousel/assets/owl.theme.green.css: {}
+      assets/lib/owlcarousel/assets/owl.theme.green.min.css: {}
+      css/font-awesome.css: {}
+
+global-script:
+  js:
+    '//maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js': { type: external}
+    '//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js': { type: external}
+    '//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js': { type: external}
+    js/main.js: {}
+    js/cdragZoom.js: {}
+    js/cs_theme_main.js: {}
+    js/cs_theme_jquery_3.4.1.min.js: {}
+    js/cs_theme_select2.min.js: {}
+    js/cs_theme_bootstrap.bundle.min.js: {}
+    js/cs_theme_bootstrap-lightbox.js: {}
+    assets/lib/owlcarousel/owl.carousel.js: {}
+    assets/lib/owlcarousel/owl.carousel.min.js: {}
+    assets/lib/waypoints/waypoints.min.js: {}
+    assets/lib/wow/wow.js: {}
+    assets/lib/wow/wow.min.js: {}
+
+  dependencies:
+    - core/jquery
+    - core/drupal

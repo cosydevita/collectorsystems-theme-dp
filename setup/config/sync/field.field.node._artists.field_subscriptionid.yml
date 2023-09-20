@@ -1,0 +1,23 @@
+uuid: d82c28b6-4509-4f28-91df-4ad19205e553
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_subscriptionid
+    - node.type._artists
+id: node._artists.field_subscriptionid
+field_name: field_subscriptionid
+entity_type: node
+bundle: _artists
+label: SubscriptionId
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

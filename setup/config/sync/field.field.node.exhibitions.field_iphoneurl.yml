@@ -1,0 +1,19 @@
+uuid: e9bb2dbe-e2d1-4e84-9497-9c724785ff6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_iphoneurl
+    - node.type.exhibitions
+id: node.exhibitions.field_iphoneurl
+field_name: field_iphoneurl
+entity_type: node
+bundle: exhibitions
+label: iPhoneURL
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,23 @@
+uuid: 74a3d2c2-7ad8-479f-9edd-f150149ecf1c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_othernumbertypeid
+    - node.type.objects
+id: node.objects.field_othernumbertypeid
+field_name: field_othernumbertypeid
+entity_type: node
+bundle: objects
+label: OtherNumberTypeId
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

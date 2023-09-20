@@ -1,0 +1,21 @@
+uuid: 353ddd23-9ae4-43c6-bd02-c1b43a052ddc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_creationdate
+    - node.type.exhibitions
+  module:
+    - datetime
+id: node.exhibitions.field_creationdate
+field_name: field_creationdate
+entity_type: node
+bundle: exhibitions
+label: CreationDate
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

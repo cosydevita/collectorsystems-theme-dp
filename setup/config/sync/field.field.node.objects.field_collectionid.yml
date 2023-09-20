@@ -1,0 +1,23 @@
+uuid: 6f66ebb7-40bd-44de-8d31-5a1c0bf51b80
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_collectionid
+    - node.type.objects
+id: node.objects.field_collectionid
+field_name: field_collectionid
+entity_type: node
+bundle: objects
+label: CollectionId
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

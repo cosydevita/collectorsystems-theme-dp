@@ -1,0 +1,23 @@
+uuid: 5700aee7-0acc-4717-a414-0af12b06ca86
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_descendentcount
+    - node.type.collections
+id: node.collections.field_descendentcount
+field_name: field_descendentcount
+entity_type: node
+bundle: collections
+label: DescendentCount
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,23 @@
+uuid: 26c82d1c-33b9-4d3c-9557-a6ca2532b916
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_rightextent
+    - node.type.collections
+id: node.collections.field_rightextent
+field_name: field_rightextent
+entity_type: node
+bundle: collections
+label: RightExtent
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

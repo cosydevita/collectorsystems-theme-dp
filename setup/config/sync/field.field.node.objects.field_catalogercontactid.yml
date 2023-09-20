@@ -1,0 +1,23 @@
+uuid: b925f52e-62fa-4304-96e5-545665d6465e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_catalogercontactid
+    - node.type.objects
+id: node.objects.field_catalogercontactid
+field_name: field_catalogercontactid
+entity_type: node
+bundle: objects
+label: CatalogerContactId
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

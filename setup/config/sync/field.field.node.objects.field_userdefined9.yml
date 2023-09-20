@@ -1,0 +1,19 @@
+uuid: d60d2bab-6991-4d63-9c43-84b9eddc0cf4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_userdefined9
+    - node.type.objects
+id: node.objects.field_userdefined9
+field_name: field_userdefined9
+entity_type: node
+bundle: objects
+label: UserDefined9
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

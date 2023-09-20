@@ -1,0 +1,21 @@
+uuid: 3f38e738-1c9f-475d-952a-3776f8940d8d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_objectdescription
+    - node.type.objects
+  module:
+    - text
+id: node.objects.field_objectdescription
+field_name: field_objectdescription
+entity_type: node
+bundle: objects
+label: ObjectDescription
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

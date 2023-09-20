@@ -1,0 +1,19 @@
+uuid: 4a18d1fa-e140-494e-83e7-9af06a730556
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_thumbsizeurl
+    - node.type.groups
+id: node.groups.field_thumbsizeurl
+field_name: field_thumbsizeurl
+entity_type: node
+bundle: groups
+label: ThumbSizeURL
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,23 @@
+uuid: c33c1de6-309b-42ba-92e4-92c0edac19dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_exhibitionstartdateday
+    - node.type.exhibitions
+id: node.exhibitions.field_exhibitionstartdateday
+field_name: field_exhibitionstartdateday
+entity_type: node
+bundle: exhibitions
+label: ExhibitionStartDateDay
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

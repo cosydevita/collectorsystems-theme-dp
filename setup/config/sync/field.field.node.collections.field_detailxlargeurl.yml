@@ -1,0 +1,19 @@
+uuid: 97df1158-5bee-4717-b15f-df628246ac2a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_detailxlargeurl
+    - node.type.collections
+id: node.collections.field_detailxlargeurl
+field_name: field_detailxlargeurl
+entity_type: node
+bundle: collections
+label: DetailXLargeURL
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

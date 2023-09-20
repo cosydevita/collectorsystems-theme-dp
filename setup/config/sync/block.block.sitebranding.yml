@@ -1,0 +1,23 @@
+uuid: 033f4f31-348b-4a36-a668-950a66359072
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - collectorsystems
+id: sitebranding
+theme: collectorsystems
+region: site_branding
+weight: 0
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: false
+  use_site_slogan: false
+visibility: {  }

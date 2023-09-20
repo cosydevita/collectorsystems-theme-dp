@@ -1,0 +1,21 @@
+uuid: fc0731e9-0f0d-4d03-8fce-c0412f893549
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_inventorymemo
+    - node.type.objects
+  module:
+    - text
+id: node.objects.field_inventorymemo
+field_name: field_inventorymemo
+entity_type: node
+bundle: objects
+label: InventoryMemo
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

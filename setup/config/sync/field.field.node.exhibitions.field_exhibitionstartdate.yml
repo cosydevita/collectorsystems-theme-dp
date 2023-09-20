@@ -1,0 +1,21 @@
+uuid: 2585d267-6eda-41e4-88ea-0a3f6bac0b28
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_exhibitionstartdate
+    - node.type.exhibitions
+  module:
+    - datetime
+id: node.exhibitions.field_exhibitionstartdate
+field_name: field_exhibitionstartdate
+entity_type: node
+bundle: exhibitions
+label: ExhibitionStartDate
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

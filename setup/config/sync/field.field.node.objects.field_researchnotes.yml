@@ -1,0 +1,21 @@
+uuid: 8c757217-3482-4b2f-8159-185b1efba7a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_researchnotes
+    - node.type.objects
+  module:
+    - text
+id: node.objects.field_researchnotes
+field_name: field_researchnotes
+entity_type: node
+bundle: objects
+label: ResearchNotes
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

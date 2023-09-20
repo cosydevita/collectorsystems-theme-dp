@@ -1,0 +1,19 @@
+uuid: 79d29baf-301d-4918-bdd1-13622b1bc6d4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_subject
+    - node.type.objects
+id: node.objects.field_subject
+field_name: field_subject
+entity_type: node
+bundle: objects
+label: Subject
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

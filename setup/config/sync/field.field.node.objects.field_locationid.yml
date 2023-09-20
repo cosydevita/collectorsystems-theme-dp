@@ -1,0 +1,23 @@
+uuid: 952a12e5-5943-46b4-ba74-97469b9ad016
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_locationid
+    - node.type.objects
+id: node.objects.field_locationid
+field_name: field_locationid
+entity_type: node
+bundle: objects
+label: LocationId
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,21 @@
+uuid: e9b64d61-a061-4cbf-8d95-e376f3a2bd41
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_exhibitionstartdateyear
+    - node.type.exhibitions
+  module:
+    - datetime
+id: node.exhibitions.field_exhibitionstartdateyear
+field_name: field_exhibitionstartdateyear
+entity_type: node
+bundle: exhibitions
+label: ExhibitionStartDateYear
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

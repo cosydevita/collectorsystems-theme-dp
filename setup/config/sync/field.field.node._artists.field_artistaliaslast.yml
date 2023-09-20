@@ -1,0 +1,19 @@
+uuid: aeb5721e-efde-479e-8beb-9aeafc5d0ee7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_artistaliaslast
+    - node.type._artists
+id: node._artists.field_artistaliaslast
+field_name: field_artistaliaslast
+entity_type: node
+bundle: _artists
+label: ArtistAliasLast
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

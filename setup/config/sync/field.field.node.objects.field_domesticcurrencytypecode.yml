@@ -1,0 +1,19 @@
+uuid: df4a26e8-010a-4627-a8f5-c8c188dda591
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_domesticcurrencytypecode
+    - node.type.objects
+id: node.objects.field_domesticcurrencytypecode
+field_name: field_domesticcurrencytypecode
+entity_type: node
+bundle: objects
+label: DomesticCurrencyTypeCode
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
