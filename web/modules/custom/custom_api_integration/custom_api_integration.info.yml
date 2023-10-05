@@ -1,9 +1,0 @@
-name: 'Custom API Integration'
-type: module
-description: 'Integrate with an external API.'
-core_version_requirement: ^9 || ^10
-package: Custom
-dependencies:
-  - node
-config: 
-  - custom_api_integration.settings
