@@ -1,0 +1,23 @@
+uuid: 49243356-3b65-4445-a6f2-dbf7d956ba6f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_userdefineddomesticcurren2
+    - node.type.objects
+id: node.objects.field_userdefineddomesticcurren2
+field_name: field_userdefineddomesticcurren2
+entity_type: node
+bundle: objects
+label: UserDefinedDomesticCurrency2
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: float

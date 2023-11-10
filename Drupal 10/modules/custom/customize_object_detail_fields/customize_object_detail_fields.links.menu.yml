@@ -1,0 +1,6 @@
+customize_object_detail_fields.settings_form:
+  title: 'Customize Object Detail Fields Settings Form'
+  route_name: customize_object_detail_fields.settings_form
+  description: 'Customize which fields to show in the object details page'
+  parent: system.admin_config_system
+  weight: 99

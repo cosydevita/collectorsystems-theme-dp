@@ -1,0 +1,213 @@
+@media (min-width : 981px) {
+    .mob-header{
+        display: none;
+    }
+    .form-group-two {
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+    }
+    .only-mobile {
+        display: none;
+    }
+}
+
+@media (max-width : 980px){
+    .bottom-footer img {
+        width: 100%;
+        max-width: 10rem;
+    }
+    .only-desktop{
+        display: none;
+    }
+    .top-header .logo{
+        display: none;
+    }
+    .mob-header .menu {
+        padding: 24px 0;
+        border-left: 1px solid #C4CBCF;
+        padding-left: 16px;
+    }
+    .mob-header .container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .top-header {
+        background: var(--primary);
+    }
+    
+    .top-menu a {
+        color: #fff;
+        border: none;
+        padding: 0 0.5rem;
+        height: 34px;
+        font-size: 12px;
+    }
+    
+    .top-menu a img {
+        display: none;
+    }
+    
+    .top-header .container {
+        justify-content: flex-end;
+    }
+    .blog.single-v {
+        flex-direction: column;
+    }
+    
+    .image-single img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .blog:not(.single-v) .image {
+        float: left;
+        width: 114px;
+        height: 80px;
+        margin-right: 12px;
+        margin-bottom: 10px;
+    }
+    
+    .blog .content {
+        padding: 10px;
+    }
+    .team-box .img {
+        height: 160px;
+    }
+    .upcoming .col-md-4.col-12 {
+        margin-bottom: 2rem;
+    }
+    
+    .insights-access .col-md-9.col-12 {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    
+    .ctas {
+        display: block;
+        width: 100%;
+    }
+    
+    .ctas a {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    
+    .ctas a img {
+        width: 100%;
+        margin-bottom: 0;
+    }
+    
+    footer > .container {
+        padding: 2rem 1.5rem;
+    }
+    
+    .f-widget {
+        flex-wrap: wrap;
+    }
+    
+    .f-widget > div {
+        border-top: 1px solid #494F52;
+        padding-top: 2rem;
+        border-left: 0;
+        padding: 2rem 0 0;
+        width: 100%;
+    }
+    
+    body .f-cn01 {
+        padding-bottom: 2rem;
+    }
+    .main-header {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 19;
+        overflow: auto;
+        right: -100%;
+        transition: all 0.3s ease-in;
+    }
+    .main-header.show{
+        right: 0;
+    }
+    
+    .main-header .container {
+        flex-direction: column-reverse;
+        justify-content: flex-end;
+    }
+    
+    .menus a {
+        display: block;
+        margin-bottom: 1rem;
+        font-size: 25px;
+        margin-right: 0;
+    }
+    
+    .search {
+        margin: 10px 0 1rem;
+    }
+    .menu img {
+        height: 22px;
+        object-fit: contain;
+        width: 38px;
+    }
+    body .abs-image {
+        width: 120%;
+        top: -17%;
+        bottom: auto;
+        right: -35%;
+        left: auto;
+    }
+    
+    section.banner {
+        overflow: hidden;
+    }
+    section.insights > .container:last-child {
+        background: #fff;
+        padding: 1rem;
+    }
+    
+    .blog:not(.single-v) {
+        border-bottom: 1px solid #DCE4E8;
+        margin-bottom: 16px;
+    }
+    section.insights {
+        padding: 2rem 0 0;
+    }
+    
+    section.insights .more-link {
+        margin: 0.5rem 0;
+    }
+    section.insights {
+        padding: 2rem 0 0;
+    }
+    
+    section.insights .more-link {
+        margin: 0.5rem 0;
+    }
+    
+    section.our-team {
+        padding: 2rem 0;
+    }
+    
+    section.upcoming {
+        padding: 3rem 0 2rem;
+    }
+    
+    section.upcoming .more-link {
+        margin: 0;
+    }
+    
+    section.insights-access {
+        padding: 0 1.5rem 3rem;
+    }
+    
+    section.form h2 {
+        margin-bottom: 2rem;
+    }
+    
+    footer .f-logo {
+        margin-bottom: 2rem;
+    }
+}

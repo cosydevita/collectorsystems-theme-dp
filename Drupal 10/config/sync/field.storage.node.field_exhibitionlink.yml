@@ -1,0 +1,19 @@
+uuid: 790b9b66-f9d8-47be-93f2-c7f6f1fd6fd6
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - node
+id: node.field_exhibitionlink
+field_name: field_exhibitionlink
+entity_type: node
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

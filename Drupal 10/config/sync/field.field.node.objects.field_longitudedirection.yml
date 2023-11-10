@@ -1,0 +1,19 @@
+uuid: aa3e48ca-7eb8-4e5f-bca5-346e44ccdc85
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_longitudedirection
+    - node.type.objects
+id: node.objects.field_longitudedirection
+field_name: field_longitudedirection
+entity_type: node
+bundle: objects
+label: LongitudeDirection
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,23 @@
+uuid: 33edd288-9166-42a4-93d2-e0db0d760166
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_leftextent
+    - node.type.collections
+id: node.collections.field_leftextent
+field_name: field_leftextent
+entity_type: node
+bundle: collections
+label: LeftExtent
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

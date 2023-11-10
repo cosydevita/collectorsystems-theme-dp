@@ -1,0 +1,18 @@
+uuid: 7edff0c4-edda-4968-81d5-7f516ec90e85
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: GROUPS
+type: groups
+description: ''
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

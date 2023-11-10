@@ -1,0 +1,23 @@
+uuid: 649bb678-c263-4da5-8d36-96aab988b65a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_responsibledepartmentid
+    - node.type.objects
+id: node.objects.field_responsibledepartmentid
+field_name: field_responsibledepartmentid
+entity_type: node
+bundle: objects
+label: ResponsibleDepartmentId
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

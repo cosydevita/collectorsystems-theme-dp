@@ -1,0 +1,19 @@
+uuid: 8b647727-c648-4bf0-afd5-3abb6ba41657
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_artistrace
+    - node.type._artists
+id: node._artists.field_artistrace
+field_name: field_artistrace
+entity_type: node
+bundle: _artists
+label: ArtistRace
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

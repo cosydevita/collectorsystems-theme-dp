@@ -1,0 +1,23 @@
+uuid: f06e7337-07dc-4d1e-8a9c-928fec3964f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_groupid
+    - node.type.groups
+id: node.groups.field_groupid
+field_name: field_groupid
+entity_type: node
+bundle: groups
+label: GroupId
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

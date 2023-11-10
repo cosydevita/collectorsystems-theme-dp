@@ -1,0 +1,20 @@
+uuid: a6beea54-78f4-4cf6-acca-dea4baad1e3d
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_locationtypeid
+field_name: field_locationtypeid
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

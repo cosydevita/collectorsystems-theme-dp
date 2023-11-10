@@ -1,0 +1,19 @@
+uuid: 3e025e35-cd5e-48ed-8555-c416c6d38546
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_thumbsizeurl
+    - node.type.collections
+id: node.collections.field_thumbsizeurl
+field_name: field_thumbsizeurl
+entity_type: node
+bundle: collections
+label: ThumbSizeURL
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,27 @@
+uuid: ab1476fd-e7aa-4dea-82e4-e78ebf2e49d8
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - collectorsystems
+id: homepageimage
+theme: collectorsystems
+region: highlighted
+weight: 0
+provider: null
+plugin: 'block_content:c38e5b6a-752b-4218-8a96-b3754a0bc533'
+settings:
+  id: 'block_content:c38e5b6a-752b-4218-8a96-b3754a0bc533'
+  label: 'Home Page Image'
+  label_display: '0'
+  provider: core
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /none

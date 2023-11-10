@@ -1,0 +1,23 @@
+uuid: f36d0283-733f-451e-a257-7916e01ac36a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_exhibitionenddateday
+    - node.type.exhibitions
+id: node.exhibitions.field_exhibitionenddateday
+field_name: field_exhibitionenddateday
+entity_type: node
+bundle: exhibitions
+label: ExhibitionEndDateDay
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

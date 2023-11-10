@@ -1,0 +1,23 @@
+uuid: 1574349f-9c04-47b0-b374-24876abcbe28
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_parentcollectionid
+    - node.type.collections
+id: node.collections.field_parentcollectionid
+field_name: field_parentcollectionid
+entity_type: node
+bundle: collections
+label: ParentCollectionId
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

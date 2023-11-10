@@ -1,0 +1,25 @@
+.form-fields-wrapper{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  grid-gap: 40px;
+}
+select#select-field1, select#select-field2{
+  height: 500px;
+  min-width: 400px;
+
+}
+.form-item__label{
+  font-size: 20px !important;
+  margin-bottom: 20px !important;
+  display: block !important;
+
+}
+select#select-field1 option, select#select-field2 option{
+  padding: 15px 5px;
+}
+.move-buttons{
+  display: flex;
+  flex-direction: column;
+  grid-gap: 5px;
+}

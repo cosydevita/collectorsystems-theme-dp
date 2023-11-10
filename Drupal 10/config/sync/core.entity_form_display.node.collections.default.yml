@@ -1,0 +1,273 @@
+uuid: 46e6362e-13eb-4ace-9d33-590137df4289
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.collections.body
+    - field.field.node.collections.field_collectionid
+    - field.field.node.collections.field_collectionimageattachmenti
+    - field.field.node.collections.field_collectionname
+    - field.field.node.collections.field_createdbyusername
+    - field.field.node.collections.field_creationdate
+    - field.field.node.collections.field_descendentcount
+    - field.field.node.collections.field_detaillargeurl
+    - field.field.node.collections.field_detailurl
+    - field.field.node.collections.field_detailxlargeurl
+    - field.field.node.collections.field_fileurl
+    - field.field.node.collections.field_fullcollectionname
+    - field.field.node.collections.field_ipadurl
+    - field.field.node.collections.field_iphoneurl
+    - field.field.node.collections.field_leftextent
+    - field.field.node.collections.field_midsizeurl
+    - field.field.node.collections.field_modificationdate
+    - field.field.node.collections.field_modifiedbyusername
+    - field.field.node.collections.field_parentcollectionid
+    - field.field.node.collections.field_rightextent
+    - field.field.node.collections.field_rootcollectionid
+    - field.field.node.collections.field_slideshowurl
+    - field.field.node.collections.field_subscriptionid
+    - field.field.node.collections.field_thumbsizeurl
+    - node.type.collections
+  module:
+    - datetime
+    - path
+    - text
+id: node.collections.default
+targetEntityType: node
+bundle: collections
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 121
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  created:
+    type: datetime_timestamp
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_collectionid:
+    type: number
+    weight: 122
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_collectionimageattachmenti:
+    type: number
+    weight: 134
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_collectionname:
+    type: string_textfield
+    weight: 123
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_createdbyusername:
+    type: string_textfield
+    weight: 125
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_creationdate:
+    type: datetime_default
+    weight: 135
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_descendentcount:
+    type: number
+    weight: 133
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_detaillargeurl:
+    type: string_textfield
+    weight: 136
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_detailurl:
+    type: string_textfield
+    weight: 137
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_detailxlargeurl:
+    type: string_textfield
+    weight: 138
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_fileurl:
+    type: string_textfield
+    weight: 139
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_fullcollectionname:
+    type: string_textfield
+    weight: 128
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_ipadurl:
+    type: string_textfield
+    weight: 140
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_iphoneurl:
+    type: string_textfield
+    weight: 141
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_leftextent:
+    type: number
+    weight: 130
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_midsizeurl:
+    type: string_textfield
+    weight: 143
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_modificationdate:
+    type: datetime_default
+    weight: 124
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_modifiedbyusername:
+    type: string_textfield
+    weight: 126
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_parentcollectionid:
+    type: number
+    weight: 127
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_rightextent:
+    type: number
+    weight: 131
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_rootcollectionid:
+    type: number
+    weight: 129
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_slideshowurl:
+    type: string_textfield
+    weight: 142
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_subscriptionid:
+    type: number
+    weight: 132
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thumbsizeurl:
+    type: string_textfield
+    weight: 144
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  promote:
+    type: boolean_checkbox
+    weight: 15
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 120
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  sticky:
+    type: boolean_checkbox
+    weight: 16
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

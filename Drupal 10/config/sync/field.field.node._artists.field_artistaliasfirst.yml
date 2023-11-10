@@ -1,0 +1,19 @@
+uuid: 535f6cd1-ced0-49c9-a745-c14438c316c4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_artistaliasfirst
+    - node.type._artists
+id: node._artists.field_artistaliasfirst
+field_name: field_artistaliasfirst
+entity_type: node
+bundle: _artists
+label: ArtistAliasFirst
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

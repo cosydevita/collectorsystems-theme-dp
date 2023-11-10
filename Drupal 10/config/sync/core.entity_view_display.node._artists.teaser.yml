@@ -1,0 +1,98 @@
+uuid: c1934880-bb28-42b3-8deb-c865f6c88d9c
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node._artists.body
+    - field.field.node._artists.field_artistalias
+    - field.field.node._artists.field_artistaliasfirst
+    - field.field.node._artists.field_artistaliaslast
+    - field.field.node._artists.field_artistbio
+    - field.field.node._artists.field_artistcompany
+    - field.field.node._artists.field_artistethnicity
+    - field.field.node._artists.field_artistfirst
+    - field.field.node._artists.field_artistgenderid
+    - field.field.node._artists.field_artistid
+    - field.field.node._artists.field_artistlast
+    - field.field.node._artists.field_artistlink
+    - field.field.node._artists.field_artistlocale
+    - field.field.node._artists.field_artistmemo
+    - field.field.node._artists.field_artistname
+    - field.field.node._artists.field_artistnationality
+    - field.field.node._artists.field_artistphotoattachmentid
+    - field.field.node._artists.field_artistrace
+    - field.field.node._artists.field_artistschool
+    - field.field.node._artists.field_artistyears
+    - field.field.node._artists.field_createdbyusername
+    - field.field.node._artists.field_creationdate
+    - field.field.node._artists.field_detaillargeurl
+    - field.field.node._artists.field_detailurl
+    - field.field.node._artists.field_detailxlargeurl
+    - field.field.node._artists.field_fileurl
+    - field.field.node._artists.field_gettyid
+    - field.field.node._artists.field_ipadurl
+    - field.field.node._artists.field_iphoneurl
+    - field.field.node._artists.field_midsizeurl
+    - field.field.node._artists.field_modificationdate
+    - field.field.node._artists.field_modifiedbyusername
+    - field.field.node._artists.field_slideshowurl
+    - field.field.node._artists.field_subscriptionid
+    - field.field.node._artists.field_thumbsizeurl
+    - node.type._artists
+  module:
+    - text
+    - user
+id: node._artists.teaser
+targetEntityType: node
+bundle: _artists
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_artistalias: true
+  field_artistaliasfirst: true
+  field_artistaliaslast: true
+  field_artistbio: true
+  field_artistcompany: true
+  field_artistethnicity: true
+  field_artistfirst: true
+  field_artistgenderid: true
+  field_artistid: true
+  field_artistlast: true
+  field_artistlink: true
+  field_artistlocale: true
+  field_artistmemo: true
+  field_artistname: true
+  field_artistnationality: true
+  field_artistphotoattachmentid: true
+  field_artistrace: true
+  field_artistschool: true
+  field_artistyears: true
+  field_createdbyusername: true
+  field_creationdate: true
+  field_detaillargeurl: true
+  field_detailurl: true
+  field_detailxlargeurl: true
+  field_fileurl: true
+  field_gettyid: true
+  field_ipadurl: true
+  field_iphoneurl: true
+  field_midsizeurl: true
+  field_modificationdate: true
+  field_modifiedbyusername: true
+  field_slideshowurl: true
+  field_subscriptionid: true
+  field_thumbsizeurl: true

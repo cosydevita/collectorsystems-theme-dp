@@ -1,0 +1,23 @@
+uuid: 7c2fb3be-fc11-497b-974b-a962b9369ae6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_objectstatuscode
+    - node.type.objects
+id: node.objects.field_objectstatuscode
+field_name: field_objectstatuscode
+entity_type: node
+bundle: objects
+label: ObjectStatusCode
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

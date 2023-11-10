@@ -1,0 +1,9 @@
+name: 'Customize Object Detail Fields:'
+type: module
+description: 'Custom module for customizing Object Detail Fields'
+core_version_requirement: ^9 || ^10
+package: Custom
+dependencies:
+  - node
+config:
+  - customize_object_detail_fields.settings

@@ -1,0 +1,19 @@
+uuid: 5a09e64e-3577-4595-88a9-ff6bb809dd08
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_slideshowurl
+    - node.type.collections
+id: node.collections.field_slideshowurl
+field_name: field_slideshowurl
+entity_type: node
+bundle: collections
+label: SlideShowURL
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

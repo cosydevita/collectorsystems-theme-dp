@@ -1,0 +1,23 @@
+uuid: e7ab7cbb-3148-4d55-86ba-331c401c88e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_deleted
+    - node.type.objects
+id: node.objects.field_deleted
+field_name: field_deleted
+entity_type: node
+bundle: objects
+label: Deleted
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'true'
+  off_label: 'false'
+field_type: boolean

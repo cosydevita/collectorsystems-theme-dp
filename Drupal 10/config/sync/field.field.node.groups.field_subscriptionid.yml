@@ -1,0 +1,23 @@
+uuid: 070bf1fb-8d10-403b-9531-7f4f9e43d58a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_subscriptionid
+    - node.type.groups
+id: node.groups.field_subscriptionid
+field_name: field_subscriptionid
+entity_type: node
+bundle: groups
+label: SubscriptionId
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

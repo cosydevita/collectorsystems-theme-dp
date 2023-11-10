@@ -1,0 +1,24 @@
+uuid: 98e29ffe-64ae-48e7-8ccf-16b889a475a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.exhibitions
+  module:
+    - text
+id: node.exhibitions.body
+field_name: body
+entity_type: node
+bundle: exhibitions
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary

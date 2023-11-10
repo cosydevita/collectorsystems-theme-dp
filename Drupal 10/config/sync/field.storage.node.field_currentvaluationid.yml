@@ -1,0 +1,20 @@
+uuid: c459d1f0-b97f-486e-99ef-909c1dab3773
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_currentvaluationid
+field_name: field_currentvaluationid
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

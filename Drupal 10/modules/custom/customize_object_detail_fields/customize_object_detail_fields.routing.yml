@@ -1,0 +1,7 @@
+customize_object_detail_fields.settings_form:
+  path: '/admin/config/customize_object_detail_fields/settings'
+  defaults:
+    _form: '\Drupal\customize_object_detail_fields\Form\CustomizeObjectDetailFieldsSettingsForm'
+    _title: 'Custom API Integration Settings'
+  requirements:
+    _permission: 'administer site configuration'

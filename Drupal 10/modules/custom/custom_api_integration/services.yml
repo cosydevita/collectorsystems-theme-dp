@@ -1,0 +1,3 @@
+services:
+  http_client:
+    class: Drupal\Core\Http\ClientFactory

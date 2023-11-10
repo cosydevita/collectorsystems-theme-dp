@@ -1,0 +1,22 @@
+uuid: 1380bea9-2300-430b-9ac4-bc2117164962
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_locationaccessmemo
+    - node.type.objects
+  module:
+    - text
+id: node.objects.field_locationaccessmemo
+field_name: field_locationaccessmemo
+entity_type: node
+bundle: objects
+label: LocationAccessMemo
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

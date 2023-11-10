@@ -1,0 +1,9 @@
+customize_object_detail_fields:
+  version: 1.x
+  js:
+    js/customize_object_detail_fields.js: {}
+  css:
+    theme:
+      css/customize_object_detail_fields.css: {}
+  dependencies:
+    - core/jquery

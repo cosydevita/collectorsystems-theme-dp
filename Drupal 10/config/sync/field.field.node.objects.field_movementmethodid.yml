@@ -1,0 +1,23 @@
+uuid: db9dfbea-bc86-4f6b-acf7-4e5ea3f18e86
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_movementmethodid
+    - node.type.objects
+id: node.objects.field_movementmethodid
+field_name: field_movementmethodid
+entity_type: node
+bundle: objects
+label: MovementMethodId
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

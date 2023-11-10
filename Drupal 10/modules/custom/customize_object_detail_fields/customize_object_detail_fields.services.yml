@@ -1,0 +1,4 @@
+services:
+  customize_object_detail_fields.field_info_service:
+    class: Drupal\customize_object_detail_fields\FieldInfoService
+    arguments: ['@entity_field.manager', '@entity_type.bundle.info']

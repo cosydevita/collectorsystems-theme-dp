@@ -1,0 +1,23 @@
+uuid: c83528b3-3808-4d28-8100-a1b09e39e1a8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_objectclassificationcode
+    - node.type.objects
+id: node.objects.field_objectclassificationcode
+field_name: field_objectclassificationcode
+entity_type: node
+bundle: objects
+label: ObjectClassificationCode
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

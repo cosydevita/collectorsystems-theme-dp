@@ -1,0 +1,19 @@
+uuid: f2e7450e-1a8d-4f06-b514-1e5c88b1f443
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_maker
+    - node.type.objects
+id: node.objects.field_maker
+field_name: field_maker
+entity_type: node
+bundle: objects
+label: Maker
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

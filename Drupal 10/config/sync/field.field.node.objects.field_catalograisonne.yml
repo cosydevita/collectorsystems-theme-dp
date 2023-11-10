@@ -1,0 +1,23 @@
+uuid: cbfd83ed-9578-4a97-a5f8-aaf57d2be1b6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_catalograisonne
+    - node.type.objects
+id: node.objects.field_catalograisonne
+field_name: field_catalograisonne
+entity_type: node
+bundle: objects
+label: CatalogRaisonne
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

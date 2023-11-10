@@ -1,0 +1,21 @@
+uuid: 5a6c5bb1-cfcc-4c5d-9178-acb994b04220
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_userdefineddate1
+    - node.type.objects
+  module:
+    - datetime
+id: node.objects.field_userdefineddate1
+field_name: field_userdefineddate1
+entity_type: node
+bundle: objects
+label: UserDefinedDate1
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

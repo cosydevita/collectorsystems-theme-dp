@@ -1,0 +1,19 @@
+uuid: 2e81c0f9-4273-4526-98b6-207deb3b26ea
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_detaillargeurl
+    - node.type.exhibitions
+id: node.exhibitions.field_detaillargeurl
+field_name: field_detaillargeurl
+entity_type: node
+bundle: exhibitions
+label: DetailLargeURL
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

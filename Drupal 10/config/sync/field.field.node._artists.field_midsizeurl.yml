@@ -1,0 +1,19 @@
+uuid: e94b88c5-5c9c-4e4f-9c1f-cfc3dd1b7974
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_midsizeurl
+    - node.type._artists
+id: node._artists.field_midsizeurl
+field_name: field_midsizeurl
+entity_type: node
+bundle: _artists
+label: MidSizeURL
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

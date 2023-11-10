@@ -1,0 +1,19 @@
+uuid: 61e12b69-0a36-446a-a698-10a672de2005
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - text
+id: node.field_locationsecuritymemo
+field_name: field_locationsecuritymemo
+entity_type: node
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

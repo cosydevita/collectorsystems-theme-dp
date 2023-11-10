@@ -1,0 +1,19 @@
+uuid: 1a2232af-d400-49bd-882d-b264514b271b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_slideshowurl
+    - node.type._artists
+id: node._artists.field_slideshowurl
+field_name: field_slideshowurl
+entity_type: node
+bundle: _artists
+label: SlideShowURL
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

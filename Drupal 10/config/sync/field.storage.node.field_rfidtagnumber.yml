@@ -1,0 +1,21 @@
+uuid: 6c0e6992-04a2-4d60-ba4d-b598916e4836
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_rfidtagnumber
+field_name: field_rfidtagnumber
+entity_type: node
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

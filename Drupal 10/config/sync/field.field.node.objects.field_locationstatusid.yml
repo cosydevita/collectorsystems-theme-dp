@@ -1,0 +1,23 @@
+uuid: fd1520a5-7298-40f7-bd53-55b2f2244ef9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_locationstatusid
+    - node.type.objects
+id: node.objects.field_locationstatusid
+field_name: field_locationstatusid
+entity_type: node
+bundle: objects
+label: LocationStatusId
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

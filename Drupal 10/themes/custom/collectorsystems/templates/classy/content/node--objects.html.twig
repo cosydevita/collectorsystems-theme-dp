@@ -1,0 +1,318 @@
+{#
+/**
+ * @file
+ * Bartik's theme implementation to display a node.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - node.getCreatedTime() will return the node creation timestamp.
+ *   - node.hasField('field_example') returns TRUE if the node bundle includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   - node.isPublished() will return whether the node is published or not.
+ *   Calling other methods, such as node.delete(), will result in an exception.
+ *   See \Drupal\node\Entity\Node for a full list of public properties and
+ *   methods for the node object.
+ * - label: (optional) The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - author_picture: The node author user entity, rendered using the "compact"
+ *   view mode.
+ * - metadata: Metadata for this node.
+ * - date: (optional) Themed creation date field.
+ * - author_name: (optional) Themed author name field.
+ * - url: Direct URL of the current node.
+ * - display_submitted: Whether submission information should be displayed.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - node: The current template type (also known as a "theming hook").
+ *   - node--type-[type]: The current node type. For example, if the node is an
+ *     "Article" it would result in "node--type-article". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - node--view-mode-[view_mode]: The View Mode of the node; for example, a
+ *     teaser would result in: "node--view-mode-teaser", and
+ *     full: "node--view-mode-full".
+ *   The following are controlled through the node publishing options.
+ *   - node--promoted: Appears on nodes promoted to the front page.
+ *   - node--sticky: Appears on nodes ordered above other non-sticky nodes in
+ *     teaser listings.
+ *   - node--unpublished: Appears on unpublished nodes visible only to site
+ *     admins.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main
+ *   content tag that appears in the template.
+ * - author_attributes: Same as attributes, except applied to the author of
+ *   the node tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - teaser: Flag for the teaser state. Will be true if view_mode is 'teaser'.
+ * - page: Flag for the full page state. Will be true if view_mode is 'full'.
+ * - readmore: Flag for more state. Will be true if the teaser content of the
+ *   node cannot hold the main body content.
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_node()
+ */
+#}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'clearfix',
+  ]
+%}
+<div class="row g-5">
+	<div class="cs-theme-navigation pull-right mb-3">
+		<div class="cs-theme-navigation pull-right mb-3">
+			<ul class="pagination justify-content-end">
+				<li class="page-item">
+					{{ content|without(
+            'field_objectid','field_inventorynumber','field_uniqueid','field_collectionid', 'field_inventorycontactid','field_deleted', 'field_mainimageattachmentid', 'field_locationid','field_subscriptionid','field_objectstatuscode','field_objectstatus','field_objectconversionrate','field_objectclassificationcode','field_objectclassification','field_objectdescription',
+  'field_creditline','field_maindimensionid','field_provenance','field_signatures','field_objectcurrencytypeid',
+'field_userdefined5','field_userdefined6','field_userdefined7','field_userdefined8','field_userdefined9','field_userdefined14','field_userdefined38','field_userdefined39','field_userdefined40','field_userdefinedrichtext1','field_userdefinedrichtext2','field_userdefinedrichtext3','field_userdefinedrichtext12',
+  'field_allfields',
+  'field_alternatetitle',
+  'field_artistid',
+  'field_currentvaluationid',
+  'field_currentinsurancepolicyid',
+  'field_currentconditionid',
+  'field_domesticexpensetotal',
+  'field_rfidtagnumber',
+  'field_objecttypeid',
+  'field_othernumbertypeid',
+  'field_responsibledepobjectmentid',
+  'field_completenessid',
+  'field_completenessdate',
+  'field_completenessnote',
+  'field_movementreferencenumber',
+  'field_movementauthorizerid',
+  'field_movementauthorizationdate',
+  'field_movementcontactid',
+  'field_movementmethodid',
+  'field_movementmemo',
+  'field_movementreasonid',
+  'field_plannedremoval',
+  'field_locationreferencenamenumbe',
+  'field_locationtypeid',
+  'field_locationaccessmemo',
+  'field_locationconditionmemo',
+  'field_locationconditiondate',
+  'field_locationsecuritymemo',
+  'field_objectdate',
+  'field_countryorigin',
+  'field_categorystyle',
+  'field_maker',
+  'field_alternatetitle',
+  'field_subject',
+  'field_stateoforigin',
+  'field_countyoforigin',
+  'field_cityoforigin',
+  'field_medium',
+  'field_edition',
+  'field_nomenclatureobjectname',
+  'field_locationstatusid',
+  'field_colorid',
+  'field_objectcurrencytypecode',
+  'field_domesticcurrencytypecode',
+  'field_itemcount',
+  'field_othernumbers',
+  'field_material',
+  'field_state',
+  'field_catalognumber',
+  'field_collectiontitle',
+  'field_catalogercontactid',
+  'field_catalogdate',
+  'field_relatedcollections',
+  'field_durationseconds',
+  'field_duration',
+  'field_quantity',
+  'field_researchnotes',
+  'field_collectorcontactid',
+  'field_latitudedirection',
+  'field_latitude',
+  'field_longitudedirection',
+  'field_longitude',
+  'field_allfields',
+  'field_objectistid',
+  'field_suiteportfolio',
+  'field_catalograisonne',
+  'field_form',
+  'field_techniqueid',
+  'field_referencenotes',
+  'field_fileurl',
+  'field_thumbsizeurl',
+  'field_midsizeurl',
+  'field_detailurl',
+  'field_detaillargeurl',
+  'field_detailxlargeurl',
+  'field_iphoneurl',
+  'field_ipadurl',
+  'field_slideshowurl',
+  'field_inventorymemo',
+  'field_userdefinedcurrency1',
+  'field_userdefinedcurrency2',
+  'field_userdefineddomesticcurrenc',
+  'field_userdefineddomesticcurren2',
+  'field_term',
+  'field_userdefineddate1',
+  'field_userdefineddate2'
+
+) }}
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row g-5">
+		<div class="col-xl-6 col-lg-6 py-4 mx-auto wow fadeInDown" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInDown;">
+			<!-- New slider-->
+			<!-- Carousel A Start-->
+				<div
+				id="carouselA" class="carousel slide carouselBoth carousel-fade pointer-event" data-bs-ride="carousel" data-bs-interval="false"> <!-- Wrapper for carousel items -->
+				<div class="carousel-inner" role="listbox">
+					<div class="carousel-item" data-slide-number="0">
+
+						<a class="carouselAToggle" data-big="{{content.field_fileurl.0}}" href="javascript:;">
+							<img class="d-block img-fluid" src="{{content.field_detaillargeurl.0 }}" alt="Slide 1">
+						</a>
+					</div>
+					<div class="carousel-item active" data-slide-number="1">
+
+						<a class="carouselAToggle" data-big="{{content.field_fileurl.0}}" href="javascript:;">
+							<img class="d-block img-fluid" src="{{content.field_detaillargeurl.0 }}" alt="Slide 1">
+						</a>
+					</div>
+
+				</div>
+			</div>
+			<!-- Carousel A End -->
+			<div class="row d-flex align-items-center" style="display:none !important;">
+				<div class="col-10 text-lg-end">
+					<div class="object_detail_info image_copyright_on">
+						<i class="bi bi-info-circle"></i>&nbsp;Due to right restrictions, this image cannot be enlarged, viewed at full screen, or downloaded.</div>
+				</div>
+				<div class="col-2 object_detail_share pe-0">
+					<ul class="float-end d-flex mt-3" style="list-style:none;">
+						<li class="image_copyright_off">
+							<button type="button" id="btnDownload" class="btn-download" title="Download">
+								<i class="bi bi-download"></i>
+							</button>
+						</li>
+						<li>
+							<button type="button" id="btnShare" class="btn-share" data-bs-title="Share" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content-id="sharePopoverHiddenContent">
+								<i class="bi bi-share"></i>
+							</button>
+						</li>
+						<li class="image_copyright_off">
+							<button type="button" id="btnExpand" class="btn-expand" title="Enlarge image">
+								<i class="bi bi-arrows-angle-expand"></i>
+							</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- Navigation -->
+
+			<div class="row mt-4" style="justify-content: center; background-color: transparent;">
+				<div class="prev-part col-md-1 my-auto" style="display: none;">
+					<a class="carousel-control-prev" href="#carouselA" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon">
+							<i class="bi bi-chevron-left"></i>
+						</span>
+					</a>
+				</div>
+				<div id="carouselB" class="carousel slide carouselBoth carousel-fade col-md-10 pointer-event" data-bs-ride="carousel" data-bs-interval="false">
+					<div class="carousel-inner thumb-carousel row mx-0" role="listbox" style="background: rgb(240, 240, 240);">
+
+
+						<div class="carousel-item active" data-slide-number="0">
+							<div id="carousel-selector-0" class="thumb col-3 px-1 py-2" data-target="#carouselA" data-slide-to="0">
+								<img class="d-block img-fluid" src="{{content.field_thumbsizeurl.0}}" alt="">
+
+							</div>
+							<div id="carousel-selector-1" class="thumb col-3 px-1 py-2 selected" data-target="#carouselA" data-slide-to="1">
+								<img class="d-block img-fluid" src="{{content.field_thumbsizeurl.0}}" alt="">
+
+							</div>
+						</div>
+
+						<div class="carousel-item" data-slide-number="1">
+							<div id="carousel-selector-1" class="thumb col-3 px-1 py-2 selected" data-target="#carouselA" data-slide-to="1">
+								<img class="d-block img-fluid" src="{{content.field_thumbsizeurl.0}}" alt="">
+
+							</div>
+							<div id="carousel-selector-0" class="thumb col-3 px-1 py-2" data-target="#carouselA" data-slide-to="0">
+								<img class="d-block img-fluid" src="{{content.field_thumbsizeurl.0}}" alt="">
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="next-part col-md-1 my-auto" style="display: none;">
+					<a class="carousel-control-next" href="#carouselA" data-bs-slide="next">
+						<span class="carousel-control-next-icon">
+							<i class="bi bi-chevron-right"></i>
+						</span>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		{# <div class="col-xl-6 col-lg-6 mx-auto cs-object-details wow fadeInDown" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInDown;">
+			<p class="my-2">{{ label }}</p>
+			<p class="my-2">{{ content.field_objectdate }}</p>
+			<p class="mb-3">
+				{{ content.field_inventorynumber }}
+			</p>
+		</div> #}
+
+    <div class="col-xl-6 col-lg-6 mx-auto cs-object-details wow fadeInDown" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInDown;">
+      {% for field_value in detail_fields_values %}
+
+          <p class="mb-3">
+            {{ field_value }}
+          </p>
+      {% endfor %}
+    </div>
+
+
+	</div>
+	<span id="sharePopoverHiddenContent" class="visually-hidden">
+		<ul class="objectdetail_sharetools">
+			<li>
+				<a target="_blank" href="javascript:;" class="btn-media email">
+					<i class="bi bi-envelope"></i>
+				</a>
+			</li>
+			<li>
+				<a target="_blank" href="javascript:;" class="btn-media facebook">
+					<i class="bi bi-facebook"></i>
+				</a>
+			</li>
+			<!-- <li><a target="_blank" href="javascript:;" class="btn-media instagram">
+																					            <i class="bi bi-instagram"></i>
+																					          </a></li> -->
+			<li>
+				<a target="_blank" href="javascript:;" class="btn-media twitter">
+					<i class="bi bi-twitter"></i>
+				</a>
+			</li>
+			<!-- <li><a href="javascript:;" onclick="window.print()"><img src="https://simplesharebuttons.com/images/somacro/print.png" alt="Print" /></a></li> -->
+		</ul>
+	</span>

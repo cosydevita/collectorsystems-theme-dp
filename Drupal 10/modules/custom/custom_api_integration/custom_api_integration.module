@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function custom_api_integration_theme() {
+  return [
+    'custom_api_integration_response' => [
+      'variables' => [
+        'response' => '',
+        'show_field_labels' => '',
+        'enable_zoom' => '',
+        'filter_keywords' => '',
+        'items_per_page' => '',
+        'footer_text' => '',
+      ],
+    ],
+  ];
+}
+/**
+ * Implements hook_preprocess_HOOK() for block templates.
+ */
+function custom_api_integration_preprocess_page(&$variables)
+{
+    $variables['#attached']['library'][] = 'custom_api_integration/custom_api_integration';
+}  

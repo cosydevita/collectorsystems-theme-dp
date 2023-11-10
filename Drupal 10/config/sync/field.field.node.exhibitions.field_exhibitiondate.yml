@@ -1,0 +1,19 @@
+uuid: af010626-7e22-4848-aba2-fa9f5f5efc72
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_exhibitiondate
+    - node.type.exhibitions
+id: node.exhibitions.field_exhibitiondate
+field_name: field_exhibitiondate
+entity_type: node
+bundle: exhibitions
+label: ExhibitionDate
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

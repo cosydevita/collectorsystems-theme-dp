@@ -1,0 +1,19 @@
+uuid: 20816ba1-9440-407c-98e3-9325a0e1d1d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ipadurl
+    - node.type.collections
+id: node.collections.field_ipadurl
+field_name: field_ipadurl
+entity_type: node
+bundle: collections
+label: iPadURL
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
