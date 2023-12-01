@@ -6,6 +6,7 @@
     const $curerentSelectField1Options = $('#current-select-field1-options');
     const $curerentSelectField2Options = $('#current-select-field2-options');
 
+
     $('#select-field1 option').removeAttr("selected");
     $('#select-field2 option').removeAttr("selected");
 
@@ -72,6 +73,7 @@
       $selectField1.val('')
       $selectField2.val('')
 
+
     });
 
     $('#move-to-select1').on('click', function() {
@@ -88,8 +90,9 @@
       moveOption(1);
     });
 
+
     //Form submit
-    $('#customize-object-detail-fields-settings-form').submit( function(event){
+    $('#customize-object-list-fields-settings-form').submit( function(event){
 
       update_curerentSelectField1Options()
       update_curerentSelectField2Options()
@@ -100,9 +103,9 @@
           alert("Please select field(s) to save!");
           return false;
       }
-      if(selectedOptsForDisplay.length > 20)
+      if(selectedOptsForDisplay.length > 5)
       {
-        alert("You can not save more than 20 fields!");
+        alert("You can not save more than 5 fields!");
           return false;
       }
 

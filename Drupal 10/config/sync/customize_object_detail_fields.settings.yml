@@ -1,125 +1,423 @@
-select_field2:
-  title: Title
 select_field1:
-  body: Body
-  field_allfields: AllFields
-  field_alternatetitle: AlternateTitle
-  field_artistid: ArtistId
-  field_catalogdate: CatalogDate
-  field_catalogercontactid: CatalogerContactId
-  field_catalognumber: CatalogNumber
-  field_catalograisonne: CatalogRaisonne
-  field_categorystyle: CategoryStyle
-  field_cityoforigin: CityOfOrigin
-  field_collectionid: CollectionId
-  field_collectiontitle: CollectionTitle
-  field_collectorcontactid: CollectorContactId
-  field_colorid: ColorId
-  field_completenessdate: CompletenessDate
-  field_completenessid: CompletenessId
-  field_completenessnote: CompletenessNote
-  field_countryorigin: CountryOrigin
-  field_countyoforigin: CountyOfOrigin
-  field_createdbyusername: CreatedByUserName
-  field_creationdate: CreationDate
-  field_creditline: CreditLine
-  field_currentconditionid: CurrentConditionId
-  field_currentinsurancepolicyid: CurrentInsurancePolicyId
-  field_currentvaluationid: CurrentValuationId
-  field_deleted: Deleted
-  field_detaillargeurl: DetailLargeURL
-  field_detailurl: DetailURL
-  field_detailxlargeurl: DetailXLargeURL
-  field_domesticcurrencytypecode: DomesticCurrencyTypeCode
-  field_domesticexpensetotal: DomesticExpenseTotal
-  field_duration: Duration
-  field_durationseconds: DurationSeconds
-  field_edition: Edition
-  field_fileurl: FileURL
-  field_form: Form
-  field_inventorycontactid: InventoryContactId
-  field_inventorydate: InventoryDate
-  field_inventorymemo: InventoryMemo
-  field_inventorynumber: InventoryNumber
-  field_ipadurl: iPadURL
-  field_iphoneurl: iPhoneURL
-  field_itemcount: ItemCount
-  field_latitude: Latitude
-  field_latitudedirection: LatitudeDirection
-  field_locationaccessmemo: LocationAccessMemo
-  field_locationconditiondate: LocationConditionDate
-  field_locationconditionmemo: LocationConditionMemo
-  field_locationid: LocationId
-  field_locationreferencenamenumbe: LocationReferenceNameNumber
-  field_locationsecuritymemo: LocationSecurityMemo
-  field_locationstatusid: LocationStatusId
-  field_locationtypeid: LocationTypeId
-  field_longitude: Longitude
-  field_longitudedirection: LongitudeDirection
-  field_maindimensionid: MainDimensionId
-  field_mainimageattachmentid: MainImageAttachmentId
-  field_maker: Maker
-  field_material: Material
-  field_medium: Medium
-  field_midsizeurl: MidSizeURL
-  field_modificationdate: ModificationDate
-  field_modifiedbyusername: ModifiedByUserName
-  field_movementauthorizationdate: MovementAuthorizationDate
-  field_movementauthorizerid: MovementAuthorizerId
-  field_movementcontactid: MovementContactId
-  field_movementmemo: MovementMemo
-  field_movementmethodid: MovementMethodId
-  field_movementreasonid: MovementReasonId
-  field_movementreferencenumber: MovementReferenceNumber
-  field_nomenclatureobjectname: NomenclatureObjectName
-  field_objectclassification: ObjectClassification
-  field_objectclassificationcode: ObjectClassificationCode
-  field_objectconversionrate: ObjectConversionRate
-  field_objectcurrencytypecode: ObjectCurrencyTypeCode
-  field_objectcurrencytypeid: ObjectCurrencyTypeId
-  field_objectdate: ObjectDate
-  field_objectdescription: ObjectDescription
-  field_objectid: ObjectId
-  field_objectstatus: ObjectStatus
-  field_objectstatuscode: ObjectStatusCode
-  field_objecttypeid: ObjectTypeId
-  field_othernumbers: OtherNumbers
-  field_othernumbertypeid: OtherNumberTypeId
-  field_plannedremoval: PlannedRemoval
-  field_provenance: Provenance
-  field_quantity: Quantity
-  field_relatedcollections: RelatedCollections
-  field_researchnotes: ResearchNotes
-  field_responsibledepartmentid: ResponsibleDepartmentId
-  field_rfidtagnumber: RFIDTagNumber
-  field_signatures: Signatures
-  field_slideshowurl: SlideShowURL
-  field_state: State
-  field_stateoforigin: StateOfOrigin
-  field_subject: Subject
-  field_subscriptionid: SubscriptionId
-  field_suiteportfolio: SuitePortfolio
-  field_techniqueid: TechniqueId
-  field_term: Term
-  field_thumbsizeurl: ThumbSizeURL
-  field_uniqueid: UniqueId
-  field_userdefined14: UserDefined14
-  field_userdefined38: UserDefined38
-  field_userdefined39: UserDefined39
-  field_userdefined40: UserDefined40
-  field_userdefined5: UserDefined5
-  field_userdefined6: UserDefined6
-  field_userdefined7: UserDefined7
-  field_userdefined8: UserDefined8
-  field_userdefined9: UserDefined9
-  field_userdefinedcurrency1: UserDefinedCurrency1
-  field_userdefinedcurrency2: UserDefinedCurrency2
-  field_userdefineddate1: UserDefinedDate1
-  field_userdefineddate2: UserDefinedDate2
-  field_userdefineddomesticcurren2: UserDefinedDomesticCurrency2
-  field_userdefineddomesticcurrenc: UserDefinedDomesticCurrency1
-  field_userdefinedrichtext1: UserDefinedRichText1
-  field_userdefinedrichtext12: UserDefinedRichText12
-  field_userdefinedrichtext2: UserDefinedRichText2
-  field_userdefinedrichtext3: UserDefinedRichText3
-uncacheable_setting: null
+  AboriginalName: 'Aboriginal Name'
+  Acceleration: Acceleration
+  AdditionalAccessionNumber: 'Additional Accession Number'
+  AdditionalArea: 'Additional Area'
+  AdditionalArtistMakers: 'Additional Artist/Makers'
+  AdditionalArtists: 'Additional Artists'
+  AdditionalAuthors: 'Additional Authors'
+  AdditionalCreators: AdditionalCreators
+  AdditionalPublishers: 'Additional Publishers'
+  AddressInventoryContactName: AddressInventoryContactName
+  AddressInventoryDate: AddressInventoryDate
+  AddressInventoryMemo: AddressInventoryMemo
+  AddressName: 'Address Name'
+  Age: Age
+  AgeStage: Age/Stage
+  AlternateName: 'Alternate Name'
+  AlternateTitle: 'Alternate Title'
+  ArtDirectorContactName: 'Art Director Contact Name'
+  ArtistAliasFirst: 'Artist Alias First'
+  ArtistAliasLast: 'Artist Alias Last'
+  ArtistCompany: 'Artist Company'
+  ArtistEthnicity: 'Artist Ethnicity'
+  ArtistFirst: 'Artist First'
+  ArtistGender: 'Artist Gender'
+  ArtistLast: 'Artist Last'
+  ArtistLocale: 'Artist Locale'
+  ArtistMakerAlias: 'Artist/Maker Alias'
+  ArtistMakerAliasFirst: 'Artist/Maker Alias First'
+  ArtistMakerAliasLast: 'Artist/Maker Alias Last'
+  ArtistMakerCompany: 'Artist/Maker Company'
+  ArtistMakerFirst: 'Artist/Maker First'
+  ArtistMakerGender: 'Artist/Maker Gender'
+  ArtistMakerLast: 'Artist/Maker Last'
+  ArtistMakerLink: 'Artist/Maker Link'
+  ArtistMakerLocale: 'Artist/Maker Locale'
+  ArtistMakerName: 'Artist/Maker Name'
+  ArtistMakerNationality: 'Artist/Maker Nationality'
+  ArtistMakerYears: 'Artist/Maker Years'
+  ArtistNationality: 'Artist Nationality'
+  ArtistRace: 'Artist Race'
+  ArtistSchool: 'Artist School'
+  ArtistYears: 'Artist Years'
+  Aspect: Aspect
+  AssociatedSpecies: 'Associated Species'
+  Audience: Audience
+  AuthorName: 'Author Name'
+  BagNumber: 'Bag Number'
+  Battery: Battery
+  BottleSize: 'Bottle Size'
+  BoxNumber: 'Box Number'
+  BrakeFluid: 'Brake Fluid'
+  Brand: Brand
+  BroadClassOfMaterial: 'Broad Class of Material'
+  CallNumber: 'Call Number'
+  Carats: Carats
+  CastAndCrew: 'Cast And Crew'
+  CatalogDate: 'Catalog Date'
+  CatalogerContactName: 'Cataloger Contact Name'
+  CatalogFolder: 'Catalog Folder'
+  CatalogLevel: 'Catalog Level'
+  CatalogNumber: 'Catalog Number'
+  CatalogRaisonne: 'Catalog Raisonné'
+  CategoryStyle: Category/Style
+  ChassisNumber: 'Chassis Number'
+  CinematographerContactName: 'Cinematographer Contact Name'
+  CityOfOrigin: 'City of Origin'
+  Clarity: Clarity
+  Class: Class
+  CollectionDate: 'Collection Date'
+  CollectionNumber: 'Collection Number'
+  CollectionTitle: 'Collection Title'
+  CollectorContactName: 'Collector Contact Name'
+  CollectorPlace: 'Collector Place'
+  Color: Color
+  CommonName: 'Common Name'
+  Completeness: Completeness
+  CompletenessDate: 'Completeness Date'
+  CompletenessNote: 'Completeness Note'
+  CompletionYear: 'Completion Year'
+  ComponentPart: 'Component Part'
+  ComposerContactName: 'Composer Contact Name'
+  Composition: Composition
+  ContinentWorldRegion: 'Continent World Region'
+  ContributorContactName: 'Contributor Contact Name'
+  ControlledProperty: 'Controlled Property'
+  Copyright: Copyright
+  Copyrights: Copyrights
+  CountryOrigin: 'Country of Origin'
+  CountyOfOrigin: 'County of Origin'
+  CoverType: 'Cover Type'
+  CreatorContactName: 'Creator Contact Name'
+  CreditLine: 'Credit Line'
+  CulturalID: 'Cultural ID'
+  CultureOfUse: 'Culture of Use'
+  Cut: Cut
+  DashLayout: 'Dash Layout'
+  Datum: Datum
+  DecorativeMotif: 'Decorative Motif'
+  DecorativeTechnique: 'Decorative Technique'
+  DepositionalEnvironment: 'Depositional Environment'
+  DepthImperial: 'Depth Imperial'
+  DepthInMeters: 'Depth in Meters'
+  DepthMetric: 'Depth Metric'
+  DescriptiveName: 'Descriptive Name'
+  DesignerName: 'Designer Name'
+  DeweyCallNumber: 'Dewey Call Number'
+  DiameterImperial: 'Diameter Imperial'
+  DiameterMetric: 'Diameter Metric'
+  DimensionDescription: 'Dimension Description'
+  DimensionMemo: 'Dimension Memo'
+  DirectorContactName: 'Director Contact Name'
+  DistributionCompany: 'Distribution Company'
+  Drainage: Drainage
+  DrivenBy: 'Driven By'
+  Duration: Duration
+  Edition: Edition
+  EditorContactName: 'Editor Contact Name'
+  ElevationInMeters: 'Elevation In Meters'
+  EminentFigureContactName: 'Eminent Figure Contact Name'
+  EminentOrganizationContactName: 'Eminent Organization Contact Name'
+  EngineNumber: 'Engine Number'
+  EnginePosition: 'Engine Position'
+  EngineType: 'Engine Type'
+  EpochSeries: Epoch/Series
+  Event: Event
+  ExoticNative: Exotic/Native
+  Exposure: Exposure
+  FabricMaterial: Fabric/Material
+  Family: Family
+  FermentationPeriod: 'Fermentation Period'
+  FieldCollectionMemo: 'Field Collection Memo'
+  FieldCollectionMethod: 'Field Collection Method'
+  FieldCollectionPlace: 'Field Collection Place'
+  FieldCollectionSourceContactName: 'Field Collection Source Contact Name'
+  FieldSiteNumber: 'Field Site Number'
+  FieldSpecimenNumber: 'Field Specimen Number'
+  FilmSize: 'Film Size'
+  FindingAids: 'Finding Aids'
+  Form: Form
+  Format: Format
+  Formation: Formation
+  FormationPeriodSubstrate: Formation/Period/Substrate
+  FuelHighway: 'Fuel Highway'
+  FuelType: 'Fuel Type'
+  FullCollectionName: 'Full Collection Name'
+  FullLocationName: 'Full Location Name'
+  Genre: Genre
+  Genus: Genus
+  GeologicalClassification: 'Geological Classification'
+  GeologicalComplexName: 'Geological Complex Name'
+  GeoUnit: 'Geo Unit'
+  Grape: Grape
+  Habitat: Habitat
+  HabitatCommunity: Habitat/Community
+  HabitatMemo: 'Habitat Memo'
+  HeightImperial: 'Height Imperial'
+  HeightMetric: 'Height Metric'
+  HistoricCulturalPeriod: 'Historic/Cultural Period'
+  History: History
+  Horizon: Horizon
+  IdentifiedByContactName: 'Identified by Contact Name'
+  IdentifiedDate: 'Identified Date'
+  IllustratorContactName: 'Illustrator Contact Name'
+  ImageNumber: 'Image Number'
+  ImageRights: 'Image Rights'
+  ImperialDims: 'Imperial Dims'
+  Inscriptions: Inscriptions
+  InsituFloat: Insitu/Float
+  IntervieweeContactName: 'Interviewee Contact Name'
+  InterviewerContactName: 'Interviewer Contact Name'
+  InventoryContactName: 'Inventory Contact Name'
+  InventoryDate: 'Inventory Date'
+  InventoryMemo: 'Inventory Memo'
+  ISBN: ISBN
+  ISSN: ISSN
+  ItemCount: 'Item Count'
+  Karats: Karats
+  KeyDescriptor: 'Key Descriptor'
+  Kingdom: Kingdom
+  Labels: Labels
+  Language: Language
+  Latitude: Latitude
+  LCCallNumber: 'LC Call Number'
+  LCCN: LCCN
+  LevelOfControl: 'Level of Control'
+  LicensePlateNumber: 'License Plate Number'
+  Lithology: Lithology
+  LithologyPedotype: Lithology/Pedotype
+  Locality: Locality
+  LocationAccessMemo: 'Location Access Memo'
+  LocationConditionDate: 'Location Condition Date'
+  LocationConditionMemo: 'Location Condition Memo'
+  LocationReferenceNameNumber: 'Location Reference Name Number'
+  LocationSecurityMemo: 'Location Security Memo'
+  LocationStatus: 'Location Status'
+  LocationType: 'Location Type'
+  Longitude: Longitude
+  Maker: Maker
+  MakersMark: 'Makers Mark'
+  ManufactureDate: 'Manufacture Date'
+  ManufacturingTechnique: 'Manufacturing Technique'
+  Material: Material
+  MaterialComponent: 'Material Component'
+  MaterialComponentMemo: 'Material Component Memo'
+  MaterialName: 'Material Name'
+  MaterialSource: 'Material Source'
+  Maturity: Maturity
+  Medium: Medium
+  Member: Member
+  MetalType: 'Metal Type'
+  MetricDims: 'Metric Dims'
+  Mileage: Mileage
+  Model: Model
+  MovementAuthorizationDate: 'Movement Authorization Date'
+  MovementAuthorizerContactName: 'Movement Authorizer Contact Name'
+  MovementContactName: 'Movement Contact Name'
+  MovementMemo: 'Movement Memo'
+  MovementMethod: 'Movement Method'
+  MovementReason: 'Movement Reason'
+  MovementReferenceNumber: 'Movement Reference Number'
+  NAGPRA: NAGPRA
+  NarratorContactName: 'Narrator Contact Name'
+  NegativeNumber: 'Negative Number'
+  NomenclatureObjectName: 'Nomenclature Object Name'
+  NumberOfPages: 'Number of Pages'
+  ObjectConversionRate: 'Object Conversion Rate'
+  ObjectDate: 'Object Date'
+  ObjectDateOfConversionRate: 'Object Date of Conversion Rate'
+  ObjectDescription: 'Object Description'
+  ObjectForm: 'Object Form'
+  ObjectNameCurrency: 'Object Name Currency'
+  ObjectNameLevel: 'Object Name Level'
+  ObjectNameNote: 'Object Name Note'
+  ObjectNameSystem: 'Object Name System'
+  ObjectNameTitleLanguage: 'Object Name Title Language'
+  ObjectNameType: 'Object Name Type'
+  ObjectPart: 'Object Part'
+  ObjectProductionDate: 'Object Production Date'
+  ObjectProductionMemo: 'Object Production Memo'
+  ObjectProductionReason: 'Object Production Reason'
+  ObjectStatus: 'Object Status'
+  ObjectType: 'Object Type'
+  ObjectUse: 'Object Use'
+  ObjectUseMemo: 'Object Use Memo'
+  OCLCNumber: 'OCLC Number'
+  OilType: 'Oil Type'
+  OldNumber: 'Old Number'
+  Order: Order
+  OtherManufacturingSite: 'Other Manufacturing Site'
+  OtherNumbers: 'Other Numbers'
+  OtherNumberType: 'Other Number Type'
+  Paint: Paint
+  Passengers: Passengers
+  PatentDate: 'Patent Date'
+  PeopleContent: 'People Content'
+  PeriodSystem: Period/System
+  PermanentFullLocationName: 'Permanent Full Location Name'
+  PhotographyContactName: 'Photography Contact Name'
+  PhylumDivision: Phylum/Division
+  PlaceContent: 'Place Content'
+  PlaceOfManufactureCity: 'Place of Manufacture City'
+  PlaceOfManufactureCountry: 'Place of Manufacture Country'
+  PlaceOfManufactureCounty: 'Place of Manufacture County'
+  PlaceOfManufactureState: 'Place of Manufacture State'
+  PlannedRemoval: 'Planned Removal'
+  Power: Power
+  PreviousCatalogNumber: 'Previous Catalog Number'
+  Process: Process
+  ProducerContactName: 'Producer Contact Name'
+  ProductionCompanyContactName: 'Production Company Contact Name'
+  ProductionDate: 'Production Date'
+  ProductionDesignerContactName: 'Production Designer Contact Name'
+  Provenance: Provenance
+  PublisherContactName: 'Publisher Contact Name'
+  PublisherLocation: 'Publisher Location'
+  Quantity: Quantity
+  QuarterSection: 'Quarter Section'
+  Rare: Rare
+  ReferenceDatum: 'Reference Datum'
+  ReferenceNotes: 'Reference Notes'
+  Region: Region
+  RegistrationNotes: 'Registration Notes'
+  RegistrationStatus: 'Registration Status'
+  RelatedCollections: 'Related Collections'
+  ReleaseDate: 'Release Date'
+  RepairsMade: 'Repairs Made'
+  Reproduction: Reproduction
+  ReproductionMethod: 'Reproduction Method'
+  ResearchNotes: 'Research Notes'
+  ResponsibleDepartment: 'Responsible Department'
+  RevisedNomenclature: 'Revised Nomenclature'
+  RFIDTagNumber: 'RFID Tag Number'
+  School: School
+  ScientificName: 'Scientific Name'
+  Section: Section
+  SeriesStatement: 'Series Statement'
+  Sex: Sex
+  ShiftPattern: 'Shift Pattern'
+  Signatures: Signatures
+  SiteName: 'Site Name'
+  SiteNumber: 'Site Number'
+  Size: Size
+  SKU: SKU
+  SlideNumber: 'Slide Number'
+  Slope: Slope
+  SoilType: 'Soil Type'
+  Species: Species
+  SpeciesAuthorDate: 'Species Author Date'
+  SpeciesAuthorName: 'Species Author Name'
+  SpecificClassOfMaterial: 'Specific Class of Material'
+  SquareFeet: 'Square Feet'
+  SquareMeters: 'Square Meters'
+  StaffNotes: 'Staff Notes'
+  Stage: Stage
+  StartingInstructions: 'Starting Instructions'
+  State: State
+  StateOfOrigin: 'State of Origin'
+  StateSiteNumber: 'State Site Number'
+  StatusDate: 'Status Date'
+  Stones: Stones
+  StorageUnit: 'Storage Unit'
+  StratigraphicUnitMemo: 'Stratigraphic Unit Memo'
+  StratigraphicUnitName: 'Stratigraphic Unit Name'
+  StratigraphicUnitType: 'Stratigraphic Unit Type'
+  StrunzClass: 'Strunz Class'
+  StrunzDivision: 'Strunz Division'
+  StrunzID: 'Strunz ID'
+  StudioContactName: 'Studio Contact Name'
+  StudyNumber: 'Study Number'
+  SubFamily: 'Sub Family'
+  Subgenre: Subgenre
+  Subject: Subject
+  Subspecies: Subspecies
+  SubspeciesAuthorDate: 'Subspecies Author Date'
+  SubspeciesAuthorityContactName: 'Subspecies Authority Contact Name'
+  SubspeciesAuthorName: 'Subspecies Author Name'
+  SubspeciesDescriptiveName: 'Subspecies Descriptive Name'
+  SubspeciesForma: 'Subspecies Forma'
+  SubspeciesFormaAuthorityContactName: 'Subspecies Forma Authority Contact Name'
+  SubspeciesFormaYear: 'Subspecies Forma Year'
+  SubspeciesSynonym: 'Subspecies Synonym'
+  SubspeciesVariety: 'Subspecies Variety'
+  SubspeciesVarietyAuthorityContactName: 'Subspecies Variety Authority Contact Name'
+  SubspeciesVarietyYear: 'Subspecies Variety Year'
+  SubspeciesYear: 'Subspecies Year'
+  SuitePortfolio: Suite/Portfolio
+  Synopsis: Synopsis
+  Taphonomy: Taphonomy
+  TaxonomicNotes: 'Taxonomic Notes'
+  TaxonomicSerialNumber: 'Taxonomic Serial Number'
+  Taxonomy: Taxonomy
+  Technique: Technique
+  Temper: Temper
+  Term: 'Term (Getty AAT)'
+  ThinSection: 'Thin Section'
+  ThreatenedEndangeredDate: 'Threatened Endangered Date'
+  ThreatenedEndangeredSpeciesStatus: 'Threatened Endangered Species Status'
+  ThreatenedEndangeredSpeciesSynonym: 'Threatened Endangered Species Synonym'
+  ThreatenedEndangeredSpeciesSynonymName: 'Threatened Endangered Species Synonym Name'
+  TimePeriod: 'Time Period'
+  TitleStatus: 'Title Status'
+  TitleStatusNotes: 'Title Status Notes'
+  TopSpeed: 'Top Speed'
+  TotalBags: 'Total Bags'
+  TotalBoxes: 'Total Boxes'
+  TownshipRangeSection: Township/Range/Section
+  Transcription: Transcription
+  Transmission: Transmission
+  TransmissionFluid: 'Transmission Fluid'
+  TypeName: 'Type Name'
+  TypeOfBinding: 'Type of Binding'
+  TypeOfGemstone: 'Type of Gemstone'
+  TypeOfWine: 'Type of Wine'
+  TypeSpecimen: 'Type of Specimen'
+  TypeStatus: 'Type Status'
+  UniqueId: UniqueId
+  Unit: Unit
+  URI: URI
+  UseDate: 'Use Date'
+  UserDefined14: 'UDF 14'
+  UserDefined2: 'Binding Number'
+  UserDefined3: 'BIB Number'
+  UserDefined38: 'UDF 38'
+  UserDefined39: 'UDF 39'
+  UserDefined40: 'UDF 40'
+  UserDefined5: 'UDF 5'
+  UserDefined6: 'UDF 6'
+  UserDefined7: 'UDF 7'
+  UserDefined8: 'UDF 8'
+  UserDefined9: 'UDF 9'
+  UserDefinedControlledVocab1: UserDefinedControlledVocab1
+  UserDefinedControlledVocab2: UserDefinedControlledVocab2
+  UserDefinedControlledVocab3: UserDefinedControlledVocab3
+  UserDefinedControlledVocab4: UserDefinedControlledVocab4
+  UserDefinedControlledVocab8: UserDefinedControlledVocab8
+  UserDefinedCurrency1: 'UDF Currency 1'
+  UserDefinedCurrency2: 'UDF Currency 2'
+  UserDefinedDate1: 'UDF Date 1'
+  UserDefinedDate2: 'UDF Date 2'
+  UserDefinedDomesticCurrency1: 'UDF Domestic Currency 1'
+  UserDefinedDomesticCurrency2: 'UDF Domestic Currency 2'
+  UserDefinedNumber1: 'UDF Number 1'
+  UserDefinedNumber2: 'UDF Number 2'
+  UserDefinedRichText1: CNotes1
+  UserDefinedRichText12: 'UDF R 12'
+  UserDefinedRichText2: CNotes2
+  UserDefinedRichText3: 'Tax Notes'
+  UTMCoordinates: 'UTM Coordinates'
+  VerticalDatum: 'Vertical Datum'
+  VIN: VIN
+  VolumeNumber: 'Volume Number'
+  Waterbody: Waterbody
+  WeightImperial: 'Weight Imperial'
+  WeightMetric: 'Weight Metric'
+  WidthImperial: 'Width Imperial'
+  WidthMetric: 'Width Metric'
+  WithinSiteProveniance: 'Within Site Proveniance'
+  WriterContactName: 'Writer Contact Name'
+select_field2:
+  Title: Title
+  ArtistName: 'Artist Name'
+  InventoryNumber: 'Inventory Number'

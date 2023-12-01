@@ -49,4 +49,7 @@ function customize_object_detail_fields_form_alter(&$form, &$form_state, $form_i
     $form['#attached']['library'][] = 'customize_object_detail_fields/customize_object_detail_fields';
 
   }
+  if ( $form_id === 'customize_object_list_fields_settings_form') {
+    $form['#attached']['library'][] = 'customize_object_detail_fields/customize_object_list_fields';
+  }
 }

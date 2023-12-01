@@ -5,20 +5,20 @@ namespace Drupal\customize_object_detail_fields\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
-class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
+class CustomizeObjectListFieldsSettingsForm extends ConfigFormBase {
 
   public function getFormId() {
-    return 'customize_object_detail_fields_settings_form';
+    return 'customize_object_list_fields_settings_form';
   }
 
   protected function getEditableConfigNames() {
-    return ['customize_object_detail_fields.settings'];
+    return ['customize_object_list_fields.settings'];
   }
 
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     // Load the current configuration settings.
-      $config = \Drupal::config('customize_object_detail_fields.settings');
+      $config = \Drupal::config('customize_object_list_fields.settings');
 
         // First Multiple Select List
         $form['select_field1'] = array(
@@ -97,7 +97,7 @@ class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
 
   public function get_select_field1_options(){
      // Load the current configuration settings.
-     $config = \Drupal::config('customize_object_detail_fields.settings');
+     $config = \Drupal::config('customize_object_list_fields.settings');
 
       $options = [];
      if($config->get('select_field1')){
@@ -124,7 +124,7 @@ class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
 
   public function get_select_field2_options(){
     // Load the current configuration settings.
-    $config = \Drupal::config('customize_object_detail_fields.settings');
+    $config = \Drupal::config('customize_object_list_fields.settings');
     $options = [];
 
     if($config->get('select_field2')){
@@ -144,14 +144,14 @@ class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
       if(!$current_field_1_options){
         $current_field_1_options = '';
       }
-      $this->config('customize_object_detail_fields.settings')
+      $this->config('customize_object_list_fields.settings')
       ->set('select_field1',  $current_field_1_options)
       ->save();
 
       if(!$current_field_2_options){
         $current_field_2_options = '';
       }
-      $this->config('customize_object_detail_fields.settings')
+      $this->config('customize_object_list_fields.settings')
       ->set('select_field2',  $current_field_2_options)
       ->save();
 

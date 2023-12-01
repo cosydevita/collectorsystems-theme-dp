@@ -9,6 +9,12 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\views\Form\ViewsForm;
+use \Drupal\views\ViewExecutable;
+use Drupal\node\Entity\Node;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+
+
 
 /**
  * Implements hook_preprocess_HOOK() for HTML document templates.
@@ -110,9 +116,19 @@ function collectorsystems_preprocess_node(&$variables) {
     }
 
     $detail_fields_values  = [];
+
     foreach ($options as $key => $value) {
-      $field_value = $node->get($key)->value;
-      $detail_fields_values[] = $field_value;
+      if($key!='Title'){
+        $key= 'field_'.$key;
+      }
+      $key = strtolower($key);
+      if ($node->hasField($key)) {
+        $field_value = $node->get($key)->value;
+        if($field_value){
+          $detail_fields_values[] = $field_value;
+        }
+      }
+
     }
 
 
@@ -268,5 +284,78 @@ function collectorsystems_preprocess_views_view_field(&$variables) {
     //   // Replace characters in the field output.
     //   $variables['output'] = Drupal\Core\Render\Markup::create("<p>5 times</p> <table class='times'><thead><tr><th>ASM Name</th><th>PRD Type</th><th>Set</th><th>Que Paper Code</th></tr></thead><tbody><tr><td>BP-AP-pcc-1-2</td><td>Unit Assessment</td><td>Base Set</td><td>MY23-LS-MAth-1</td></tr></tbody></table>");
     // }
+
+
   }
 }
+
+function collectorsystems_preprocess_views_view_fields(&$variables) {
+
+  $view = $variables['view'];
+
+  if ($view->id() == 'objects' && $view->current_display == 'page_1') {
+    $nid = $variables['row']->nid;
+    // Load the node using the node ID.
+    $node = Node::load($nid);
+
+    \Drupal::cache('config')->invalidate('customize_object_list_fields.settings');
+
+    $config = \Drupal::config('customize_object_list_fields.settings');
+
+
+    if($config->get('select_field2')){
+      $options =  $config->get('select_field2');
+    }
+
+    $list_fields_values  = [];
+    $object_url = \Drupal::service('path_alias.manager')->getAliasByPath('/node/'.$nid);
+
+    //object image
+    $object_image_key = 'field_detaillargeurl';
+    if ($node->hasField($object_image_key)) {
+      $field_value = $node->get($object_image_key)->value;
+      $object_image_url = $field_value;
+      if(!$object_image_url){
+        $object_image_url = \Drupal::theme()->getActiveTheme()->getPath().'/assets/img/noimage300.png';
+      }
+      $object_image = '<a href="'.$object_url.'"><img class="object-image mb-3" src='.$object_image_url.'></a>';
+
+      $variables['object_image'] = $object_image;
+    }
+
+    foreach ($options as $key => $value) {
+      if($key!='Title'){
+        $key= 'field_'.$key;
+      }
+      $key = strtolower($key);
+      if ($node->hasField($key)) {
+        $field_value = $node->get($key)->value;
+        if($key == 'title'){
+          $url = Url::fromUri('entity:node/' . $nid);
+
+          // Create a link using the URL and node title.
+          $link = Link::fromTextAndUrl($node->getTitle(), $url);
+          // Get the renderer service.
+          $renderer = \Drupal::service('renderer');
+
+          // Render the link.
+          $link_output = $renderer->render($link->toRenderable());
+
+          $field_value = $link_output;
+
+        }
+        if($field_value){
+          $list_fields_values[] = $field_value;
+        }
+      }
+
+    }
+
+
+    $variables['list_fields_values'] = $list_fields_values;
+
+
+  }
+
+}
+

@@ -10,7 +10,6 @@ dependencies:
     - field.storage.node.field_artistyears
     - field.storage.node.field_detaillargeurl
     - field.storage.node.field_objectdate
-    - node.type.article
     - node.type.objects
   module:
     - better_exposed_filters
@@ -693,7 +692,6 @@ display:
           plugin_id: bundle
           operator: in
           value:
-            article: article
             objects: objects
           group: 1
           exposed: false

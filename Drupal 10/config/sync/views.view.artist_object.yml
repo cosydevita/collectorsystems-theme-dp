@@ -445,16 +445,13 @@ display:
             operator_limit_selection: false
             operator_list: {  }
       style:
-        type: grid
+        type: grid_responsive
         options:
           grouping: {  }
           columns: 3
-          automatic_width: true
-          alignment: horizontal
-          row_class_custom: ''
-          row_class_default: true
-          col_class_custom: ''
-          col_class_default: true
+          cell_min_width: 150
+          grid_gutter: 40
+          alignment: vertical
       row:
         type: fields
       query:
