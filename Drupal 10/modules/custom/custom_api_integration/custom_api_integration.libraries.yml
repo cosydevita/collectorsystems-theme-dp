@@ -1,9 +1,0 @@
-custom_api_integration:
-  version: 1.x
-  js:
-    js/custom_api_integration.js: {}
-  css:
-    theme:
-      css/custom_api_integration.css: {}
-  dependencies:
-    - core/jquery
