@@ -13,3 +13,41 @@ custom_api_integration.get_art_from_api:
     _title: 'API Integration'
   requirements:
     _permission: 'access content'
+custom_api_integration.dashboard:
+  path: '/admin/config/api-dashboard'
+  defaults:
+    _controller: '\Drupal\custom_api_integration\Controller\DashboardController::dashboardPage'
+    _title: 'API Dashboard'
+  requirements:
+    _permission: 'administer site configuration'
+custom_api_integration.objects_list_page:
+  path: '/objects'
+  defaults:
+    _controller: '\Drupal\custom_api_integration\Controller\PageTemplatesController::ObjectsListPage'
+    _title: 'Objects'
+  requirements:
+    _permission: 'access site content'
+custom_api_integration.artists_list_page:
+  path: '/artists'
+  defaults:
+    _controller: '\Drupal\custom_api_integration\Controller\PageTemplatesController::ArtistsListPage'
+    _title: 'Artists'
+  requirements:
+    _permission: 'access site content'
+custom_api_integration.exhibitions_list_page:
+  path: '/exhibitions'
+  defaults:
+    _controller: '\Drupal\custom_api_integration\Controller\PageTemplatesController::ExhibitionsListPage'
+    _title: 'Exhibitions'
+  requirements:
+    _permission: 'access site content'
+custom_api_integration.groups_list_page:
+  path: '/groups'
+  defaults:
+    _controller: '\Drupal\custom_api_integration\Controller\PageTemplatesController::GroupsListPage'
+    _title: 'Groups'
+  requirements:
+    _permission: 'access site content'
+
+
+

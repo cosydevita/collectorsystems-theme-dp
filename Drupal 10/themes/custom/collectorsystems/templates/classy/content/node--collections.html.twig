@@ -81,7 +81,7 @@
 
  <div class="row g-5">
         <div class="col-lg-12 wow fadeInDown" data-wow-delay="0.1s">
-            <h1 class="font-normal">    
+            <h1 class="font-normal">
              <!-- if (isset($collectionWithObjects)) {
                 echo (count($collectionWithObjects)>0) ? $collectionWithObjects[0]['Collection']['FullCollectionName'] : ""
                 } -->
@@ -89,3 +89,12 @@
             </h1>
         </div>
     </div>
+
+
+<div class="container-xxl py-5">
+    <div class="row mb-3">
+      <div class="col d-inline-flex">
+          {{ drupal_view('collection_object', 'block_1', node.field_collectionid.value) }}
+      </div>
+    </div>
+  </div>

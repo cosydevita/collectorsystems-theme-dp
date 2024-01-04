@@ -32,6 +32,7 @@ module:
   jquery_ui_datepicker: 0
   jquery_ui_slider: 0
   jquery_ui_touch_punch: 0
+  jsonapi: 0
   link: 0
   menu_link_content: 0
   menu_ui: 0
@@ -42,7 +43,10 @@ module:
   path: 0
   path_alias: 0
   prevnext: 0
+  rest: 0
+  restui: 0
   search: 0
+  serialization: 0
   shortcut: 0
   system: 0
   taxonomy: 0

@@ -5,5 +5,20 @@ custom_api_integration:
   css:
     theme:
       css/custom_api_integration.css: {}
+      https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css: {}
   dependencies:
     - core/jquery
+dashboard:
+  js:
+    js/dashboard.js: {}
+  css:
+    theme:
+      css/dashboard.css: {}
+      https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.ajax
+    - core/jquery
+    - core/once
+
+

@@ -1,0 +1,18 @@
+uuid: 0b7df5ae-5ac3-4eba-9a2c-a6852bd363ff
+langcode: en
+status: true
+dependencies:
+  module:
+    - custom_api_integration
+    - serialization
+    - user
+id: cs_fetch_group_ajax
+plugin_id: cs_fetch_group_ajax
+granularity: resource
+configuration:
+  methods:
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

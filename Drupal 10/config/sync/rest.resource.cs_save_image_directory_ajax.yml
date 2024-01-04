@@ -1,0 +1,18 @@
+uuid: 1584f0e1-b5ac-46bb-aa04-60750f52813e
+langcode: en
+status: true
+dependencies:
+  module:
+    - custom_api_integration
+    - serialization
+    - user
+id: cs_save_image_directory_ajax
+plugin_id: cs_save_image_directory_ajax
+granularity: resource
+configuration:
+  methods:
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

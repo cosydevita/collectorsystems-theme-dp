@@ -4,5 +4,5 @@ subscription_id: '103807'
 show_field_labels: 0
 enable_zoom: 0
 filter_keywords: {  }
-items_per_page: '3'
-footer_text: 'Collector Systems'
+items_per_page: '1'
+footer_text: ''

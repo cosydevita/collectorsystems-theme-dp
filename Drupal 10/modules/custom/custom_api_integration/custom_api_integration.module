@@ -1,4 +1,7 @@
 <?php
+use Drupal\Core\Database\Database;
+use Drupal\Core\Database\Schema;
+use Drupal\custom_api_integration\Csconstants;
 
 /**
  * Implements hook_theme().
@@ -15,6 +18,68 @@ function custom_api_integration_theme() {
         'footer_text' => '',
       ],
     ],
+    'dashboard' => [
+      'variables' => [
+        'response' => '',
+        'show_field_labels' => '',
+        'enable_zoom' => '',
+        'filter_keywords' => '',
+        'items_per_page' => '',
+        'footer_text' => '',
+      ],
+    ],
+    'objects-list-page' => [
+      'variables' => [
+        'object_details' =>NULL,
+        'nxshowrec' => NULL,
+        'nxshskip' => NULL,
+        'count' => NULL,
+        'dataorderby' => NULL,
+        'current_page' => NULL,
+        'requested_pageNo' => NULL,
+        'qSearch' => NULL
+      ],
+    ],
+    'artists-list-page' => [
+      'variables' => [
+        'AllArtists' =>NULL,
+        'nxshowrec' => NULL,
+        'nxshskip' => NULL,
+        'count' => NULL,
+        'dataorderby' => NULL,
+        'current_page' => NULL,
+        'requested_pageNo' => NULL,
+        'qSearch' => NULL,
+        'loadsec' => NULL,
+        'requested_page' => NULL
+      ],
+    ],
+    'exhibitions-list-page' => [
+      'variables' => [
+        'all_exhibitions' =>NULL,
+        'nxshowrec' => NULL,
+        'nxshskip' => NULL,
+        'count' => NULL,
+        'dataorderby' => NULL,
+        'current_page' => NULL,
+        'requested_pageNo' => NULL,
+        'qSearch' => NULL,
+        'loadsec' => NULL,
+      ],
+    ],
+    'groups-list-page' => [
+      'variables' => [
+        'all_groups' =>NULL,
+        'nxshowrec' => NULL,
+        'nxshskip' => NULL,
+        'count' => NULL,
+        'dataorderby' => NULL,
+        'current_page' => NULL,
+        'requested_pageNo' => NULL,
+        'qSearch' => NULL,
+        'loadsec' => NULL,
+      ],
+    ]
   ];
 }
 /**
@@ -23,4 +88,6 @@ function custom_api_integration_theme() {
 function custom_api_integration_preprocess_page(&$variables)
 {
     $variables['#attached']['library'][] = 'custom_api_integration/custom_api_integration';
-}  
+}
+
+

@@ -1,7 +1,15 @@
 xai.settings_form:
-  title: 'API Integration Form'
+  title: 'CollectorSystems API Integration Form'
   route_name: custom_api_integration.settings_form
   description: 'A description for the menu entry'
   parent: system.admin_config_system
   weight: 99
+xai.api_dashboard:
+  title: 'CollectorSystems API Dashboard'
+  route_name: custom_api_integration.dashboard
+  description: 'API Dashbopard to sync the API data to database'
+  parent: system.admin_config_system
+  weight: 99
+
+
 

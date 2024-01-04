@@ -612,7 +612,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: artists
+      path: artists-page
     cache_metadata:
       max-age: -1
       contexts:

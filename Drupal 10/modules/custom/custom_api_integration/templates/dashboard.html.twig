@@ -1,0 +1,151 @@
+<div class="loading-class">
+        <div class="loading-indicator">
+        </div>
+    </div>
+<div class="custom-button-container">
+         <!--Add the button element -->
+    <button id="create-table-button">Create Table</button>
+    </div>
+
+         <!--Add the button element -->
+    <!--<button id="create-image-list-button"></button>-->
+    <div class="wrapper">
+
+    <div class="custom-group-data">
+        <label><h1><i class="fa fa-group" style="font-size:30px;color:black"></i> Groups </h1></label>
+          <div class="count-wrapper">
+            <div class="lds-dual-ring spinner"></div>
+            <div class="count-data">
+              <p id="response-data"><b>DB Count: </b></p>
+              <p id="response-data1"><b>API Count: </b></p>
+            </div>
+          </div>
+
+    </div>
+
+   <div class="custom-object-data">
+        <label><h1><i class="fa fa-glass" style="font-size:30px;color:black"></i> Objects </h1></label>
+
+      <div class="count-wrapper">
+        <div class="lds-dual-ring spinner"></div>
+        <div class="count-data">
+          <p id="resp-data"><b>DB Count: </b></p>
+          <p id="resp-data1"><b>API Count: </b></p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="custom-collection-data">
+        <label><h1><i class="fa fa-object-group" style="font-size:30px;color:black"></i> Collections </h1></label>
+
+          <div class="count-wrapper">
+            <div class="lds-dual-ring spinner"></div>
+            <div class="count-data">
+              <p id="resp-data2"><b>DB Count: </b></p>
+              <p id="resp-data3"><b>API Count: </b></p>
+            </div>
+          </div>
+    </div>
+
+    <div class="custom-exhibition-data">
+        <label><h1><i class="fa fa-university" style="font-size:30px;color:black"></i> Exhibitions </h1></label>
+
+          <div class="count-wrapper">
+            <div class="lds-dual-ring spinner"></div>
+            <div class="count-data">
+              <p id="resp-data4"><b>DB Count: </b></p>
+              <p id="resp-data5"><b>API Count: </b></p>
+            </div>
+          </div>
+    </div>
+
+    <div class="custom-artist-data">
+        <label><h1><i class="fa fa-picture-o" style="font-size:30px;color:black"></i> Artists </h1></label>
+
+          <div class="count-wrapper">
+            <div class="lds-dual-ring spinner"></div>
+            <div class="count-data">
+              <p id="resp-data6"><b>DB Count: </b></p>
+              <p id="resp-data7"><b>API Count: </b></p>
+            </div>
+          </div>
+    </div>
+    </div>
+
+
+    <div class="loading-class">
+        <div class="loading-indicator-image">
+        </div>
+    </div>
+    <div class="main-heading">
+        <h1>Save Images</h1>
+    </div>
+    <div class="button-styling" id="image-saved">
+    <?php $collectsys_options = get_option( 'collectsysapi_option_name' );
+
+    if ($collectsys_options['collect_sys_ImageSaved'] != "1"): ?>
+        <div class="custom-image-save">
+            <label><h1><i class="fa fa-folder" style="font-size:30px;color:black"></i> Directory? </h1></label>
+            <button id="custom-directory-save">Click Here!</button>
+        </div>
+    <?php endif; ?>
+
+    <?php $collectsys_options = get_option( 'collectsysapi_option_name' );
+
+    if ($collectsys_options['collect_sys_ImageSaved']
+
+    != "1" && $collectsys_options['collect_sys_ImageSaved'] != "2"): ?>
+        <div style="display:flex;flex-direction: column;justify-content: center;align-items: center;margin: 10px;">
+            <h1>OR</h1>
+        </div>
+    <?php endif; ?>
+
+    <?php $collectsys_options = get_option( 'collectsysapi_option_name' );
+
+    if ($collectsys_options['collect_sys_ImageSaved'] != "2"): ?>
+        <div class="db-save">
+            <label><h1><i class="fa fa-database" style="font-size:30px;color:black"></i> Database? </h1></label>
+            <button id="custom-database-save">Click Here!</button>
+        </div>
+    <?php endif; ?>
+</div>
+
+<div class="loading-class">
+        <div class="loading-indicator-image-object">
+        </div>
+    </div>
+    <div class="main-heading">
+        <h1>Save Object Images</h1>
+    </div>
+    <div class="button-styling" id="image-saved-object">
+    <?php $collectsys_options = get_option( 'collectsysapi_option_name' );
+
+    if ($collectsys_options['collect_sys_ImageSaved'] != "1"): ?>
+        <div class="custom-image-save">
+            <label><h1><i class="fa fa-folder" style="font-size:30px;color:black"></i> Directory? </h1></label>
+            <button id="custom-object-directory-save">Click Here!</button>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($collectsys_options['collect_sys_ImageSaved'] != "1" && $collectsys_options['collect_sys_ImageSaved'] != "2"): ?>
+        <div style="display:flex;flex-direction: column;justify-content: center;align-items: center;margin: 10px;">
+            <h1>OR</h1>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($collectsys_options['collect_sys_ImageSaved'] != "2"): ?>
+        <div class="db-save">
+            <label><h1><i class="fa fa-database" style="font-size:30px;color:black"></i> Database? </h1></label>
+            <button id="custom-object-database-save">Click Here!</button>
+        </div>
+    <?php endif; ?>
+</div>
+
+
+
+
+
+
+
+
