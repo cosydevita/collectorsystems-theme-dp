@@ -79,7 +79,91 @@ function custom_api_integration_theme() {
         'qSearch' => NULL,
         'loadsec' => NULL,
       ],
+    ],
+    'collections-list-page' => [
+      'variables' => [
+        'all_collections' =>NULL,
+        'nxshowrec' => NULL,
+        'nxshskip' => NULL,
+        'count' => NULL,
+        'dataorderby' => NULL,
+        'current_page' => NULL,
+        'requested_page' => NULL,
+        'qSearch' => NULL,
+        'loadsec' => NULL,
+        'site_url' => NULL
+      ],
+    ],
+    'artobject-detail-page' => [
+      'variables' => [
+        'thumbDetails' => NULL,
+        'customized_fields_array' => NULL,
+        'object_details' => NULL,
+        'row_number' => NULL,
+        'row_before' => NULL,
+        'row_after' => NULL,
+      ],
+    ],
+    'artist-detail-page' => [
+      'variables' => [
+        'nxshowrec' => NULL,
+        'nxshskip' => NULL,
+        'obj_count' => NULL,
+        'artistId' => NULL,
+        'groupLevelOrderBy' => NULL,
+        'groupLevelPageNo' => NULL,
+        'artist_details' => NULL,
+        'groupLevelPageNo' => NULL,
+        'qSearch' => NULL,
+        'loadsec' => NULL,
+        'object_details' => NULL
+      ],
+    ],
+    'exhibition-detail-page' => [
+      'variables' => [
+        'nxshowrec' => NULL,
+        'nxshskip' => NULL,
+        'obj_count' => NULL,
+        'groupLevelOrderBy' => NULL,
+        'groupLevelPageNo' => NULL,
+        'groupLevelPageNo' => NULL,
+        'qSearch' => NULL,
+        'loadsec' => NULL,
+        'object_details' => NULL,
+        'exhibition_details' => NULL
+      ],
+    ],
+    'group-detail-page' => [
+      'variables' => [
+        'nxshowrec' => NULL,
+        'nxshskip' => NULL,
+        'obj_count' => NULL,
+        'groupLevelOrderBy' => NULL,
+        'groupLevelPageNo' => NULL,
+        'groupLevelPageNo' => NULL,
+        'qSearch' => NULL,
+        'loadsec' => NULL,
+        'object_details' => NULL,
+        'group_details' => NULL,
+        'group_object_details' => NULL
+      ],
+    ],
+    'collection-detail-page' => [
+      'variables' => [
+        'nxshowrec' => NULL,
+        'nxshskip' => NULL,
+        'obj_count' => NULL,
+        'groupLevelOrderBy' => NULL,
+        'groupLevelPageNo' => NULL,
+        'groupLevelPageNo' => NULL,
+        'qSearch' => NULL,
+        'loadsec' => NULL,
+        'object_details' => NULL,
+        'collection_details' => NULL,
+      ],
     ]
+
+
   ];
 }
 /**

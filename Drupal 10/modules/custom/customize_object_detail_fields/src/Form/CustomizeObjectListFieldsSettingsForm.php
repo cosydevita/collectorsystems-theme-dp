@@ -96,66 +96,75 @@ class CustomizeObjectListFieldsSettingsForm extends ConfigFormBase {
   }
 
   public function get_select_field1_options(){
-     // Load the current configuration settings.
-     $config = \Drupal::config('customize_object_list_fields.settings');
 
-      $options = [];
-     if($config->get('select_field1')){
-       $options =  $config->get('select_field1');
-     }
-     else{
-      //load all options only if  select_field2 does not have data
-      if(!$config->get('select_field2')){
-        $ObjectFieldsService = \Drupal::service('customize_object_detail_fields.object_fields_service');
-        $ObjectFields = $ObjectFieldsService->getObjectFields();
 
-       foreach($ObjectFields as $field){
-        // "FieldName": "AboriginalName",
-        // "FieldValue": "Aboriginal Name"
-        $options[$field['FieldName']] = $field['FieldValue'];
-       }
+     $selected_options = $this->get_select_field2_options();
 
+    //get all the options
+    $ObjectFieldsService = \Drupal::service('customize_object_detail_fields.object_fields_service');
+    $ObjectFields = $ObjectFieldsService->getObjectFields();
+
+    foreach($ObjectFields as $field){
+      // "FieldName": "AboriginalName",
+      // "FieldValue": "Aboriginal Name"
+      $field_name = $field['FieldName'];
+      $field_value = $field['FieldValue'];
+
+      if(!($selected_options[$field_name])){
+        $options[$field_name] = $field_value;
       }
+    }
 
-     }
-     return $options;
+
+    return $options;
 
   }
 
   public function get_select_field2_options(){
-    // Load the current configuration settings.
-    $config = \Drupal::config('customize_object_list_fields.settings');
-    $options = [];
+    $db = \Drupal::database();
 
-    if($config->get('select_field2')){
-      $options =  $config->get('select_field2');
+    $tblnm = "clsobjects_fields";
+    $settblnm = $tblnm;
 
-    }
+    $query = $db->select($settblnm, 'c')
+      ->fields('c', ['fieldname', 'fieldvalue'])
+      ->condition('fieldtype', 'ObjectList');
 
-    return $options;
+    $result = $query->execute()->fetchAllKeyed();
+
+    return $result;
 
  }
 
     public function submitForm(array &$form, FormStateInterface $form_state) {
 
-      $current_field_1_options = json_decode($form_state->getValue('current_select_field1_options'), true);
       $current_field_2_options = json_decode($form_state->getValue('current_select_field2_options'), true);
 
-      if(!$current_field_1_options){
-        $current_field_1_options = '';
+      $table_name = 'clsobjects_fields';
+
+      // Delete rows where fieldtype is 'ObjectList'.
+      \Drupal::database()->delete($table_name)
+        ->condition('fieldtype', 'ObjectList')
+        ->execute();
+
+      // Get selected items from the form.
+      $chkfieldarray = $current_field_2_options;
+
+      // Check if there are selected items.
+      if (!empty($chkfieldarray)) {
+        foreach ($chkfieldarray as $FieldName => $value) {
+          // Assuming $ch is already defined with data.
+
+          // Insert into the database.
+          \Drupal::database()->insert($table_name)
+            ->fields(array(
+              'fieldname' => $FieldName,
+              'fieldvalue' => $value,
+              'fieldtype' => 'ObjectList',
+            ))
+            ->execute();
+        }
       }
-      $this->config('customize_object_list_fields.settings')
-      ->set('select_field1',  $current_field_1_options)
-      ->save();
-
-      if(!$current_field_2_options){
-        $current_field_2_options = '';
-      }
-      $this->config('customize_object_list_fields.settings')
-      ->set('select_field2',  $current_field_2_options)
-      ->save();
-
-
       parent::submitForm($form, $form_state);
     }
 

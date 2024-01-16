@@ -42,3 +42,7 @@ global-script:
   dependencies:
     - core/jquery
     - core/drupal
+
+footer-scripts:
+  js:
+    assets/js/footer-scripts.js: {}

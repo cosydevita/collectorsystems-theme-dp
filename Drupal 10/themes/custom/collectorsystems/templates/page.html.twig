@@ -179,3 +179,161 @@
 
 	</div>
 </footer>
+
+
+{# $chpageredirect=basename(get_permalink());
+	if($chpageredirect=='artists'){				//from artists
+		$detailData="artist-detail";
+	} else if($chpageredirect=='collections'){	//from collections
+		$detailData="collection-detail";
+	} else if($chpageredirect=='exhibitions'){	//from exhibitions
+		$detailData="exhibition-detail";
+	} else if($chpageredirect=='artist-detail' OR $chpageredirect=='collection-detail' OR $detailData="exhibition-detail"){	//from exhibitions
+		$detailData="artobject-detail";
+	}
+$actionurl = site_url()."/".$detailData; #}
+
+
+
+{# if url = http://collectorsystems-drupal.docksal/artists then get artists #}
+{% set chpageredirect = path('<current>') %}
+{% set parts = chpageredirect|split('/') %}
+{% set chpageredirect = parts|last %}
+
+{% if chpageredirect == 'objects' %}
+  {% set detailData = 'artobject-detail' %}
+{% elseif chpageredirect == 'artists' %}
+  {% set detailData = 'artist-detail' %}
+{% elseif chpageredirect == 'collections' %}
+  {% set detailData = 'collection-detail' %}
+{% elseif chpageredirect == 'exhibitions' %}
+  {% set detailData = 'exhibition-detail' %}
+{% elseif chpageredirect == 'artist-detail' or chpageredirect == 'collection-detail' or chpageredirect == 'exhibition-detail' %}
+  {% set detailData = 'artobject-detail' %}
+{% endif %}
+
+{% set actionurl = path('<front>') ~ detailData %}
+
+<form name="frmdata" id="frmdata" action="{{actionurl}}">
+	<input type="hidden" value="" id="dataId" name="dataId"/>
+	<input type="hidden" value="" id="sortBy" name="sortBy"/>
+	<input type="hidden" value="" id="pageNo" name="pageNo"/>
+	<input type="hidden" value="" id="qSearch" name="qSearch"/>
+</form>
+
+<script>
+
+
+  function getmoredetails(currentCSThemeObjectId,currentCSThemeOrderBy,currentCSThemeSearch,currentCSThemePageNo){	//alert(currentCSObjectId);
+    document.getElementById('dataId').value = currentCSThemeObjectId;
+    document.getElementById('sortBy').value = currentCSThemeOrderBy;
+    document.getElementById('pageNo').value = currentCSThemePageNo;
+
+    if(currentCSThemeSearch != "" && currentCSThemeSearch != undefined)
+    {
+    document.getElementById('qSearch').value = currentCSThemeSearch;
+    }
+    else{
+      jQuery("#qSearch").remove();
+    }
+    document.getElementById("frmdata").submit();
+  }
+  function getmoredetailsForArtist(artistactionurl,str){
+    $durl = artistactionurl+"/artist-detail?dataId="+str;
+    window.location.href= $durl;
+  }
+  function getmoredetailsForCollection(collectionactionurl,str){
+    $durl = collectionactionurl+"/collection-detail?dataId="+str;
+    window.location.href= $durl;
+  }
+  function getmoredetailsForExhibition(exhibitionactionurl,str){
+    $durl = exhibitionactionurl+"/exhibition-detail?dataId="+str;
+    window.location.href= $durl;
+  }
+  function getmoredetailsForGroup(groupactionurl,str){
+    $durl = groupactionurl+"/group-detail?dataId="+str;
+    window.location.href= $durl;
+  }
+
+
+
+  function displayWPThemeDefaultImage(control, imageFor, imageSize){
+    $defaultImgName = "";
+    switch(imageFor)
+    {
+      case "Artists":
+        $siteUrl = get_bloginfo("template_directory");
+        defaultImgName=$siteUrl + "/img/artist.png";
+        break;
+      case "Objects":
+        switch (imageSize) {
+          case "FullSize":
+          case "DetailXLarge":
+            defaultImgName = "https://cdn.collectorsystems.com/images/noimage500.png";
+            break;
+          case "SlideShow":
+          case "DetailLarge":
+            defaultImgName = "https://cdn.collectorsystems.com/images/noimage300.png";
+            break;
+          case "iPad":
+            defaultImgName = "https://cdn.collectorsystems.com/images/noimage200.png";
+            break;
+          case "iPhone":
+          case "ThumbSize":
+            defaultImgName = "https://cdn.collectorsystems.com/images/noimage100.png";
+            break;
+          case "Detail":
+          case "MidSize":
+            defaultImgName = "https://cdn.collectorsystems.com/images/noimage150.png";
+            break;
+        }
+        break;
+      case "Collections":
+      case "Exhibitions":
+        defaultImgName = "https://cdn.collectorsystems.com/images/noimage200.png";
+        break;
+    }
+    return defaultImgName;
+  }
+
+
+  function pagingForGroupLevelObjects(ajaxpage,listPageSize,groupLevelPageNoValue)
+  {
+    //debugger;
+  var searchValue=document.getElementById("searchindata").value;
+  var groupLevelOrderBy=document.getElementById("dlGroupLevelObjectsOrderBy").value;
+  var pagenamevalue=ajaxpage;
+  var pagetopvalue=document.getElementById("groupLevelTopCount").value;
+  var pageskipvalue=document.getElementById("groupLevelSkipCount").value;
+  var pageTotalCount=document.getElementById("groupLevelTotalCount").value;
+  var groupTypeId=document.getElementById("groupTypeId").value;
+
+  var collectionLeftExtent=$("#collectionLeftExtent").length > 0 ? $("#collectionLeftExtent").val() : 0;
+  var collectionRightExtent=$("#collectionRightExtent").length > 0 ? $("#collectionRightExtent").val() : 0;
+
+  if(groupLevelPageNoValue==1)
+  {
+    pageskipvalue=0;
+  }
+  else
+  {
+    pageskipvalue=(Number(groupLevelPageNoValue)-1) *Number(pagetopvalue);
+  }
+
+  jQuery.ajax({
+      url: 'admin-ajax.php',
+      type: 'post',
+      data: { action: 'groupLevelObjects_paging_page',pagename:pagenamevalue,groupTypeId:groupTypeId,collectionLeftExtent:collectionLeftExtent,collectionRightExtent:collectionRightExtent,groupLevelPageNo:groupLevelPageNoValue,groupLevelTopCount:pagetopvalue,groupLevelSkipCount:pageskipvalue,groupLevelTotalCount:pageTotalCount,groupLevelOrderBy:groupLevelOrderBy,groupLevelSearch:searchValue},
+      success: function(data) {
+
+        document.getElementById("groupLevelOrderBy").value =  document.getElementById("dlGroupLevelObjectsOrderBy").value;
+        $('#groupLevelObjectsData').html(data);
+
+        htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,pagenamevalue,groupLevelPageNoValue,pageTotalCount,groupLevelOrderBy,searchValue);
+     }
+  });
+
+  return false;
+  }
+
+</script>

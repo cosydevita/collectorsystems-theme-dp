@@ -2,7 +2,7 @@
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\HtmlCommand;
-
+use Drupal\Core\Database\Database;
 
 use Drupal\Core\Ajax\CommandInterface;
 /**
@@ -52,4 +52,45 @@ function customize_object_detail_fields_form_alter(&$form, &$form_state, $form_i
   if ( $form_id === 'customize_object_list_fields_settings_form') {
     $form['#attached']['library'][] = 'customize_object_detail_fields/customize_object_list_fields';
   }
+}
+$database = Database::getConnection();
+
+if (!($database->schema()->tableExists('clsobjects_fields'))) {
+  create_table_clsobjects_fields();
+}
+
+function create_table_clsobjects_fields(){
+
+  $database = Database::getConnection();
+  $table_name = 'clsobjects_fields'; // Replace {table_name} with your actual table name.
+  $schema = [
+    'description' => 'Your table description',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique identifier for the record.',
+      ],
+      'fieldname' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Field name',
+      ],
+      'fieldvalue' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Field value',
+      ],
+      'fieldtype' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Field type',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  // Create the table.
+  $database->schema()->createTable($table_name, $schema);
+
 }

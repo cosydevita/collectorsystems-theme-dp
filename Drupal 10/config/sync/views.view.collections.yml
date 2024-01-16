@@ -318,7 +318,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: collections
+      path: collections-page
     cache_metadata:
       max-age: -1
       contexts:

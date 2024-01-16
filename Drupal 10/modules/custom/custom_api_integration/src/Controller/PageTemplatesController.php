@@ -6,6 +6,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Database\Query\SelectInterface;
+use Drupal\Core\Database\Query\Condition;
+
 class PageTemplatesController extends ControllerBase
 {
   public function ObjectsListPage(){
@@ -24,18 +26,13 @@ class PageTemplatesController extends ControllerBase
     $nxshskip = $shskip;
     $loadsec = 1;
 
-    // $customized_fields = getCommaSeparatedFieldsForListPage();
-    $customized_fields = "title"; //temp only
+    $customized_fields = $this->getCommaSeparatedFieldsForListPage();
 
-    // echo "field:" . $customized_fields;
     $customized_fields_array = explode(',', $customized_fields);
 
     // Count Total Objects
     $object_table = 'CSObjects';
-    // $count = Database::getConnection()->select($object_table, 'o')
-    //   ->fields('o', ['COUNT(*)'])
-    //   ->execute()
-    //   ->fetchField();
+
     $count = Database::getConnection()->select($object_table)
     ->countQuery()
     ->execute()
@@ -67,11 +64,6 @@ class PageTemplatesController extends ControllerBase
     $result = $query->execute();
     $object_details = $result->fetchAllAssoc('ObjectId'); // Assuming 'ObjectId' is the primary key field
 
-    // echo "<pre>";
-    // print $query->__toString();
-    // print_r($object_details);
-
-    // die();
 
     $build = [
       '#theme' => 'objects-list-page',
@@ -328,6 +320,541 @@ class PageTemplatesController extends ControllerBase
 
   }
 
+  public function CollectionsListPage(){
+
+    $showrec=   9;
+    $showrec = isset($listPageSize) ? $listPageSize : 9;
+    $shskip =   0;
+    $ajaxfor=   "listcollection";
+
+    $current_page=   "collections";
+    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "CollectionName%20asc";
+    $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
+
+    $requested_page = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
+    $shskip = ($requested_page - 1) * $showrec;
+
+    $nxshowrec=   isset($listPageSize) ? $listPageSize : 9;
+    $nxshskip =   $shskip;
+
+    $loadsec=1;
+
+    //Fetch Collections From Database
+    $collection_table = "Collections";
+    $database = \Drupal::database();
+    $connection = Database::getConnection();
+
+
+    $count = $database->select($collection_table)
+    ->countQuery()
+    ->execute()
+    ->fetchField();
+
+      // Build the query.
+      $query = $connection->select($collection_table, 'c');
+      $query->fields('c');
+
+      // Add conditions based on $dataorderby and $qSearch.
+      if ($dataorderby === 'CollectionName%20asc') {
+          $query->orderBy('c.CollectionName');
+      } elseif ($dataorderby === 'CollectionName%20desc') {
+          $query->orderBy('c.CollectionName', 'DESC');
+      }
+
+      if ($qSearch !== NULL) {
+          $query->condition('c.CollectionName', '%' . $connection->escapeLike($qSearch) . '%', 'LIKE');
+      }
+
+      // Add limits.
+      $query->range($shskip, $showrec);
+
+      // Execute the query.
+      $result = $query->execute();
+
+      // Fetch all collections.
+      $all_collections = $result->fetchAll();
+
+      $base_url_with_scheme = \Drupal::request()->getSchemeAndHttpHost();
+
+    $build = [
+      '#theme' => 'collections-list-page',
+      '#all_collections' => $all_collections,
+      '#nxshowrec' => $nxshowrec,
+      '#nxshskip' => $nxshskip,
+      '#count' => $count,
+      '#dataorderby' => $dataorderby,
+      '#current_page' => $current_page,
+      '#qSearch' => $qSearch,
+      '#loadsec' => $loadsec,
+      '#requested_page' => $requested_page,
+      '#site_url' => $base_url_with_scheme,
+      '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
+
+    ];
+
+
+    return $build;
+
+  }
+
+  public function ObjectDetailPage(){
+
+    $artObjID=$_REQUEST['dataId'];
+    $sortBy=isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
+    $qSearch=isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
+    $requested_pageNo=isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
+
+    // Fetch Objects Data from database
+    $object_table = 'CSObjects';
+    // $count = \Drupal::database()->select($object_table)
+    //   ->countQuery()
+    //   ->execute()
+    //   ->fetchField();
+
+    // Collection Table
+    $collection_table = 'Collections';
+
+    // Fetch object details from database
+    $query = \Drupal::database()->select($object_table, 'o');
+    $query ->fields('o');
+
+    if ($sortBy === 'Title%20desc' || $sortBy === 'Title asc') {
+      $query->orderBy('Title', ($sortBy === 'Title%20desc') ? 'DESC' : 'ASC');
+    }
+    elseif ($sortBy === 'InventoryNumber%20asc' || $sortBy === 'InventoryNumber%20desc') {
+      $query->orderBy('InventoryNumber', ($sortBy === 'InventoryNumber%20desc') ? 'DESC' : 'ASC');
+    }
+    elseif ($sortBy === 'ObjectDate%20desc' || $sortBy === 'ObjectDate%20asc') {
+      $query->orderBy('ObjectDate', ($sortBy === 'ObjectDate%20desc') ? 'DESC' : 'ASC');
+    }
+    elseif ($sortBy === 'Collection/CollectionName%20asc' || $sortBy === 'Collection/CollectionName%20desc') {
+      $query->join($collection_table, 'c', 'o.CollectionId = c.CollectionId');
+      $query->fields('c', ['CollectionName']);
+      $query->orderBy('c.CollectionName', ($sortBy === 'Collection/CollectionName%20desc') ? 'DESC' : 'ASC');
+    }
+
+    $object_details = $query->execute()->fetchAllAssoc('ObjectId'); //
+
+
+
+
+    // $thumbImage_table = $wpdb->prefix . "ThumbImages";
+    // $check = $wpdb->get_row("SELECT object_image_path, object_image_attachment FROM $thumbImage_table", ARRAY_A);
+    // $fetch_thumbs = $wpdb->prepare("SELECT * FROM $thumbImage_table WHERE ObjectId = %d ORDER BY object_image_path DESC", $artObjID);
+    // $thumbDetails = $wpdb->get_results($fetch_thumbs, ARRAY_A);
+    // $loadsec=1;
+    // Assuming $thumbImage_table is the name of your custom table.
+    // Get the default database connection.
+    $database = Database::getConnection();
+
+    // Assuming $thumbImage_table is the name of your custom table.
+    $thumbImage_table = $database->prefixTables('ThumbImages');
+
+    // Fetching a single row.
+    $query = $database->select($thumbImage_table, 'ti')
+      ->fields('ti', ['object_image_path', 'object_image_attachment'])
+      ->execute();
+    $check = $query->fetchAssoc();
+
+    // Fetching multiple rows based on a condition.
+    $query = $database->select($thumbImage_table, 'ti')
+      ->fields('ti')
+      ->condition('ObjectId', $artObjID)
+      ->orderBy('object_image_path', 'DESC')
+      ->execute();
+    $thumbDetails = $query->fetchAllAssoc('ID');
+
+    // print_r($thumbDetails);
+    // die();
+
+
+    //FOR NEXT AND PREVIOUS
+    $customized_fields = $this->getCommaSeperatedFieldsForDetailPage();
+
+    $customized_fields_array = explode(',', $customized_fields);
+
+
+    $row_number=-1;
+
+    if($object_details)
+    {
+        foreach($object_details as $key=>$object)
+        {
+            // if($object['ObjectId'] == $artObjID)
+            if ($object->ObjectId == $artObjID)
+            {
+                $row_number = $key;
+                break;
+            }
+        }
+
+    }
+    $row_before = (int)$row_number-1;
+    $row_after = (int)$row_number+1;
+
+    $thumbImageTable = 'ThumbImages'; // Assuming that "ThumbImages" is the table name.
+
+    $query = Database::getConnection()->select($thumbImageTable, 'ti');
+    $query->fields('ti');
+
+    if ($check['object_image_path']) {
+      $query->condition('ti.ObjectId', $artObjID);
+      if ($artObjID === '2314862' || $artObjID === '2314861' || $artObjID === '2314848' || $artObjID === '2314841' || $artObjID === '2314836') {
+        $query->orderBy('ti.object_image_path', 'DESC');
+      } elseif ($artObjID === '2314842') {
+        $query->orderBy('ti.object_image_path', 'ASC');
+      }
+    } elseif ($check['object_image_attachment']) {
+      $query->condition('ti.ObjectId', $artObjID);
+      if ($artObjID === '2314862' || $artObjID === '2314843' || $artObjID === '2314836' || $artObjID === '2314841') {
+        $query->orderBy('ti.object_image_attachment', 'ASC');
+      } elseif ($artObjID === '2314842' || $artObjID === '2314861' || $artObjID === '2314845' || $artObjID === '2314833') {
+        $query->orderBy('ti.object_image_attachment', 'DESC');
+      } elseif ($artObjID === '2314848') {
+        $query->orderBy('ti.ThumbURL', 'DESC');
+      }
+    }
+
+    // Execute the query.
+    $thumbDetails = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+    // echo "<pre>";
+    // print_r($customized_fields_array);
+    // die();
+
+
+
+    $build = [
+      '#theme' => 'artobject-detail-page',
+      '#thumbDetails' => $thumbDetails,
+      '#customized_fields_array' => $customized_fields_array,
+      '#object_details' => $object_details,
+      '#row_number' => $row_number,
+      '#row_before' => $row_before,
+      '#row_after' => $row_after,
+      // '#site_url' => $base_url_with_scheme,
+      '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
+
+    ];
+
+
+    return $build;
+
+  }
+
+  public function ArtistDetailPage(){
+    $artistId=$_REQUEST['dataId'];
+    $groupLevelTopCount=   9;
+    $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
+    $groupLevelSkipCount =   0;
+    $ajaxfor=   "artistbydetails";
+    $current_page=   "artist-detail";
+
+    $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
+    $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
+    $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
+    $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? intval($_REQUEST['groupLevelPageNo']) : 1;
+    $groupLevelSkipCount = ($groupLevelPageNo - 1) * $groupLevelTopCount;
+
+    $nxshowrec=   isset($listPageSize) ? $listPageSize : 9;
+    $nxshskip =   $groupLevelSkipCount;
+    $loadsec=1;
+
+    $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
+
+    $customized_fields_array = explode(',', $customized_fields);
+
+    // Fetch artist details from the database
+    $connection = Database::getConnection();
+    $artist_table = $connection->prefixTables('Artists');
+    $fetch_artist_details = $connection->select($artist_table, 'a')
+      ->fields('a', ['ArtistId', 'ArtistName', 'ArtistFirst', 'ArtistLast', 'ArtistYears', 'ArtistNationality', 'ArtistLocale', 'ArtistBio'])
+      ->condition('ArtistId', $artistId)
+      ->execute()
+      ->fetchAssoc();
+    $artist_details = $fetch_artist_details;
+
+    // Construct the WHERE clause for LIKE condition on multiple fields
+    $where_conditions = new Condition('OR');
+    foreach ($customized_fields_array as $field) {
+      $where_conditions->condition($field, '%' . $qSearch . '%', 'LIKE');
+    }
+
+    // Fetch objects where ArtistId
+    $object_table = $connection->prefixTables('CSObjects');
+    $query = $connection->select($object_table, 'o')
+      ->fields('o') // Specify the fields you want to select
+      ->condition('o.ArtistId', $artistId);
+    if ($qSearch !== NULL) {
+      $query->condition($where_conditions);
+    }
+    $object_details = $query->execute()->fetchAllAssoc('ObjectId');
+
+    // Count
+    $count_object = $connection->select($object_table, 'o')
+      ->condition('o.ArtistId', $artistId)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $obj_count = $count_object;
+
+
+
+    $build = [
+      '#theme' => 'artist-detail-page',
+      '#nxshowrec' => $nxshowrec,
+      '#nxshskip' => $nxshskip,
+      '#obj_count' => $obj_count,
+      '#artistId' => $artistId,
+      '#groupLevelOrderBy' => $groupLevelOrderBy,
+      '#groupLevelPageNo' => $groupLevelPageNo,
+      '#artist_details' => $artist_details,
+      '#groupLevelPageNo' => $groupLevelPageNo,
+      '#qSearch' => $qSearch,
+      '#loadsec' => $loadsec,
+      '#object_details' => $object_details,
+      '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
+
+    ];
+
+
+    return $build;
+
+  }
+
+  public function ExhibitionDetailPage(){
+    $exhibitionID=$_REQUEST['dataId'];
+    $groupLevelTopCount=   9;
+    $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
+    $groupLevelSkipCount =   0;
+    $ajaxfor=   "exhibitiondetail";
+    $current_page=   "exhibition-detail";
+
+    $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Object/Title%20desc";
+    $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
+    $requested_pageNo = isset($_REQUEST['pageNo']) ? absint($_REQUEST['pageNo']) : 1;
+    $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? absint($_REQUEST['groupLevelPageNo']) : 1;
+    $groupLevelSkipCount = ($groupLevelPageNo - 1) * $groupLevelTopCount;
+
+
+    $nxshowrec=   isset($listPageSize) ? $listPageSize : 9;
+    $nxshskip =   $groupLevelSkipCount;
+
+    $loadsec=1;
+
+    //Fetch Exhibition Data from database
+    $database = \Drupal::database();
+    // Define the table name using Drupal's table() method.
+    $exhibition_table = 'Exhibitions';
+
+    // Build the database query.
+    $query = $database->select($exhibition_table);
+    $query->fields($exhibition_table);
+    $query->condition('ExhibitionId', $exhibitionID);
+    $result = $query->execute();
+
+    // Fetch the result as an associative array.
+    $exhibition_details = $result->fetchAssoc();
+
+    // print_r($exhibition_details); //PASS
+    // die();
+
+
+    //Fetch Objects Where ExhibitionId
+    $exhibitionObj_table = 'ExhibitionObjects';
+    $object_table = 'CSObjects';
+
+    $query = \Drupal::database()->select($exhibitionObj_table, 'eo');
+    $query->fields('eo');
+    $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
+    $query->fields('co');
+    $query->condition('eo.ExhibitionId', $exhibitionID);
+
+    $result = $query->execute();
+
+    $object_details = $result->fetchAllAssoc('ObjectId');
+
+    // print_r($object_details); //PASS
+    // die();
+
+
+
+    //Count
+    $count_object = $database->query("SELECT COUNT(*) FROM {" . $exhibitionObj_table . "} WHERE ExhibitionId = :exhibition_id", [
+      ':exhibition_id' => $exhibitionID,
+    ]);
+    $obj_count = $count_object->fetchField();
+
+
+    $build = [
+      '#theme' => 'exhibition-detail-page',
+      '#nxshowrec' => $nxshowrec,
+      '#nxshskip' => $nxshskip,
+      '#obj_count' => $obj_count,
+      '#groupLevelOrderBy' => $groupLevelOrderBy,
+      '#groupLevelPageNo' => $groupLevelPageNo,
+      '#groupLevelPageNo' => $groupLevelPageNo,
+      '#qSearch' => $qSearch,
+      '#loadsec' => $loadsec,
+      '#object_details' => $object_details,
+      '#exhibition_details' => $exhibition_details,
+      '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
+
+    ];
+
+
+    return $build;
+
+  }
+
+  public function GroupDetailPage(){
+    $groupID=$_REQUEST['dataId'];
+    $groupLevelTopCount=   9;
+    $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
+    $groupLevelSkipCount =   0;
+    $ajaxfor=   "groupdetail";
+    $current_page=   "group-detail";
+
+    $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Object/Title%20desc";
+    $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
+    $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
+    $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? intval($_REQUEST['groupLevelPageNo']) : 1;
+    $groupLevelSkipCount = ($groupLevelPageNo - 1) * $groupLevelTopCount;
+
+
+
+    $nxshowrec=   isset($listPageSize) ? $listPageSize : 9;
+    $nxshskip =   $groupLevelSkipCount;
+
+    $loadsec=1;
+
+    $database = \Drupal::database();
+
+    //Fetch Group Details From Database
+
+    $group_table = 'Groups';
+    $query = $database->select($group_table, 'g')
+    ->fields('g', ['GroupId', 'GroupDescription', 'GroupMemo'])
+    ->condition('GroupId', $groupID)
+    ->range(0, 1); // Assuming you only expect one result.
+    $group_details = $query->execute()->fetchAssoc();
+
+
+    //Fetch Objects Where GroupId
+    $groupObj_table = "GroupObjects";
+    $query = $database->select($groupObj_table, 'go')
+    ->fields('go')
+    ->condition('GroupId', $groupID);
+    $object_details = $query->execute()->fetchAssoc();
+
+
+    $object_table = "CSObjects";
+    $query = $database->select($groupObj_table, 'eo');
+    $query->fields('eo');
+    $query->condition('eo.GroupId', $groupID);
+    $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
+    $query->fields('co');
+
+
+    $group_object_details = $query->execute()->fetchAllAssoc('ObjectId');
+
+
+    $query = $database->select($groupObj_table, 'go')
+      ->condition('GroupId', $groupID)
+      ->countQuery();
+    $obj_count = $query->execute()->fetchField();
+
+    // echo "<pre>";
+    // print_r($group_object_details);
+    // die();
+
+    $build = [
+      '#theme' => 'group-detail-page',
+      '#nxshowrec' => $nxshowrec,
+      '#nxshskip' => $nxshskip,
+      '#obj_count' => $obj_count,
+      '#groupLevelOrderBy' => $groupLevelOrderBy,
+      '#groupLevelPageNo' => $groupLevelPageNo,
+      '#groupLevelPageNo' => $groupLevelPageNo,
+      '#qSearch' => $qSearch,
+      '#loadsec' => $loadsec,
+      '#object_details' => $object_details,
+      '#group_details' => $group_details,
+      '#group_object_details' => $group_object_details,
+      '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
+
+    ];
+    return $build;
+
+  }
+
+
+  public function CollectionDetailPage(){
+
+    $collectionID=$_REQUEST['dataId'];
+    $groupLevelTopCount=   9;
+    $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
+    $groupLevelSkipCount =   0;
+    $ajaxfor=   "collectiondetail";
+    $current_page=   "collection-detail";
+
+    $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
+    $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
+    $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
+    $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? intval($_REQUEST['groupLevelPageNo']) : 1;
+    $groupLevelSkipCount = ($groupLevelPageNo - 1) * $groupLevelTopCount;
+
+    $nxshowrec=   isset($listPageSize) ? $listPageSize : 9;
+    $nxshskip =   $groupLevelSkipCount;
+    $loadsec=1;
+
+    //Fetch Collection Detail From Database
+    $database = \Drupal::database();
+    $collection_table = 'Collections';
+    $query = $database->select($collection_table, 'c')
+    ->fields('c', ['CollectionId', 'FullCollectionName'])
+    ->condition('c.CollectionId', $collectionID)
+    ->range(0, 1); // Assuming you only expect one result.
+    $collection_details = $query->execute()->fetchAssoc();
+
+
+    //Fetch Objects Where CollectionId
+    // $object_table = $wpdb->prefix . "CSObjects";
+    // $fetch_object_collection_details = $wpdb->prepare("SELECT * FROM $object_table WHERE CollectionId = %d",$collectionID);
+    // $object_details = $wpdb->get_results($fetch_object_collection_details , ARRAY_A);
+    $object_table = 'CSObjects';
+    $query = $database->select($object_table, 'co')
+      ->fields('co')
+      ->condition('co.CollectionId', $collectionID);
+    $object_details = $query->execute()->fetchAllAssoc('ObjectId');
+
+
+    //Count
+    $query = $database->select($object_table, 'co')
+    ->condition('co.CollectionId', $collectionID)
+    ->countQuery();
+    $obj_count = $query->execute()->fetchField();
+
+
+
+    $build = [
+      '#theme' => 'collection-detail-page',
+      '#nxshowrec' => $nxshowrec,
+      '#nxshskip' => $nxshskip,
+      '#obj_count' => $obj_count,
+      '#groupLevelOrderBy' => $groupLevelOrderBy,
+      '#groupLevelPageNo' => $groupLevelPageNo,
+      '#groupLevelPageNo' => $groupLevelPageNo,
+      '#qSearch' => $qSearch,
+      '#loadsec' => $loadsec,
+      '#object_details' => $object_details,
+      '#collection_details' => $collection_details,
+      '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
+    ];
+    return $build;
+
+  }
 
   public function drupal_selected($value, $current_value, $echo = true) {
     $selected = $value == $current_value ? 'selected="selected"' : '';
@@ -337,5 +864,59 @@ class PageTemplatesController extends ControllerBase
     }
 
     return $selected;
+  }
+
+  public function getCommaSeperatedFieldsForDetailPage(){
+
+    $db = \Drupal::database();
+
+    $tblnm = "clsobjects_fields";
+    $settblnm = $tblnm;
+
+    $query = $db->select($settblnm, 'c')
+      ->fields('c', ['fieldname'])
+      ->condition('fieldtype', 'ObjectDetail');
+
+    $result = $query->execute()->fetchAllAssoc('fieldname');
+
+    $values = implode(',', array_keys($result));
+
+    return $values;
+  }
+
+  public function getCommaSeparatedFieldsForListPage(){
+    $db = \Drupal::database();
+
+    $tblnm = "clsobjects_fields";
+    $settblnm = $tblnm;
+
+    $query = $db->select($settblnm, 'c')
+      ->fields('c', ['fieldname'])
+      ->condition('fieldtype', 'ObjectList');
+
+    $result = $query->execute()->fetchAllAssoc('fieldname');
+
+    $values = implode(',', array_keys($result));
+
+    return $values;
+
+  }
+
+  public function getCommaSeperatedFieldsForListPageObject(){
+    $db = \Drupal::database();
+
+    $tblnm = "clsobjects_fields";
+    $settblnm = $tblnm;
+
+    $query = $db->select($settblnm, 'c')
+      ->fields('c', ['fieldname'])
+      ->condition('fieldtype', 'ObjectList');
+
+    $result = $query->execute()->fetchAllAssoc('fieldname');
+
+    $values = implode(',', array_keys($result));
+
+    return $values;
+
   }
 }

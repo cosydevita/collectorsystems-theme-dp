@@ -32,7 +32,7 @@
                             {% set group_img = groupdata.GroupImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(groupdata.GroupImageAttachment) : groupdata.ImagePath ? site_url() ~ groupdata.ImagePath : 'https://cdn.collectorsystems.com/images/noimage300.png' %}
                             <img class="img-fluid" src="{{ group_img }}" alt=""/>
                         </a> #}
-                        <a href="javascript:;" onclick="return getmoredetailsForGroup('{{ path('<front>') }}', {{ groupdata.GroupId }})">
+                        <a href="javascript:;" onclick="return getmoredetailsForGroup('{{ site_url }}', {{ groupdata.GroupId }})">
                           {% set group_img = groupdata.GroupImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(groupdata.GroupImageAttachment) : groupdata.ImagePath ? groupdata.ImagePath : 'https://cdn.collectorsystems.com/images/noimage300.png' %}
                           <img class="img-fluid" src="{{ group_img }}" alt=""/>
                       </a>
