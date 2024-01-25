@@ -14,7 +14,7 @@
                 <ul class="pagination justify-content-end">
                     {% if object_details[row_before] is defined and row_before >= 0 %}
                         <li class="page-item">
-                            <a class="page-link prev-btn" href="javascript:;" onclick="return getmoredetails({{ object_details[row_before]['ObjectId'] }},'{{ sortBy }}','{{ qSearch }}',{{ requested_pageNo }})">
+                            <a class="page-link prev-btn" href="javascript:;" onclick="return getmoredetails({{ object_details[row_before]. ObjectId }},'{{ sortBy }}','{{ qSearch }}',{{ requested_pageNo }})">
                                 <i class="fa fa-arrow-left"></i>Previous
                             </a>
                         </li>
@@ -24,7 +24,7 @@
                     {% endif %}
                     {% if object_details[row_after] is defined and row_after < count %}
                         <li class="page-item">
-                            <a class="page-link next-btn" href="javascript:;" onclick="return getmoredetails({{ object_details[row_after]['ObjectId'] }},'{{ sortBy }}','{{ qSearch }}',{{ requested_pageNo }})">
+                            <a class="page-link next-btn" href="javascript:;" onclick="return getmoredetails({{ object_details[row_after]. ObjectId }},'{{ sortBy }}','{{ qSearch }}',{{ requested_pageNo }})">
                                 Next<i class="fa fa-arrow-right"></i>
                             </a>
                         </li>

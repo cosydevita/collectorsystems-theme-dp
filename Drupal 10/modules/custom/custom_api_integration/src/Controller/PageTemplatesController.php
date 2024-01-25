@@ -50,6 +50,48 @@ class PageTemplatesController extends ControllerBase
       $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
       $query->orderBy('Title', 'DESC');
     }
+    else if($dataorderby === "Title%20asc" && $qSearch !== NULL)
+    {
+      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+      $query->orderBy('Title', 'ASC');
+    }
+    else if($dataorderby === "InventoryNumber%20asc" && $qSearch !== NULL)
+    {
+        // $fetch_object_details = $wpdb->prepare("SELECT * FROM $object_table WHERE Title LIKE %s ORDER BY InventoryNumber ASC LIMIT %d , %d",'%' . $wpdb->esc_like($qSearch) . '%',  $shskip, $showrec);
+        $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+        $query->orderBy('InventoryNumber', 'ASC');
+    }
+    else if($dataorderby === "InventoryNumber%20desc" && $qSearch !== NULL)
+    {
+      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+      $query->orderBy('InventoryNumber', 'DESC');
+    }
+    else if($dataorderby === "ObjectDate%20desc" && $qSearch !== NULL)
+    {
+      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+      $query->orderBy('ObjectDate', 'DESC');
+    }
+    else if($dataorderby === "ObjectDate%20asc" && $qSearch !== NULL)
+    {
+      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+      $query->orderBy('ObjectDate', 'ASC');
+    }
+    else if($dataorderby === "Collection/CollectionName%20asc" && $qSearch !== NULL){
+      $query->fields('o')
+      ->fields('c', ['CollectionName'])
+      ->join($collection_table, 'c', 'o.CollectionId = c.CollectionId');
+      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+      $query->orderBy('c.CollectionName', 'ASC');
+
+    }
+    else if($dataorderby === "Collection/CollectionName%20desc" && $qSearch !== NULL){
+      $query->fields('o')
+      ->fields('c', ['CollectionName'])
+      ->join($collection_table, 'c', 'o.CollectionId = c.CollectionId');
+      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+      $query->orderBy('c.CollectionName', 'DESC');
+
+    }
     // Add other conditions for different order by options and search criteria
 
     // Ensure the SELECT clause includes all necessary columns
@@ -406,10 +448,10 @@ class PageTemplatesController extends ControllerBase
 
     // Fetch Objects Data from database
     $object_table = 'CSObjects';
-    // $count = \Drupal::database()->select($object_table)
-    //   ->countQuery()
-    //   ->execute()
-    //   ->fetchField();
+    $count = \Drupal::database()->select($object_table)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
 
     // Collection Table
     $collection_table = 'Collections';
@@ -423,6 +465,7 @@ class PageTemplatesController extends ControllerBase
     }
     elseif ($sortBy === 'InventoryNumber%20asc' || $sortBy === 'InventoryNumber%20desc') {
       $query->orderBy('InventoryNumber', ($sortBy === 'InventoryNumber%20desc') ? 'DESC' : 'ASC');
+
     }
     elseif ($sortBy === 'ObjectDate%20desc' || $sortBy === 'ObjectDate%20asc') {
       $query->orderBy('ObjectDate', ($sortBy === 'ObjectDate%20desc') ? 'DESC' : 'ASC');
@@ -433,7 +476,9 @@ class PageTemplatesController extends ControllerBase
       $query->orderBy('c.CollectionName', ($sortBy === 'Collection/CollectionName%20desc') ? 'DESC' : 'ASC');
     }
 
-    $object_details = $query->execute()->fetchAllAssoc('ObjectId'); //
+    // $object_details = $query->execute()->fetchAllAssoc('ObjectId'); //
+    $object_details = $query->execute()->fetchAll(); //
+
 
 
 
@@ -483,6 +528,8 @@ class PageTemplatesController extends ControllerBase
             // if($object['ObjectId'] == $artObjID)
             if ($object->ObjectId == $artObjID)
             {
+              // print_r($object_details);
+
                 $row_number = $key;
                 break;
             }
@@ -518,12 +565,6 @@ class PageTemplatesController extends ControllerBase
     // Execute the query.
     $thumbDetails = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
-    // echo "<pre>";
-    // print_r($customized_fields_array);
-    // die();
-
-
-
     $build = [
       '#theme' => 'artobject-detail-page',
       '#thumbDetails' => $thumbDetails,
@@ -532,6 +573,10 @@ class PageTemplatesController extends ControllerBase
       '#row_number' => $row_number,
       '#row_before' => $row_before,
       '#row_after' => $row_after,
+      '#count' => $count,
+      '#sortBy' => $sortBy,
+      '#qSearch' => $qSearch,
+      '#requested_pageNo' => $requested_pageNo,
       // '#site_url' => $base_url_with_scheme,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 

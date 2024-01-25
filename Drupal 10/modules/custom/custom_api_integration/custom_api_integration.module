@@ -102,6 +102,10 @@ function custom_api_integration_theme() {
         'row_number' => NULL,
         'row_before' => NULL,
         'row_after' => NULL,
+        'count' => NULL,
+        'sortBy' =>NULL,
+        'qSearch' => NULL,
+        'requested_pageNo' => NULL,
       ],
     ],
     'artist-detail-page' => [

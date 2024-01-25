@@ -27,22 +27,28 @@
  * @see search_preprocess_block()
  */
 #}
-{%
-  set classes = [
-    'block',
-    'block-search',
-    'container-inline',
-  ]
-%}
-<div{{ attributes.addClass(classes) }}>
-  {{ title_prefix }}
-  {% if label %}
-    <h2{{ title_attributes }}>{{ label }}</h2>
-  {% endif %}
-  {{ title_suffix }}
-  {% block content %}
-    <div{{ content_attributes.addClass('content', 'container-inline') }}>
-      {{ content }}
+
+{# Get the current path #}
+{% set current_path = path('<current>') %}
+
+  {# Get the value of 'dataId' from the query parameters #}
+  {% set dataId = app.request.query.get('dataId') is not null ? app.request.query.get('dataId') : '' %}
+
+  {# Extract the pagename from the current path #}
+  {% set pagename = current_path | split('/') | last %}
+
+  {% if pagename in ['objects', 'artists', 'exhibitions', 'groups', 'collections', 'artobject-detail', 'artist-detail', 'exhibition-detail', 'group-detail', 'collection-detail'] %}
+
+    <div class="nav-item nav-link me-0 mt-md-2">
+      {# <form class="search-form" onsubmit="return chksearchfordata('<?php echo $pagename; ?>');">
+          <input id="searchindata" type="search" class="expand-search" autocomplete="off" name="" value="<?php echo $qSearch; ?>" placeholder="Search...">
+              <span id="clearInputText" class="clear-search" onclick="return clearSearchData('<?php echo $pagename; ?>');" >&times;</span>
+          </input>
+      </form> #}
+      <form class="search-form" onsubmit="return chksearchfordata('{{ pagename }}');">
+        <input id="searchindata" type="search" class="expand-search" autocomplete="off" name="" value="{{ qSearch }}" placeholder="Search...">
+        <span id="clearInputText" class="clear-search" onclick="return clearSearchData('{{ pagename }}');">&times;</span>
+      </form>
+
     </div>
-  {% endblock %}
-</div>
+  {% endif %}

@@ -148,6 +148,9 @@
                         </div>
 		</div>
 	</nav>
+
+
+
 </header>
 
 <main>
@@ -199,6 +202,7 @@ $actionurl = site_url()."/".$detailData; #}
 {% set chpageredirect = path('<current>') %}
 {% set parts = chpageredirect|split('/') %}
 {% set chpageredirect = parts|last %}
+{{chpageredirect}}
 
 {% if chpageredirect == 'objects' %}
   {% set detailData = 'artobject-detail' %}
@@ -208,7 +212,7 @@ $actionurl = site_url()."/".$detailData; #}
   {% set detailData = 'collection-detail' %}
 {% elseif chpageredirect == 'exhibitions' %}
   {% set detailData = 'exhibition-detail' %}
-{% elseif chpageredirect == 'artist-detail' or chpageredirect == 'collection-detail' or chpageredirect == 'exhibition-detail' %}
+{% elseif  chpageredirect == 'artobject-detail' or chpageredirect == 'artist-detail' or chpageredirect == 'collection-detail' or chpageredirect == 'exhibition-detail' %}
   {% set detailData = 'artobject-detail' %}
 {% endif %}
 
@@ -336,4 +340,74 @@ $actionurl = site_url()."/".$detailData; #}
   return false;
   }
 
+
+  function applySorting(pageName){
+  //var baseUrl = '<?php echo site_url(); ?>' + "/" + pageName;
+  var baseUrl = window.location.origin + "/" + pageName;
+
+
+  var pagingUrl = "";
+
+  var searchValue=document.getElementById("searchindata").value;
+  var sortByValue=document.getElementById("seldataorderby").value;
+  var pagerec=document.getElementById("totrec").value;
+
+  if(sortByValue != "")
+  {
+    sortByValue = encodeURIComponent(sortByValue);
+  }
+  if(searchValue != "")
+  {
+    searchValue = encodeURIComponent(searchValue);
+  }
+
+  if(sortByValue != "" && searchValue == "")
+  {
+    pagingUrl = baseUrl+"?sortBy="+sortByValue;
+  }
+  if(sortByValue == "" && searchValue != "")
+  {
+    pagingUrl = baseUrl+"?qSearch="+searchValue;
+  }
+  if(sortByValue != "" && searchValue != "")
+  {
+    pagingUrl = baseUrl+"?sortBy="+sortByValue+"&qSearch="+searchValue;
+  }
+  if(sortByValue == "" && searchValue == "")
+  {
+    pagingUrl = baseUrl;
+  }
+  window.location.href = pagingUrl;
+}
+
+
+function chksearchfordata(ajaxpage){
+
+  if(ajaxpage=="artist-detail" || ajaxpage=="exhibition-detail" || ajaxpage=="group-detail"|| ajaxpage=="collection-detail")
+  {
+    searchingForGroupLevelObjects(ajaxpage);
+  }
+  else
+  {
+    if(ajaxpage=="artobject-detail")
+    {
+      //redirect it to objects list page
+      ajaxpage = "objects";
+    }
+    applySearchToTopLevelTabs(ajaxpage);
+    //searchingForTopLevelTabs(ajaxpage);
+  }
+
+  function applySearchToTopLevelTabs(pageName){
+
+    var baseUrl =  window.location.origin;
+    var sortByValue=document.getElementById("seldataorderby").value;
+    var qSearchValue=document.getElementById("searchindata").value;
+
+    window.location.href = baseUrl+"/"+pageName+"?sortBy="+encodeURIComponent(sortByValue)+"&qSearch="+qSearchValue;
+  }
+
+
+  return false;
+}
 </script>
