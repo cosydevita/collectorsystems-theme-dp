@@ -11,7 +11,8 @@ use Drupal\Core\Database\Query\Condition;
 class PageTemplatesController extends ControllerBase
 {
   public function ObjectsListPage(){
-    $showrec = 9;
+    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip = 0;
     $ajaxfor = "artobjects";
@@ -130,8 +131,8 @@ class PageTemplatesController extends ControllerBase
 
   public function ArtistsListPage(){
 
-    $showrec = 9;
-    $listPageSize = isset($listPageSize) ? $listPageSize : 9;
+    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip = 0;
     $ajaxfor = "artist";
     $current_page = "artists";
@@ -193,7 +194,7 @@ class PageTemplatesController extends ControllerBase
   }
 
   public function ExhibitionsListPage(){
-    $showrec=   9;
+    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip =   0;
     $ajaxfor=   "listexhibition";
@@ -266,7 +267,7 @@ class PageTemplatesController extends ControllerBase
 
   public function GroupsListPage(){
 
-    $showrec=   9;
+    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip =   0;
     $ajaxfor=   "listgroup";
@@ -364,7 +365,7 @@ class PageTemplatesController extends ControllerBase
 
   public function CollectionsListPage(){
 
-    $showrec=   9;
+    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip =   0;
     $ajaxfor=   "listcollection";

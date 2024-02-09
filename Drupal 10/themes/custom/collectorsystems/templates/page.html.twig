@@ -169,7 +169,7 @@
   <div class="container mt-auto">
 		<div class="row copyright">
 			<div class="col-md-6 text-center text-md-start">
-				<a href="javascript:;">©Collector Systems.</a>
+				<a href="javascript:;">©{{footer_text}}</a>
 				<!-- <a href="javascript:;">© 2023 Collector Systems<br> 169 Hudson St.</a> -->
 			</div>
 			<div class="col-md-6 text-center text-md-end">
@@ -202,7 +202,6 @@ $actionurl = site_url()."/".$detailData; #}
 {% set chpageredirect = path('<current>') %}
 {% set parts = chpageredirect|split('/') %}
 {% set chpageredirect = parts|last %}
-{{chpageredirect}}
 
 {% if chpageredirect == 'objects' %}
   {% set detailData = 'artobject-detail' %}

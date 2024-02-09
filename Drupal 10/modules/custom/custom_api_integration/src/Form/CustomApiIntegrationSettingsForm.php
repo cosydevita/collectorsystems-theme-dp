@@ -80,9 +80,10 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       '#type' => 'select',
       '#title' => $this->t('Items Per Page'),
       '#options' => [
-        '1' => '1',
-        '2' => '2',
         '3' => '3',
+        '6' => '6',
+        '9' => '9',
+        '12' => '12',
       ],
       '#default_value' => $config->get('items_per_page'),
     ];

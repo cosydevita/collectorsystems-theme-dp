@@ -10,6 +10,12 @@ xai.api_dashboard:
   description: 'API Dashbopard to sync the API data to database'
   parent: system.admin_config_system
   weight: 99
+xai.homepage_image:
+  title: 'CollectorSystems Home Page Image Settings'
+  route_name: custom_api_integration.homepage_image_form
+  description: 'Set Homepage Image'
+  parent: system.admin_config_system
+  weight: 99
 
 
 

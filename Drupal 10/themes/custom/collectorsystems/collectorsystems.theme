@@ -13,6 +13,7 @@ use \Drupal\views\ViewExecutable;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Drupal\file\Entity\File;
 
 
 
@@ -82,6 +83,28 @@ function collectorsystems_preprocess_collectorsystemsntenance_page(&$variables) 
   $variables['#attached']['library'][] = 'collectorsystems/collectorsystemsntenance_page';
 }
 
+function collectorsystems_preprocess_page(&$variables){
+  $footer_text =  \Drupal::config('custom_api_integration.settings')->get('footer_text');
+  $variables['footer_text'] = $footer_text;
+
+
+  //pass homepage_image_url
+  $homepage_image =  \Drupal::config('homepage_image.settings')->get('homepage_image');
+  if($homepage_image){
+    $file_id_homepage_image = $homepage_image[0];
+    $file_homepage_image = File::load($file_id_homepage_image[0]);
+    // Get the URL of the file.
+    $homepage_image_url = \Drupal::service('file_url_generator')->generateAbsoluteString($file_homepage_image->getFileUri());
+  }
+  else{
+    $homepage_image_url = "/themes/custom/collectorsystems/assets/img/banner.jpeg";
+
+  }
+  $variables['homepage_image_url'] = $homepage_image_url;
+
+  $variables['#cache']['max-age'] = 0;
+
+}
 /**
  * Implements hook_preprocess_HOOK() for node.html.twig.
  */
