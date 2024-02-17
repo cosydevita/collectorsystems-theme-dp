@@ -2,7 +2,69 @@
 use Drupal\Core\Database\Database;
 use Drupal\Core\Database\Schema;
 use Drupal\custom_api_integration\Csconstants;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
 
+/**
+ * Creates menu items in the main navigation menu if there are no menu items created for list pages
+ */
+function create_main_menu_items(){
+  // Array of menu items for the main menu
+  $main_menu_items = array(
+    array(
+      'title' => 'Objects',
+      'link' => 'route:custom_api_integration.objects_list_page',
+      'menu_name' => 'main',
+      'expanded' => TRUE,
+      'weight' => 0,
+
+    ),
+    array(
+      'title' => 'Artists',
+      'link' => 'route:custom_api_integration.artists_list_page',
+      'menu_name' => 'main',
+      'expanded' => TRUE,
+      'weight' => 1,
+
+    ),
+    array(
+      'title' => 'Exhibitions',
+      'link' => 'route:custom_api_integration.exhibitions_list_page',
+      'menu_name' => 'main',
+      'expanded' => TRUE,
+      'weight' => 2,
+
+    ),
+    array(
+      'title' => 'Groups',
+      'link' => 'route:custom_api_integration.groups_list_page',
+      'menu_name' => 'main',
+      'expanded' => TRUE,
+      'weight' => 3,
+    ),
+    array(
+      'title' => 'Collectons',
+      'link' => 'route:custom_api_integration.collections_list_page',
+      'menu_name' => 'main',
+      'expanded' => TRUE,
+      'weight' => 4,
+
+    ),
+    // Add more main menu items as needed
+  );
+
+  // Iterate through the array and create main menu items
+  foreach ($main_menu_items as $item) {
+    $existing_menu_item = \Drupal::entityTypeManager()
+    ->getStorage('menu_link_content')
+    ->loadByProperties(['link' => $item['link']]);
+
+    if (empty($existing_menu_item)) {
+      // Menu item does not exist, create it
+      $menu_link = MenuLinkContent::create($item);
+      $menu_link->save();
+    }
+  }
+}
 /**
  * Implements hook_theme().
  */
@@ -176,6 +238,5 @@ function custom_api_integration_theme() {
 function custom_api_integration_preprocess_page(&$variables)
 {
     $variables['#attached']['library'][] = 'custom_api_integration/custom_api_integration';
+    create_main_menu_items();
 }
-
-

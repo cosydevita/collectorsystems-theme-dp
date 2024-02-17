@@ -3096,10 +3096,20 @@ class CreateTablesRestResource extends ResourceBase {
     if($selected_fields){
       // Add dynamic fields if available
       foreach ($selected_fields as $field) {
-        $schema['fields'][$field] = [
-          'type' => 'varchar',
-          'length' => 500,
-        ];
+        switch($field){
+          case "ObjectDescription":
+            $schema['fields'][$field] = [
+                'type' => 'text',
+                'size' => 'big'
+            ];
+            break;
+          default:
+              $schema['fields'][$field] = [
+                  'type' => 'varchar',
+                  'length' => 500
+              ];
+        }
+
       }
     }
 
@@ -3424,6 +3434,11 @@ class CreateTablesRestResource extends ResourceBase {
             $filtercount = 0;
             $filtertemp='';
             $len = count($objectFields_arr);
+
+            //to get CollectionId and ArtistId values by default
+            $dynamicurl.= 'Collection($select=CollectionId),';
+            $dynamicurl.= 'PublicAPIV2.Models.Art/Artist($select=ArtistId),';
+
             foreach ($objectFields_arr as $field){
                 //print_r($filtercount.'-'.$field);
                 switch ($field)

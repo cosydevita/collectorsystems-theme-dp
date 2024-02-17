@@ -631,7 +631,8 @@ class PageTemplatesController extends ControllerBase
     $query = $connection->select($object_table, 'o')
       ->fields('o') // Specify the fields you want to select
       ->condition('o.ArtistId', $artistId);
-    if ($qSearch !== NULL) {
+
+    if ($qSearch !== NULL && count($customized_fields_array)>0) {
       $query->condition($where_conditions);
     }
     $object_details = $query->execute()->fetchAllAssoc('ObjectId');

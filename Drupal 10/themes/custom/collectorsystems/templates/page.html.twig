@@ -239,6 +239,20 @@ $actionurl = site_url()."/".$detailData; #}
     else{
       jQuery("#qSearch").remove();
     }
+
+
+    //for the detail pages
+    var urlString = window.location.href;
+    var url = new URL(urlString);
+    var pathName = url.pathname;
+    var detailPagePart = pathName.split('/').pop();
+    if(detailPagePart == 'group-detail'){
+      document.getElementById("frmdata").setAttribute('action', '/artobject-detail')
+    }
+
+
+
+
     document.getElementById("frmdata").submit();
   }
   function getmoredetailsForArtist(artistactionurl,str){

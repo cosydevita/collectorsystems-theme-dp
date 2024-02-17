@@ -93,8 +93,11 @@ function collectorsystems_preprocess_page(&$variables){
   if($homepage_image){
     $file_id_homepage_image = $homepage_image[0];
     $file_homepage_image = File::load($file_id_homepage_image[0]);
-    // Get the URL of the file.
-    $homepage_image_url = \Drupal::service('file_url_generator')->generateAbsoluteString($file_homepage_image->getFileUri());
+    if($file_homepage_image){
+      // Get the URL of the file.
+      $homepage_image_url = \Drupal::service('file_url_generator')->generateAbsoluteString($file_homepage_image->getFileUri());
+    }
+
   }
   else{
     $homepage_image_url = "/themes/custom/collectorsystems/assets/img/banner.jpeg";
