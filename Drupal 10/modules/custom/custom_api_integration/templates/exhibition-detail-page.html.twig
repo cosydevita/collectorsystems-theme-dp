@@ -28,8 +28,8 @@
             <div class="sort-by-field" id="dlGroupLevelObjectsSortingHtml">
                 <span class="sort-by-title me-3">Sort By: </span>
                 <select name="dlGroupLevelObjectsOrderBy" id="dlGroupLevelObjectsOrderBy" class="form-select" onchange="return sortingForGroupLevelObjects('{{ ajaxfor }}',{{ listPageSize }});">
-                    <option value="Object/Title%20desc">Title Desc</option>
-                    <option value="Object/Title%20asc">Title Asc</option>
+                    <option value="Title%20desc">Title Desc</option>
+                    <option value="Title%20asc">Title Asc</option>
                     <!-- Add other options here -->
                 </select>
             </div>
@@ -40,7 +40,7 @@
         {% for value in object_details %}
             {% set delaytm = (loadsec == 1) ? '0.01s' : ((loadsec == 2) ? '0.03s' : '0.05s') %}
 
-            {{  getExhibitionObjectsListHtml(value, groupLevelOrderBy|replace({'Object/': ''})|trim,groupLevelPageNo,qSearch,delaytm,"https://cdn.collectorsystems.com/images/noimage300.png") }}
+            {{  getExhibitionObjectsListHtml(value, groupLevelOrderBy,groupLevelPageNo,qSearch,delaytm,"https://cdn.collectorsystems.com/images/noimage300.png") }}
 
             {% set loadsec = (loadsec + 1 == 4) ? 1 : (loadsec + 1) %}
         {% endfor %}

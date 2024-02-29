@@ -182,7 +182,8 @@ function custom_api_integration_theme() {
         'groupLevelPageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
-        'object_details' => NULL
+        'object_details' => NULL,
+        'ajaxfor' => NULL,
       ],
     ],
     'exhibition-detail-page' => [
@@ -196,6 +197,7 @@ function custom_api_integration_theme() {
         'qSearch' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
+        'exhibitionID' => NULL,
         'exhibition_details' => NULL
       ],
     ],
@@ -211,6 +213,7 @@ function custom_api_integration_theme() {
         'loadsec' => NULL,
         'object_details' => NULL,
         'group_details' => NULL,
+        'groupID' => NULL,
         'group_object_details' => NULL
       ],
     ],
@@ -225,6 +228,7 @@ function custom_api_integration_theme() {
         'qSearch' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
+        'collectionID' => NULL,
         'collection_details' => NULL,
       ],
     ]

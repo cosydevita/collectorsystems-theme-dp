@@ -318,6 +318,8 @@ class CustomTwig extends AbstractExtension {
       $value = is_object($value) ? get_object_vars($value) : $value;
     }
 
+
+
   $customized_fields_array = explode(',', $customized_fields);
   $site_url = \Drupal::request()->getSchemeAndHttpHost();
 

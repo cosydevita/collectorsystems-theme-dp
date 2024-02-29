@@ -31,7 +31,9 @@
         <div class="col-auto text-end my-auto d-inline-flex">
             <div class="sort-by-field" id="dlGroupLevelObjectsSortingHtml">
                 <span class="sort-by-title me-3">Sort By: </span>
-                <select name="dlGroupLevelObjectsOrderBy" id="dlGroupLevelObjectsOrderBy" class="form-select" onchange="return sortingForGroupLevelObjects('{{ ajaxfor }}',{{ listPageSize }});">
+                <select name="dlGroupLevelObjectsOrderBy" id="dlGroupLevelObjectsOrderBy"
+                class="form-select"
+                 onchange="return sortingForGroupLevelObjects('{{ ajaxfor }}',{{ listPageSize }});">
                     <option value="Title%20desc">Title Desc</option>
                     <option value="Title%20asc">Title Asc</option>
                     <option value="InventoryNumber%20desc">Inventory Number Desc</option>

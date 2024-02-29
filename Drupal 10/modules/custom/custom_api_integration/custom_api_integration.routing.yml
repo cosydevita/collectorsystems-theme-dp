@@ -97,6 +97,13 @@ custom_api_integration.collection_detail_page:
     _title: 'Collection Detail'
   requirements:
     _permission: 'access content'
+custom_api_integration.group_level_objects_searching_page:
+  path: '/v1/group-level-objects-searching-page'
+  defaults:
+    _controller: '\Drupal\custom_api_integration\Controller\AjaxRequestsController::groupLevelObjects_searching_page'
+    _title: 'Group Level Objects Searching Page'
+  requirements:
+    _permission: 'access content'
 
 
 

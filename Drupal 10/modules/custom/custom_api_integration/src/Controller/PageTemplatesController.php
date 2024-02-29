@@ -34,54 +34,51 @@ class PageTemplatesController extends ControllerBase
     // Count Total Objects
     $object_table = 'CSObjects';
 
-    $count = Database::getConnection()->select($object_table)
-    ->countQuery()
-    ->execute()
-    ->fetchField();
-
-  $count = (int) $count;
-
     // Collection Table
     $collection_table = 'Collections';
 
     // Fetch object details from the database
     $query = Database::getConnection()->select($object_table, 'o');
+    $or_condition_group = $query->orConditionGroup();
+
+    foreach($customized_fields_array as $customized_field){
+      $or_condition_group->condition($customized_field, '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+    }
+    $query->condition($or_condition_group);
 
     if ($dataorderby === "Title%20desc" && $qSearch !== NULL) {
-      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+
       $query->orderBy('Title', 'DESC');
     }
     else if($dataorderby === "Title%20asc" && $qSearch !== NULL)
     {
-      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+
       $query->orderBy('Title', 'ASC');
     }
     else if($dataorderby === "InventoryNumber%20asc" && $qSearch !== NULL)
     {
-        // $fetch_object_details = $wpdb->prepare("SELECT * FROM $object_table WHERE Title LIKE %s ORDER BY InventoryNumber ASC LIMIT %d , %d",'%' . $wpdb->esc_like($qSearch) . '%',  $shskip, $showrec);
-        $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
         $query->orderBy('InventoryNumber', 'ASC');
     }
     else if($dataorderby === "InventoryNumber%20desc" && $qSearch !== NULL)
     {
-      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+
       $query->orderBy('InventoryNumber', 'DESC');
     }
     else if($dataorderby === "ObjectDate%20desc" && $qSearch !== NULL)
     {
-      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+
       $query->orderBy('ObjectDate', 'DESC');
     }
     else if($dataorderby === "ObjectDate%20asc" && $qSearch !== NULL)
     {
-      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+
       $query->orderBy('ObjectDate', 'ASC');
     }
     else if($dataorderby === "Collection/CollectionName%20asc" && $qSearch !== NULL){
       $query->fields('o')
       ->fields('c', ['CollectionName'])
       ->join($collection_table, 'c', 'o.CollectionId = c.CollectionId');
-      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+
       $query->orderBy('c.CollectionName', 'ASC');
 
     }
@@ -89,7 +86,7 @@ class PageTemplatesController extends ControllerBase
       $query->fields('o')
       ->fields('c', ['CollectionName'])
       ->join($collection_table, 'c', 'o.CollectionId = c.CollectionId');
-      $query->condition('Title', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+
       $query->orderBy('c.CollectionName', 'DESC');
 
     }
@@ -98,9 +95,9 @@ class PageTemplatesController extends ControllerBase
     // Ensure the SELECT clause includes all necessary columns
     $query->fields('o');
 
-    // foreach ($customized_fields_array as $field) {
-    //   $query->orderBy($field);
-    // }
+
+    $count_query = $query->countQuery();
+    $total_results = $count_query->execute()->fetchField();
 
     $query->range($shskip, $showrec);
 
@@ -108,12 +105,14 @@ class PageTemplatesController extends ControllerBase
     $object_details = $result->fetchAllAssoc('ObjectId'); // Assuming 'ObjectId' is the primary key field
 
 
+
+
     $build = [
       '#theme' => 'objects-list-page',
       '#object_details' => $object_details,
       '#nxshowrec' => $nxshowrec,
       '#nxshskip' => $nxshskip,
-      '#count' => $count,
+      '#count' => $total_results,
       '#dataorderby' => $dataorderby,
       '#current_page' => $current_page,
       '#requested_pageNo' => $requested_pageNo,
@@ -593,7 +592,7 @@ class PageTemplatesController extends ControllerBase
     $groupLevelTopCount=   9;
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
     $groupLevelSkipCount =   0;
-    $ajaxfor=   "artistbydetails";
+    $ajaxfor=   "artist-detail";
     $current_page=   "artist-detail";
 
     $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
@@ -661,6 +660,7 @@ class PageTemplatesController extends ControllerBase
       '#qSearch' => $qSearch,
       '#loadsec' => $loadsec,
       '#object_details' => $object_details,
+      '#ajaxfor' => $ajaxfor,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -678,7 +678,7 @@ class PageTemplatesController extends ControllerBase
     $ajaxfor=   "exhibitiondetail";
     $current_page=   "exhibition-detail";
 
-    $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Object/Title%20desc";
+    $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
     $requested_pageNo = isset($_REQUEST['pageNo']) ? absint($_REQUEST['pageNo']) : 1;
     $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? absint($_REQUEST['groupLevelPageNo']) : 1;
@@ -722,11 +722,6 @@ class PageTemplatesController extends ControllerBase
 
     $object_details = $result->fetchAllAssoc('ObjectId');
 
-    // print_r($object_details); //PASS
-    // die();
-
-
-
     //Count
     $count_object = $database->query("SELECT COUNT(*) FROM {" . $exhibitionObj_table . "} WHERE ExhibitionId = :exhibition_id", [
       ':exhibition_id' => $exhibitionID,
@@ -746,6 +741,7 @@ class PageTemplatesController extends ControllerBase
       '#loadsec' => $loadsec,
       '#object_details' => $object_details,
       '#exhibition_details' => $exhibition_details,
+      '#exhibitionID' => $exhibitionID,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -829,6 +825,7 @@ class PageTemplatesController extends ControllerBase
       '#object_details' => $object_details,
       '#group_details' => $group_details,
       '#group_object_details' => $group_object_details,
+      '#groupID' => $groupID,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -897,6 +894,7 @@ class PageTemplatesController extends ControllerBase
       '#loadsec' => $loadsec,
       '#object_details' => $object_details,
       '#collection_details' => $collection_details,
+      '#collectionID' => $collectionID,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
     ];
     return $build;

@@ -398,6 +398,7 @@ function chksearchfordata(ajaxpage){
 
   if(ajaxpage=="artist-detail" || ajaxpage=="exhibition-detail" || ajaxpage=="group-detail"|| ajaxpage=="collection-detail")
   {
+    event.preventDefault();
     searchingForGroupLevelObjects(ajaxpage);
   }
   else
@@ -420,6 +421,82 @@ function chksearchfordata(ajaxpage){
     window.location.href = baseUrl+"/"+pageName+"?sortBy="+encodeURIComponent(sortByValue)+"&qSearch="+qSearchValue;
   }
 
+
+  return false;
+}
+
+
+function searchingForGroupLevelObjects(ajaxpage){
+  var objectListSearchValue=document.getElementById("searchindata").value;
+  var objectListOrderByValue=document.getElementById("dlGroupLevelObjectsOrderBy").value;
+  var objectListRecTopValue=document.getElementById("groupLevelTopCount").value;
+  var objectListRecSkipValue=document.getElementById("groupLevelSkipCount").value;
+  var objectListTotalRecValue=document.getElementById("groupLevelTotalCount").value;
+  var groupTypeId=document.getElementById("groupTypeId").value;
+
+  var collectionLeftExtent=jQuery("#collectionLeftExtent").length > 0 ? jQuery("#collectionLeftExtent").val() : 0;
+  var collectionRightExtent=jQuery("#collectionRightExtent").length > 0 ? jQuery("#collectionRightExtent").val() : 0;
+
+  var listPageSize = objectListRecTopValue;
+  objectListRecSkipValue = 0;
+
+  var groupLevelPageNoValue =1;
+
+  jQuery.ajax({
+        url: '/v1/group-level-objects-searching-page',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          action: 'groupLevelObjects_searching_page',pagename:ajaxpage,groupTypeId:groupTypeId,collectionLeftExtent:collectionLeftExtent,collectionRightExtent:collectionRightExtent,searchWord:objectListSearchValue, groupLevelTopCount:objectListRecTopValue,groupLevelSkipCount:objectListRecSkipValue,groupLevelOrderBy:objectListOrderByValue},
+        success: function(data) {
+          console.log(data)
+         //debugger;
+         jQuery('#groupLevelObjectsData').html(data.groupLevelSearchHtml);
+         document.getElementById("groupLevelTotalCount").value = document.getElementById("hdnTotalGroupLevelObjectCount").value;
+         objectListTotalRecValue = document.getElementById("groupLevelTotalCount").value;
+         htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,ajaxpage,groupLevelPageNoValue,objectListTotalRecValue,objectListOrderByValue,objectListSearchValue);
+         if(Number(objectListTotalRecValue) > Number(objectListRecTopValue))
+         {
+          jQuery(".cs-grouplevel-total-count").html("("+objectListTotalRecValue+" results)");
+         }
+         else
+         {
+          jQuery(".cs-grouplevel-total-count").html("");
+         }
+       }
+    });
+  return false;
+}
+
+
+
+function sortingForGroupLevelObjects(ajaxpage,listPageSize){
+
+  var searchValue=document.getElementById("searchindata").value;
+  var selordrtype=document.getElementById("dlGroupLevelObjectsOrderBy").value;
+  var pagenamevalue=ajaxpage;
+  var pagetopvalue=document.getElementById("groupLevelTopCount").value;
+  var pageskipvalue=document.getElementById("groupLevelSkipCount").value;
+  var pageTotalCount=document.getElementById("groupLevelTotalCount").value;
+  var groupTypeId=document.getElementById("groupTypeId").value;
+
+  var collectionLeftExtent=jQuery("#collectionLeftExtent").length > 0 ? jQuery("#collectionLeftExtent").val() : 0;
+  var collectionRightExtent=jQuery("#collectionRightExtent").length > 0 ? jQuery("#collectionRightExtent").val() : 0;
+
+  var groupLevelPageNoValue =1;
+
+  jQuery.ajax({
+      url: '/v1/group-level-objects-searching-page',
+      type: 'POST',
+      dataType: 'json',
+      data: { action: 'groupLevelObjects_searching_page',pagename:pagenamevalue,groupTypeId:groupTypeId,collectionLeftExtent:collectionLeftExtent,collectionRightExtent:collectionRightExtent,groupLevelTopCount:pagetopvalue,groupLevelSkipCount:pageskipvalue,groupLevelOrderBy:selordrtype,groupLevelSearch:searchValue},
+      success: function(data) {
+          document.getElementById("groupLevelOrderBy").value =  document.getElementById("dlGroupLevelObjectsOrderBy").value;
+          jQuery('#groupLevelObjectsData').html(data.groupLevelSearchHtml);
+
+          //htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,pagenamevalue,groupLevelPageNoValue,pageTotalCount,groupLevelOrderBy,searchValue);
+    }
+  });
 
   return false;
 }
