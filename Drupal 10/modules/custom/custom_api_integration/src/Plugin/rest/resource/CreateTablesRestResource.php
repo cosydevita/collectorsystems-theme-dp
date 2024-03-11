@@ -3445,14 +3445,17 @@ class CreateTablesRestResource extends ResourceBase {
                 {
                     case "LocationName":
                     case "FullLocationName":
-                        $dynamicurl.= 'Location($select=LocationId,LocationName,FullLocationName),';
-                        $srch_temp="contains".'(Location/'.$field.','."'$searchWord'".')';
-                        break;
+                      $dynamicurl.= 'Location($select=LocationId,LocationName,FullLocationName),';
+                      $srch_temp="contains".'(Location/'.$field.','."'$searchWord'".')';
+                      break;
 
                     case "PermanentLocationName":
+                      $dynamicurl.= 'PermanentLocation($select=LocationId,LocationName,FullLocationName),';
+                      $srch_temp="contains".'(PermanentLocation/LocationName,'."'$searchWord'".')';
+                      break;
                     case "PermanentFullLocationName":
                         $dynamicurl.= 'PermanentLocation($select=LocationId,LocationName,FullLocationName),';
-                        $srch_temp="contains".'(PermanentLocation/'.$field.','."'$searchWord'".')';
+                        $srch_temp="contains".'(PermanentLocation/'.'FullLocationName'.','."'$searchWord'".')';
                         break;
 
                     case "CollectionName":
@@ -4055,6 +4058,7 @@ class CreateTablesRestResource extends ResourceBase {
                     //Art
                       case "CatalogRaisonne":
                       case "SuitePortfolio":
+                      case "Form":
 
                       //Archaeology
                       case "DecorativeMotif":
@@ -4216,6 +4220,7 @@ class CreateTablesRestResource extends ResourceBase {
                     {
                         //Art
                         case "CatalogRaisonne":
+                        case "Form":
                         case "ReferenceNotes":
                         case "SuitePortfolio":
                           $non_expandable_fields[$i]= "PublicAPIV2.Models.Art/" .$non_expandable_fields[$i];
@@ -4397,7 +4402,11 @@ class CreateTablesRestResource extends ResourceBase {
                           $non_expandable_fields[$i] = "PublicAPIV2.Models.Clothing/" .$non_expandable_fields[$i];
                             $srch_temp="contains".'(PublicAPIV2.Models.Clothing/'.$cs_non_expandable_field.','."'$searchWord'".')';
                             array_push($filterTermArray, $srch_temp);
-                        break;
+                          break;
+                        case "ReleaseDate":
+                        case "ProductionDate":
+                          $non_expandable_fields[$i] = "PublicAPIV2.Models.Archive/" .$non_expandable_fields[$i];
+                          break;
 
 
                     }

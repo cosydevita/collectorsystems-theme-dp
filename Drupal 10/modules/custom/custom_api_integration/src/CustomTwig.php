@@ -32,7 +32,7 @@ class CustomTwig extends AbstractExtension {
     return base64_encode($data);
   }
 
-  public function getObjectslistHtml($objItemList,$value=[], $dataOrderBy, $datapageNo, $dataSearch,$delaytm, $default_image_url){
+  public function getObjectslistHtml($objItemList,$value=[], $dataOrderBy, $datapageNo, $dataSearch,$delaytm, $default_image_url=NULL){
 
     if (is_object($value)) {
         $value = get_object_vars($value);
@@ -327,9 +327,16 @@ class CustomTwig extends AbstractExtension {
    <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
                   <div class="card-body d-flex flex-column">
                       <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId'] ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)">
-                              <?php $object_img = !empty($value['ObjectImage']) ? 'data:image/jpeg;base64,' . base64_encode($value['ObjectImage']) : "";
+                              <?php
+                               $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
                               $server_path = $value['ObjectImagePath'];
-                              $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
+                              if($server_path){
+                                $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
+                              }
+                              else{
+                                $relative_path = '';
+                              }
+
                               $image_url = $site_url. "/". $relative_path;
                               if(empty($object_img) && empty($server_path)){
                               ?>
@@ -398,9 +405,14 @@ class CustomTwig extends AbstractExtension {
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
                   <div class="card-body d-flex flex-column">
                       <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId'] ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)">
-                              <?php $object_img = !empty($value['ObjectImage']) ? 'data:image/jpeg;base64,' . base64_encode($value['ObjectImage']) : "";
+                              <?php
+                              $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
                               $server_path = $value['ObjectImagePath'];
-                              $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
+                              if ($server_path !== null) {
+                                $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
+                              }else{
+                                $relative_path = '';
+                              }
                               $image_url = $site_url . "/" . $relative_path;
                               if(empty($object_img) && empty($server_path)){
                               ?>

@@ -48,6 +48,7 @@
                     <div class="carousel-inner" role="listbox">
                         {% for i, thumb in allthumb %}
                             <div class="carousel-item {{ i == 0 ? 'active' }}">
+
                                 {% if enableZoomForImages %}
                                     <a class="carouselAToggle" data-big="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" href="javascript:;">
                                         <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="Slide {{ i+1 }}"/>
@@ -55,8 +56,8 @@
                                 {% else %}
 
                                 {% set relative_path = thumb.object_image_path  %}
+                                    {% set object_img = thumb['object_image_attachment']  ? 'data:image/jpeg;base64,' ~ base64_encode(thumb['object_image_attachment']) : '' %}
 
-                                {# {{dump(thumb)}} #}
                                     <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="Slide {{ i+1 }}"/>
                                 {% endif %}
                             </div>

@@ -29,12 +29,12 @@
                     <div class="card-body d-flex flex-column">
                         <a href="javascript:;" onclick="return getmoredetailsForCollection('{{ site_url }}', {{ collect.CollectionId }})">
                             {% set cltimg = collect.CollectionImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(collect.CollectionImageAttachment) : collect.ImagePath %}
-                            {% set relative_path = cltimg ? cltimg : site_url ~ '/' ~ collect.ImagePath %}
-                            {% set image_url = cltimg ? site_url ~ '/' ~ relative_path : '' %}
-                            {% if not cltimg and not collect.ImagePath %}
+                            {% set relative_path = cltimg ? cltimg : '' %}
+                            {% set image_url = relative_path ?  relative_path : '' %}
+                            {% if not cltimg and not relative_path %}
                                 <img class="img-fluid" src="https://cdn.collectorsystems.com/images/noimage300.png" alt=""/>
                             {% else %}
-                                <img class="img-fluid" src="{{ image_url ?: cltimg }}" alt=""/>
+                                <img class="img-fluid" src="{{ image_url ? image_url : cltimg }}" alt=""/>
                             {% endif %}
                         </a>
                     </div>

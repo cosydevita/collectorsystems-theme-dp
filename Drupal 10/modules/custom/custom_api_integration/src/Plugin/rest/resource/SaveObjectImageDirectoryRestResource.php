@@ -127,16 +127,25 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
         //Save Object Images
         foreach($Detaildata['value'] as $image)
         {
-            $object_main_image_path = $objectDirectory . '/' . $image['MainImageAttachment']['FileName'];
-            $mainImageURL = $image['MainImageAttachment']['DetailLargeURL'];
-            $objectImages = $image['ObjectImageAttachments'];
+          $object_main_image_path = '';
+
+          if (
+            isset($image['MainImageAttachment']) &&
+            isset($image['MainImageAttachment']['FileName'])
+          ) {
+              $object_main_image_path = $objectDirectory . '/' . $image['MainImageAttachment']['FileName'];
+          }
+            $mainImageURL = $image['MainImageAttachment']['DetailLargeURL'] ?? null;
+            $objectImages = $image['ObjectImageAttachments'] ?? null;
             $curlMain1 = curl_init($mainImageURL);
             curl_setopt($curlMain1, CURLOPT_RETURNTRANSFER, true);
 
             $mainImageData = curl_exec($curlMain1);
 
             curl_close($curlMain1);
-            file_put_contents($object_main_image_path, $mainImageData);
+            if($object_main_image_path &&  $mainImageData){
+              file_put_contents($object_main_image_path, $mainImageData);
+            }
             //for local hosts only
             // $object_main_image_path = preg_replace("#.*?\\\\wp-content#", "/wp-content", $object_main_image_path);
             $attachment = $image['MainImageAttachment'];
@@ -180,7 +189,7 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
                     $fileName1 = $objectImage['Attachment']['FileURL'];
                     if($objectImageData!==false)
                     {
-                        $mainId = $image['MainImageAttachmentId'];
+                        $mainId = $image['MainImageAttachmentId'] ?? null;
                         // $add_directory_path = $wpdb->prepare("UPDATE $object_table SET object_image_path = %s , thumb_size_URL_path = %s , FileURL = %s WHERE ObjectId = %d", $object_image_path, $thumb_image_path , $fileName1 ,$id1);
                         // $wpdb->query($add_directory_path);
                         // $insertObjectImage1 = $wpdb->prepare("INSERT INTO $thumbImage_table(ThumbURL,ObjectId, thumb_size_URL_path, object_image_path) VALUES(%s,%d, %s, %s)",$fileName1,$id1 , $thumb_image_path, $object_image_path);

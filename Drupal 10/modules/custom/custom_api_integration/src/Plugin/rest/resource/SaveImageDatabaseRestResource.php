@@ -378,7 +378,7 @@ class SaveImageDatabaseRestResource extends ResourceBase {
      //Save Collection Images
      foreach($CollectionPhoto['value'] as $photo)
      {
-         $mainImageURL = $photo['CollectionImageAttachment']['DetailLargeURL'];
+         $mainImageURL = $photo['CollectionImageAttachment']['DetailLargeURL'] ?? null;
          $curlMain = curl_init($mainImageURL);
          curl_setopt($curlMain, CURLOPT_RETURNTRANSFER, true);
          $mainImageData = curl_exec($curlMain);
@@ -395,7 +395,7 @@ class SaveImageDatabaseRestResource extends ResourceBase {
      //Save Groups Images
      foreach ($GroupImages['value'] as $photo)
      {
-         $mainImageURL = $photo['GroupImageAttachment']['DetailLargeURL'];
+         $mainImageURL = $photo['GroupImageAttachment']['DetailLargeURL'] ?? null;
          $curlMain = curl_init($mainImageURL);
          curl_setopt($curlMain, CURLOPT_RETURNTRANSFER, true);
          $mainImageData = curl_exec($curlMain);
@@ -412,7 +412,7 @@ class SaveImageDatabaseRestResource extends ResourceBase {
      //Save Exhibitions Images
      foreach ($ExhibitionPhoto['value'] as $photo)
      {
-         $mainImageURL = $photo['ExhibitionImageAttachment']['DetailLargeURL'];
+         $mainImageURL = $photo['ExhibitionImageAttachment']['DetailLargeURL'] ?? null;
          $curlMain = curl_init($mainImageURL);
          curl_setopt($curlMain, CURLOPT_RETURNTRANSFER, true);
          $mainImageData = curl_exec($curlMain);
@@ -429,7 +429,7 @@ class SaveImageDatabaseRestResource extends ResourceBase {
      //Start GroupObjects
      foreach($GroupObjects['value'] as $obj)
      {
-         $object_image = $obj['Object']['MainImageAttachment']['DetailLargeURL'];
+         $object_image = $obj['Object']['MainImageAttachment']['DetailLargeURL'] ?? null;
          $curlMain = curl_init($object_image);
          curl_setopt($curlMain, CURLOPT_RETURNTRANSFER, true);
          $mainImageData = curl_exec($curlMain);
@@ -446,7 +446,7 @@ class SaveImageDatabaseRestResource extends ResourceBase {
      //Start GroupObjects
      foreach($ExhibitionObjects['value'] as $obj)
      {
-         $object_image = $obj['Object']['MainImageAttachment']['DetailLargeURL'];
+         $object_image = $obj['Object']['MainImageAttachment']['DetailLargeURL'] ?? null;
          $curlMain = curl_init($object_image);
          curl_setopt($curlMain, CURLOPT_RETURNTRANSFER, true);
          $mainImageData = curl_exec($curlMain);

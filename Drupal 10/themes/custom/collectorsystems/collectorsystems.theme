@@ -171,6 +171,11 @@ function collectorsystems_preprocess_block(&$variables) {
   if ($variables['plugin_id'] == 'system_branding_block') {
     $variables['attributes']['class'][] = 'clearfix';
   }
+  if(isset($_GET['qSearch'])){
+    $variables['qSearch'] = $_GET['qSearch'];
+  }
+  $variables['#cache']['max-age'] = 0;
+
 }
 
 /**

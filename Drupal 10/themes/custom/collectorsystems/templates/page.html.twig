@@ -500,4 +500,62 @@ function sortingForGroupLevelObjects(ajaxpage,listPageSize){
 
   return false;
 }
+
+function clearSearchData(pageName){
+    document.getElementById("searchindata").value = "";
+
+    if(pageName=="artist-detail" || pageName=="exhibition-detail" || pageName=="group-detail" || pageName=="collection-detail")
+    {
+      clearSearchForGroupLevelObjects(pageName);
+    }
+    else
+    {
+      clearSearchForTopLevelTabs(pageName);
+    }
+    return false;
+}
+
+
+function clearSearchForTopLevelTabs(pageName)
+{
+  var baseUrl = window.location.origin + "/" + pageName;
+  var pagingUrl = "";
+
+  document.getElementById("searchindata").value = "";
+  var sortByValue=document.getElementById("seldataorderby").value;
+  if(sortByValue != "")
+  {
+    sortByValue = encodeURIComponent(sortByValue);
+  }
+  if(pageName == "artobject-detail")
+  {
+    var dataId = document.getElementById("hdnObjectId").value;
+    var pageNo = document.getElementById("pageNo").value;
+    pagingUrl = baseUrl+"/"+pageName+"?dataId="+dataId;
+    if(sortByValue != "")
+    {
+      pagingUrl = pagingUrl+"&sortBy="+sortByValue;
+    }
+    if(pageNo != "")
+    {
+      pagingUrl = pagingUrl+"&pageNo="+pageNo;
+    }
+  }
+  else
+  {
+    if(sortByValue != "")
+    {
+      pagingUrl = baseUrl+"?sortBy="+sortByValue;
+    }
+  }
+
+  window.location.href = pagingUrl;
+
+}
+
+function clearSearchForGroupLevelObjects(ajaxpage)
+{
+  window.location.reload();
+}
+
 </script>

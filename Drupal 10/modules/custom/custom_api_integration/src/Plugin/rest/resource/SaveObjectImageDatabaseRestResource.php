@@ -104,9 +104,9 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
     //Save Objects Images
     foreach ($Detaildata['value'] as $image)
     {
-        $mainImageURL = $image['MainImageAttachment']['DetailLargeURL'];
-        $objectImages = $image['ObjectImageAttachments'];
-        $mainID = $image['MainImageAttachmentId'];
+        $mainImageURL = $image['MainImageAttachment']['DetailLargeURL'] ?? null;
+        $objectImages = $image['ObjectImageAttachments'] ?? null;
+        $mainID = $image['MainImageAttachmentId'] ?? null;
 
         $curlMain = curl_init($mainImageURL);
         curl_setopt($curlMain, CURLOPT_RETURNTRANSFER, true);
@@ -144,7 +144,7 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
                 if ($objectImageData !== false)
                 {
                     $id1 = $image['ObjectId'];
-                    $mainId = $image['MainImageAttachmentId'];
+                    $mainId = $image['MainImageAttachmentId'] ?? null;
                     // $insertObjectImage = $wpdb->prepare("UPDATE $object_table SET object_image_attachment= %s , thumb_size_URL = %s , FileURL = %s WHERE ObjectId = %d" , $objectImageData , $thumbImageData , $fileName1 , $id1);
                     // $resultObject = $wpdb->query($insertObjectImage);
                     // $insertObjectImage1 = $wpdb->prepare("INSERT INTO $thumbImage_table(ThumbURL,ObjectId, thumb_size_URL, object_image_attachment) VALUES(%s,%d, %s, %s)",$fileName1,$id1 , $thumbImageData, $objectImageData);
