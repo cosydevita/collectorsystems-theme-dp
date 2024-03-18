@@ -1,11 +1,24 @@
 <div class="loading-class">
         <div class="loading-indicator">
         </div>
-    </div>
+</div>
+<p>Use this menu to copy your collection information into your website SQL database.</p>
+<p>Use "Reset and Create Daaset" when you add new fields. This will delete your current dataset and re-create it with the new data.</p>
+<p>Use "Update Dataset" when you have added new Objects, Exhibitions, or Groups. This will update the existing databsae without rewriting it. </p>
+
+<h2>Data</h2>
+
 <div class="custom-button-container">
+
          <!--Add the button element -->
-    <button id="create-table-button">Create Table</button>
-    </div>
+    <button id="btn-reset-and-create-dataset" class="dataset-btn btn btn-dark">Reset and Create Dataset</button>
+    <div >OR</div>
+    <button id="btn-update-dataset" class="dataset-btn btn btn-dark">Update Dataset</button>
+
+
+</div>
+<p>Last synced on: {{API_Synced_On}} by {{API_Synced_By}}</p>
+
 
          <!--Add the button element -->
     <!--<button id="create-image-list-button"></button>-->

@@ -74,9 +74,9 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
     // Decode JSON data.
     $Detaildata = json_decode($Detaildata, TRUE);
 
-    // Truncate the ThumbImages table.
-    $truncate_query = $database->truncate($thumbImage_table);
-    $truncate_query->execute();
+    // // Truncate the ThumbImages table.
+    // $truncate_query = $database->truncate($thumbImage_table);
+    // $truncate_query->execute();
 
     // $allImagesDirectory = __DIR__ . '/All Images' . '/Objects';
     $allImagesDirectory = PublicStream::basePath() . '/All Images' . '/Objects';
@@ -100,6 +100,8 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
   ])
   ->execute();
 
+    //to store ObjectImageAttachments AttachmentIds
+    $AttachmentIds_API = [];
 
     //Save Objects Images
     foreach ($Detaildata['value'] as $image)
@@ -107,23 +109,42 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
         $mainImageURL = $image['MainImageAttachment']['DetailLargeURL'] ?? null;
         $objectImages = $image['ObjectImageAttachments'] ?? null;
         $mainID = $image['MainImageAttachmentId'] ?? null;
+        $objectId = $image['ObjectId'];
+        $ApiModificationDate =  $image['ModificationDate'];
 
-        $curlMain = curl_init($mainImageURL);
-        curl_setopt($curlMain, CURLOPT_RETURNTRANSFER, true);
+        // $check_is_object_modified = $this->check_is_object_modified($objectId, $ApiModificationDate);
+        // if(!$check_is_object_modified){
+        //   // If object is not modified then skip to the next iteration without updating it
+        //   continue;
+        // }
 
-        $mainImageData = curl_exec($curlMain);
+        $is_exist_object_MainImageAttachmentId = $this->is_exist_object_MainImageAttachmentId($objectId, $mainID);
+        //if there is already the data for the same MainImageAttachmentId then do not insert the new data
+        if(!$is_exist_object_MainImageAttachmentId){
+          $curlMain = curl_init($mainImageURL);
+          curl_setopt($curlMain, CURLOPT_RETURNTRANSFER, true);
 
-        curl_close($curlMain);
+          $mainImageData = curl_exec($curlMain);
 
-        if ($mainImageData !== false)
-        {
-            $id = $image['ObjectId'];
+          curl_close($curlMain);
 
-            $insertImage = $database->update($object_table)
-            ->fields(['main_image_attachment' => $mainImageData])
-            ->condition('ObjectId', $id)
-            ->execute();
+          if ($mainImageData !== false)
+          {
+              $id = $image['ObjectId'];
+
+              $insertImage = $database->update($object_table)
+              ->fields([
+                'main_image_attachment' => $mainImageData,
+                'MainImageAttachmentId' => $mainID
+
+                ])
+              ->condition('ObjectId', $id)
+              ->execute();
+          }
+
         }
+
+
 
         if (!empty($objectImages))
         {
@@ -131,6 +152,15 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
             {
                 $objectImageDetailLargeURL = $objectImage['Attachment']['DetailXLargeURL'];
                 $fileName1 = $objectImage['Attachment']['FileURL'];
+                $AttachmentId = $objectImage['Attachment']['AttachmentId'];
+                $AttachmentIds_API[] =  $AttachmentId;
+                $is_exist_object_image_AttachmentId_DB = $this->is_exist_object_image_AttachmentId_DB($objectId, $AttachmentId);
+
+                //if there is already the data for the same attachmentId then do not insert the new data
+                if($is_exist_object_image_AttachmentId_DB){
+                  continue;
+                }
+
                 $curlObject = curl_init($objectImageDetailLargeURL);
                 curl_setopt($curlObject, CURLOPT_RETURNTRANSFER, true);
                 $objectImageData = curl_exec($curlObject);
@@ -170,6 +200,7 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
                         'ObjectId' => $id1,
                         'thumb_size_URL' => $thumbImageData,
                         'object_image_attachment' => $objectImageData,
+                        'AttachmentId' => $AttachmentId
                       ])
                       ->execute();
 
@@ -180,8 +211,15 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
                       ->execute();
                 }
             }
+
         }
     }
+
+    //remove all the attachment ids from the database which does not exist in API
+    if($AttachmentIds_API){
+      $this->remove_unrequired_AttachmentIds_from_Database($AttachmentIds_API);
+    }
+
 
 
     // $this->save_image_directory();
@@ -213,5 +251,88 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
             rmdir($dir);
         }
     }
+
+  public function check_is_object_modified($objectId, $ApiModificationDate){
+    $database = Database::getConnection();
+    $table_name = 'CSObjects';
+    // Check if the object is modified
+    $record_exists = $database->select($table_name)
+    ->fields($table_name)
+    ->condition('ObjectId', $objectId)
+    ->condition('ModificationDate', $ApiModificationDate)
+    ->execute()
+    ->fetchAssoc();
+
+    if($record_exists){
+      return true;
+    }else{
+      return false;
+    }
+
+  }
+
+  public function is_exist_object_image_AttachmentId_DB($objectId, $AttachmentId){
+    $database = Database::getConnection();
+    $table_name = 'ThumbImages';
+    // Check if the object is modified
+    $record_exists = $database->select($table_name)
+    ->fields($table_name)
+    ->condition('ObjectId', $objectId)
+    ->condition('AttachmentId', $AttachmentId)
+    ->execute()
+    ->fetchAssoc();
+
+    if($record_exists){
+      return true;
+    }else{
+      return false;
+    }
+
+  }
+
+  public function is_exist_object_MainImageAttachmentId($objectId, $MainImageAttachmentId){
+
+    $database = Database::getConnection();
+    $table_name = 'CSObjects';
+    // Check if the object is modified
+    $record_exists = $database->select($table_name)
+    ->fields($table_name)
+    ->condition('ObjectId', $objectId)
+    ->condition('MainImageAttachmentId', $MainImageAttachmentId)
+    ->execute()
+    ->fetchAssoc();
+
+    if($record_exists){
+      return true;
+    }else{
+      return false;
+    }
+
+  }
+
+  /**
+   * Remove the unrequired rows from the 'ThumbImages' table which does not exist in the API response
+   */
+  public function remove_unrequired_AttachmentIds_from_Database($AttachmentIds_API){
+    $database = Database::getConnection();
+    $table_name = 'ThumbImages';
+
+    // Get all AttachmentIds from the database
+    $dbAttachmentIds = $database->select($table_name, 't')
+        ->fields('t', ['AttachmentId'])
+        ->execute()
+        ->fetchCol();
+
+    // Find AttachmentIds in the database that are not in the API response
+    $unrequiredAttachmentIds = array_diff($dbAttachmentIds, $AttachmentIds_API);
+
+    if (!empty($unrequiredAttachmentIds)) {
+        // Remove rows with unrequired AttachmentIds from the database
+        $database->delete($table_name)
+            ->condition('AttachmentId', $unrequiredAttachmentIds, 'IN')
+            ->execute();
+    }
+
+  }
 
 }

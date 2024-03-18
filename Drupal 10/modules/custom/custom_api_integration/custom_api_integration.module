@@ -88,6 +88,8 @@ function custom_api_integration_theme() {
         'filter_keywords' => '',
         'items_per_page' => '',
         'footer_text' => '',
+        'API_Synced_On' => '',
+        'API_Synced_By' => ''
       ],
     ],
     'objects-list-page' => [

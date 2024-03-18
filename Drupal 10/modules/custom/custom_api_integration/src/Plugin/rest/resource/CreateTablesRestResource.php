@@ -7,6 +7,11 @@ use Drupal\rest\ResourceResponse;
 use Drupal\Core\Database\Connection;
 use Drupal\custom_api_integration\Csconstants;
 use Drupal\Core\Database\Database;
+use Drupal\Core\StreamWrapper\PublicStream;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
+
+
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -31,7 +36,14 @@ class CreateTablesRestResource extends ResourceBase {
    *   Throws exception expected.
    */
   public function post($data) {
-    $this->custom_api_integration_sync_api_data();
+    if(isset($data['btn_action'])){
+      $btn_action = $data['btn_action'];
+    }
+    else{
+      $btn_action = '';
+    }
+
+    $this->custom_api_integration_sync_api_data($btn_action);
     $response = [
       'messgae' => 'All tables created successfully test.'
     ];
@@ -42,27 +54,75 @@ class CreateTablesRestResource extends ResourceBase {
    /**
    * Sync the api data to the database
    */
-  function custom_api_integration_sync_api_data() {
+  function custom_api_integration_sync_api_data($btn_action) {
 
     //drop tables
-    $this->custom_api_integration_drop_tables();
+    $this->custom_api_integration_drop_tables($btn_action);
+
+    if($btn_action == 'reset-and-create-dataset'){
+
+      //drop images directory
+      $allImagesDirectory = PublicStream::basePath() . '/All Images';
+      if(file_exists( $allImagesDirectory ))
+      {
+        $this->deleteDirectory($allImagesDirectory);
+      }
+
+    }
 
     // create tables
-    $this->custom_api_integration_create_tables();
+    $this->custom_api_integration_create_tables($btn_action);
 
-    $this->sync_api_data();
+    $this->sync_api_data($btn_action);
+    $this->update_CSSynced_table();
 
 
   }
 
-  function sync_api_data(){
-    $this->sync_api_data_Artists();
-    $this->sync_api_data_Objects();
-    $this->sync_api_data_Collections();
-    $this->sync_api_data_Exhibitions();
-    $this->sync_api_data_Groups();
+  function sync_api_data($btn_action){
+    $this->sync_api_data_Artists($btn_action);
+    $this->sync_api_data_Objects($btn_action);
+    $this->sync_api_data_Collections($btn_action);
+    $this->sync_api_data_Exhibitions($btn_action);
+    $this->sync_api_data_Groups($btn_action);
     $this->sync_api_data_ExhibitionObjects();
     $this->sync_api_data_GroupObjects();
+
+  }
+
+  function update_CSSynced_table(){
+    $table_name = 'CSSynced';
+    $database = Database::getConnection();
+
+
+
+    // Get the current user object.
+    $current_user = \Drupal::currentUser();
+
+    // Check if the user is authenticated.
+    if ($current_user->isAuthenticated()) {
+      // Truncate the CSSynced table.
+      $truncate_query = $database->truncate($table_name);
+      $truncate_query->execute();
+
+
+      // Get the user name.
+      $username = $current_user->getAccountName();
+      // Output the username.
+      $current_date_time = new DrupalDateTime();
+      $formatted_date_time = $current_date_time->format('m/d/y H:i:s');
+
+      $data = array(
+        'LastSyncedBy' => $username,
+        'LastSyncedDateTime' => $formatted_date_time,
+
+      );
+
+
+      $database->insert($table_name)
+      ->fields($data)
+      ->execute();
+    }
 
   }
 
@@ -176,7 +236,7 @@ class CreateTablesRestResource extends ResourceBase {
 
   }
 
-  function sync_api_data_Groups(){
+  function sync_api_data_Groups($btn_action){
     $config = \Drupal::config('custom_api_integration.settings');
     $subsKey = $config->get('subscription_key');
     $subAcntId = $config->get('account_guid');
@@ -240,15 +300,28 @@ class CreateTablesRestResource extends ResourceBase {
       //end group images
 
       //Start Groups
+      $groupIds_API = [];
       foreach ($GroupImages['value'] as $group)
       {
           $groupId = $group['GroupId'];
+
+          $groupIds_API[] = $groupId;
+
           $groupDescription = $group['GroupDescription'];
           $groupMemo = NULL;
           if(isset($group['GroupMemo']) && $group['GroupMemo'] !== NULL)
           {
               $groupMemo = $group['GroupMemo'];
           }
+
+          if(isset($group['ModificationDate']) && $group['ModificationDate'] !== NULL)
+          {
+              $ModificationDate = $group['ModificationDate'];
+          }elseif(isset($group['CreationDate']) && $group['CreationDate'] !== NULL){
+            $ModificationDate = $group['CreationDate'];
+          }
+
+
           if($groupId !== 0)
           {
               // $sql3 = $wpdb->prepare("INSERT INTO $table_name3 (GroupId , GroupDescription , GroupMemo) VALUES (%d , %s , %s)", $groupId ,  $groupDescription , $groupMemo);
@@ -258,20 +331,53 @@ class CreateTablesRestResource extends ResourceBase {
                 'GroupId' => $groupId,
                 'GroupDescription' => $groupDescription,
                 'GroupMemo' => $groupMemo,
+                'ModificationDate' => $ModificationDate,
+
               );
 
-              // Insert the data into the table.
-              \Drupal::database()->insert($table_name3)
+              if($btn_action == 'update-dataset'){
+                // Check if the record exists.
+                 $record_exists = $database->select($table_name3)
+                 ->fields($table_name3)
+                 ->condition('GroupId', $groupId)
+                 ->execute()
+                 ->fetchAssoc();
+
+                if($record_exists){
+                  // Update the existing record if the ModificationDate has changed
+                  $database->update($table_name3)
+                    ->fields($data)
+                    ->condition('GroupId', $groupId)
+                    ->condition('ModificationDate', $ModificationDate, '<>')
+                    ->execute();
+                }else{
+                    // Handle if record doesn't exist
+                    // Insert data into the table.
+                  $database->insert($table_name3)
+                    ->fields($data)
+                    ->execute();
+                }
+
+              }else{
+                // Insert the data into the table.
+                \Drupal::database()->insert($table_name3)
                 ->fields($data)
                 ->execute();
+
+              }
+
+
           }
 
       }//End Groups
 
+    if($groupIds_API){
+        $this->remove_unrequired_Groups_from_Database($groupIds_API);
+    }
 
   }
 
-  function sync_api_data_Exhibitions(){
+  function sync_api_data_Exhibitions($btn_action){
     $config = \Drupal::config('custom_api_integration.settings');
     $subsKey = $config->get('subscription_key');
     $subAcntId = $config->get('account_guid');
@@ -333,11 +439,12 @@ class CreateTablesRestResource extends ResourceBase {
             exit();
         }
         $data4 = json_decode($data4, TRUE); //End Exhibition's API Data
-
+        $exhibitionIds_API = [];
         //Start Exhibitions
         foreach ($ExhibitionPhoto['value'] as $exhibition)
         {
             $exhibitionId = $exhibition['ExhibitionId'];
+            $exhibitionIds_API[] = $exhibitionId;
             $exhibitionSubject = $exhibition['ExhibitionSubject'];
             $exhibitionLocation = NULL;
             if(isset($exhibition['ExhibitionLocation']) && $exhibition['ExhibitionLocation'] !== NULL)
@@ -350,6 +457,15 @@ class CreateTablesRestResource extends ResourceBase {
             {
                 $exhibitionMemo = $exhibition['ExhibitionMemo'];
             }
+
+            if(isset($exhibition['ModificationDate']) && $exhibition['ModificationDate'] !== NULL)
+            {
+                $ModificationDate = $exhibition['ModificationDate'];
+            }elseif(isset($exhibition['CreationDate']) && $exhibition['CreationDate'] !== NULL){
+              $ModificationDate = $exhibition['CreationDate'];
+            }
+
+
             if($exhibitionId !== null)
             {
                 // $sql4 = $wpdb->prepare("INSERT INTO $table_name4(ExhibitionId , ExhibitionSubject , ExhibitionLocation , ExhibitionDate , ExhibitionMemo) VALUES (%d , %s , %s , %s , %s)", $exhibitionId ,  $exhibitionSubject , $exhibitionLocation , $exhibitionDate , $exhibitionMemo );
@@ -360,15 +476,47 @@ class CreateTablesRestResource extends ResourceBase {
                   'ExhibitionLocation' => $exhibitionLocation,
                   'ExhibitionDate' => $exhibitionDate,
                   'ExhibitionMemo' => $exhibitionMemo,
+                  'ModificationDate' => $ModificationDate,
                 );
-               $database->insert($table_name4)
-              ->fields($data)
-              ->execute();
+
+                if($btn_action == 'update-dataset'){
+                  // Check if the record exists.
+                   $record_exists = $database->select($table_name4)
+                   ->fields($table_name4)
+                   ->condition('ExhibitionId', $exhibitionId)
+                   ->execute()
+                   ->fetchAssoc();
+
+                  if($record_exists){
+                    // Update the existing record if the ModificationDate has changed
+                    $database->update($table_name4)
+                      ->fields($data)
+                      ->condition('ExhibitionId', $exhibitionId)
+                      ->condition('ModificationDate', $ModificationDate, '<>')
+                      ->execute();
+                  }else{
+                      // Handle if record doesn't exist
+                      // Insert data into the table.
+                    $database->insert($table_name4)
+                      ->fields($data)
+                      ->execute();
+                  }
+
+                }else{
+                  $database->insert($table_name4)
+                  ->fields($data)
+                  ->execute();
+                }
+
             }
         } //End Exhibitions
+         //remove unrequired data from the database which does not exist in API
+        if($exhibitionIds_API){
+          $this->remove_unrequired_Exhibitions_from_Database($exhibitionIds_API);
+        }
 
   }
-  function sync_api_data_Collections(){
+  function sync_api_data_Collections($btn_action){
     // Get the api config settings
     $config = \Drupal::config('custom_api_integration.settings');
     $subsKey = $config->get('subscription_key');
@@ -434,12 +582,22 @@ class CreateTablesRestResource extends ResourceBase {
       }
       $data2 = json_decode($data2, TRUE); //End Collection's API Data
 
+      $collectionIds_API = [];
+
       //Start Collections
       foreach ($CollectionPhoto['value'] as $collection)
       {
           $collectionId = $collection['CollectionId'];
+          $collectionIds_API[] = $collectionId;
           $collectionName = $collection['CollectionName'];
           $collectionFullName = $collection['FullCollectionName'];
+
+          if(isset($collection['ModificationDate']) && $collection['ModificationDate'] !== NULL)
+          {
+              $ModificationDate = $collection['ModificationDate'];
+          }elseif(isset($collection['CreationDate']) && $collection['CreationDate'] !== NULL){
+            $ModificationDate = $collection['CreationDate'];
+          }
 
           if ($collectionId !== 0 && $collectionName !== null && $collectionFullName !== null)
           {
@@ -450,18 +608,55 @@ class CreateTablesRestResource extends ResourceBase {
                 'CollectionId' => $collectionId,
                 'CollectionName' => $collectionName,
                 'FullCollectionName' => $collectionFullName,
+                'ModificationDate' => $ModificationDate,
+
               ];
 
-              // Insert data into the table using the database API.
-              $database->insert($table_name2)
+
+
+              if($btn_action == 'update-dataset'){
+                // Check if the record exists.
+                 $record_exists = $database->select($table_name2)
+                 ->fields($table_name2)
+                 ->condition('CollectionId', $collectionId)
+                 ->execute()
+                 ->fetchAssoc();
+
+                if($record_exists){
+                  // Update the existing record if the ModificationDate has changed
+                  $database->update($table_name2)
+                    ->fields($data)
+                    ->condition('CollectionId', $collectionId)
+                    ->condition('ModificationDate', $ModificationDate, '<>')
+                    ->execute();
+                }else{
+                    // Handle if record doesn't exist
+                    // Insert data into the table.
+                  $database->insert($table_name2)
+                    ->fields($data)
+                    ->execute();
+                }
+
+              }else{
+                // Insert data into the table using the database API.
+                $database->insert($table_name2)
                 ->fields($data)
                 ->execute();
+
+              }
+
+
           }
 
       }//End Collections
 
+    //remove unrequired data from the database which does not exist in API
+    if($collectionIds_API){
+    $this->remove_unrequired_Collections_from_Database($collectionIds_API);
+    }
+
   }
-  function sync_api_data_Objects(){
+  function sync_api_data_Objects($btn_action){
 
     $field_names = $field_names_array = $this->get_field_names(); //temp test
 
@@ -514,7 +709,7 @@ class CreateTablesRestResource extends ResourceBase {
       $data1 = json_decode($data1, TRUE); //End Object's API Data
 
 
-
+        $objectIds_API = [];
         foreach ($data1['value'] as $value)
         {
           $combinedObjectValues = [];
@@ -2792,6 +2987,9 @@ class CreateTablesRestResource extends ResourceBase {
 
 
           $id1 = $value['ObjectId'];
+
+          $objectIds_API[] = $id1;
+
           $imgId1 = NULL;
           if(isset($value['MainImageAttachmentId']) && $value['MainImageAttachmentId'] !== NULL)
           {
@@ -2827,6 +3025,12 @@ class CreateTablesRestResource extends ResourceBase {
           {
               $collectionId = $value['Collection']['CollectionId'];
           }
+          if(isset($value['ModificationDate']) && $value['ModificationDate'] !== NULL)
+          {
+              $ModificationDate = $value['ModificationDate'];
+          }elseif(isset($value['CreationDate']) && $value['CreationDate'] !== NULL){
+            $ModificationDate = $value['CreationDate'];
+          }
 
 
         // Create an associative array with field-value pairs
@@ -2838,6 +3042,7 @@ class CreateTablesRestResource extends ResourceBase {
           'MainImageAttachmentId' => $imgId1,
           'ArtistId' => $artistId,
           'CollectionId' => $collectionId,
+          'ModificationDate' => $ModificationDate,
         );
 
         // If $combinedObjectValues is not empty, add its values to the $values array
@@ -2846,17 +3051,47 @@ class CreateTablesRestResource extends ResourceBase {
         }
 
 
-        // Perform the database insert
-        $database->insert($table_name)
+        if($btn_action == 'update-dataset'){
+          // Check if the record exists.
+           $record_exists = $database->select($table_name)
+           ->fields($table_name)
+           ->condition('ObjectId', $id1)
+           ->execute()
+           ->fetchAssoc();
+
+          if($record_exists){
+            // Update the existing record if the ModificationDate has changed
+            $database->update($table_name)
+              ->fields($values)
+              ->condition('ObjectId', $id1)
+              ->condition('ModificationDate', $ModificationDate, '<>')
+              ->execute();
+          }else{
+              // Handle if record doesn't exist
+              // Insert data into the table.
+            $database->insert($table_name)
+              ->fields($values)
+              ->execute();
+          }
+
+        }else{
+          // Perform the database insert
+          $database->insert($table_name)
           ->fields($values)
           ->execute();
+        }
+
+
       }//End Objects
 
 
 
+      if($objectIds_API){
+        $this->remove_unrequired_Objects_from_Database($objectIds_API);
+      }
 
   }
-  function sync_api_data_Artists(){
+  function sync_api_data_Artists($btn_action){
 
     // Get the api config settings
     $config = \Drupal::config('custom_api_integration.settings');
@@ -2918,12 +3153,13 @@ class CreateTablesRestResource extends ResourceBase {
       }
       $ArtistPhoto = json_decode($ArtistPhoto, TRUE);
 
-
+      $artistIds_API = [];
       //Start Artists
       foreach ($ArtistPhoto['value'] as $art)
       {
 
           $artistId = $art['ArtistId'];
+          $artistIds_API[] = $artistId;
           $artistName = NULL;
           $artistFirst = NULL;
           $artistLast = NULL;
@@ -2959,6 +3195,12 @@ class CreateTablesRestResource extends ResourceBase {
           {
               $artistBio = $art['ArtistBio'];
           }
+          if(isset($art['ModificationDate']) && $art['ModificationDate'] !== NULL)
+          {
+              $ModificationDate = $art['ModificationDate'];
+          }elseif(isset($art['CreationDate']) && $art['CreationDate'] !== NULL){
+            $ModificationDate = $art['CreationDate'];
+          }
           if($artistId !== 0)
           {
               // Prepare the data for insertion.
@@ -2971,31 +3213,73 @@ class CreateTablesRestResource extends ResourceBase {
                 'ArtistNationality' => $artistNationality,
                 'ArtistLocale' => $artistLocale,
                 'ArtistBio' => $artistBio,
+                'ModificationDate' => $ModificationDate
               ];
+              if($btn_action == 'update-dataset'){
+                 // Check if the record exists.
+                  $record_exists = $database->select($table_name)
+                  ->fields($table_name)
+                  ->condition('ArtistId', $artistId)
+                  ->execute()
+                  ->fetchAssoc();
 
-              // Insert data into the table.
-              $result = $database->insert($table_name)
+                if ($record_exists) {
+                    // Update the existing record if the ModificationDate has changed
+                    $database->update($table_name)
+                      ->fields($data)
+                      ->condition('ArtistId', $artistId)
+                      ->condition('ModificationDate', $ModificationDate, '<>')
+                      ->execute();
+                } else {
+                    // Handle if record doesn't exist
+                    // Insert data into the table.
+                    $result = $database->insert($table_name)
+                    ->fields($data)
+                    ->execute();
+                }
+
+
+              }else{
+                // Insert data into the table.
+                $result = $database->insert($table_name)
                 ->fields($data)
                 ->execute();
+              }
+
           }
 
       } //End Artists
+
+      if($artistIds_API){
+        $this->remove_unrequired_Artists_from_Database($artistIds_API);
+      }
   }
 
   /**
    * Helper function to drop the tables.
    */
-  function custom_api_integration_drop_tables() {
-    $tables = [
-      'CSObjects',
-      'Artists',
-      'Collections',
-      'Groups',
-      'Exhibitions',
-      'ExhibitionObjects',
-      'GroupObjects',
-      'ThumbImages'
-    ];
+  function custom_api_integration_drop_tables($btn_action) {
+    if($btn_action == 'update-dataset'){
+      //if update dataset then only delete specific tables
+      $tables = [
+        'ExhibitionObjects',
+        'GroupObjects',
+        'CSSynced'
+      ];
+    }else{
+      $tables = [
+        'CSObjects',
+        'Artists',
+        'Collections',
+        'Groups',
+        'Exhibitions',
+        'ExhibitionObjects',
+        'GroupObjects',
+        'ThumbImages',
+        'CSSynced'
+      ];
+    }
+
     $database = Database::getConnection();
     foreach ($tables as $table_name) {
       if ($database->schema()->tableExists($table_name)) {
@@ -3010,15 +3294,24 @@ class CreateTablesRestResource extends ResourceBase {
   /**
    * Helper function to create the dynamic table.
    */
-  function custom_api_integration_create_tables() {
-    $this->create_table_CSObjects();
-    $this->create_table_Artists();
-    $this->create_table_Collections();
-    $this->create_table_Groups();
-    $this->create_table_Exhibitions();
-    $this->create_table_ExhibitionObjects();
-    $this->create_table_GroupObjects();
-    $this->create_table_ThumbImages();
+  function custom_api_integration_create_tables($btn_action) {
+    if($btn_action == 'update-dataset'){
+      $this->create_table_ExhibitionObjects();
+      $this->create_table_GroupObjects();
+      $this->create_table_CSSynced();
+
+    }else{
+      $this->create_table_CSObjects();
+      $this->create_table_Artists();
+      $this->create_table_Collections();
+      $this->create_table_Groups();
+      $this->create_table_Exhibitions();
+      $this->create_table_ExhibitionObjects();
+      $this->create_table_GroupObjects();
+      $this->create_table_ThumbImages();
+      $this->create_table_CSSynced();
+    }
+
 
   }
 
@@ -3089,6 +3382,10 @@ class CreateTablesRestResource extends ResourceBase {
         'FileURL' => [
           'type' => 'text',
         ],
+        'ModificationDate' => [
+          'type' => 'varchar',
+          'length' => 500,
+        ]
       ],
       'primary key' => ['ObjectId'],
     ];
@@ -3164,6 +3461,10 @@ class CreateTablesRestResource extends ResourceBase {
           'type' => 'varchar',
           'length' => 500,
         ],
+        'ModificationDate' => [
+          'type' => 'varchar',
+          'length' => 500,
+        ]
       ],
       'primary key' => ['ArtistId'],
     ];
@@ -3200,6 +3501,10 @@ class CreateTablesRestResource extends ResourceBase {
           'type' => 'varchar',
           'length' => 500,
         ],
+        'ModificationDate' => [
+          'type' => 'varchar',
+          'length' => 500,
+        ]
       ],
       'primary key' => ['CollectionId'],
     ];
@@ -3236,6 +3541,10 @@ class CreateTablesRestResource extends ResourceBase {
           'type' => 'varchar',
           'length' => 500,
         ],
+        'ModificationDate' => [
+          'type' => 'varchar',
+          'length' => 500,
+        ]
       ],
       'primary key' => ['GroupId'],
     ];
@@ -3280,6 +3589,10 @@ class CreateTablesRestResource extends ResourceBase {
           'type' => 'varchar',
           'length' => 500,
         ],
+        'ModificationDate' => [
+          'type' => 'varchar',
+          'length' => 500,
+        ]
       ],
       'primary key' => ['ExhibitionId'],
     ];
@@ -3348,6 +3661,27 @@ class CreateTablesRestResource extends ResourceBase {
 
   }
 
+  function create_table_CSSynced(){
+    $table_name = 'CSSynced';
+    $schema = [
+      'fields' => [
+        'LastSyncedDateTime' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'LastSyncedBy' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+
+      ]
+    ];
+    Database::getConnection()->schema()->createTable($table_name, $schema);
+
+  }
+
 
   function create_table_ThumbImages(){
     // Create the new table
@@ -3386,6 +3720,10 @@ class CreateTablesRestResource extends ResourceBase {
         'object_image_path' => [
           'type' => 'text',
         ],
+        'AttachmentId' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+        ]
       ],
       'primary key' => ['ID'],
       'unique keys' => [
@@ -4425,6 +4763,8 @@ class CreateTablesRestResource extends ResourceBase {
 
             }
             $dynamicurl = $dynamicurl.'ObjectId,';
+            $dynamicurl = $dynamicurl.'ModificationDate,';
+            $dynamicurl = $dynamicurl.'CreationDate,';
 
             if(empty($filtertemp)){
                 return $dynamicurl;
@@ -4453,5 +4793,137 @@ class CreateTablesRestResource extends ResourceBase {
       $commaSeperatedItem .= '<a href="/artist-detail?dataId='.$additionalItem[$additionalArray][$additionalPropertyId].'">'.$additionalItem[$additionalArray][$additionalProperty].'</a>';
     }
     return $commaSeperatedItem;
+  }
+
+
+  public  function deleteDirectory($dir)
+    {
+      if (is_dir($dir))
+      {
+        $files = array_diff(scandir($dir), array('.', '..'));
+        foreach ($files as $file)
+        {
+            $path = "$dir/$file";
+            if (is_dir($path))
+            {
+                $this->deleteDirectory($path);
+            }
+            else
+            {
+                unlink($path);
+            }
+        }
+        rmdir($dir);
+      }
+    }
+
+  public function remove_unrequired_Exhibitions_from_Database($exhibitionIds_API){
+    $database = Database::getConnection();
+    $table_name = 'Exhibitions';
+
+
+    // Get all exhibitionIds from the database
+    $dbexhibitionIds = $database->select($table_name, 't')
+        ->fields('t', ['ExhibitionId'])
+        ->execute()
+        ->fetchCol();
+
+    // Find exhibitionIds in the database that are not in the API response
+    $unrequiredexhibitionIds = array_diff($dbexhibitionIds, $exhibitionIds_API);
+
+    if (!empty($unrequiredexhibitionIds)) {
+        // Remove rows with unrequired ExhibitionIds from the database
+        $database->delete($table_name)
+            ->condition('ExhibitionId', $unrequiredexhibitionIds, 'IN')
+            ->execute();
+    }
+  }
+
+  public function remove_unrequired_Groups_from_Database($groupIds_API){
+    $database = Database::getConnection();
+    $table_name = 'Groups';
+
+
+    // Get all GroupIds from the database
+    $dbGroupIds = $database->select($table_name, 't')
+        ->fields('t', ['GroupId'])
+        ->execute()
+        ->fetchCol();
+
+    // Find GroupIds in the database that are not in the API response
+    $unrequiredGroupIds = array_diff($dbGroupIds, $groupIds_API);
+
+    if (!empty($unrequiredGroupIds)) {
+        // Remove rows with unrequired GroupIds from the database
+        $database->delete($table_name)
+            ->condition('GroupId', $unrequiredGroupIds, 'IN')
+            ->execute();
+    }
+  }
+
+  public function remove_unrequired_Collections_from_Database($collectionIds_API){
+    $database = Database::getConnection();
+    $table_name = 'Collections';
+
+
+    // Get all CollectionIds from the database
+    $dbCollectionIds = $database->select($table_name, 't')
+        ->fields('t', ['CollectionId'])
+        ->execute()
+        ->fetchCol();
+
+    // Find CollectionIds in the database that are not in the API response
+    $unrequiredCollectionIds = array_diff($dbCollectionIds, $collectionIds_API);
+
+    if (!empty($unrequiredCollectionIds)) {
+        // Remove rows with unrequired CollectionIds from the database
+        $database->delete($table_name)
+            ->condition('CollectionId', $unrequiredCollectionIds, 'IN')
+            ->execute();
+    }
+  }
+
+  public function remove_unrequired_Artists_from_Database($artistIds_API){
+    $database = Database::getConnection();
+    $table_name = 'Artists';
+
+
+    // Get all ArtistIds from the database
+    $dbArtistIds = $database->select($table_name, 't')
+        ->fields('t', ['ArtistId'])
+        ->execute()
+        ->fetchCol();
+
+    // Find ArtistIds in the database that are not in the API response
+    $unrequiredArtistIds = array_diff($dbArtistIds, $artistIds_API);
+
+    if (!empty($unrequiredArtistIds)) {
+        // Remove rows with unrequired ArtistIds from the database
+        $database->delete($table_name)
+            ->condition('ArtistId', $unrequiredArtistIds, 'IN')
+            ->execute();
+    }
+  }
+
+  public function remove_unrequired_Objects_from_Database($objectIds_API){
+    $database = Database::getConnection();
+    $table_name = 'CSObjects';
+
+
+    // Get all ObjectIds from the database
+    $dbObjectIds = $database->select($table_name, 't')
+        ->fields('t', ['ObjectId'])
+        ->execute()
+        ->fetchCol();
+
+    // Find ObjectIds in the database that are not in the API response
+    $unrequiredObjectIds = array_diff($dbObjectIds, $objectIds_API);
+
+    if (!empty($unrequiredObjectIds)) {
+        // Remove rows with unrequired ObjectIds from the database
+        $database->delete($table_name)
+            ->condition('ObjectId', $unrequiredObjectIds, 'IN')
+            ->execute();
+    }
   }
 }

@@ -24,7 +24,13 @@
 
 
         // $('#create-table-button').on('click', function () {
-        $(once('createTableButton', '#create-table-button')).on('click.createTableButton', function () {
+        $(once('createTableButton', '.dataset-btn')).on('click.createTableButton', function (event) {
+          var btn_action = '';
+          if (event.target.id === 'btn-update-dataset') {
+            btn_action = 'update-dataset';
+          } else if (event.target.id === 'btn-reset-and-create-dataset') {
+            btn_action = 'reset-and-create-dataset';
+          }
 
           if (sessionToken == '') return;
 
@@ -40,6 +46,7 @@
                 url: '/v1/cs-create-tables?_format=json',
                 contentType: 'application/json',
                 data: JSON.stringify({
+                  btn_action: btn_action
                 }),
                 headers: {
                   'Accept': 'application/json',

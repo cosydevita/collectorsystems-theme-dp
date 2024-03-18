@@ -24,7 +24,7 @@ custom_api_integration.dashboard:
   path: '/admin/config/api-dashboard'
   defaults:
     _controller: '\Drupal\custom_api_integration\Controller\DashboardController::dashboardPage'
-    _title: 'API Dashboard'
+    _title: 'Database Sync Menu'
   requirements:
     _permission: 'administer site configuration'
 custom_api_integration.objects_list_page:
