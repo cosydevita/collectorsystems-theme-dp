@@ -48,22 +48,24 @@ class DashboardController extends ControllerBase implements ContainerInjectionIn
   public function dashboardPage() {
     $database = Database::getConnection();
     $table_CSSynced = 'CSSynced';
-    // Check if the record exists and fetch the LastSyncedDateTime and LastSyncedBy.
-    $record_exists = $database->select($table_CSSynced)
-    ->fields($table_CSSynced, ['LastSyncedDateTime', 'LastSyncedBy'])
-    ->execute()
-    ->fetchAssoc();
+    $table_exists = $database->schema()->tableExists($table_CSSynced);
+    $last_synced_date_time = '----';
+    $last_synced_by = '----';
+    if($table_exists){
+       // Check if the record exists and fetch the LastSyncedDateTime and LastSyncedBy.
+      $record_exists = $database->select($table_CSSynced)
+      ->fields($table_CSSynced, ['LastSyncedDateTime', 'LastSyncedBy'])
+      ->execute()
+      ->fetchAssoc();
 
-    // Check if a record was found.
-    if ($record_exists) {
-    // Retrieve the values.
-    $last_synced_date_time = $record_exists['LastSyncedDateTime'];
-    $last_synced_by = $record_exists['LastSyncedBy'];
+      // Check if a record was found.
+      if ($record_exists) {
+      // Retrieve the values.
+      $last_synced_date_time = $record_exists['LastSyncedDateTime'];
+      $last_synced_by = $record_exists['LastSyncedBy'];
 
-    }
-    else{
-      $last_synced_date_time = '';
-      $last_synced_by = '';
+      }
+
     }
 
     $build = [

@@ -68,6 +68,9 @@
                     $('.wrapper').show();
                     alert("All the tables are created successfully!");
                     button.prop('hidden', false);
+                    //reload the page
+                    location.reload();
+
                 }
             });
         });
