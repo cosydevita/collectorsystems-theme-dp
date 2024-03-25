@@ -1,6 +1,4 @@
 custom_api_integration:
-  js:
-    js/custom_api_integration.js: {}
   css:
     theme:
       css/custom_api_integration.css: {}
@@ -19,5 +17,18 @@ dashboard:
     - core/drupal.ajax
     - core/jquery
     - core/once
+custom_api_integration_settings_form:
+  js:
+    js/custom_api_integration_settings_form.js: {}
+  dependencies:
+    - core/jquery
+select2:
+  js:
+    js/cs_theme_select2.min.js: {}
+  css:
+    theme:
+      css/cs_theme_select2.min.css: {}
+  dependencies:
+  - core/jquery
 
 

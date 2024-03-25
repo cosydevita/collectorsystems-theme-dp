@@ -11,6 +11,15 @@ use Drupal\Core\Database\Query\Condition;
 class PageTemplatesController extends ControllerBase
 {
   public function ObjectsListPage(){
+
+    if(!$this->is_CS_tables_exists()){
+      $build = [
+        '#theme' => 'objects-list-page',
+        '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
+      ];
+      return $build;
+    }
+
     $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
 
     $showrec = isset($listPageSize) ? $listPageSize : 9;
@@ -28,8 +37,9 @@ class PageTemplatesController extends ControllerBase
     $loadsec = 1;
 
     $customized_fields = $this->getCommaSeparatedFieldsForListPage();
-
-    $customized_fields_array = explode(',', $customized_fields);
+    if($customized_fields){
+      $customized_fields_array = explode(',', $customized_fields);
+    }
 
     // Count Total Objects
     $object_table = 'CSObjects';
@@ -39,12 +49,16 @@ class PageTemplatesController extends ControllerBase
 
     // Fetch object details from the database
     $query = Database::getConnection()->select($object_table, 'o');
-    $or_condition_group = $query->orConditionGroup();
+    if($customized_fields){
+      $or_condition_group = $query->orConditionGroup();
 
-    foreach($customized_fields_array as $customized_field){
-      $or_condition_group->condition($customized_field, '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+      foreach($customized_fields_array as $customized_field){
+        $or_condition_group->condition($customized_field, '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
+      }
+      $query->condition($or_condition_group);
+
     }
-    $query->condition($or_condition_group);
+
 
     if ($dataorderby === "Title%20desc" && $qSearch !== NULL) {
 
@@ -95,7 +109,6 @@ class PageTemplatesController extends ControllerBase
     // Ensure the SELECT clause includes all necessary columns
     $query->fields('o');
 
-
     $count_query = $query->countQuery();
     $total_results = $count_query->execute()->fetchField();
 
@@ -103,7 +116,6 @@ class PageTemplatesController extends ControllerBase
 
     $result = $query->execute();
     $object_details = $result->fetchAllAssoc('ObjectId'); // Assuming 'ObjectId' is the primary key field
-
 
 
 
@@ -129,6 +141,13 @@ class PageTemplatesController extends ControllerBase
   }
 
   public function ArtistsListPage(){
+    if(!$this->is_CS_tables_exists()){
+      $build = [
+        '#theme' => 'artists-list-page',
+        '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
+      ];
+      return $build;
+    }
 
     $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
@@ -193,6 +212,15 @@ class PageTemplatesController extends ControllerBase
   }
 
   public function ExhibitionsListPage(){
+    if(!$this->is_CS_tables_exists()){
+      $build = [
+        '#theme' => 'exhibitions-list-page',
+        '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
+      ];
+      return $build;
+    }
+
+
     $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip =   0;
@@ -265,6 +293,14 @@ class PageTemplatesController extends ControllerBase
   }
 
   public function GroupsListPage(){
+
+    if(!$this->is_CS_tables_exists()){
+      $build = [
+        '#theme' => 'groups-list-page',
+        '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
+      ];
+      return $build;
+    }
 
     $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
@@ -363,6 +399,15 @@ class PageTemplatesController extends ControllerBase
   }
 
   public function CollectionsListPage(){
+
+    if(!$this->is_CS_tables_exists()){
+      $build = [
+        '#theme' => 'collections-list-page',
+        '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
+      ];
+      return $build;
+    }
+
 
     $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
@@ -963,5 +1008,28 @@ class PageTemplatesController extends ControllerBase
 
     return $values;
 
+  }
+
+  public function is_CS_tables_exists(){
+    $tables = [
+      'CSObjects',
+      'Artists',
+      'Collections',
+      'Groups',
+      'Exhibitions',
+      'ExhibitionObjects',
+      'GroupObjects',
+      'ThumbImages'
+
+    ];
+    $tables_exists = true;
+    $database = Database::getConnection();
+    foreach($tables as $table){
+      if(!$database->schema()->tableExists($table) ){
+        $tables_exists = false;
+      }
+    }
+
+    return $tables_exists;
   }
 }

@@ -8,7 +8,6 @@ global-styling:
       assets/lib/animate/animate.min.css: {}
       assets/css/cs_theme_bootstrap-lightbox.css: {}
       assets/css/cs_theme_bootstrap.min.css: {}
-      assets/css/cs_theme_select2.min.css: {}
       assets/css/cs_theme_style.css: {}
       assets/css/mobile.css: {}
       assets/fontawesome/css/all.min.css: {}
@@ -28,7 +27,6 @@ global-script:
     js/main.js: {}
     js/cdragZoom.js: {}
     js/cs_theme_jquery_3.4.1.min.js: {}
-    js/cs_theme_select2.min.js: {}
     js/cs_theme_bootstrap.bundle.min.js: {}
     js/cs_theme_bootstrap-lightbox.js: {}
     assets/lib/owlcarousel/owl.carousel.js: {}

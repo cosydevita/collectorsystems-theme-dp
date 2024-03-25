@@ -4,6 +4,9 @@ namespace Drupal\custom_api_integration\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\custom_api_integration\Csconstants;
+use Drupal\Core\Database\Database;
+use Drupal\Core\StreamWrapper\PublicStream;
 
 class CustomApiIntegrationSettingsForm extends ConfigFormBase {
 
@@ -54,21 +57,22 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
     $form['filter_keywords'] = [
       '#type' => 'select',
       '#title' => $this->t('Filter Images By Keywords'),
-      '#options' => [
-        'Armchairs' => $this->t('Armchairs'),
-        'art gallery' => $this->t('Art Gallery'),
-        'Canvas' => $this->t('Canvas'),
-        'clock' => $this->t('Clock'),
-        'collection' => $this->t('Collection'),
-        'fine arts' => $this->t('Fine Arts'),
-        'gallery' => $this->t('Gallery'),
-        'necklace' => $this->t('Necklace'),
-        'oil painting' => $this->t('Oil Painting'),
-        'paint' => $this->t('Paint'),
-        'sculpture' => $this->t('Sculpture'),
-        'wall art' => $this->t('Wall Art'),
-        'wall painting' => $this->t('Wall Painting'),
-      ],
+      // '#options' => [
+      //   'Armchairs' => $this->t('Armchairs'),
+      //   'art gallery' => $this->t('Art Gallery'),
+      //   'Canvas' => $this->t('Canvas'),
+      //   'clock' => $this->t('Clock'),
+      //   'collection' => $this->t('Collection'),
+      //   'fine arts' => $this->t('Fine Arts'),
+      //   'gallery' => $this->t('Gallery'),
+      //   'necklace' => $this->t('Necklace'),
+      //   'oil painting' => $this->t('Oil Painting'),
+      //   'paint' => $this->t('Paint'),
+      //   'sculpture' => $this->t('Sculpture'),
+      //   'wall art' => $this->t('Wall Art'),
+      //   'wall painting' => $this->t('Wall Painting'),
+      // ],
+      '#options' => $this->get_attachment_keywords() ?? [],
       '#default_value' => $config->get('filter_keywords'),
       '#multiple' => true,
       '#attributes' => [
@@ -94,6 +98,10 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('footer_text'),
     ];
 
+    $form['#attached']['library'][] = 'custom_api_integration/select2';
+    $form['#attached']['library'][] = 'custom_api_integration/custom_api_integration_settings_form';
+
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -110,6 +118,50 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       ->save();
 
     parent::submitForm($form, $form_state);
+  }
+
+  public function get_attachment_keywords(){
+
+    $config = \Drupal::config('custom_api_integration.settings');
+    $subsKey = $config->get('subscription_key');
+    $subAcntId = $config->get('account_guid');
+    $subsId = $config->get('subscription_id');
+
+
+    $url = csconstants::Public_API_URL.$subAcntId.'/AttachmentKeywords?$apply=groupby((AttachmentKeywordString))';
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $headers = array(
+    "Accept: application/json",
+    "Ocp-Apim-Subscription-Key:$subsKey ",
+    "Cache-Control:no-cache",
+    );
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+    $Detaildata = curl_exec($curl);
+    curl_close($curl);
+
+    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    if($httpcode == 403)
+    {
+        // get_template_part( 403 );
+        exit();
+    }
+
+    $Detaildata = json_decode($Detaildata, TRUE);
+    $keywords = [];
+    foreach($Detaildata['value'] as $data)
+    {
+      if(isset($data['AttachmentKeywordString'])){
+        $keywords[] = $data['AttachmentKeywordString'];
+      }
+    }
+
+    return $keywords;
   }
 
 }

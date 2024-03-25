@@ -413,11 +413,7 @@ a:hover h4, a:hover h5, a:hover h6 {
 }
 
 .card-title {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    word-break: var(--word-break, "none");
-    overflow: hidden;
+ display: block;
 }
 
 .card a:hover
