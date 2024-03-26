@@ -416,7 +416,7 @@ class PageTemplatesController extends ControllerBase
     $ajaxfor=   "listcollection";
 
     $current_page=   "collections";
-    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "CollectionName%20asc";
+    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "FullCollectionName%20desc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
 
     $requested_page = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
