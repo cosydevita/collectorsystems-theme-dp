@@ -446,6 +446,8 @@ class PageTemplatesController extends ControllerBase
           $query->orderBy('c.CollectionName');
       } elseif ($dataorderby === 'CollectionName%20desc') {
           $query->orderBy('c.CollectionName', 'DESC');
+      }elseif ($dataorderby === 'FullCollectionName%20desc') {
+        $query->orderBy('c.FullCollectionName', 'DESC');
       }
 
       if ($qSearch !== NULL) {
