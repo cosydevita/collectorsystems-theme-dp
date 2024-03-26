@@ -235,15 +235,16 @@ class PageTemplatesController extends ControllerBase
     $nxshskip =   $shskip;
     $loadsec=1;
 
-    //Fetch Exhibition Data from Database
     $exhibition_table = "Exhibitions";
-    $connection = Database::getConnection();
-    $count = $connection->query("SELECT COUNT(*) FROM $exhibition_table")->fetchField();
 
+    // Fetch Count From the Database
+    $query = Database::getConnection()->select($exhibition_table, 'a');
+    $query->addExpression('COUNT(*)');
+    $count = $query->execute()->fetchField();
 
     $database = Database::getConnection();
 
-
+    //Fetch Exhibition Data from Database
     $query = $database->select($exhibition_table, 'et');
     $query->fields('et');
 
