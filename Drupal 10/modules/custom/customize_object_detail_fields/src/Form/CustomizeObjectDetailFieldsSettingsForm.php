@@ -111,7 +111,7 @@ class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
       $field_name = $field['FieldName'];
       $field_value = $field['FieldValue'];
 
-      if(!($selected_options[$field_name])){
+      if(!(isset($selected_options[$field_name]))){
         $options[$field_name] = $field_value;
       }
     }
