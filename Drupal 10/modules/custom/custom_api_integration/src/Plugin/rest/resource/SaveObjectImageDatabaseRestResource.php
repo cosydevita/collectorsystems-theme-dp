@@ -107,10 +107,19 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
     foreach ($Detaildata['value'] as $image)
     {
         $mainImageURL = $image['MainImageAttachment']['DetailLargeURL'] ?? null;
-        $objectImages = $image['ObjectImageAttachments'] ?? null;
+
         $mainID = $image['MainImageAttachmentId'] ?? null;
         $objectId = $image['ObjectId'];
         $ApiModificationDate =  $image['ModificationDate'];
+
+        $filtered_keywords = get_filtered_keywords();
+        if($filtered_keywords){
+          $mainAttachmentId= isset($image['MainImageAttachment']) ? $image['MainImageAttachment']['AttachmentId'] : 0;
+          $objectImages = getObjectImageAttachmentsByObjectId($objectId, $mainAttachmentId);
+        }
+        else{
+          $objectImages = $image['ObjectImageAttachments'] ?? null;
+        }
 
         // $check_is_object_modified = $this->check_is_object_modified($objectId, $ApiModificationDate);
         // if(!$check_is_object_modified){
@@ -148,6 +157,7 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
 
         if (!empty($objectImages))
         {
+
             foreach ($objectImages as $objectImage)
             {
                 $objectImageDetailLargeURL = $objectImage['Attachment']['DetailXLargeURL'];

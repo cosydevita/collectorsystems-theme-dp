@@ -72,7 +72,7 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       //   'wall art' => $this->t('Wall Art'),
       //   'wall painting' => $this->t('Wall Painting'),
       // ],
-      '#options' => $this->get_attachment_keywords() ?? [],
+      '#options' => $this->get_filter_keywords_options() ?? [],
       '#default_value' => $config->get('filter_keywords'),
       '#multiple' => true,
       '#attributes' => [
@@ -120,7 +120,7 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
     parent::submitForm($form, $form_state);
   }
 
-  public function get_attachment_keywords(){
+  public function get_filter_keywords_options(){
 
     $config = \Drupal::config('custom_api_integration.settings');
     $subsKey = $config->get('subscription_key');
@@ -160,8 +160,14 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
         $keywords[] = $data['AttachmentKeywordString'];
       }
     }
+    $options = [];
 
-    return $keywords;
+    foreach($keywords as $keyword){
+      $options[$keyword] = $this->t($keyword);
+
+    }
+    return $options;
+
   }
 
 }

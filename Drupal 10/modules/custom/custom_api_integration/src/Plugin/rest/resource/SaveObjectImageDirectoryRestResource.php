@@ -136,7 +136,15 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
               $object_main_image_path = $objectDirectory . '/' . $image['MainImageAttachment']['FileName'];
           }
             $mainImageURL = $image['MainImageAttachment']['DetailLargeURL'] ?? null;
-            $objectImages = $image['ObjectImageAttachments'] ?? null;
+            $filtered_keywords = get_filtered_keywords();
+            $objectId = $image['ObjectId'];
+            if($filtered_keywords){
+              $mainAttachmentId= isset($image['MainImageAttachment']) ? $image['MainImageAttachment']['AttachmentId'] : 0;
+              $objectImages = getObjectImageAttachmentsByObjectId($objectId, $mainAttachmentId);
+            }
+            else{
+              $objectImages = $image['ObjectImageAttachments'] ?? null;
+            }
             $curlMain1 = curl_init($mainImageURL);
             curl_setopt($curlMain1, CURLOPT_RETURNTRANSFER, true);
 
