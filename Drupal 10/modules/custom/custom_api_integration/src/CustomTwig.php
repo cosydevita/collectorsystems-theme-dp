@@ -260,9 +260,14 @@ class CustomTwig extends AbstractExtension {
               default:
                 if(!empty($artObjData[$object_field])){ ?>
                     <p class="my-2">
-                    <?php if($showFieldLabelNames==1){ ?>
+                    <?php if($showFieldLabelNames==1){
+                      $fieldLabel = constant('Drupal\custom_api_integration\csconstants::' . $object_field."FieldLabel");
+                      if(!$fieldLabel){
+                        $fieldLabel = $object_field;
+                      }
+                      ?>
 
-                    <span class="object_detail_fieldlabel"><?php echo constant('Drupal\custom_api_integration\csconstants::' . $object_field) ?>:</span>
+                    <span class="object_detail_fieldlabel"><?php echo $fieldLabel ?>:</span>
 
                     <?php } ?>
                       <?php echo $artObjData[$object_field]  ?>
