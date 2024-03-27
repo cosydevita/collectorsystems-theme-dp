@@ -1,159 +1,145 @@
-<div class="loading-class">
-        <div class="loading-indicator">
-        </div>
-</div>
+
+<h2>Database Sync Menu</h2>
+
 <p>Use this menu to copy your collection information into your website SQL database.</p>
-<p>Use "Reset and Create Daaset" when you add new fields. This will delete your current dataset and re-create it with the new data.</p>
-<p>Use "Update Dataset" when you have added new Objects, Exhibitions, or Groups. This will update the existing databsae without rewriting it. </p>
+<p>Use "Reset and Create Daaset" when you add new fields. This will delete your current dataset and re-create it with the new data.
+</br>
+Use "Update Dataset" when you have added new Objects, Exhibitions, or Groups. This will update the existing databsae without rewriting it.
+</p>
+
+<br>
 
 <h2>Data</h2>
-
-<div class="custom-button-container">
-
-         <!--Add the button element -->
-    <button id="btn-reset-and-create-dataset" class="dataset-btn btn btn-dark">Reset and Create Dataset</button>
-    <div >OR</div>
-    <button id="btn-update-dataset" class="dataset-btn btn btn-dark">Update Dataset</button>
-
-
-</div>
-<p>Last synced on: {{API_Synced_On}} by {{API_Synced_By}}</p>
-
-
          <!--Add the button element -->
     <!--<button id="create-image-list-button"></button>-->
     <div class="wrapper">
 
-    <div class="custom-group-data">
-        <label><h1><i class="fa fa-group" style="font-size:30px;color:black"></i> Groups </h1></label>
-          <div class="count-wrapper">
-            <div class="lds-dual-ring spinner"></div>
-            <div class="count-data">
-              <p id="response-data"><b>DB Count: </b></p>
-              <p id="response-data1"><b>API Count: </b></p>
+      <div class="custom-group-data">
+          <label><h5>Groups </h5></label>
+            <div class="count-wrapper">
+              <div class="lds-dual-ring spinner"></div>
+              <div class="count-data">
+                <p id="response-data">DB Count: </b></p>
+                <p id="response-data1">API Count: </b></p>
+              </div>
             </div>
-          </div>
 
-    </div>
-
-   <div class="custom-object-data">
-        <label><h1><i class="fa fa-glass" style="font-size:30px;color:black"></i> Objects </h1></label>
-
-      <div class="count-wrapper">
-        <div class="lds-dual-ring spinner"></div>
-        <div class="count-data">
-          <p id="resp-data"><b>DB Count: </b></p>
-          <p id="resp-data1"><b>API Count: </b></p>
-        </div>
       </div>
 
-    </div>
-
-    <div class="custom-collection-data">
-        <label><h1><i class="fa fa-object-group" style="font-size:30px;color:black"></i> Collections </h1></label>
+      <div class="custom-object-data">
+            <label><h5> Objects </h5></label>
 
           <div class="count-wrapper">
             <div class="lds-dual-ring spinner"></div>
             <div class="count-data">
-              <p id="resp-data2"><b>DB Count: </b></p>
-              <p id="resp-data3"><b>API Count: </b></p>
+              <p id="resp-data">DB Count: </p>
+              <p id="resp-data1">API Count: </p>
             </div>
           </div>
+
+        </div>
+
+        <div class="custom-collection-data">
+            <label><h5> Collections </h5></label>
+
+              <div class="count-wrapper">
+                <div class="lds-dual-ring spinner"></div>
+                <div class="count-data">
+                  <p id="resp-data2">DB Count: </p>
+                  <p id="resp-data3">API Count: </p>
+                </div>
+              </div>
+        </div>
+
+        <div class="custom-exhibition-data">
+            <label><h5>Exhibitions </h5></label>
+
+              <div class="count-wrapper">
+                <div class="lds-dual-ring spinner"></div>
+                <div class="count-data">
+                  <p id="resp-data4">DB Count: </p>
+                  <p id="resp-data5">API Count: </p>
+                </div>
+              </div>
+        </div>
+
+        <div class="custom-artist-data">
+            <label><h5>Artists </h5></label>
+
+              <div class="count-wrapper">
+                <div class="lds-dual-ring spinner"></div>
+                <div class="count-data">
+                  <p id="resp-data6">DB Count: </p>
+                  <p id="resp-data7">API Count: </p>
+                </div>
+              </div>
+        </div>
+    </div>
+    <div class="loading-class">
+      <div class="loading-indicator"></div>
+    </div>
+    <div class="custom-button-container">
+      <button id="btn-reset-and-create-dataset" class="dataset-btn btn btn-dark">Reset and Create Dataset</button>
+      <div >Or</div>
+      <button id="btn-update-dataset" class="dataset-btn btn btn-dark">Update Dataset</button>
     </div>
 
-    <div class="custom-exhibition-data">
-        <label><h1><i class="fa fa-university" style="font-size:30px;color:black"></i> Exhibitions </h1></label>
+    <p class="last-synced-wrapper">Last synced on: {{API_Synced_On}} by {{API_Synced_By}}</p>
 
-          <div class="count-wrapper">
-            <div class="lds-dual-ring spinner"></div>
-            <div class="count-data">
-              <p id="resp-data4"><b>DB Count: </b></p>
-              <p id="resp-data5"><b>API Count: </b></p>
-            </div>
-          </div>
-    </div>
 
-    <div class="custom-artist-data">
-        <label><h1><i class="fa fa-picture-o" style="font-size:30px;color:black"></i> Artists </h1></label>
 
-          <div class="count-wrapper">
-            <div class="lds-dual-ring spinner"></div>
-            <div class="count-data">
-              <p id="resp-data6"><b>DB Count: </b></p>
-              <p id="resp-data7"><b>API Count: </b></p>
-            </div>
-          </div>
-    </div>
-    </div>
-
+    <h2>Images</h2>
 
     <div class="loading-class">
-        <div class="loading-indicator-image">
-        </div>
+        <div class="loading-indicator-image-object"></div>
     </div>
+
     <div class="main-heading">
-        <h1>Save Images</h1>
-    </div>
-    <div class="button-styling" id="image-saved">
-    <?php $collectsys_options = get_option( 'collectsysapi_option_name' );
-
-    if ($collectsys_options['collect_sys_ImageSaved'] != "1"): ?>
-        <div class="custom-image-save">
-            <label><h1><i class="fa fa-folder" style="font-size:30px;color:black"></i> Directory? </h1></label>
-            <button id="custom-directory-save">Click Here!</button>
-        </div>
-    <?php endif; ?>
-
-    <?php $collectsys_options = get_option( 'collectsysapi_option_name' );
-
-    if ($collectsys_options['collect_sys_ImageSaved']
-
-    != "1" && $collectsys_options['collect_sys_ImageSaved'] != "2"): ?>
-        <div style="display:flex;flex-direction: column;justify-content: center;align-items: center;margin: 10px;">
-            <h1>OR</h1>
-        </div>
-    <?php endif; ?>
-
-    <?php $collectsys_options = get_option( 'collectsysapi_option_name' );
-
-    if ($collectsys_options['collect_sys_ImageSaved'] != "2"): ?>
-        <div class="db-save">
-            <label><h1><i class="fa fa-database" style="font-size:30px;color:black"></i> Database? </h1></label>
-            <button id="custom-database-save">Click Here!</button>
-        </div>
-    <?php endif; ?>
-</div>
-
-<div class="loading-class">
-        <div class="loading-indicator-image-object">
-        </div>
-    </div>
-    <div class="main-heading">
-        <h1>Save Object Images</h1>
+        <h5>Save Object Images</h5>
     </div>
     <div class="button-styling" id="image-saved-object">
-    <?php $collectsys_options = get_option( 'collectsysapi_option_name' );
 
-    if ($collectsys_options['collect_sys_ImageSaved'] != "1"): ?>
         <div class="custom-image-save">
-            <label><h1><i class="fa fa-folder" style="font-size:30px;color:black"></i> Directory? </h1></label>
-            <button id="custom-object-directory-save">Click Here!</button>
+            <button id="custom-object-directory-save">Directory</button>
         </div>
-    <?php endif; ?>
 
-    <?php if ($collectsys_options['collect_sys_ImageSaved'] != "1" && $collectsys_options['collect_sys_ImageSaved'] != "2"): ?>
+
         <div style="display:flex;flex-direction: column;justify-content: center;align-items: center;margin: 10px;">
-            <h1>OR</h1>
+            <p>Or</p>
         </div>
-    <?php endif; ?>
 
-    <?php if ($collectsys_options['collect_sys_ImageSaved'] != "2"): ?>
         <div class="db-save">
-            <label><h1><i class="fa fa-database" style="font-size:30px;color:black"></i> Database? </h1></label>
-            <button id="custom-object-database-save">Click Here!</button>
+            <button id="custom-object-database-save">Database</button>
         </div>
-    <?php endif; ?>
-</div>
+    </div>
+
+
+
+  <div class="section-save-other-images">
+    <div class="loading-class">
+      <div class="loading-indicator-image"></div>
+    </div>
+    <div class="main-heading">
+        <h5>Save Other Images</h5>
+    </div>
+    <div class="button-styling" id="image-saved">
+
+        <div class="custom-image-save">
+            <button id="custom-directory-save">Directory</button>
+        </div>
+
+
+
+        <div style="display:flex;flex-direction: column;justify-content: center;align-items: center;margin: 10px;">
+          <p>Or</p>
+        </div>
+
+
+        <div class="db-save">
+            <button id="custom-database-save">Database</button>
+        </div>
+    </div>
+  </div>
 
 
 
