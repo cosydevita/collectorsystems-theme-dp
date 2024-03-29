@@ -613,6 +613,33 @@ class PageTemplatesController extends ControllerBase
     // Execute the query.
     $thumbDetails = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
+    //filter images using keywords
+    $filtered_keywords = get_filtered_keywords();
+    if($filtered_keywords){
+      foreach($thumbDetails as  $thumbDetailKey => $thumbDetail){
+        $keywords = json_decode($thumbDetail['keywords']);
+        $MainImageAttachmentId = $thumbDetail['MainImageAttachmentId'];
+        $AttachmentId = $thumbDetail['AttachmentId'];
+
+        // Check if any of the $keywords exists in $filtered_keywords
+        $foundKeyword = false;
+        foreach($keywords as $keyword) {
+            if (in_array($keyword, $filtered_keywords)) {
+                $foundKeyword = true;
+              break;
+            }
+        }
+        if (!$foundKeyword) {
+          //do not remove if the attachmentId is MainImageAttachmentId
+          if($MainImageAttachmentId != $AttachmentId){
+            unset($thumbDetails[$thumbDetailKey]);
+
+          }
+        }
+
+      }
+    }
+    $thumbDetails =  array_values($thumbDetails);
     $build = [
       '#theme' => 'artobject-detail-page',
       '#thumbDetails' => $thumbDetails,

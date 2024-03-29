@@ -3723,7 +3723,16 @@ class CreateTablesRestResource extends ResourceBase {
         'AttachmentId' => [
           'type' => 'int',
           'unsigned' => TRUE,
+        ],
+        'keywords' => [
+          'type' => 'blob',
+          'size' => 'big',
+        ],
+        'ModificationDate' => [
+          'type' => 'varchar',
+          'length' => 500,
         ]
+
       ],
       'primary key' => ['ID'],
       'unique keys' => [

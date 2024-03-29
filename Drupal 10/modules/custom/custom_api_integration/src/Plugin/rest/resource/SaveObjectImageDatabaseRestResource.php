@@ -42,7 +42,10 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
     $database = Database::getConnection();
 
     //Fetch Object Images
-    $url = csconstants::Public_API_URL.$subAcntId.'/Objects?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=MainImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL,SlideShowURL),ObjectImageAttachments($expand=Attachment),';
+    //expanded to include the attachmentkeywords
+    $url =csconstants::Public_API_URL.$subAcntId.'/Objects?$expand=MainImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL,SlideShowURL),ObjectImageAttachments($expand=Attachment($select=AttachmentId,SubscriptionId,FileName,Description,ContentType,CreationDate,FileURL,ThumbSizeURL,MidSizeURL,DetailURL,DetailLargeURL,DetailXLargeURL,iphoneURL,SlideShowURL;$expand=AttachmentKeywords($select=AttachmentKeywordString))),&$select=InventoryNumber,Title,InventoryNumber,ObjectId,MainImageAttachmentId,ModificationDate,CreationDate&$filter=SubscriptionId%20eq%20'.$subsId.'%20And%20Deleted%20eq%20false';
+
+
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -110,22 +113,14 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
 
         $mainID = $image['MainImageAttachmentId'] ?? null;
         $objectId = $image['ObjectId'];
-        $ApiModificationDate =  $image['ModificationDate'];
 
-        $filtered_keywords = get_filtered_keywords();
-        if($filtered_keywords){
-          $mainAttachmentId= isset($image['MainImageAttachment']) ? $image['MainImageAttachment']['AttachmentId'] : 0;
-          $objectImages = getObjectImageAttachmentsByObjectId($objectId, $mainAttachmentId);
-        }
-        else{
-          $objectImages = $image['ObjectImageAttachments'] ?? null;
-        }
 
-        // $check_is_object_modified = $this->check_is_object_modified($objectId, $ApiModificationDate);
-        // if(!$check_is_object_modified){
-        //   // If object is not modified then skip to the next iteration without updating it
-        //   continue;
-        // }
+
+
+
+
+        $objectImages = $image['ObjectImageAttachments'] ?? null;
+
 
         $is_exist_object_MainImageAttachmentId = $this->is_exist_object_MainImageAttachmentId($objectId, $mainID);
         //if there is already the data for the same MainImageAttachmentId then do not insert the new data
@@ -161,15 +156,34 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
             foreach ($objectImages as $objectImage)
             {
                 $objectImageDetailLargeURL = $objectImage['Attachment']['DetailXLargeURL'];
-                $fileName1 = $objectImage['Attachment']['FileURL'];
+                if(isset($objectImage['Attachment']['ModificationDate'])){
+                  $ModificationDate_API =  $objectImage['Attachment']['ModificationDate'];
+                }else{
+                  $ModificationDate_API = $objectImage['Attachment']['CreationDate'];
+                }
                 $AttachmentId = $objectImage['Attachment']['AttachmentId'];
                 $AttachmentIds_API[] =  $AttachmentId;
-                $is_exist_object_image_AttachmentId_DB = $this->is_exist_object_image_AttachmentId_DB($objectId, $AttachmentId);
 
-                //if there is already the data for the same attachmentId then do not insert the new data
-                if($is_exist_object_image_AttachmentId_DB){
-                  continue;
+
+                // $is_image_modified = $this->is_image_modified($ModificationDate_API, $AttachmentId);
+
+                // //if image is not modified then skip
+                // if($is_image_modified == false){
+                //   continue;
+                // }
+
+
+                $AttachmentKeywords = $objectImage['Attachment']['AttachmentKeywords'];
+
+                $keywords = [];
+                foreach($AttachmentKeywords as $AttachmentKeyword){
+                  $keywords[] = $AttachmentKeyword['AttachmentKeywordString'];
                 }
+                $keywords_serialized = json_encode($keywords);
+
+                $fileName1 = $objectImage['Attachment']['FileURL'];
+
+
 
                 $curlObject = curl_init($objectImageDetailLargeURL);
                 curl_setopt($curlObject, CURLOPT_RETURNTRANSFER, true);
@@ -181,18 +195,11 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
                 curl_setopt($curlObject1, CURLOPT_RETURNTRANSFER, true);
                 $thumbImageData = curl_exec($curlObject1);
                 curl_close($curlObject1);
+
                 if ($objectImageData !== false)
                 {
                     $id1 = $image['ObjectId'];
                     $mainId = $image['MainImageAttachmentId'] ?? null;
-                    // $insertObjectImage = $wpdb->prepare("UPDATE $object_table SET object_image_attachment= %s , thumb_size_URL = %s , FileURL = %s WHERE ObjectId = %d" , $objectImageData , $thumbImageData , $fileName1 , $id1);
-                    // $resultObject = $wpdb->query($insertObjectImage);
-                    // $insertObjectImage1 = $wpdb->prepare("INSERT INTO $thumbImage_table(ThumbURL,ObjectId, thumb_size_URL, object_image_attachment) VALUES(%s,%d, %s, %s)",$fileName1,$id1 , $thumbImageData, $objectImageData);
-                    // $wpdb->query($insertObjectImage1);
-                    // $insertmainId1 = $wpdb->prepare("UPDATE $thumbImage_table SET MainImageAttachmentId = %d WHERE ObjectId = %d", $mainId, $id1);
-                    // $wpdb->query($insertmainId1);
-
-
                       // Update $object_table.
                       $updateObjectQuery = $database->update($object_table)
                       ->fields([
@@ -210,15 +217,13 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
                         'ObjectId' => $id1,
                         'thumb_size_URL' => $thumbImageData,
                         'object_image_attachment' => $objectImageData,
-                        'AttachmentId' => $AttachmentId
+                        'AttachmentId' => $AttachmentId,
+                        'keywords' => $keywords_serialized,
+                        'MainImageAttachmentId' => $mainId,
+                        'ModificationDate' => $ModificationDate_API
                       ])
                       ->execute();
 
-                      // Update $thumbImage_table.
-                      $updateMainIdQuery = $database->update($thumbImage_table)
-                      ->fields(['MainImageAttachmentId' => $mainId])
-                      ->condition('ObjectId', $id1)
-                      ->execute();
                 }
             }
 
@@ -277,6 +282,32 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
       return true;
     }else{
       return false;
+    }
+
+  }
+
+  function is_image_modified($ModificationDate_API, $AttachmentId){
+    $database = Database::getConnection();
+    $table_name = 'ThumbImages';
+    // Check if the object is modified
+    $query = $database->select($table_name)
+    ->fields($table_name)
+    ->condition('AttachmentId', $AttachmentId)
+    ->condition('ModificationDate', $ModificationDate_API)
+    ->execute();
+
+
+    if ($query) {
+      $record_exists = $query->fetchAssoc();
+      if ($record_exists) {
+        return TRUE;
+      } else {
+        return FALSE;
+      }
+    } else {
+      // Handle query execution error
+      \Drupal::logger('custom_api_integration')->error('Error executing database query for function is_image_modified');
+      return FALSE;
     }
 
   }
