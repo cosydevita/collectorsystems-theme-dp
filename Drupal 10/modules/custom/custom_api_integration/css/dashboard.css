@@ -91,61 +91,9 @@
         color: white;
         background-color: black;
     }
-    #custom-database-save{
-        padding: 10px 20px;
-        background-color: black;
-        color: #fff;
-        border: none;
-        margin: 3px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
 
-    #custom-object-database-save{
-        padding: 10px 20px;
-        background-color: black;
-        color: #fff;
-        border: none;
-        margin: 3px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
 
-    #custom-object-directory-save{
-        padding: 10px 20px;
-        background-color: black;
-        color: #fff;
-        border: none;
-        margin: 3px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
 
-    #custom-directory-save{
-        padding: 10px 20px;
-        background-color: black;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        margin: 3px;
-        cursor: pointer;
-    }
-
-    #custom-directory-save:hover {
-        background-color: #454545;
-    }
-
-    #custom-database-save:hover {
-        background-color: #454545;
-    }
-
-    #custom-object-database-save:hover {
-        background-color: #454545;
-    }
-
-    #custom-object-directory-save:hover {
-        background-color: #454545;
-    }
 
     .btn-dark {
         padding: 10px 20px;
@@ -154,6 +102,11 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
+    }
+    .btn-dark:disabled, .btn-dark:disabled:hover{
+      border: 1px solid #999999;
+      background-color: #cccccc;
+      color: #666666;
     }
 
     .btn-dark:hover {

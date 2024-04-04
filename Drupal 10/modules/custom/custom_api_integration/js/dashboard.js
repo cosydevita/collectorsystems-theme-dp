@@ -23,7 +23,6 @@
 
 
 
-        // $('#create-table-button').on('click', function () {
         $(once('createTableButton', '.dataset-btn')).on('click.createTableButton', function (event) {
           var btn_action = '';
           if (event.target.id === 'btn-update-dataset') {
@@ -38,9 +37,7 @@
             $('.wrapper').hide();
 
             var button = $(this);
-
-            console.log('Error: ' + button);
-                button.prop('hidden', true);
+            button.prop('disabled', true);
              $.ajax({
                 type: 'POST',
                 url: '/v1/cs-create-tables?_format=json',
@@ -59,15 +56,19 @@
                 error: function (xhr, status, error) {
                     // Handle errors if the AJAX request fails
                     console.log('Error: ' + error);
-                    button.prop('hidden', false);
+                    button.prop('disabled', false);
                     $('.wrapper').show();
                 },
                 complete: function ()
                 {
                     $('.loading-indicator').hide();
                     $('.wrapper').show();
-                    alert("All the tables are created successfully!");
-                    button.prop('hidden', false);
+                    if(btn_action == 'update-dataset'){
+                      alert("Dataset updated successfully!");
+                    }else{
+                      alert("All the tables are created successfully!");
+                    }
+                    button.prop('disabled', false);
                     //reload the page
                     location.reload();
 
@@ -75,11 +76,11 @@
             });
         });
 
-          // $('#custom-database-save').on('click', function () {
           $(once('customDatabaseSaveButton', '#custom-database-save')).on('click.customDatabaseSaveButton', function () {
 
               $('.loading-indicator-image').show();
-              $('#image-saved').hide();
+              var button = $(this);
+              button.prop('disabled', true);
 
             $.ajax({
                 type: 'POST',
@@ -99,33 +100,32 @@
                     console.log(response);
                 },
                 error: function (xhr, status, error) {
-                    $('#image-saved').show();
                     $('.loading-indicator-image').hide();
                     console.log('Error: ' + error);
+                    button.prop('disabled', false);
+
 
                 },
                 complete: function ()
                 {
-                    $('#image-saved').show();
                     $('.loading-indicator-image').hide();
                     alert("All the images are saved in the database successfully!");
+                    button.prop('disabled', false);
+
 
                 }
             });
         });
 
-        // $('#custom-directory-save').on('click', function () {
         $(once('customDirectorySaveButton', '#custom-directory-save')).on('click.customDirectorySaveButton', function () {
 
 
             $('.loading-indicator-image').show();
-              $('#image-saved').hide();
 
             var button = $(this);
                 button.prop('disabled', true);
             $.ajax({
                 type: 'POST',
-                // url: 'http://collectorsystems-wp.docksal/wp-content/themes/collectorsystems-theme-wp/TableCreation/save_image_directory_action.php',
                 url: '/v1/cs-save-image-directory-ajax?_format=json',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -143,7 +143,6 @@
                 },
 
                 error: function (xhr, status, error) {
-                    $('#image-saved').show();
                     $('.loading-indicator-image').hide();
                     console.log('Error: ' + error);
                     button.prop('disabled', false);
@@ -151,24 +150,21 @@
 
                 complete: function ()
                 {
-                    $('#image-saved').show();
                     $('.loading-indicator-image').hide();
                     alert("All the images are saved in their respective directories successfully!");
                     button.prop('disabled', false);
                 }
             });
           });
-        // $('#custom-object-database-save').on('click', function () {
+
         $(once('customObjectDatabaseSaveButton', '#custom-object-database-save')).on('click.customObjectDatabaseSaveButton', function () {
 
           $('.loading-indicator-image-object').show();
-          $('#image-saved-object').hide();
 
           var button = $(this);
             button.prop('disabled', true);
           $.ajax({
               type: 'POST',
-              // url: 'http://collectorsystems-wp.docksal/wp-content/themes/collectorsystems-theme-wp/TableCreation/save_object_image_database_action.php',
               url: '/v1/cs-save-object-image-database-ajax?_format=json',
               contentType: 'application/json',
               data: JSON.stringify({
@@ -184,28 +180,25 @@
               },
               error: function (xhr, status, error) {
                   $('.loading-indicator-image-object').hide();
-            $('#image-saved-object').show();
                   console.log('Error: ' + error);
                   button.prop('disabled', false);
               },
               complete: function ()
               {
                   $('.loading-indicator-image-object').hide();
-            $('#image-saved-object').show();
                   alert("All Object Images are stored in the database successfully!");
                   button.prop('disabled', false);
               }
           });
         });
-        // $('#custom-object-directory-save').on('click', function () {
         $(once('customObjectDirectorySaveButton', '#custom-object-directory-save')).on('click.customObjectDirectorySaveButton', function () {
 
             $('.loading-indicator-image-object').show();
-              $('#image-saved-object').hide();
+            var button = $(this);
+            button.prop('disabled', true);
 
             $.ajax({
                 type: 'POST',
-                // url: 'http://collectorsystems-wp.docksal/wp-content/themes/collectorsystems-theme-wp/TableCreation/save_object_image_directory_action.php',
                 url: '/v1/cs-save-object-image-directory-ajax?_format=json',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -222,101 +215,24 @@
                 },
                 error: function (xhr, status, error) {
                     $('.loading-indicator-image-object').hide();
-              $('#image-saved-object').show();
                     console.log('Error: ' + error);
+                    button.prop('disabled', false);
 
                 },
                 complete: function ()
                 {
                     $('.loading-indicator-image-object').hide();
-              $('#image-saved-object').show();
                     alert("All Object Images are stored in the directory successfully!");
+                    button.prop('disabled', false);
 
                 }
             });
         });
-        $('#create-image-detail-button').on('click', function () {
-            var button = $(this);
-                button.prop('disabled', true);
-            $.ajax({
-                type: 'POST',
-                url: 'http://collectorsystems-wp.docksal/wp-content/themes/collectorsystems-theme-wp/TableCreation/create_image_detail.php',
-                data: {
-                    action: 'create_image_detail_ajax'
-                    // Add any other data you need to pass to the AJAX handler (if required)
-                },
-                success: function (response) {
-                    debugger;
-                    console.log(response);
-                },
-                error: function (xhr, status, error) {
-                    // Handle errors if the AJAX request fails
-                    console.log('Error: ' + error);
-                    button.prop('disabled', false);
-                },
-                complete: function ()
-                {
-                    $('.loading-indicator').hide();
-                    alert("All Object Images are stored in the directory successfully!");
-                    button.prop('disabled', false);
-                }
-            });
-        });
 
-         $('#fetch-exhibition-button').on('click', function () {
-            $.ajax({
-                type: 'POST',
-                url: 'http://collectorsystems-wp.docksal/wp-content/themes/collectorsystems-theme-wp/TableCreation/fetch_exhibition_action.php',
-                data: {
-                    action: 'fetch_exhibition_ajax'
-                    // Add any other data you need to pass to the AJAX handler (if required)
-                },
-                success: function (response) {
-                    debugger;
-                    alert(response);
-                },
-                error: function (xhr, status, error) {
-                    // Handle errors if the AJAX request fails
-                    console.log('Error: ' + error);
-                }
-            });
-        });
-         $('#fetch-collection-button').on('click', function () {
-            $.ajax({
-                type: 'POST',
-                url: 'http://collectorsystems-wp.docksal/wp-content/themes/collectorsystems-theme-wp/TableCreation/fetch_collection_action.php',
-                data: {
-                    action: 'fetch_collection_ajax'
-                    // Add any other data you need to pass to the AJAX handler (if required)
-                },
-                success: function (response) {
-                    debugger;
-                     alert(response);
-                },
-                error: function (xhr, status, error) {
-                    // Handle errors if the AJAX request fails
-                    console.log('Error: ' + error);
-                }
-            });
-        });
-          $('#fetch-group-button').on('click', function () {
-            $.ajax({
-                type: 'POST',
-                url: 'http://collectorsystems-wp.docksal/wp-content/themes/collectorsystems-theme-wp/TableCreation/fetch_group_action.php',
-                data: {
-                    action: 'fetch_group_ajax'
-                    // Add any other data you need to pass to the AJAX handler (if required)
-                },
-                success: function (response) {
-                    debugger;
-                    alert(response);
-                },
-                error: function (xhr, status, error) {
-                    // Handle errors if the AJAX request fails
-                    console.log('Error: ' + error);
-                }
-            });
-        });
+
+
+
+
 
         if (!this.attached) {
           getSessionToken();
@@ -327,7 +243,6 @@
         function fetch_group_ajax(sessionToken){
           $.ajax({
             type: 'POST',
-            // url: 'http://collectorsystems-wp.docksal/wp-content/themes/collectorsystems-theme-wp/TableCreation/fetch_group_action.php',
             url: '/v1/cs-fetch-group-ajax?_format=json',
             contentType: 'application/json',
             data: JSON.stringify({

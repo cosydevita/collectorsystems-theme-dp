@@ -84,7 +84,9 @@ Use "Update Dataset" when you have added new Objects, Exhibitions, or Groups. Th
       <button id="btn-update-dataset" class="dataset-btn btn btn-dark">Update Dataset</button>
     </div>
 
-    <p class="last-synced-wrapper">Last synced on: {{API_Synced_On}} by {{API_Synced_By}}</p>
+    {% if API_Synced_On is not empty and API_Synced_By is not empty %}
+      <p class="last-synced-wrapper">Last synced on: {{API_Synced_On}} by {{API_Synced_By}}</p>
+    {% endif %}
 
 
 
@@ -100,7 +102,7 @@ Use "Update Dataset" when you have added new Objects, Exhibitions, or Groups. Th
     <div class="button-styling" id="image-saved-object">
 
         <div class="custom-image-save">
-            <button id="custom-object-directory-save">Directory</button>
+            <button class="btn btn btn-dark" id="custom-object-directory-save">Directory</button>
         </div>
 
 
@@ -109,7 +111,7 @@ Use "Update Dataset" when you have added new Objects, Exhibitions, or Groups. Th
         </div>
 
         <div class="db-save">
-            <button id="custom-object-database-save">Database</button>
+            <button class="btn btn btn-dark" id="custom-object-database-save">Database</button>
         </div>
     </div>
 
@@ -125,7 +127,7 @@ Use "Update Dataset" when you have added new Objects, Exhibitions, or Groups. Th
     <div class="button-styling" id="image-saved">
 
         <div class="custom-image-save">
-            <button id="custom-directory-save">Directory</button>
+            <button class="btn btn btn-dark" id="custom-directory-save">Directory</button>
         </div>
 
 
@@ -136,7 +138,7 @@ Use "Update Dataset" when you have added new Objects, Exhibitions, or Groups. Th
 
 
         <div class="db-save">
-            <button id="custom-database-save">Database</button>
+            <button class="btn btn btn-dark" id="custom-database-save">Database</button>
         </div>
     </div>
   </div>

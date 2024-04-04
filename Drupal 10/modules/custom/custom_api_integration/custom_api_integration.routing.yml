@@ -12,14 +12,6 @@ custom_api_integration.homepage_image_form:
     _title: 'Home Page Image'
   requirements:
     _permission: 'administer site configuration'
-
-custom_api_integration.get_art_from_api:
-  path: '/admin/config/api/get_art'
-  defaults:
-    _controller: '\Drupal\custom_api_integration\Controller\ApiIntegrationController::getArtFromAPI'
-    _title: 'API Integration'
-  requirements:
-    _permission: 'access content'
 custom_api_integration.dashboard:
   path: '/admin/config/api-dashboard'
   defaults:

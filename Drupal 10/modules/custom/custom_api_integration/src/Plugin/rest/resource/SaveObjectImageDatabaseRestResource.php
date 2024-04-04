@@ -165,6 +165,8 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
                 $AttachmentIds_API[] =  $AttachmentId;
 
 
+
+                //this is not working event the $is_image_modified is returning true or false
                 // $is_image_modified = $this->is_image_modified($ModificationDate_API, $AttachmentId);
 
                 // //if image is not modified then skip
