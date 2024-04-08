@@ -284,7 +284,6 @@ class CustomTwig extends AbstractExtension {
 
   public function customPaginationForGroupLevelObjects($groupTypeId,$ajaxpage,$requested_page,$total_records,$sortBy,$qSearch)
   {
-
     $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
 
 
@@ -292,6 +291,7 @@ class CustomTwig extends AbstractExtension {
     if(empty($requested_page)) $requested_page = 1;
 
     $pages = ceil($total_records / $listPageSize);
+
     if(!$pages)
     {
         $pages = 1;

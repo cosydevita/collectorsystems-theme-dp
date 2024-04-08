@@ -28,8 +28,15 @@
             <div class="sort-by-field" id="dlGroupLevelObjectsSortingHtml">
                 <span class="sort-by-title me-3">Sort By: </span>
                 <select name="dlGroupLevelObjectsOrderBy" id="dlGroupLevelObjectsOrderBy" class="form-select" onchange="return sortingForGroupLevelObjects('{{ ajaxfor }}',{{ listPageSize }});">
-                    <option value="Title%20desc">Title Desc</option>
-                    <option value="Title%20asc">Title Asc</option>
+                  <option value="Title%20desc">Title Desc</option>
+                  <option value="Title%20asc">Title Asc</option>
+                  <option value="InventoryNumber%20desc">Inventory Number Desc</option>
+                  <option value="InventoryNumber%20asc">Inventory Number Asc</option>
+                  <option value="Collection/CollectionName%20desc">Collection Name Desc</option>
+                  <option value="Collection/CollectionName%20asc">Collection Name Asc</option>
+                  <option value="ObjectDate%20desc">Object Date Desc</option>
+                  <option value="ObjectDate%20asc">Object Date Asc</option>
+
                     <!-- Add other options here -->
                 </select>
             </div>

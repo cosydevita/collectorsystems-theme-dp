@@ -325,8 +325,8 @@ $actionurl = site_url()."/".$detailData; #}
   var pageTotalCount=document.getElementById("groupLevelTotalCount").value;
   var groupTypeId=document.getElementById("groupTypeId").value;
 
-  var collectionLeftExtent=$("#collectionLeftExtent").length > 0 ? $("#collectionLeftExtent").val() : 0;
-  var collectionRightExtent=$("#collectionRightExtent").length > 0 ? $("#collectionRightExtent").val() : 0;
+  var collectionLeftExtent=jQuery("#collectionLeftExtent").length > 0 ? jQuery("#collectionLeftExtent").val() : 0;
+  var collectionRightExtent=jQuery("#collectionRightExtent").length > 0 ? jQuery("#collectionRightExtent").val() : 0;
 
   if(groupLevelPageNoValue==1)
   {
@@ -337,18 +337,43 @@ $actionurl = site_url()."/".$detailData; #}
     pageskipvalue=(Number(groupLevelPageNoValue)-1) *Number(pagetopvalue);
   }
 
-  jQuery.ajax({
+  /*jQuery.ajax({
       url: 'admin-ajax.php',
       type: 'post',
       data: { action: 'groupLevelObjects_paging_page',pagename:pagenamevalue,groupTypeId:groupTypeId,collectionLeftExtent:collectionLeftExtent,collectionRightExtent:collectionRightExtent,groupLevelPageNo:groupLevelPageNoValue,groupLevelTopCount:pagetopvalue,groupLevelSkipCount:pageskipvalue,groupLevelTotalCount:pageTotalCount,groupLevelOrderBy:groupLevelOrderBy,groupLevelSearch:searchValue},
       success: function(data) {
 
         document.getElementById("groupLevelOrderBy").value =  document.getElementById("dlGroupLevelObjectsOrderBy").value;
-        $('#groupLevelObjectsData').html(data);
+       jQuery('#groupLevelObjectsData').html(data);
 
         htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,pagenamevalue,groupLevelPageNoValue,pageTotalCount,groupLevelOrderBy,searchValue);
      }
   });
+  */
+  jQuery.ajax({
+      url: '/v1/group-level-objects-searching-page',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        action: 'groupLevelObjects_searching_page',
+        pagename:pagenamevalue,
+        groupTypeId:groupTypeId,
+        collectionLeftExtent:collectionLeftExtent,
+        collectionRightExtent:collectionRightExtent,
+        groupLevelPageNo:groupLevelPageNoValue,
+        groupLevelTopCount:pagetopvalue,
+        groupLevelSkipCount:pageskipvalue,
+        groupLevelOrderBy:groupLevelOrderBy,
+        groupLevelSearch:searchValue},
+      success: function(data) {
+          document.getElementById("groupLevelOrderBy").value =  document.getElementById("dlGroupLevelObjectsOrderBy").value;
+          jQuery('#groupLevelObjectsData').html(data.groupLevelSearchHtml);
+          jQuery('#groupLevelPageNo').val(groupLevelPageNoValue)
+          htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,pagenamevalue,groupLevelPageNoValue,pageTotalCount,groupLevelOrderBy,searchValue);
+    }
+  });
+
+
 
   return false;
   }
@@ -447,7 +472,16 @@ function searchingForGroupLevelObjects(ajaxpage){
         type: 'POST',
         dataType: 'json',
         data: {
-          action: 'groupLevelObjects_searching_page',pagename:ajaxpage,groupTypeId:groupTypeId,collectionLeftExtent:collectionLeftExtent,collectionRightExtent:collectionRightExtent,searchWord:objectListSearchValue, groupLevelTopCount:objectListRecTopValue,groupLevelSkipCount:objectListRecSkipValue,groupLevelOrderBy:objectListOrderByValue},
+          action: 'groupLevelObjects_searching_page',
+          pagename:ajaxpage,
+          groupTypeId:groupTypeId,
+          collectionLeftExtent:collectionLeftExtent,
+          collectionRightExtent:collectionRightExtent,
+          searchWord:objectListSearchValue,
+          groupLevelTopCount:objectListRecTopValue,
+          groupLevelSkipCount:objectListRecSkipValue,
+          groupLevelOrderBy:objectListOrderByValue
+        },
         success: function(data) {
           console.log(data)
          //debugger;
@@ -479,22 +513,49 @@ function sortingForGroupLevelObjects(ajaxpage,listPageSize){
   var pageskipvalue=document.getElementById("groupLevelSkipCount").value;
   var pageTotalCount=document.getElementById("groupLevelTotalCount").value;
   var groupTypeId=document.getElementById("groupTypeId").value;
+  var objectListRecTopValue=document.getElementById("groupLevelTopCount").value;
 
   var collectionLeftExtent=jQuery("#collectionLeftExtent").length > 0 ? jQuery("#collectionLeftExtent").val() : 0;
   var collectionRightExtent=jQuery("#collectionRightExtent").length > 0 ? jQuery("#collectionRightExtent").val() : 0;
 
   var groupLevelPageNoValue =1;
 
+
   jQuery.ajax({
       url: '/v1/group-level-objects-searching-page',
       type: 'POST',
       dataType: 'json',
-      data: { action: 'groupLevelObjects_searching_page',pagename:pagenamevalue,groupTypeId:groupTypeId,collectionLeftExtent:collectionLeftExtent,collectionRightExtent:collectionRightExtent,groupLevelTopCount:pagetopvalue,groupLevelSkipCount:pageskipvalue,groupLevelOrderBy:selordrtype,groupLevelSearch:searchValue},
+      data: {
+        action: 'groupLevelObjects_searching_page',
+        pagename:pagenamevalue,
+        groupTypeId:groupTypeId,
+        collectionLeftExtent:collectionLeftExtent,
+        collectionRightExtent:collectionRightExtent,
+        groupLevelTopCount:pagetopvalue,
+        groupLevelSkipCount:pageskipvalue,
+        groupLevelOrderBy:selordrtype,
+        searchWord:searchValue
+      },
       success: function(data) {
+        jQuery('#groupLevelObjectsData').html(data.groupLevelSearchHtml);
+        //document.getElementById("groupLevelTotalCount").value = document.getElementById("hdnTotalGroupLevelObjectCount").value;
+        var objectListTotalRecValue = document.getElementById("groupLevelTotalCount").value;
+
+
           document.getElementById("groupLevelOrderBy").value =  document.getElementById("dlGroupLevelObjectsOrderBy").value;
           jQuery('#groupLevelObjectsData').html(data.groupLevelSearchHtml);
 
-          //htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,pagenamevalue,groupLevelPageNoValue,pageTotalCount,groupLevelOrderBy,searchValue);
+          htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,pagenamevalue,groupLevelPageNoValue,objectListTotalRecValue,groupLevelOrderBy,searchValue);
+
+          if(Number(objectListTotalRecValue) > Number(objectListRecTopValue))
+          {
+           jQuery(".cs-grouplevel-total-count").html("("+objectListTotalRecValue+" results)");
+          }
+          else
+          {
+           jQuery(".cs-grouplevel-total-count").html("");
+          }
+
     }
   });
 
@@ -556,6 +617,36 @@ function clearSearchForTopLevelTabs(pageName)
 function clearSearchForGroupLevelObjects(ajaxpage)
 {
   window.location.reload();
+}
+
+
+function htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,ajaxpage,requested_page,total_records,sortBy,qSearch)
+{
+    var pagingHtmlContent = "";
+    var showItemsPerPage = listPageSize;
+    if(requested_page=="") requested_page = 1;
+
+    var calculated_pages = Math.ceil(total_records / listPageSize);
+    if(!calculated_pages)
+    {
+      calculated_pages = 1;
+    }
+
+    if(1 != calculated_pages)
+    {
+      if(requested_page != 1) pagingHtmlContent+= "<a href='javascript:;' onclick=pagingForGroupLevelObjects(\'"+ajaxpage+"\',"+listPageSize+","+(requested_page - 1)+")><i class=\'bi bi-chevron-left\'></i></a>";
+
+        for (i=1; i <= calculated_pages; i++)
+        {
+            if (1 != calculated_pages &&( !(i >= requested_page+showItemsPerPage+1 || i <= requested_page-showItemsPerPage-1) || calculated_pages <= showItemsPerPage ))
+            {
+              pagingHtmlContent+= (requested_page == i)? "<span class=\'current\'>"+i+"</span>":"<a href='javascript:;' onclick=pagingForGroupLevelObjects(\'"+ajaxpage+"\',"+listPageSize+","+i+") class=\'inactive\' >"+i+"</a>";
+            }
+        }
+
+        if (requested_page != calculated_pages) pagingHtmlContent+= "<a href='javascript:;'onclick=pagingForGroupLevelObjects(\'"+ajaxpage+"\',"+listPageSize+","+calculated_pages+")><i class=\'bi bi-chevron-right\'></i></a>";
+    }
+    jQuery("#groupLevelPagingData").html(pagingHtmlContent);
 }
 
 </script>

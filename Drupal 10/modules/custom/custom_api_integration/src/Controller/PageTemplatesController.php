@@ -664,7 +664,7 @@ class PageTemplatesController extends ControllerBase
 
   public function ArtistDetailPage(){
     $artistId=$_REQUEST['dataId'];
-    $groupLevelTopCount=   9;
+    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
     $groupLevelSkipCount =   0;
     $ajaxfor=   "artist-detail";
@@ -736,6 +736,7 @@ class PageTemplatesController extends ControllerBase
       '#loadsec' => $loadsec,
       '#object_details' => $object_details,
       '#ajaxfor' => $ajaxfor,
+      '#listPageSize' => $listPageSize,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -747,10 +748,10 @@ class PageTemplatesController extends ControllerBase
 
   public function ExhibitionDetailPage(){
     $exhibitionID=$_REQUEST['dataId'];
-    $groupLevelTopCount=   9;
+    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
     $groupLevelSkipCount =   0;
-    $ajaxfor=   "exhibitiondetail";
+    $ajaxfor=   "exhibition-detail";
     $current_page=   "exhibition-detail";
 
     $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
@@ -778,9 +779,6 @@ class PageTemplatesController extends ControllerBase
 
     // Fetch the result as an associative array.
     $exhibition_details = $result->fetchAssoc();
-
-    // print_r($exhibition_details); //PASS
-    // die();
 
 
     //Fetch Objects Where ExhibitionId
@@ -816,7 +814,9 @@ class PageTemplatesController extends ControllerBase
       '#loadsec' => $loadsec,
       '#object_details' => $object_details,
       '#exhibition_details' => $exhibition_details,
+      '#ajaxfor' => $ajaxfor,
       '#exhibitionID' => $exhibitionID,
+      '#listPageSize' => $listPageSize,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -828,10 +828,10 @@ class PageTemplatesController extends ControllerBase
 
   public function GroupDetailPage(){
     $groupID=$_REQUEST['dataId'];
-    $groupLevelTopCount=   9;
+    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
     $groupLevelSkipCount =   0;
-    $ajaxfor=   "groupdetail";
+    $ajaxfor=   "group-detail";
     $current_page=   "group-detail";
 
     $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Object/Title%20desc";
@@ -883,9 +883,6 @@ class PageTemplatesController extends ControllerBase
       ->countQuery();
     $obj_count = $query->execute()->fetchField();
 
-    // echo "<pre>";
-    // print_r($group_object_details);
-    // die();
 
     $build = [
       '#theme' => 'group-detail-page',
@@ -897,9 +894,11 @@ class PageTemplatesController extends ControllerBase
       '#groupLevelPageNo' => $groupLevelPageNo,
       '#qSearch' => $qSearch,
       '#loadsec' => $loadsec,
+      '#ajaxfor' => $ajaxfor,
       '#object_details' => $object_details,
       '#group_details' => $group_details,
       '#group_object_details' => $group_object_details,
+      '#listPageSize' => $listPageSize,
       '#groupID' => $groupID,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
@@ -912,10 +911,12 @@ class PageTemplatesController extends ControllerBase
   public function CollectionDetailPage(){
 
     $collectionID=$_REQUEST['dataId'];
-    $groupLevelTopCount=   9;
+    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $showrec = isset($listPageSize) ? $listPageSize : 9;
+    $shskip =   0;
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
     $groupLevelSkipCount =   0;
-    $ajaxfor=   "collectiondetail";
+    $ajaxfor=   "collection-detail";
     $current_page=   "collection-detail";
 
     $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
@@ -938,14 +939,13 @@ class PageTemplatesController extends ControllerBase
     $collection_details = $query->execute()->fetchAssoc();
 
 
-    //Fetch Objects Where CollectionId
-    // $object_table = $wpdb->prefix . "CSObjects";
-    // $fetch_object_collection_details = $wpdb->prepare("SELECT * FROM $object_table WHERE CollectionId = %d",$collectionID);
-    // $object_details = $wpdb->get_results($fetch_object_collection_details , ARRAY_A);
     $object_table = 'CSObjects';
     $query = $database->select($object_table, 'co')
       ->fields('co')
       ->condition('co.CollectionId', $collectionID);
+
+    // Add limits.
+    $query->range($shskip, $showrec);
     $object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
 
@@ -966,10 +966,12 @@ class PageTemplatesController extends ControllerBase
       '#groupLevelPageNo' => $groupLevelPageNo,
       '#groupLevelPageNo' => $groupLevelPageNo,
       '#qSearch' => $qSearch,
+      '#ajaxfor' => $ajaxfor,
       '#loadsec' => $loadsec,
       '#object_details' => $object_details,
       '#collection_details' => $collection_details,
       '#collectionID' => $collectionID,
+      '#listPageSize' => $listPageSize,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
     ];
     return $build;

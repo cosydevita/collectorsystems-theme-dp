@@ -36,22 +36,20 @@ class AjaxRequestsController extends ControllerBase
 
   public function groupLevelObjects_searching_page()
   {
-    global $subsId;
-    global $subAcntId;
-    global $subsKey;
+
     $groupLevelSearchHtml = "";
     $Spage = strip_tags($_POST['pagename']);
 
     $groupTypeId = $_POST['groupTypeId'];
     $groupLevelTopCount = $_POST['groupLevelTopCount'];
-    $groupLevelSkipCount = 0;
+    $groupLevelSkipCount = $_POST['groupLevelSkipCount'] ?? 0;
     $groupLevelOrderBy = $_POST['groupLevelOrderBy'];
     $groupLevelSearch = trim($_POST['searchWord']);
 
     $collectionLeftExtent = $_POST['collectionLeftExtent'];
     $collectionRightExtent = $_POST['collectionRightExtent'];
 
-    $groupLevelPageNo = 1;
+    $groupLevelPageNo = $_POST['groupLevelPageNoValue'] ?? 1;
 
     $loadsec = 1;
     $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
@@ -72,6 +70,7 @@ class AjaxRequestsController extends ControllerBase
 
       // Fetch objects where ArtistId
       $object_table = $connection->prefixTables('CSObjects');
+
       $query = $connection->select($object_table, 'o')
         ->fields('o') // Specify the fields you want to select
         ->condition('o.ArtistId', $artistId);
@@ -79,6 +78,13 @@ class AjaxRequestsController extends ControllerBase
       if ($qSearch !== NULL && count($customized_fields_array) > 0) {
         $query->condition($where_conditions);
       }
+
+      $query->range($groupLevelSkipCount, $groupLevelTopCount);
+
+      //sorting
+      $this->query_sort_objects_list($groupLevelOrderBy, $qSearch, $query);
+
+
       $object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
       // Count
@@ -113,6 +119,7 @@ class AjaxRequestsController extends ControllerBase
       } else {
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }
+      $groupLevelSearchHtml.= '<input type="hidden" id="hdnTotalGroupLevelObjectCount" value="'.$obj_count.'"></input>';
     } else if ($Spage == "exhibition-detail") {
 
       $exhibitionID = $groupTypeId;
@@ -139,7 +146,10 @@ class AjaxRequestsController extends ControllerBase
       if ($qSearch !== NULL && count($customized_fields_array) > 0) {
         $query->condition($where_conditions);
       }
+      $query->range($groupLevelSkipCount, $groupLevelTopCount);
 
+      //sorting
+      $this->query_sort_objects_list($groupLevelOrderBy, $qSearch, $query);
 
       $result = $query->execute();
 
@@ -179,6 +189,7 @@ class AjaxRequestsController extends ControllerBase
       } else {
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }
+      $groupLevelSearchHtml.= '<input type="hidden" id="hdnTotalGroupLevelObjectCount" value="'.$obj_count.'"></input>';
     } else if ($Spage == "group-detail") {
 
       $groupID = $groupTypeId;
@@ -210,6 +221,13 @@ class AjaxRequestsController extends ControllerBase
       if ($qSearch !== NULL && count($customized_fields_array) > 0) {
         $query->condition($where_conditions);
       }
+
+      $query->range($groupLevelSkipCount, $groupLevelTopCount);
+
+
+      //sorting
+      $this->query_sort_objects_list($groupLevelOrderBy, $qSearch, $query);
+
       $obj_count = $query->execute()->fetchField();
 
       $object_details = $query->execute()->fetchAllAssoc('ObjectId');
@@ -244,6 +262,7 @@ class AjaxRequestsController extends ControllerBase
       } else {
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }
+      $groupLevelSearchHtml.= '<input type="hidden" id="hdnTotalGroupLevelObjectCount" value="'.$obj_count.'"></input>';
     } else if ($Spage == "collection-detail") {
 
       $collectionID = $groupTypeId;
@@ -269,10 +288,18 @@ class AjaxRequestsController extends ControllerBase
       if ($qSearch !== NULL && count($customized_fields_array) > 0) {
         $query->condition($where_conditions);
       }
-      $object_details = $query->execute()->fetchAllAssoc('ObjectId');
-      //Count
 
-      $obj_count = $query->execute()->fetchField();
+      $query->range($groupLevelSkipCount, $groupLevelTopCount);
+
+      //sorting
+      $this->query_sort_objects_list($groupLevelOrderBy, $qSearch, $query);
+
+      $object_details = $query->execute()->fetchAllAssoc('ObjectId');
+
+      //Count
+      $count_query = $query->countQuery();
+      $obj_count = $count_query->execute()->fetchField();
+
 
       if ($obj_count > 0) {
         $groupLevelSearchHtml = '<div class="card-group row g-5 artist-objects-container mt-5" id="groupLevelObjectsData">';
@@ -304,6 +331,7 @@ class AjaxRequestsController extends ControllerBase
       } else {
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }
+      $groupLevelSearchHtml.= '<input type="hidden" id="hdnTotalGroupLevelObjectCount" value="'.$obj_count.'"></input>';
     }
 
     return new JsonResponse(['groupLevelSearchHtml' => $groupLevelSearchHtml]);
@@ -330,5 +358,56 @@ class AjaxRequestsController extends ControllerBase
     $values = implode(',', array_keys($result));
 
     return $values;
+  }
+
+  function query_sort_objects_list($groupLevelOrderBy, $qSearch, $query){
+    $connection = Database::getConnection();
+
+    $collection_table =  $connection->prefixTables('Collections');
+
+    //for sorting
+    if ($groupLevelOrderBy === "Title%20desc" && $qSearch !== NULL) {
+
+      $query->orderBy('Title', 'DESC');
+    }
+    else if($groupLevelOrderBy === "Title%20asc" && $qSearch !== NULL)
+    {
+
+      $query->orderBy('Title', 'ASC');
+    }
+    else if($groupLevelOrderBy === "InventoryNumber%20asc" && $qSearch !== NULL)
+    {
+        $query->orderBy('InventoryNumber', 'ASC');
+    }
+    else if($groupLevelOrderBy === "InventoryNumber%20desc" && $qSearch !== NULL)
+    {
+
+      $query->orderBy('InventoryNumber', 'DESC');
+    }
+    else if($groupLevelOrderBy === "ObjectDate%20desc" && $qSearch !== NULL)
+    {
+
+      $query->orderBy('ObjectDate', 'DESC');
+    }
+    else if($groupLevelOrderBy === "ObjectDate%20asc" && $qSearch !== NULL)
+    {
+
+      $query->orderBy('ObjectDate', 'ASC');
+    }
+    else if($groupLevelOrderBy === "Collection/CollectionName%20asc" && $qSearch !== NULL){
+      $query->fields('o')
+      ->fields('c', ['CollectionName'])
+      ->join($collection_table, 'c', 'o.CollectionId = c.CollectionId');
+
+      $query->orderBy('c.CollectionName', 'ASC');
+
+    }
+    else if($groupLevelOrderBy === "Collection/CollectionName%20desc" && $qSearch !== NULL){
+      $query->fields('o')
+      ->fields('c', ['CollectionName'])
+      ->join($collection_table, 'c', 'o.CollectionId = c.CollectionId');
+
+      $query->orderBy('c.CollectionName', 'DESC');
+    }
   }
 }

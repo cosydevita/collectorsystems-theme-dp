@@ -192,6 +192,7 @@ function custom_api_integration_theme() {
         'qSearch' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
+        'listPageSize' => NULL,
         'ajaxfor' => NULL,
       ],
     ],
@@ -207,7 +208,9 @@ function custom_api_integration_theme() {
         'loadsec' => NULL,
         'object_details' => NULL,
         'exhibitionID' => NULL,
-        'exhibition_details' => NULL
+        'exhibition_details' => NULL,
+        'listPageSize' => NULL,
+        'ajaxfor' => NULL,
       ],
     ],
     'group-detail-page' => [
@@ -223,7 +226,9 @@ function custom_api_integration_theme() {
         'object_details' => NULL,
         'group_details' => NULL,
         'groupID' => NULL,
-        'group_object_details' => NULL
+        'group_object_details' => NULL,
+        'listPageSize' => NULL,
+        'ajaxfor' => NULL,
       ],
     ],
     'collection-detail-page' => [
@@ -239,6 +244,8 @@ function custom_api_integration_theme() {
         'object_details' => NULL,
         'collectionID' => NULL,
         'collection_details' => NULL,
+        'listPageSize' => NULL,
+        'ajaxfor' => NULL,
       ],
     ]
 
