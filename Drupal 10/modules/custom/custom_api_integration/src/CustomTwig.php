@@ -130,6 +130,9 @@ class CustomTwig extends AbstractExtension {
       $pagingUrl = $baseUrl;
     }
     $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    if(!$listPageSize){
+      return;
+    }
 
     $showitems = $listPageSize;
     if(empty($requested_page)) $requested_page = 1;
