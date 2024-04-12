@@ -9,5 +9,5 @@ fetch:
   timeout: 30
 notification:
   emails:
-    - viditgarg2017@email.com
+    - sudarshanhang@gmail.com
   threshold: all

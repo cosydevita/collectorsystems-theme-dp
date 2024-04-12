@@ -1,4 +1,4 @@
-uuid: 3901fd27-cc3a-412e-bb40-938d4b7cc666
+uuid: 6cd4f768-6733-4960-be2d-4d799d523ca9
 langcode: en
 status: true
 dependencies: {  }
@@ -7,7 +7,7 @@ _core:
 id: feedback
 label: 'Website feedback'
 recipients:
-  - viditgarg2017@email.com
+  - sudarshanhang@gmail.com
 reply: ''
 weight: 0
 message: 'Your message has been sent.'

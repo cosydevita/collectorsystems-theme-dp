@@ -1,4 +1,4 @@
-uuid: 9a777b5d-a9cc-496c-8856-cfee55982222
+uuid: 1cbab076-c6e1-4e4c-a47b-7523a02e2510
 langcode: en
 status: false
 dependencies:
@@ -8,7 +8,7 @@ dependencies:
     - node
     - user
 _core:
-  default_config_hash: sz_FoMz5aClG4jFy4UDlkenXQtgTUXohEDjWVBuHaro
+  default_config_hash: 0mU55pEUCMGcMhBRpyMqjal173jNwZh0hrvImj4HVWU
 id: glossary
 label: Glossary
 module: node
@@ -184,7 +184,7 @@ display:
             custom_date_format: ''
             timezone: ''
             tooltip:
-              date_format: ''
+              date_format: long
               custom_date_format: ''
             time_diff:
               enabled: false

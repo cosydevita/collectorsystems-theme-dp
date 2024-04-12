@@ -1,4 +1,4 @@
-uuid: 58951c4a-04e5-4376-9912-bce5f02b8002
+uuid: 38669ede-7d17-494a-8b7e-dfe9b00e4064
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - node
     - user
 _core:
-  default_config_hash: vBKWYGGDoAX-tFd1JErB8tZLSxx3lJ0foouVsgpcbB4
+  default_config_hash: 3ELwBpDb9lzqW5-daqjZYsC5lNcwbDS_i_-LKba12Lw
 id: content
 label: Content
 module: node
@@ -188,7 +188,7 @@ display:
             custom_date_format: ''
             timezone: ''
             tooltip:
-              date_format: ''
+              date_format: long
               custom_date_format: ''
             time_diff:
               enabled: false

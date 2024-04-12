@@ -1,4 +1,4 @@
-uuid: 9a69599a-a29e-49ec-84c6-bd1201314d1d
+uuid: a296468c-102b-4d33-8057-ed8f2b24a8c3
 langcode: en
 status: true
 dependencies:
@@ -8,9 +8,7 @@ dependencies:
     - system
   theme:
     - collectorsystems
-_core:
-  default_config_hash: _G1IfGESk7WqvVCi7B3VJxhSY0YICgv1OmuVPJqO8bE
-id: collectorsystems_main_menu
+id: collectorsystems_mainnavigation
 theme: collectorsystems
 region: primary_menu
 weight: 0
@@ -22,6 +20,6 @@ settings:
   label_display: '0'
   provider: system
   level: 1
-  depth: 1
+  depth: 0
   expand_all_items: false
 visibility: {  }

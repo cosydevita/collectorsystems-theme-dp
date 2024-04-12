@@ -1,4 +1,4 @@
-uuid: ab9a54e9-a527-4f06-a9ec-aadbb8a3551b
+uuid: 883c979f-bc84-4aba-99e8-7d24abebe9af
 langcode: en
 status: true
 dependencies:
@@ -7,12 +7,13 @@ dependencies:
   module:
     - comment
     - contact
+    - file
     - filter
     - search
     - shortcut
     - system
 _core:
-  default_config_hash: I44QAB4es39lNzMQWiJLq2dfjX7VRSOzT_5KzAcUq_M
+  default_config_hash: cFrlqjtkTfvY3RGccjJkPf1SGIfJ942IrxTLWAO4mgA
 id: authenticated
 label: 'Authenticated user'
 weight: 1
@@ -22,6 +23,7 @@ permissions:
   - 'access content'
   - 'access shortcuts'
   - 'access site-wide contact form'
+  - 'delete own files'
   - 'post comments'
   - 'search content'
   - 'skip comment approval'

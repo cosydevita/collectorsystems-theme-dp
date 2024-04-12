@@ -1,4 +1,4 @@
-uuid: 05a9c375-7de1-45ec-a061-aee1bb38e934
+uuid: f0b564fa-35c7-487f-ab82-eb01ad5c9366
 langcode: en
 status: true
 dependencies:
@@ -7,7 +7,7 @@ dependencies:
   module:
     - ckeditor5
 _core:
-  default_config_hash: uXAqOeMiQVnzE5yk7-v1DsBagmkCI2h_q5WAf0bir-o
+  default_config_hash: lZlUTSJqWaN3iU0I0fhvQVgqf4ps9fxPPC-g_9aWIRc
 format: basic_html
 editor: ckeditor5
 settings:
