@@ -41,7 +41,9 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
     $database = Database::getConnection();
 
         //Fetch Object Images
-        $url = csconstants::Public_API_URL.$subAcntId.'/Objects?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=MainImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL,SlideShowURL),ObjectImageAttachments($expand=Attachment),';
+        //expanded to include the attachmentkeywords
+        $url =csconstants::Public_API_URL.$subAcntId.'/Objects?$expand=MainImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL,SlideShowURL),ObjectImageAttachments($expand=Attachment($select=AttachmentId,SubscriptionId,FileName,Description,ContentType,CreationDate,FileURL,ThumbSizeURL,MidSizeURL,DetailURL,DetailLargeURL,DetailXLargeURL,iphoneURL,SlideShowURL;$expand=AttachmentKeywords($select=AttachmentKeywordString))),&$select=InventoryNumber,Title,InventoryNumber,ObjectId,MainImageAttachmentId,ModificationDate,CreationDate&$filter=SubscriptionId%20eq%20'.$subsId.'%20And%20Deleted%20eq%20false';
+
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -136,15 +138,7 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
               $object_main_image_path = $objectDirectory . '/' . $image['MainImageAttachment']['FileName'];
           }
             $mainImageURL = $image['MainImageAttachment']['DetailLargeURL'] ?? null;
-            $filtered_keywords = get_filtered_keywords();
-            $objectId = $image['ObjectId'];
-            if($filtered_keywords){
-              $mainAttachmentId= isset($image['MainImageAttachment']) ? $image['MainImageAttachment']['AttachmentId'] : 0;
-              $objectImages = getObjectImageAttachmentsByObjectId($objectId, $mainAttachmentId);
-            }
-            else{
-              $objectImages = $image['ObjectImageAttachments'] ?? null;
-            }
+            $objectImages = $image['ObjectImageAttachments'] ?? null;
             $curlMain1 = curl_init($mainImageURL);
             curl_setopt($curlMain1, CURLOPT_RETURNTRANSFER, true);
 
@@ -175,6 +169,23 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
             {
                 foreach ($objectImages as $objectImage)
                 {
+
+                    if(isset($objectImage['Attachment']['ModificationDate'])){
+                      $ModificationDate_API =  $objectImage['Attachment']['ModificationDate'];
+                    }else{
+                      $ModificationDate_API = $objectImage['Attachment']['CreationDate'];
+                    }
+
+                    $AttachmentId = $objectImage['Attachment']['AttachmentId'];
+                    $AttachmentKeywords = $objectImage['Attachment']['AttachmentKeywords'];
+
+                    $keywords = [];
+                    foreach($AttachmentKeywords as $AttachmentKeyword){
+                      $keywords[] = $AttachmentKeyword['AttachmentKeywordString'];
+                    }
+                    $keywords_serialized = json_encode($keywords);
+
+
                     $object_image_path = $objectDirectory1 . '/' . $objectImage['Attachment']['FileName'];
                     $thumb_image_path = $objectDirectory2 . '/' . $objectImage['Attachment']['FileName'];
                     $objectImageDetailLargeURL = $objectImage['Attachment']['DetailXLargeURL'];
@@ -221,6 +232,9 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
                           'ObjectId' => $id1,
                           'thumb_size_URL_path' => $thumb_image_path,
                           'object_image_path' => $object_image_path,
+                          'AttachmentId' => $AttachmentId,
+                          'keywords' => $keywords_serialized,
+                          'ModificationDate' => $ModificationDate_API
                         ]);
                         $insert_thumb_image_data->execute();
 

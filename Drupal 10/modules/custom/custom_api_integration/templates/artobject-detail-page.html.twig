@@ -56,7 +56,7 @@
                                 {% else %}
 
                                 {% set relative_path = thumb.object_image_path  %}
-                                    {% set object_img = thumb['object_image_attachment']  ? 'data:image/jpeg;base64,' ~ base64_encode(thumb['object_image_attachment']) : '' %}
+                                    {% set object_img = thumb.object_image_attachment  ? 'data:image/jpeg;base64,' ~ base64_encode(thumb.object_image_attachment) : '' %}
 
                                     <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="Slide {{ i+1 }}"/>
                                 {% endif %}
@@ -96,9 +96,9 @@
                               {% for j in 0..(thumbDetails|length - 1) %}
                                   <div class="{{ j == 0 ? 'active carousel-item' : 'carousel-item' }}" data-slide-number="{{ j }}">
                                       <div id="carousel-selector-{{ currentslide }}" class="{{ currentslide == 0 ? 'selected thumb col-3 px-1 py-2' : 'thumb col-3 px-1 py-2' }}" data-target="#carouselA" data-slide-to="{{ currentslide }}">
-                                          {% set object_img = thumbDetails[j]['thumb_size_URL'] is defined ? 'data:image/jpeg;base64,' ~ base64_encode(thumbDetails[j]['thumb_size_URL']) : '' %}
+                                          {% set object_img = thumbDetails[j].thumb_size_URL is defined ? 'data:image/jpeg;base64,' ~ base64_encode(thumbDetails[j].thumb_size_URL) : '' %}
 
-                                          {% set server_path = thumbDetails[j]['thumb_size_URL_path'] is defined ? thumbDetails[j]['thumb_size_URL_path'] : '' %}
+                                          {% set server_path = thumbDetails[j].thumb_size_URL_path is defined ? thumbDetails[j].thumb_size_URL_path : '' %}
                                           {% set relative_path = server_path|replace({'%SERVER_DOCUMENT_ROOT%': ''}) %}
                                           {% set image_url = site_url ~ relative_path %}
 

@@ -543,12 +543,6 @@ class PageTemplatesController extends ControllerBase
     // Assuming $thumbImage_table is the name of your custom table.
     $thumbImage_table = $database->prefixTables('ThumbImages');
 
-    // Fetching a single row.
-    $query = $database->select($thumbImage_table, 'ti')
-      ->fields('ti', ['object_image_path', 'object_image_attachment'])
-      ->execute();
-    $check = $query->fetchAssoc();
-
     // Fetching multiple rows based on a condition.
     $query = $database->select($thumbImage_table, 'ti')
       ->fields('ti')
@@ -556,10 +550,6 @@ class PageTemplatesController extends ControllerBase
       ->orderBy('object_image_path', 'DESC')
       ->execute();
     $thumbDetails = $query->fetchAllAssoc('ID');
-
-    // print_r($thumbDetails);
-    // die();
-
 
     //FOR NEXT AND PREVIOUS
     $customized_fields = $this->getCommaSeperatedFieldsForDetailPage();
@@ -587,39 +577,14 @@ class PageTemplatesController extends ControllerBase
     $row_before = (int)$row_number-1;
     $row_after = (int)$row_number+1;
 
-    $thumbImageTable = 'ThumbImages'; // Assuming that "ThumbImages" is the table name.
 
-    $query = Database::getConnection()->select($thumbImageTable, 'ti');
-    $query->fields('ti');
-
-    if ($check['object_image_path']) {
-      $query->condition('ti.ObjectId', $artObjID);
-      if ($artObjID === '2314862' || $artObjID === '2314861' || $artObjID === '2314848' || $artObjID === '2314841' || $artObjID === '2314836') {
-        $query->orderBy('ti.object_image_path', 'DESC');
-      } elseif ($artObjID === '2314842') {
-        $query->orderBy('ti.object_image_path', 'ASC');
-      }
-    } elseif ($check['object_image_attachment']) {
-      $query->condition('ti.ObjectId', $artObjID);
-      if ($artObjID === '2314862' || $artObjID === '2314843' || $artObjID === '2314836' || $artObjID === '2314841') {
-        $query->orderBy('ti.object_image_attachment', 'ASC');
-      } elseif ($artObjID === '2314842' || $artObjID === '2314861' || $artObjID === '2314845' || $artObjID === '2314833') {
-        $query->orderBy('ti.object_image_attachment', 'DESC');
-      } elseif ($artObjID === '2314848') {
-        $query->orderBy('ti.ThumbURL', 'DESC');
-      }
-    }
-
-    // Execute the query.
-    $thumbDetails = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
-
-    //filter images using keywords
+    // filter images using keywords
     $filtered_keywords = get_filtered_keywords();
     if($filtered_keywords){
       foreach($thumbDetails as  $thumbDetailKey => $thumbDetail){
-        $keywords = json_decode($thumbDetail['keywords']);
-        $MainImageAttachmentId = $thumbDetail['MainImageAttachmentId'];
-        $AttachmentId = $thumbDetail['AttachmentId'];
+        $keywords = json_decode($thumbDetail->keywords);
+        $MainImageAttachmentId = $thumbDetail->MainImageAttachmentId;
+        $AttachmentId = $thumbDetail->AttachmentId;
 
         // Check if any of the $keywords exists in $filtered_keywords
         $foundKeyword = false;
@@ -652,7 +617,6 @@ class PageTemplatesController extends ControllerBase
       '#sortBy' => $sortBy,
       '#qSearch' => $qSearch,
       '#requested_pageNo' => $requested_pageNo,
-      // '#site_url' => $base_url_with_scheme,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
