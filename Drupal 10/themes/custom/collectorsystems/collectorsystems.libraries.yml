@@ -20,7 +20,7 @@ global-styling:
 
 global-script:
   js:
-    '//maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js': { type: external}
+    assets/js/cs_theme_bootstrap.bundle.min.js: {}
     '//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js': { type: external}
     '//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js': { type: external}
     assets/lib/owlcarousel/owl.carousel.js: {}
