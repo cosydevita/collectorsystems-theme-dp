@@ -604,7 +604,16 @@ class PageTemplatesController extends ControllerBase
 
       }
     }
+
     $thumbDetails =  array_values($thumbDetails);
+
+    //move the main image to the first index
+    foreach($thumbDetails as $thumbDetailKey => $thumbDetail){
+      if($thumbDetail->MainImageAttachmentId == $thumbDetail->AttachmentId ){
+        $this->moveElementToFirstIndex($thumbDetails, $thumbDetailKey);
+      }
+    }
+
     $build = [
       '#theme' => 'artobject-detail-page',
       '#thumbDetails' => $thumbDetails,
@@ -1035,5 +1044,13 @@ class PageTemplatesController extends ControllerBase
     }
 
     return $tables_exists;
+  }
+
+  function moveElementToFirstIndex(&$array, $index) {
+    if (isset($array[$index])) {
+        $element = $array[$index];
+        unset($array[$index]);
+        array_unshift($array, $element);
+    }
   }
 }
