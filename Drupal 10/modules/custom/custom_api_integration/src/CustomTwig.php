@@ -49,6 +49,9 @@ class CustomTwig extends AbstractExtension {
                     <div class="card-body d-flex flex-column">
                         <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId'] ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)">
                                 <?php
+                                $main_image_attachment_description = isset($value['main_image_attachment_description']) && $value['main_image_attachment_description'] !== ''
+                                ? $value['main_image_attachment_description']
+                                : 'Image description is not available.';
 
                                 $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
                                 $server_path = $value['main_image_path'];
@@ -61,15 +64,15 @@ class CustomTwig extends AbstractExtension {
                                 $image_url = \Drupal::request()->getSchemeAndHttpHost() . "/" .  $relative_path;
                                 if(empty($object_img) && empty($server_path)){
                                 ?>
-                                    <img class="img-fluid" src="<?php echo $default_image_url; ?>" alt=""/>
+                                    <img class="img-fluid" src="<?php echo $default_image_url; ?>" alt="<?php echo $main_image_attachment_description ?>"/>
                                     <?php } else {
                                     if (empty($server_path)) {
                                     ?>
-                                    <img class="img-fluid" src="<?php echo $object_img; ?>" alt=""/>
+                                    <img class="img-fluid" src="<?php echo $object_img; ?>" alt="<?php echo $main_image_attachment_description ?>"/>
                                     <?php
                                     } else {
                                     ?>
-                                    <img class="img-fluid" src="<?php echo $image_url; ?>" alt=""/>
+                                    <img class="img-fluid" src="<?php echo $image_url; ?>" alt="<?php echo $main_image_attachment_description ?>"/>
                                     <?php
                                     }
                                     }

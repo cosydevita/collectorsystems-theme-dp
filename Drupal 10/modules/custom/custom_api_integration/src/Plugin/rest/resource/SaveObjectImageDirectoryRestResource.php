@@ -42,7 +42,7 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
 
         //Fetch Object Images
         //expanded to include the attachmentkeywords
-        $url =csconstants::Public_API_URL.$subAcntId.'/Objects?$expand=MainImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL,SlideShowURL),ObjectImageAttachments($expand=Attachment($select=AttachmentId,SubscriptionId,FileName,Description,ContentType,CreationDate,FileURL,ThumbSizeURL,MidSizeURL,DetailURL,DetailLargeURL,DetailXLargeURL,iphoneURL,SlideShowURL;$expand=AttachmentKeywords($select=AttachmentKeywordString))),&$select=InventoryNumber,Title,InventoryNumber,ObjectId,MainImageAttachmentId,ModificationDate,CreationDate&$filter=SubscriptionId%20eq%20'.$subsId.'%20And%20Deleted%20eq%20false';
+        $url =csconstants::Public_API_URL.$subAcntId.'/Objects?$expand=MainImageAttachment($select=AttachmentId,Description,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL,SlideShowURL),ObjectImageAttachments($expand=Attachment($select=AttachmentId,SubscriptionId,FileName,Description,ContentType,CreationDate,FileURL,ThumbSizeURL,MidSizeURL,DetailURL,DetailLargeURL,DetailXLargeURL,iphoneURL,SlideShowURL;$expand=AttachmentKeywords($select=AttachmentKeywordString))),&$select=InventoryNumber,Title,InventoryNumber,ObjectId,MainImageAttachmentId,ModificationDate,CreationDate&$filter=SubscriptionId%20eq%20'.$subsId.'%20And%20Deleted%20eq%20false';
 
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -130,6 +130,7 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
         foreach($Detaildata['value'] as $image)
         {
           $object_main_image_path = '';
+          $mainImageDescription = $image['MainImageAttachment']['Description'] ?? null;
 
           if (
             isset($image['MainImageAttachment']) &&
@@ -159,6 +160,7 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
                 $update_object_path = $connection->update($object_table)
                   ->fields([
                     'main_image_path' => $object_main_image_path,
+                    'main_image_attachment_description' => $mainImageDescription
                   ])
                   ->condition('ObjectId', $id);
                 $update_object_path->execute();

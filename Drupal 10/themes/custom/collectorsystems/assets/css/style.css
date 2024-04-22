@@ -113,6 +113,9 @@ body
     display: flex;
     margin-bottom: 0px;
 }
+.navbar-light .menu-item a:focus{
+  color: rgba(0, 0, 0, 0.7);
+}
 .navbar-expand-lg .navbar-collapse{
     justify-content: end;
 }

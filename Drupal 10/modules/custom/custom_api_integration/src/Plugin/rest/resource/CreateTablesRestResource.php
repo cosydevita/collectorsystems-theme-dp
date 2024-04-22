@@ -3350,6 +3350,9 @@ class CreateTablesRestResource extends ResourceBase {
           'size' => 'big',
           // 'not null' => TRUE,
         ],
+        'main_image_attachment_description' => [
+          'type' => 'text'
+        ],
         'object_image_attachment' => [
           'type' => 'blob',
           'size' => 'big',

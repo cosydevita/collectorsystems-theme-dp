@@ -34,7 +34,9 @@
                         </a> #}
                         <a href="javascript:;" onclick="return getmoredetailsForGroup('{{ site_url }}', {{ groupdata.GroupId }})">
                           {% set group_img = groupdata.GroupImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(groupdata.GroupImageAttachment) : groupdata.ImagePath ? groupdata.ImagePath : 'https://cdn.collectorsystems.com/images/noimage300.png' %}
-                          <img class="img-fluid" src="{{ group_img }}" alt=""/>
+
+                          {% set altText = groupdata.GroupDescription is not empty ? groupdata.GroupDescription : 'Image description is not available' %}
+                          <img class="img-fluid" src="{{ group_img }}" alt="{{ altText  }}"/>
                       </a>
 
                     </div>

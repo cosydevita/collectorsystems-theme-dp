@@ -645,8 +645,11 @@ class PageTemplatesController extends ControllerBase
     $loadsec=1;
 
     $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
-
-    $customized_fields_array = explode(',', $customized_fields);
+    if($customized_fields){
+      $customized_fields_array = explode(',', $customized_fields);
+    }else{
+      $customized_fields_array = [];
+    }
 
     // Fetch artist details from the database
     $connection = Database::getConnection();
@@ -663,7 +666,6 @@ class PageTemplatesController extends ControllerBase
     foreach ($customized_fields_array as $field) {
       $where_conditions->condition($field, '%' . $qSearch . '%', 'LIKE');
     }
-
     // Fetch objects where ArtistId
     $object_table = $connection->prefixTables('CSObjects');
     $query = $connection->select($object_table, 'o')

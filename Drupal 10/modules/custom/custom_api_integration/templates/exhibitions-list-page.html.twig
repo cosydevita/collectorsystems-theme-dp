@@ -39,10 +39,13 @@
                             %}
                             {% set relative_path = exbi_img ? exbi_img : '' %}
                             {% set image_url = relative_path ? relative_path : '' %}
+                            {% set altText = exhibi.ExhibitionSubject is not empty ? exhibi.ExhibitionSubject : 'Image description is not available' %}
                             {% if not exbi_img and not relative_path %}
-                                <img class="img-fluid" src="https://cdn.collectorsystems.com/images/noimage300.png" alt=""/>
+                                <img class="img-fluid" src="https://cdn.collectorsystems.com/images/noimage300.png"
+                                alt="{{ altText }}"/>
                             {% else %}
-                                <img class="img-fluid" src="{{ exbi_img ? exbi_img : image_url }}" alt=""/>
+                                <img class="img-fluid" src="{{ exbi_img ? exbi_img : image_url }}"
+                                alt="{{ altText }}"/>
                             {% endif %}
                         </a>
                     </div>

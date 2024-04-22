@@ -31,17 +31,23 @@
                             {% set cltimg = collect.CollectionImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(collect.CollectionImageAttachment) : collect.ImagePath %}
                             {% set relative_path = cltimg ? cltimg : '' %}
                             {% set image_url = relative_path ?  relative_path : '' %}
+
+                            {% set altText = collect.FullCollectionName is not empty ? collect.FullCollectionName : 'Image description is not available' %}
                             {% if not cltimg and not relative_path %}
-                                <img class="img-fluid" src="https://cdn.collectorsystems.com/images/noimage300.png" alt=""/>
+                                <img class="img-fluid" src="https://cdn.collectorsystems.com/images/noimage300.png"
+                                alt="{{ altText }}"
+                                />
                             {% else %}
-                                <img class="img-fluid" src="{{ image_url ? image_url : cltimg }}" alt=""/>
+                                <img class="img-fluid" src="{{ image_url ? image_url : cltimg }}"
+                                alt="{{ altText }}
+                                "/>
                             {% endif %}
                         </a>
                     </div>
                     <div class="card-footer text-muted">
                         <a href="javascript:;" onclick="return getmoredetailsForCollection('{{ site_url }}', {{ collect.CollectionId }})">
                             <h5 class="card-title font-normal">
-                                {{ collect.FullCollectionName ?? "" }}
+                                {{ collect.FullCollectionName ?? "Image description is not available." }}
                             </h5>
                         </a>
                     </div>

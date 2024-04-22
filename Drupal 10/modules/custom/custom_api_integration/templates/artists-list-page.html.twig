@@ -41,13 +41,26 @@
 
                             {% set image_url =  relative_path %}
 
+                            {% set altText = artist.ArtistName is not empty ? artist.ArtistName : 'Image description is not available' %}
+
                             {% if artist_img is empty and server_path is empty %}
-                                <img class="img-fluid" src="{{base_path ~ directory }}/assets/img/artist.png" alt=""/>
+                                <img
+                                class="img-fluid"
+                                src="{{base_path ~ directory }}/assets/img/artist.png"
+                                alt="{{ altText }}"
+                                />
                             {% else %}
                                 {% if server_path is empty %}
-                                    <img class="img-fluid" src="{{ artist_img }}" alt=""/>
+                                    <img
+                                    class="img-fluid" src="{{ artist_img }}"
+                                    alt="{{ altText  }}"
+                                    />
                                 {% else %}
-                                    <img class="img-fluid" src="{{ image_url }}" alt=""/>
+                                    <img
+                                    class="img-fluid"
+                                    src="{{ image_url }}"
+                                    alt="{{ altText }}"
+                                    />
                                 {% endif %}
                             {% endif %}
                         </a>
@@ -55,7 +68,7 @@
                     <div class="card-footer text-muted">
                         <a href="javascript:;" onclick="return getmoredetailsForArtist('{{  app.request.schemeAndHttpHost }}',{{ artist.ArtistId }})">
                             <h5 class="card-title font-normal">
-                                {{ artist.ArtistName ?? '' }}
+                                {{ artist.ArtistName }}
                             </h5>
                         </a>
                     </div>
