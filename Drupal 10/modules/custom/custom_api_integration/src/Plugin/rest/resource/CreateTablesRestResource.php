@@ -3009,7 +3009,12 @@ class CreateTablesRestResource extends ResourceBase {
           {
               $title = $value['Title'];
           }
-          $inventNumber = $value['InventoryNumber'];
+          $inventNumber = NULL;
+          if(isset($value['InventoryNumber']) && $value['InventoryNumber'] != NULL)
+          {
+            $inventNumber = $value['InventoryNumber'];
+          }
+
           $objectDate = NULL;
           if(isset($value['ObjectDate']) && $value['ObjectDate'] != NULL)
           {
@@ -3726,6 +3731,9 @@ class CreateTablesRestResource extends ResourceBase {
         'AttachmentId' => [
           'type' => 'int',
           'unsigned' => TRUE,
+        ],
+        'attachment_description' => [
+          'type' => 'text'
         ],
         'keywords' => [
           'type' => 'blob',

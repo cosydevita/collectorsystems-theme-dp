@@ -37,28 +37,23 @@
 
                 {% set allthumb = thumbDetails %}
 
-                {% if allthumb[row_number]['MainImageAttachmentId'] is defined and allthumb[row_number]['MainImageAttachmentId'] > 0 %}
-                    {% set allthumb_mainattachment = allthumb|column('MainImageAttachmentId')|keys|first %}
-                    {% set element_to_shift = allthumb[allthumb_mainattachment] %}
-                    {% set _ = allthumb|slice(allthumb_mainattachment, 1) %}
-                    {% set allthumb = [element_to_shift]|merge(allthumb) %}
-                {% endif %}
-
                 <div id="carouselA" class="carousel slide carouselBoth carousel-fade" data-bs-ride="carousel" data-bs-interval="false">
                     <div class="carousel-inner" role="listbox">
                         {% for i, thumb in allthumb %}
+                          {% set altText = thumb.attachment_description is not empty ? thumb.attachment_description : 'Image description is not available' %}
+
                             <div class="carousel-item {{ i == 0 ? 'active' }}">
 
                                 {% if enableZoomForImages %}
                                     <a class="carouselAToggle" data-big="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" href="javascript:;">
-                                        <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="Slide {{ i+1 }}"/>
+                                        <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="{{altText}}"/>
                                     </a>
                                 {% else %}
 
                                 {% set relative_path = thumb.object_image_path  %}
                                     {% set object_img = thumb.object_image_attachment  ? 'data:image/jpeg;base64,' ~ base64_encode(thumb.object_image_attachment) : '' %}
 
-                                    <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="Slide {{ i+1 }}"/>
+                                    <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="{{altText}}"/>
                                 {% endif %}
                             </div>
                         {% endfor %}
@@ -94,6 +89,7 @@
                           <div class="carousel-inner thumb-carousel row mx-0" role="listbox" style="background: rgb(240, 240, 240);">
                               {% set currentslide = 0 %}
                               {% for j in 0..(thumbDetails|length - 1) %}
+                              {% set altText = thumbDetails[j].attachment_description is not empty ? thumbDetails[j].attachment_description : 'Image description is not available' %}
                                   <div class="{{ j == 0 ? 'active carousel-item' : 'carousel-item' }}" data-slide-number="{{ j }}">
                                       <div id="carousel-selector-{{ currentslide }}" class="{{ currentslide == 0 ? 'selected thumb col-3 px-1 py-2' : 'thumb col-3 px-1 py-2' }}" data-target="#carouselA" data-slide-to="{{ currentslide }}">
                                           {% set object_img = thumbDetails[j].thumb_size_URL is defined ? 'data:image/jpeg;base64,' ~ base64_encode(thumbDetails[j].thumb_size_URL) : '' %}
@@ -103,12 +99,12 @@
                                           {% set image_url = site_url ~ relative_path %}
 
                                           {% if object_img is empty and server_path is empty %}
-                                              <img class="d-block img-fluid" src="https://cdn.collectorsystems.com/images/noimage100.png" alt=""/>
+                                              <img class="d-block img-fluid" src="https://cdn.collectorsystems.com/images/noimage100.png" alt="{{altText}}"/>
                                           {% else %}
                                               {% if server_path is empty %}
-                                                  <img class="d-block img-fluid" src="{{ object_img }}" alt=""/>
+                                                  <img class="d-block img-fluid" src="{{ object_img }}" alt="{{altText}}"/>
                                               {% else %}
-                                                  <img class="d-block img-fluid" src="{{ image_url }}" alt=""/>
+                                                  <img class="d-block img-fluid" src="{{ image_url }}" alt="{{altText}}"/>
                                               {% endif %}
                                           {% endif %}
                                       </div>

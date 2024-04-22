@@ -186,6 +186,7 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
                       $keywords[] = $AttachmentKeyword['AttachmentKeywordString'];
                     }
                     $keywords_serialized = json_encode($keywords);
+                    $attachment_description = $objectImage['Attachment']['Description'];
 
 
                     $object_image_path = $objectDirectory1 . '/' . $objectImage['Attachment']['FileName'];
@@ -236,7 +237,8 @@ class SaveObjectImageDirectoryRestResource extends ResourceBase {
                           'object_image_path' => $object_image_path,
                           'AttachmentId' => $AttachmentId,
                           'keywords' => $keywords_serialized,
-                          'ModificationDate' => $ModificationDate_API
+                          'ModificationDate' => $ModificationDate_API,
+                          'attachment_description' => $attachment_description
                         ]);
                         $insert_thumb_image_data->execute();
 

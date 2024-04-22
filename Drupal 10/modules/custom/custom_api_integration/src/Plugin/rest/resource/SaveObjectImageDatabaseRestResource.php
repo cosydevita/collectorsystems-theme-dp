@@ -179,6 +179,8 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
                 $keywords_serialized = json_encode($keywords);
 
                 $fileName1 = $objectImage['Attachment']['FileURL'];
+                $attachment_description = $objectImage['Attachment']['Description'];
+
 
                 $curlObject = curl_init($objectImageDetailLargeURL);
                 curl_setopt($curlObject, CURLOPT_RETURNTRANSFER, true);
@@ -221,7 +223,8 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
                             'object_image_attachment' => $objectImageData,
                             'keywords' => $keywords_serialized,
                             'MainImageAttachmentId' => $mainId,
-                            'ModificationDate' => $ModificationDate_API
+                            'ModificationDate' => $ModificationDate_API,
+                            'attachment_description' => $attachment_description
                           ])
                           ->condition('AttachmentId', $AttachmentId)
                           ->execute();
@@ -237,7 +240,8 @@ class SaveObjectImageDatabaseRestResource extends ResourceBase {
                           'AttachmentId' => $AttachmentId,
                           'keywords' => $keywords_serialized,
                           'MainImageAttachmentId' => $mainId,
-                          'ModificationDate' => $ModificationDate_API
+                          'ModificationDate' => $ModificationDate_API,
+                          'attachment_description' => $attachment_description
                         ])
                         ->execute();
                       }
