@@ -1,0 +1,52 @@
+<input type="hidden" value="{{ nxshowrec }}" id="rectop"/>
+<input type="hidden" value="{{ nxshskip }}" id="recskip"/>
+<input type="hidden" value="{{ count }}" id="totrec"/>
+<input type="hidden" value="{{ dataorderby }}" id="dataorderby"/>
+<div class="container-xxl py-5">
+    <div class="container wow fadeInDown" data-wow-delay="0.1s">
+        <div class="row mb-3">
+            <div class="col d-inline-flex">
+                <h1 class="cs-page-title">Objects</h1>
+                {% if count > nxshowrec %}
+                    <h6 class="cs-page-total-count">({{ count }} results)</h6>
+                {% endif %}
+            </div>
+            <div class="col-auto text-end my-auto d-inline-flex">
+                <div class="sort-by-field" id="sortinghtml">
+                    <span class="sort-by-title me-3">Sort By: </span>
+                    <select name="seldataorderby" id="seldataorderby" class="form-select" onchange="return applySorting('{{ current_page }}')">
+                        <option value="Title%20desc" {% if dataorderby == "Title%20desc" %} selected {% endif %}>Title Desc</option>
+                        <option value="Title%20asc" {% if dataorderby == "Title%20asc" %} selected {% endif %}>Title Asc</option>
+                        <option value="InventoryNumber%20desc" {% if dataorderby == "InventoryNumber%20desc" %} selected {% endif %}>Inventory Number Desc</option>
+                        <option value="InventoryNumber%20asc" {% if dataorderby == "InventoryNumber%20asc" %} selected {% endif %}>Inventory Number Asc</option>
+                        <option value="Collection/CollectionName%20desc" {% if dataorderby == "Collection/CollectionName%20desc" %} selected {% endif %}>Collection Name Desc</option>
+                        <option value="Collection/CollectionName%20asc" {% if dataorderby == "Collection/CollectionName%20asc" %} selected {% endif %}>Collection Name Asc</option>
+                        <option value="ObjectDate%20desc" {% if dataorderby == "ObjectDate%20desc" %} selected {% endif %}>Object Date Desc</option>
+                        <option value="ObjectDate%20asc" {% if dataorderby == "ObjectDate%20asc" %} selected {% endif %}>Object Date Asc</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card-group row g-4 postList objects-container mt-3" id="fetchfilterdata">
+            {% for value in object_details %}
+                {% set delaytm = (loadsec == 1) ? '0.01s' : ((loadsec == 2) ? '0.03s' : '0.05s') %}
+                {{ getObjectslistHtml(object_details, value, dataorderby, requested_pageNo, qSearch, delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png') }}
+                {% set loadsec = (loadsec + 1) %}
+                {% if loadsec == 4 %}
+                    {% set loadsec = 1 %}
+                {% endif %}
+            {% endfor %}
+            {% if count == 0 %}
+                {% if qSearch is not null and qSearch != 'undefined' %}
+                    <div class="cs-theme-nodata">No results found. Please try another search.</div>
+                {% else %}
+                    <div class="cs-theme-nodata">No data available.</div>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% if count > showrec %}
+            <div class="view-more" style="display:none;"><a id="loadBtn" style="cursor:pointer" onclick="return fetch('{{ ajaxfor }}');">View more</a></div>
+        {% endif %}
+        {{ customPaginationForTopLevelTabs(current_page, requested_pageNo, count, dataorderby, qSearch) }}
+    </div>
+</div>

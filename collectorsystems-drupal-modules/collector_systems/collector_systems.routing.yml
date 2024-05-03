@@ -1,0 +1,35 @@
+collector_systems.object_detail_page:
+  path: '/artobject-detail'
+  defaults:
+    _controller: '\Drupal\collector_systems\Controller\PageTemplatesController::ObjectDetailPage'
+    _title: 'Object Detail'
+  requirements:
+    _permission: 'access content'
+collector_systems.artist_detail_page:
+  path: '/artist-detail'
+  defaults:
+    _controller: '\Drupal\collector_systems\Controller\PageTemplatesController::ArtistDetailPage'
+    _title: 'Artist Detail'
+  requirements:
+    _permission: 'access content'
+collector_systems.exhibition_detail_page:
+  path: '/exhibition-detail'
+  defaults:
+    _controller: '\Drupal\collector_systems\Controller\PageTemplatesController::ExhibitionDetailPage'
+    _title: 'Exhibition Detail'
+  requirements:
+    _permission: 'access content'
+collector_systems.groups_detail_page:
+  path: '/group-detail'
+  defaults:
+    _controller: '\Drupal\collector_systems\Controller\PageTemplatesController::GroupDetailPage'
+    _title: 'Group Detail'
+  requirements:
+    _permission: 'access content'
+collector_systems.collection_detail_page:
+  path: '/collection-detail'
+  defaults:
+    _controller: '\Drupal\collector_systems\Controller\PageTemplatesController::CollectionDetailPage'
+    _title: 'Collection Detail'
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,67 @@
+<input type="hidden" value="{{ nxshowrec }}" id="rectop"/>
+<input type="hidden" value="{{ nxshskip }}" id="recskip"/>
+<input type="hidden" value="{{ count }}" id="totrec"/>
+<input type="hidden" value="{{ dataorderby }}" id="dataorderby"/>
+
+<div class="container-xxl py-4">
+    <div class="container wow fadeInDown" data-wow-delay="0.1s">
+        <div class="row mb-3">
+            <div class="col d-inline-flex">
+                <h1 class="cs-page-title">Groups</h1>
+                {% if count > nxshowrec %}
+                    <h6 class="cs-page-total-count">({{ count }} results)</h6>
+                {% endif %}
+            </div>
+            <div class="col-auto text-end my-auto d-inline-flex">
+                <div class="sort-by-field" id="sortinghtml">
+                    <span class="sort-by-title me-3">Sort By: </span>
+                    <select name="seldataorderby" id="seldataorderby" class="form-select" onchange="return applySorting('{{ current_page }}')">
+                        <option value="GroupDescription%20desc" {{ dataorderby == 'GroupDescription%20desc' ? 'selected' : '' }}>Description Desc</option>
+                        <option value="GroupDescription%20asc" {{ dataorderby == 'GroupDescription%20asc' ? 'selected' : '' }}>Description Asc</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row card-group postList g-4 groups-container mt-3" id="fetchfilterdata">
+            {% for groupdata in all_groups %}
+                {% set delaytm = loadsec == 1 ? '0.01s' : (loadsec == 2 ? '0.03s' : '0.05s') %}
+                <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 wow fadeInDown" data-wow-delay="{{ delaytm }}">
+                    <div class="card-body d-flex flex-column">
+                        {# <a href="javascript:;" onclick="return getmoredetailsForGroup('{{ site_url }}', {{ groupdata.GroupId }})">
+                            {% set group_img = groupdata.GroupImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(groupdata.GroupImageAttachment) : groupdata.ImagePath ? site_url() ~ groupdata.ImagePath : 'https://cdn.collectorsystems.com/images/noimage300.png' %}
+                            <img class="img-fluid" src="{{ group_img }}" alt=""/>
+                        </a> #}
+                        <a href="javascript:;" onclick="return getmoredetailsForGroup('{{ site_url }}', {{ groupdata.GroupId }})">
+                          {% set group_img = groupdata.GroupImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(groupdata.GroupImageAttachment) : groupdata.ImagePath ? groupdata.ImagePath : 'https://cdn.collectorsystems.com/images/noimage300.png' %}
+
+                          {% set altText = groupdata.GroupDescription is not empty ? groupdata.GroupDescription : 'Image description is not available' %}
+                          <img class="img-fluid" src="{{ group_img }}" alt="{{ altText  }}"/>
+                      </a>
+
+                    </div>
+                    <div class="card-footer text-muted">
+                        <a href="javascript:;" onclick="return getmoredetailsForGroup('{{ site_url }}', {{ groupdata.GroupId }})">
+                            <h5 class="card-title font-normal">{{ groupdata.GroupDescription }}</h5>
+                        </a>
+                    </div>
+                </div>
+                {% set loadsec = (loadsec + 1) %}
+                {% if loadsec == 4 %}
+                    {% set loadsec = 1 %}
+                {% endif %}
+            {% endfor %}
+            {% if count == 0 %}
+                {% if qSearch is not null and qSearch is not empty and qSearch != 'undefined' %}
+                    <div class="cs-theme-nodata">No results found. Please try another search.</div>
+                {% else %}
+                    <div class="cs-theme-nodata">No data available.</div>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% if count > showrec %}
+            <div class="view-more" style="display:none;"><a id="loadBtn" style="cursor:pointer" onclick="return fetch('{{ ajaxfor }}');">View more</a></div>
+        {% endif %}
+        {{ customPaginationForTopLevelTabs(current_page, requested_pageNo, count, dataorderby, qSearch) }}
+    </div>
+</div>

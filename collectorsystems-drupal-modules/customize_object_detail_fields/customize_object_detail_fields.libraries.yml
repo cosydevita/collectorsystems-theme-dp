@@ -1,0 +1,20 @@
+customize_object_detail_fields:
+  version: 1.x
+  js:
+    js/customize_object_detail_fields.js: {}
+  css:
+    theme:
+      css/customize_object_detail_fields.css: {}
+      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css": {}
+  dependencies:
+    - core/jquery
+customize_object_list_fields:
+  version: 1.x
+  js:
+    js/customize_object_list_fields.js: {}
+  css:
+    theme:
+      css/customize_object_list_fields.css: {}
+      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css": {}
+  dependencies:
+    - core/jquery

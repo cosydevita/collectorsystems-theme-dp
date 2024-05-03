@@ -1,0 +1,15 @@
+customize_object_detail_fields.settings_form:
+  path: '/admin/config/customize_object_detail_fields/settings'
+  defaults:
+    _form: '\Drupal\customize_object_detail_fields\Form\CustomizeObjectDetailFieldsSettingsForm'
+    _title: 'Customize Object Detail Fields Settings'
+  requirements:
+    _permission: 'administer site configuration'
+customize_object_list_fields.settings_form:
+  path: '/admin/config/customize_object_list_fields/settings'
+  defaults:
+    _form: '\Drupal\customize_object_detail_fields\Form\CustomizeObjectListFieldsSettingsForm'
+    _title: 'Customize Object List Fields Settings'
+  requirements:
+    _permission: 'administer site configuration'
+

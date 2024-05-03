@@ -1,0 +1,34 @@
+collector-systems:
+  version: VERSION
+  css:
+    theme:
+      '//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css': { type: external}
+      assets/css/style.css: {}
+      assets/lib/animate/animate.css: {}
+      assets/lib/animate/animate.min.css: {}
+      assets/css/cs_theme_bootstrap-lightbox.css: {}
+      assets/css/cs_theme_bootstrap.min.css: {}
+      assets/css/cs_theme_style.css: {}
+      assets/css/mobile.css: {}
+      assets/fontawesome/css/all.min.css: {}
+      assets/lib/owlcarousel/assets/owl.carousel.css: {}
+      assets/lib/owlcarousel/assets/owl.carousel.min.css: {}
+      assets/lib/owlcarousel/assets/owl.theme.default.css: {}
+      assets/lib/owlcarousel/assets/owl.theme.default.min.css: {}
+      assets/lib/owlcarousel/assets/owl.theme.green.css: {}
+      assets/lib/owlcarousel/assets/owl.theme.green.min.css: {}
+  js:
+    assets/js/cs_theme_bootstrap.bundle.min.js: {}
+    '//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js': { type: external}
+    '//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js': { type: external}
+    assets/lib/owlcarousel/owl.carousel.js: {}
+    assets/lib/owlcarousel/owl.carousel.min.js: {}
+    assets/lib/waypoints/waypoints.min.js: {}
+    assets/lib/wow/wow.js: {}
+    assets/lib/wow/wow.min.js: {}
+    assets/js/cs_theme_bootstrap-lightbox.js: {}
+    assets/js/cs_theme_main.js: {}
+    js/collector-systems-scripts.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

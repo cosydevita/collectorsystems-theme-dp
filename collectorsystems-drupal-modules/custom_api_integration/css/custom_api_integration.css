@@ -1,0 +1,8 @@
+/* custom_api_integration.css */
+
+/* Style the "Select..." option */
+.filter-keywords-select option[value="_none"] {
+    font-weight: bold;
+    color: #888;
+  }
+  

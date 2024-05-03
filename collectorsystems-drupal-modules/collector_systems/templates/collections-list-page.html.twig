@@ -1,0 +1,73 @@
+<input type="hidden" value="{{ nxshowrec }}" id="rectop"/>
+<input type="hidden" value="{{ nxshskip }}" id="recskip"/>
+<input type="hidden" value="{{ count }}" id="totrec"/>
+<input type="hidden" value="{{ dataorderby }}" id="dataorderby"/>
+<!-- Team Start -->
+<div class="container-xxl py-5">
+    <div class="container wow fadeInDown" data-wow-delay="0.1s">
+        <div class="row mb-3">
+            <div class="col d-inline-flex">
+                <h1 class="cs-page-title">Collections</h1>
+                {% if count > nxshowrec %}<h6 class="cs-page-total-count">({{ count }} results)</h6>{% endif %}
+            </div>
+            <div class="col-auto text-end my-auto d-inline-flex">
+                <div class="sort-by-field" id="sortinghtml">
+                    <span class="sort-by-title me-3">Sort By: </span>
+                    <select name="seldataorderby" id="seldataorderby" class="form-select" onchange="return applySorting('{{ current_page }}')">
+                        <option value="FullCollectionName%20desc" {{ dataorderby == "FullCollectionName%20desc" ? 'selected' : '' }}>Full Collection Name Desc</option>
+                        <option value="FullCollectionName%20asc" {{ dataorderby == "FullCollectionName%20asc" ? 'selected' : '' }}>Full Collection Name Asc</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-group row g-4 postList objects-container mt-3" id="fetchfilterdata">
+            {% for collect in all_collections %}
+                {# switch case logic in Twig is achieved using a map #}
+                {% set delaytm = {1: '0.01s', 2: '0.03s', 3: '0.05s', 4: '0.07s'}[loadsec] %}
+                <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 wow fadeInDown" data-wow-delay="{{ delaytm }}">
+                    <div class="card-body d-flex flex-column">
+                        <a href="javascript:;" onclick="return getmoredetailsForCollection('{{ site_url }}', {{ collect.CollectionId }})">
+                            {% set cltimg = collect.CollectionImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(collect.CollectionImageAttachment) : collect.ImagePath %}
+                            {% set relative_path = cltimg ? cltimg : '' %}
+                            {% set image_url = relative_path ?  relative_path : '' %}
+
+                            {% set altText = collect.FullCollectionName is not empty ? collect.FullCollectionName : 'Image description is not available' %}
+                            {% if not cltimg and not relative_path %}
+                                <img class="img-fluid" src="https://cdn.collectorsystems.com/images/noimage300.png"
+                                alt="{{ altText }}"
+                                />
+                            {% else %}
+                                <img class="img-fluid" src="{{ image_url ? image_url : cltimg }}"
+                                alt="{{ altText }}
+                                "/>
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <a href="javascript:;" onclick="return getmoredetailsForCollection('{{ site_url }}', {{ collect.CollectionId }})">
+                            <h5 class="card-title font-normal">
+                                {{ collect.FullCollectionName ?? "Image description is not available." }}
+                            </h5>
+                        </a>
+                    </div>
+                </div>
+                {% set loadsec = loadsec + 1 %}
+                {% if loadsec == 5 %}{% set loadsec = 1 %}{% endif %}
+            {% endfor %}
+            {% if count == 0 %}
+                {% if qSearch and qSearch != null and qSearch != "undefined" %}
+                    <div class="cs-theme-nodata">No results found. Please try another search.</div>
+                {% else %}
+                    <div class="cs-theme-nodata">No data available.</div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        {% if count > (showrec + shskip) %}
+            <div class="view-more" style="display:none;"><a id="loadBtn" style="cursor:pointer" onclick="return fetch('{{ ajaxfor }}');">View more</a></div>
+        {% endif %}
+        {{ customPaginationForTopLevelTabs(current_page, requested_page, count, dataorderby, qSearch) }}
+    </div>
+</div>
+<!-- Team End -->

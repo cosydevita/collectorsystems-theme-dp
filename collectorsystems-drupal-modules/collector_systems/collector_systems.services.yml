@@ -1,0 +1,5 @@
+services:
+  collector_systems.twig.CustomTwig:
+    class: Drupal\collector_systems\CustomTwig
+    tags:
+      - { name: twig.extension }
