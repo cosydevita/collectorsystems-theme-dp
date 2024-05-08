@@ -166,48 +166,46 @@ return false;
 }
 
 
-function applySorting(pageName){
-//var baseUrl = '<?php echo site_url(); ?>' + "/" + pageName;
-var baseUrl = window.location.origin + "/" + pageName;
+function applySorting(){
+  var baseUrl = window.location.origin + window.location.pathname ;
 
 
-var pagingUrl = "";
+  var pagingUrl = "";
 
-var searchValue=document.getElementById("searchindata").value;
-var sortByValue=document.getElementById("seldataorderby").value;
-var pagerec=document.getElementById("totrec").value;
+  var searchValue=document.getElementById("searchindata").value;
+  var sortByValue=document.getElementById("seldataorderby").value;
+  var pagerec=document.getElementById("totrec").value;
 
-if(sortByValue != "")
-{
-  sortByValue = encodeURIComponent(sortByValue);
-}
-if(searchValue != "")
-{
-  searchValue = encodeURIComponent(searchValue);
-}
+  if(sortByValue != "")
+  {
+    sortByValue = encodeURIComponent(sortByValue);
+  }
+  if(searchValue != "")
+  {
+    searchValue = encodeURIComponent(searchValue);
+  }
 
-if(sortByValue != "" && searchValue == "")
-{
-  pagingUrl = baseUrl+"?sortBy="+sortByValue;
-}
-if(sortByValue == "" && searchValue != "")
-{
-  pagingUrl = baseUrl+"?qSearch="+searchValue;
-}
-if(sortByValue != "" && searchValue != "")
-{
-  pagingUrl = baseUrl+"?sortBy="+sortByValue+"&qSearch="+searchValue;
-}
-if(sortByValue == "" && searchValue == "")
-{
-  pagingUrl = baseUrl;
-}
-window.location.href = pagingUrl;
+  if(sortByValue != "" && searchValue == "")
+  {
+    pagingUrl = baseUrl+"?sortBy="+sortByValue;
+  }
+  if(sortByValue == "" && searchValue != "")
+  {
+    pagingUrl = baseUrl+"?qSearch="+searchValue;
+  }
+  if(sortByValue != "" && searchValue != "")
+  {
+    pagingUrl = baseUrl+"?sortBy="+sortByValue+"&qSearch="+searchValue;
+  }
+  if(sortByValue == "" && searchValue == "")
+  {
+    pagingUrl = baseUrl;
+  }
+  window.location.href = pagingUrl;
 }
 
 
 function chksearchfordata(ajaxpage){
-
 if(ajaxpage=="artist-detail" || ajaxpage=="exhibition-detail" || ajaxpage=="group-detail"|| ajaxpage=="collection-detail")
 {
   event.preventDefault();
@@ -226,11 +224,11 @@ else
 
 function applySearchToTopLevelTabs(pageName){
 
-  var baseUrl =  window.location.origin;
+  var baseUrl =  window.location.origin + window.location.pathname;
   var sortByValue=document.getElementById("seldataorderby").value;
   var qSearchValue=document.getElementById("searchindata").value;
 
-  window.location.href = baseUrl+"/"+pageName+"?sortBy="+encodeURIComponent(sortByValue)+"&qSearch="+qSearchValue;
+  window.location.href = baseUrl+"?sortBy="+encodeURIComponent(sortByValue)+"&qSearch="+qSearchValue;
 }
 
 

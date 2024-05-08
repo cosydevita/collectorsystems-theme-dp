@@ -29,6 +29,8 @@
             {% if obj_count > nxshowrec %}<h6 class="cs-grouplevel-total-count">({{ obj_count }} results)</h6>{% endif %}
         </div>
         <div class="col-auto text-end my-auto d-inline-flex">
+        {% include '@collector_systems/templates/search-form.html.twig' %}
+
             <div class="sort-by-field" id="dlGroupLevelObjectsSortingHtml">
                 <span class="sort-by-title me-3">Sort By: </span>
                 <select name="dlGroupLevelObjectsOrderBy" id="dlGroupLevelObjectsOrderBy"

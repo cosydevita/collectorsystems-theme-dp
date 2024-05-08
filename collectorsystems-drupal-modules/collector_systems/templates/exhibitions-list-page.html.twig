@@ -12,6 +12,7 @@
             </div>
             <div class="col-auto text-end my-auto d-inline-flex">
                 <div class="sort-by-field" id="sortinghtml">
+                    {% include '@collector_systems/templates/search-form.html.twig' %}
                     <span class="sort-by-title me-3">Sort By: </span>
                     <select name="seldataorderby" id="seldataorderby" class="form-select" onchange="return applySorting('{{ current_page }}')">
                         <option value="ExhibitionSubject%20desc" {{ dataorderby == "ExhibitionSubject%20desc" ? 'selected' : '' }}>Exhibition Desc</option>
@@ -71,6 +72,6 @@
         {% if count > showrec %}
             <div class="view-more" style="display:none;"><a id="loadBtn" style="cursor:pointer" onclick="return fetch('{{ ajaxfor }}');">View more</a></div>
         {% endif %}
-        {{ customPaginationForTopLevelTabs(current_page, requested_pageNo, count, dataorderby, qSearch) }}
+        {{ customPaginationForTopLevelTabs(requested_pageNo, count, dataorderby, qSearch) }}
     </div>
 </div>

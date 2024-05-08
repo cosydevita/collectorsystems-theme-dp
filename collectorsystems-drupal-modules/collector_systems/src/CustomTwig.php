@@ -43,7 +43,7 @@ class CustomTwig extends AbstractExtension {
 
     //echo "field:" .$customized_fields;
     $customized_fields_array = explode(',', $customized_fields);
-    $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$$dataOrderBy."pageNo=".$datapageNo;
+    $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
     ?>
 
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
@@ -96,7 +96,7 @@ class CustomTwig extends AbstractExtension {
                 break;
               default:
               ?>
-                <h6 class="font-normal" title="<?php echo $value['ArtistName']; ?>" >
+                <h6 class="font-normal" title="<?php echo $value['ArtistName'] ?? ''; ?>" >
                 <small class="flex-fill">
                   <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId']; ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)"><?php echo $value[$object_field]  ?></a>
                 </small>
@@ -111,13 +111,12 @@ class CustomTwig extends AbstractExtension {
     }
 
 
-  public function customPaginationForTopLevelTabs($current_pageName,$requested_page,$total_records,$sortBy,$qSearch)
+  public function customPaginationForTopLevelTabs($requested_page,$total_records,$sortBy,$qSearch)
   {
     $sortBy =rawurlencode($sortBy);
 
     $request = \Drupal::request();
-    $baseUrl = $request->getSchemeAndHttpHost() . '/' . $current_pageName;
-
+    $baseUrl = $request->getRequestUri();
     $pagingUrl = "";
     if(!empty($sortBy) && empty($qSearch))
     {
@@ -153,8 +152,6 @@ class CustomTwig extends AbstractExtension {
     if(1 != $pages)
     {
         echo "<div class='cs-custom-pagination d-flex'>";
-      //  if($requested_page > 2 && $requested_page > $range+1 && $showitems < $pages) echo "<a href='".\Drupal::request()->getHost()."/".$current_page."?pageNo=1'>&laquo;</a>";
-      //  if($requested_page > 1 && $showitems < $pages) echo "<a href='".\Drupal::request()->getHost()."/".$current_page."?pageNo=".($requested_page - 1)."'><i class='bi bi-chevron-left'></i></a>";
 
       if($requested_page != 1) echo "<a href='".$pagingUrl."&pageNo=".($requested_page - 1)."'><i class='bi bi-chevron-left'></i></a>";
 
@@ -337,11 +334,11 @@ class CustomTwig extends AbstractExtension {
 
   $customized_fields_array = explode(',', $customized_fields);
   $site_url = \Drupal::request()->getSchemeAndHttpHost();
-
+  $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
     ?>
    <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
                   <div class="card-body d-flex flex-column">
-                      <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId'] ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)">
+                      <a href="<?php echo $object_detail_link; ?> " >
                               <?php
                                $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
                               $server_path = $value['ObjectImagePath'];
@@ -414,12 +411,12 @@ class CustomTwig extends AbstractExtension {
 
     $site_url = \Drupal::request()->getSchemeAndHttpHost();
 
-
+    $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
 
     ?>
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
                   <div class="card-body d-flex flex-column">
-                      <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId'] ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)">
+                      <a href="<?php echo $object_detail_link; ?>" >
                               <?php
                               $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
                               $server_path = $value['ObjectImagePath'];
@@ -460,7 +457,7 @@ class CustomTwig extends AbstractExtension {
                 break;
               default:
               ?>
-                <h6 class="font-normal" title="<?php echo $value['ArtistName']; ?>" >
+                <h6 class="font-normal" title="<?php echo $value['ArtistName'] ?? ''; ?>" >
                 <small class="flex-fill">
                   <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId']; ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)"><?php echo $value[$object_field]  ?></a>
                 </small>

@@ -13,6 +13,7 @@
                 {% if count > nxshowrec %}<h6 class="cs-page-total-count">({{ count }} results)</h6>{% endif %}
             </div>
             <div class="col-auto text-end my-auto d-inline-flex">
+              {% include '@collector_systems/templates/search-form.html.twig' %}
                 <div class="sort-by-field" id="sortinghtml">
                     <span class="sort-by-title me-3">Sort By: </span>
                     <select name="seldataorderby" id="seldataorderby" class="form-select" onchange="return applySorting('{{ current_page }}')">
@@ -46,7 +47,7 @@
                             {% if artist_img is empty and server_path is empty %}
                                 <img
                                 class="img-fluid"
-                                src="{{collector_systems_module_path}}/assets/img/artist.png"
+                                src="/{{collector_systems_module_path}}/assets/img/artist.png"
                                 alt="{{ altText }}"
                                 />
                             {% else %}
@@ -87,6 +88,6 @@
         {% if count > (showrec + shskip) %}
             <div class="view-more" style="display:none;"><a id="loadBtn" style="cursor:pointer" onclick="return fetch('{{ ajaxfor }}');">View more</a></div>
         {% endif %}
-        {{ customPaginationForTopLevelTabs(current_page, requested_page, count, dataorderby, qSearch) }}
+        {{ customPaginationForTopLevelTabs(requested_page, count, dataorderby, qSearch) }}
     </div>
 </div>
