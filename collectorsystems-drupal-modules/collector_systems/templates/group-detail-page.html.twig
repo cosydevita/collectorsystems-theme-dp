@@ -1,56 +1,59 @@
-<input type="hidden" value="{{ nxshowrec }}" id="groupLevelTopCount"/>
-<input type="hidden" value="{{ nxshskip }}" id="groupLevelSkipCount"/>
-<input type="hidden" value="{{ obj_count }}" id="groupLevelTotalCount"/>
-<input type="hidden" value="{{ groupID }}" id="groupTypeId"/>
-<input type="hidden" value="{{ groupLevelOrderBy }}" id="groupLevelOrderBy"/>
-<input type="hidden" value="{{ groupLevelPageNo }}" id="groupLevelPageNo"/>
+<div  class="collector-systems-wrapper">
 
-<div class="container-xxl py-5">
-    <div class="row g-5">
-        <div class="col-lg-12 wow">
-            {% if group_details is not empty %}
-                <h1 class="font-normal mb-3">{{ group_details['GroupDescription'] }}</h1>
-                <p class="mb-4">{{ group_details['GroupMemo'] ?? "" }}</p>
-            {% endif %}
-        </div>
-    </div>
-</div>
+  <input type="hidden" value="{{ nxshowrec }}" id="groupLevelTopCount"/>
+  <input type="hidden" value="{{ nxshskip }}" id="groupLevelSkipCount"/>
+  <input type="hidden" value="{{ obj_count }}" id="groupLevelTotalCount"/>
+  <input type="hidden" value="{{ groupID }}" id="groupTypeId"/>
+  <input type="hidden" value="{{ groupLevelOrderBy }}" id="groupLevelOrderBy"/>
+  <input type="hidden" value="{{ groupLevelPageNo }}" id="groupLevelPageNo"/>
 
-<div class="container-xxl py-5">
-    <div class="row mb-3">
-        <div class="col d-inline-flex">
-            <h2 class="font-normal pl-0 m-0">Objects</h2>
-            {% if obj_count > nxshowrec %}<h6 class="cs-grouplevel-total-count">({{ obj_count }} results)</h6>{% endif %}
-        </div>
-        <div class="col-auto text-end my-auto d-inline-flex">
-          {% include '@collector_systems/templates/search-form.html.twig' %}
-            <div class="sort-by-field" id="dlGroupLevelObjectsSortingHtml">
-                <span class="sort-by-title me-3">Sort By: </span>
-                <select name="dlGroupLevelObjectsOrderBy" id="dlGroupLevelObjectsOrderBy" class="form-select" onchange="return sortingForGroupLevelObjects('{{ ajaxfor }}', {{ listPageSize }});">
-                  <option value="Title%20desc">Title Desc</option>
-                  <option value="Title%20asc">Title Asc</option>
-                  <option value="InventoryNumber%20desc">Inventory Number Desc</option>
-                  <option value="InventoryNumber%20asc">Inventory Number Asc</option>
-                  <option value="Collection/CollectionName%20desc">Collection Name Desc</option>
-                  <option value="Collection/CollectionName%20asc">Collection Name Asc</option>
-                  <option value="ObjectDate%20desc">Object Date Desc</option>
-                  <option value="ObjectDate%20asc">Object Date Asc</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="row card-group g-5 postList group-objects-container mt-5" id="groupLevelObjectsData">
-        {% for value in group_object_details %}
-            {# Add your switch case logic here if needed #}
-            {% set delaytm = (loadsec == 1) ? '0.01s' : ((loadsec == 2) ? '0.03s' : '0.05s') %}
-            {{ getGroupObjectsListHtml(value, groupLevelOrderBy|replace({'Object/': ''}), groupLevelPageNo, qSearch, delaytm, "https://cdn.collectorsystems.com/images/noimage300.png") }}
-            {% set loadsec = (loadsec + 1) % 4 %}
-        {% endfor %}
-    </div>
-    {% if groupObjectsCount > groupLevelTopCount %}
-        <div class="view-more" style="display:none"><a id="loadBtn" style="cursor:pointer" onclick="return fetch('{{ ajaxfor }}');">View more</a></div>
-    {% endif %}
-    <div class="cs-custom-pagination d-flex" id="groupLevelPagingData">
-        {{ customPaginationForGroupLevelObjects(groupID, ajaxfor, groupLevelPageNo, groupObjectsCount, groupLevelOrderBy, qSearch) }}
-    </div>
+  <div class="container-xxl py-5">
+      <div class="row g-5">
+          <div class="col-lg-12 wow">
+              {% if group_details is not empty %}
+                  <h1 class="font-normal mb-3">{{ group_details['GroupDescription'] }}</h1>
+                  <p class="mb-4">{{ group_details['GroupMemo'] ?? "" }}</p>
+              {% endif %}
+          </div>
+      </div>
+  </div>
+
+  <div class="container-xxl py-5">
+      <div class="row mb-3">
+          <div class="col d-inline-flex">
+              <h2 class="font-normal pl-0 m-0">Objects</h2>
+              {% if obj_count > nxshowrec %}<h6 class="cs-grouplevel-total-count">({{ obj_count }} results)</h6>{% endif %}
+          </div>
+          <div class="col-auto text-end my-auto d-inline-flex">
+            {% include '@collector_systems/templates/search-form.html.twig' %}
+              <div class="sort-by-field" id="dlGroupLevelObjectsSortingHtml">
+                  <span class="sort-by-title me-3">Sort By: </span>
+                  <select name="dlGroupLevelObjectsOrderBy" id="dlGroupLevelObjectsOrderBy" class="form-select" onchange="return sortingForGroupLevelObjects('{{ ajaxfor }}', {{ listPageSize }});">
+                    <option value="Title%20desc">Title Desc</option>
+                    <option value="Title%20asc">Title Asc</option>
+                    <option value="InventoryNumber%20desc">Inventory Number Desc</option>
+                    <option value="InventoryNumber%20asc">Inventory Number Asc</option>
+                    <option value="Collection/CollectionName%20desc">Collection Name Desc</option>
+                    <option value="Collection/CollectionName%20asc">Collection Name Asc</option>
+                    <option value="ObjectDate%20desc">Object Date Desc</option>
+                    <option value="ObjectDate%20asc">Object Date Asc</option>
+                  </select>
+              </div>
+          </div>
+      </div>
+      <div class="row card-group g-5 postList group-objects-container mt-5" id="groupLevelObjectsData">
+          {% for value in group_object_details %}
+              {# Add your switch case logic here if needed #}
+              {% set delaytm = (loadsec == 1) ? '0.01s' : ((loadsec == 2) ? '0.03s' : '0.05s') %}
+              {{ getGroupObjectsListHtml(value, groupLevelOrderBy|replace({'Object/': ''}), groupLevelPageNo, qSearch, delaytm, "https://cdn.collectorsystems.com/images/noimage300.png") }}
+              {% set loadsec = (loadsec + 1) % 4 %}
+          {% endfor %}
+      </div>
+      {% if groupObjectsCount > groupLevelTopCount %}
+          <div class="view-more" style="display:none"><a id="loadBtn" style="cursor:pointer" onclick="return fetch('{{ ajaxfor }}');">View more</a></div>
+      {% endif %}
+      <div class="cs-custom-pagination d-flex" id="groupLevelPagingData">
+          {{ customPaginationForGroupLevelObjects(groupID, ajaxfor, groupLevelPageNo, groupObjectsCount, groupLevelOrderBy, qSearch) }}
+      </div>
+  </div>
 </div>

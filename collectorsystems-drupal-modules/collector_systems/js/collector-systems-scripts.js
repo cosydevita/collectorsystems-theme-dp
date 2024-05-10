@@ -14,34 +14,6 @@
 
 
 
-function getmoredetails(currentCSThemeObjectId,currentCSThemeOrderBy,currentCSThemeSearch,currentCSThemePageNo){	//alert(currentCSObjectId);
-  document.getElementById('dataId').value = currentCSThemeObjectId;
-  document.getElementById('sortBy').value = currentCSThemeOrderBy;
-  document.getElementById('pageNo').value = currentCSThemePageNo;
-
-  if(currentCSThemeSearch != "" && currentCSThemeSearch != undefined)
-  {
-  document.getElementById('qSearch').value = currentCSThemeSearch;
-  }
-  else{
-    jQuery("#qSearch").remove();
-  }
-
-
-  //for the detail pages
-  var urlString = window.location.href;
-  var url = new URL(urlString);
-  var pathName = url.pathname;
-  var detailPagePart = pathName.split('/').pop();
-  if(detailPagePart == 'group-detail'){
-    document.getElementById("frmdata").setAttribute('action', '/artobject-detail')
-  }
-
-
-
-
-  document.getElementById("frmdata").submit();
-}
 function getmoredetailsForArtist(artistactionurl,str){
   $durl = artistactionurl+"/artist-detail?dataId="+str;
   window.location.href= $durl;

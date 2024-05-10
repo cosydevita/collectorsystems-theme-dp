@@ -48,9 +48,6 @@ class CustomTwig extends AbstractExtension {
 
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
                     <div class="card-body d-flex flex-column">
-                        <!--<a href="javascript:;"
-                        onclick="return getmoredetails(<?php echo $value['ObjectId'] ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)
-                        "> -->
                         <a href="<?php echo $object_detail_link; ?>">
                                 <?php
                                 $main_image_attachment_description = isset($value['main_image_attachment_description']) && $value['main_image_attachment_description'] !== ''
@@ -98,7 +95,7 @@ class CustomTwig extends AbstractExtension {
               ?>
                 <h6 class="font-normal" title="<?php echo $value['ArtistName'] ?? ''; ?>" >
                 <small class="flex-fill">
-                  <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId']; ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)"><?php echo $value[$object_field]  ?></a>
+                  <a href="<?php echo $object_detail_link; ?>"><?php echo $value[$object_field]  ?></a>
                 </small>
                 </h6>
               <?php
@@ -385,7 +382,7 @@ class CustomTwig extends AbstractExtension {
             ?>
               <h6 class="font-normal" title="<?php echo $value['ArtistName']; ?>" >
               <small class="flex-fill">
-                <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId']; ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)"><?php echo $value[$object_field]  ?></a>
+                <a href="<?php echo $object_detail_link; ?>" ><?php echo $value[$object_field]  ?></a>
               </small>
               </h6>
             <?php
@@ -459,7 +456,7 @@ class CustomTwig extends AbstractExtension {
               ?>
                 <h6 class="font-normal" title="<?php echo $value['ArtistName'] ?? ''; ?>" >
                 <small class="flex-fill">
-                  <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId']; ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)"><?php echo $value[$object_field]  ?></a>
+                  <a href="<?php echo $object_detail_link; ?>" ><?php echo $value[$object_field]  ?></a>
                 </small>
                 </h6>
               <?php

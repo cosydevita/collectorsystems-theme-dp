@@ -1,161 +1,163 @@
 
-<!-- About Start -->
-<input type="hidden" value="{{ sortBy }}" id="seldataorderby"/>
-<input type="hidden" value="{{ requested_pageNo }}" id="pageNo"/>
-<input type="hidden" value="{{ count }}" id="hdnObjectId"/>
-<div class="container-xxl py-5">
-    <div class="container">
-        <div class="row g-5">
-            <div class="cs-theme-navigation pull-right mb-3">
-                <div class="form-check form-switch" style="display:none !important;">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                    <label class="form-check-label" for="flexSwitchCheckDefault">Copyright Annotation</label>
-                </div>
-                <ul class="pagination justify-content-end">
-                    {% if object_details[row_before] is defined and row_before >= 0 %}
-                    {% set previous_object_detail_link = "/artobject-detail?dataId=" ~ object_details[row_before]. ObjectId ~"&sortBy=" ~ sortBy %}
+<div  class="collector-systems-wrapper">
 
-                        <li class="page-item">
-                            <a class="page-link prev-btn" href="{{previous_object_detail_link}}" >
-                                <i class="fa fa-arrow-left"></i>Previous
-                            </a>
+  <!-- About Start -->
+  <input type="hidden" value="{{ sortBy }}" id="seldataorderby"/>
+  <input type="hidden" value="{{ requested_pageNo }}" id="pageNo"/>
+  <input type="hidden" value="{{ count }}" id="hdnObjectId"/>
+  <div class="container-xxl py-5">
+      <div class="container">
+          <div class="row g-5">
+              <div class="cs-theme-navigation pull-right mb-3">
+                  <div class="form-check form-switch" style="display:none !important;">
+                      <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                      <label class="form-check-label" for="flexSwitchCheckDefault">Copyright Annotation</label>
+                  </div>
+                  <ul class="pagination justify-content-end">
+                      {% if object_details[row_before] is defined and row_before >= 0 %}
+                      {% set previous_object_detail_link = "/artobject-detail?dataId=" ~ object_details[row_before]. ObjectId ~"&sortBy=" ~ sortBy %}
+
+                          <li class="page-item">
+                              <a class="page-link prev-btn" href="{{previous_object_detail_link}}" >
+                                  <i class="fa fa-arrow-left"></i>Previous
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if row_number != 0 and count != 1 %}
+                          <li class="page-item"><a class="page-link object-pager">{{ row_number + 1 }} of {{ count }}</a></li>
+                      {% endif %}
+
+
+                      {% set next_object_detail_link = "/artobject-detail?dataId=" ~ object_details[row_after]. ObjectId ~"&sortBy=" ~ sortBy %}
+
+                      {% if object_details[row_after] is defined and row_after < count %}
+                          <li class="page-item">
+                              <a class="page-link next-btn" href="{{next_object_detail_link}}"  >
+                                  Next<i class="fa fa-arrow-right"></i>
+                              </a>
+                          </li>
+                      {% endif %}
+                  </ul>
+              </div>
+          </div>
+          <div class="row g-5">
+              <div class="col-xl-6 col-lg-6 py-4 mx-auto wow fadeInDown" data-wow-delay="0.1s" >
+
+                  {% set allthumb = thumbDetails %}
+
+                  <div id="carouselA" class="carousel slide carouselBoth carousel-fade" data-bs-ride="carousel" data-bs-interval="false">
+                      <div class="carousel-inner" role="listbox">
+                          {% for i, thumb in allthumb %}
+                            {% set altText = thumb.attachment_description is not empty ? thumb.attachment_description : 'Image description is not available' %}
+
+                              <div class="carousel-item {{ i == 0 ? 'active' }}">
+
+                                  {% if enableZoomForImages %}
+                                      <a class="carouselAToggle" data-big="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" href="javascript:;">
+                                          <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="{{altText}}"/>
+                                      </a>
+                                  {% else %}
+
+                                  {% set relative_path = thumb.object_image_path  %}
+                                      {% set object_img = thumb.object_image_attachment  ? 'data:image/jpeg;base64,' ~ base64_encode(thumb.object_image_attachment) : '' %}
+
+                                      <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="{{altText}}"/>
+                                  {% endif %}
+                              </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+
+                  <div class="row d-flex align-items-center" style="display:none !important;">
+                    <div class="col-10 text-lg-end"><div class="object_detail_info image_copyright_on"><i class="bi bi-info-circle"></i>&nbsp;Due to right restrictions, this image cannot be enlarged, viewed at full screen, or downloaded.</div></div>
+                    <div class="col-2 object_detail_share pe-0">
+                      <ul class="float-end d-flex mt-3" style="list-style:none;">
+                        <li class="image_copyright_off">
+                          <button type="button" id="btnDownload" class="btn-download" title="Download"><i class="bi bi-download"></i></button>
                         </li>
-                    {% endif %}
-                    {% if row_number != 0 and count != 1 %}
-                        <li class="page-item"><a class="page-link object-pager">{{ row_number + 1 }} of {{ count }}</a></li>
-                    {% endif %}
-
-
-                    {% set next_object_detail_link = "/artobject-detail?dataId=" ~ object_details[row_after]. ObjectId ~"&sortBy=" ~ sortBy %}
-
-                    {% if object_details[row_after] is defined and row_after < count %}
-                        <li class="page-item">
-                            <a class="page-link next-btn" href="{{next_object_detail_link}}"  >
-                                Next<i class="fa fa-arrow-right"></i>
-                            </a>
+                        <li>
+                          <button type="button" id="btnShare" class="btn-share" data-bs-title="Share" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content-id="sharePopoverHiddenContent">
+                          <i class="bi bi-share"></i></button>
                         </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-        <div class="row g-5">
-            <div class="col-xl-6 col-lg-6 py-4 mx-auto wow fadeInDown" data-wow-delay="0.1s" >
-
-                {% set allthumb = thumbDetails %}
-
-                <div id="carouselA" class="carousel slide carouselBoth carousel-fade" data-bs-ride="carousel" data-bs-interval="false">
-                    <div class="carousel-inner" role="listbox">
-                        {% for i, thumb in allthumb %}
-                          {% set altText = thumb.attachment_description is not empty ? thumb.attachment_description : 'Image description is not available' %}
-
-                            <div class="carousel-item {{ i == 0 ? 'active' }}">
-
-                                {% if enableZoomForImages %}
-                                    <a class="carouselAToggle" data-big="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" href="javascript:;">
-                                        <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="{{altText}}"/>
-                                    </a>
-                                {% else %}
-
-                                {% set relative_path = thumb.object_image_path  %}
-                                    {% set object_img = thumb.object_image_attachment  ? 'data:image/jpeg;base64,' ~ base64_encode(thumb.object_image_attachment) : '' %}
-
-                                    <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="{{altText}}"/>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
+                        <li class="image_copyright_off">
+                          <button type="button" id="btnExpand" class="btn-expand" title="Enlarge image"><i class="bi bi-arrows-angle-expand"></i></button>
+                        </li>
+                      </ul>
                     </div>
-                </div>
-
-                <div class="row d-flex align-items-center" style="display:none !important;">
-                  <div class="col-10 text-lg-end"><div class="object_detail_info image_copyright_on"><i class="bi bi-info-circle"></i>&nbsp;Due to right restrictions, this image cannot be enlarged, viewed at full screen, or downloaded.</div></div>
-                  <div class="col-2 object_detail_share pe-0">
-                    <ul class="float-end d-flex mt-3" style="list-style:none;">
-                      <li class="image_copyright_off">
-                        <button type="button" id="btnDownload" class="btn-download" title="Download"><i class="bi bi-download"></i></button>
-                      </li>
-                      <li>
-                        <button type="button" id="btnShare" class="btn-share" data-bs-title="Share" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content-id="sharePopoverHiddenContent">
-                        <i class="bi bi-share"></i></button>
-                      </li>
-                      <li class="image_copyright_off">
-                        <button type="button" id="btnExpand" class="btn-expand" title="Enlarge image"><i class="bi bi-arrows-angle-expand"></i></button>
-                      </li>
-                    </ul>
                   </div>
-                </div>
 
-                {% if thumbDetails|length > 1 %}
-                  <div class="row mt-4" style="justify-content: center;">
-                      <div class="prev-part col-md-1 my-auto">
-                          <a class="carousel-control-prev" href="#carouselA" data-bs-slide="prev">
-                              <span class="carousel-control-prev-icon"><i class="bi bi-chevron-left"></i></span>
-                          </a>
-                      </div>
-                      <div id="carouselB" class="carousel slide carouselBoth carousel-fade col-md-10" data-bs-ride="carousel" data-bs-interval="false">
-                          <div class="carousel-inner thumb-carousel row mx-0" role="listbox" style="background: rgb(240, 240, 240);">
-                              {% set currentslide = 0 %}
-                              {% for j in 0..(thumbDetails|length - 1) %}
-                              {% set altText = thumbDetails[j].attachment_description is not empty ? thumbDetails[j].attachment_description : 'Image description is not available' %}
-                                  <div class="{{ j == 0 ? 'active carousel-item' : 'carousel-item' }}" data-slide-number="{{ j }}">
-                                      <div id="carousel-selector-{{ currentslide }}" class="{{ currentslide == 0 ? 'selected thumb col-3 px-1 py-2' : 'thumb col-3 px-1 py-2' }}" data-target="#carouselA" data-slide-to="{{ currentslide }}">
-                                          {% set object_img = thumbDetails[j].thumb_size_URL is defined ? 'data:image/jpeg;base64,' ~ base64_encode(thumbDetails[j].thumb_size_URL) : '' %}
+                  {% if thumbDetails|length > 1 %}
+                    <div class="row mt-4" style="justify-content: center;">
+                        <div class="prev-part col-md-1 my-auto">
+                            <a class="carousel-control-prev" href="#carouselA" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"><i class="bi bi-chevron-left"></i></span>
+                            </a>
+                        </div>
+                        <div id="carouselB" class="carousel slide carouselBoth carousel-fade col-md-10" data-bs-ride="carousel" data-bs-interval="false">
+                            <div class="carousel-inner thumb-carousel row mx-0" role="listbox" style="background: rgb(240, 240, 240);">
+                                {% set currentslide = 0 %}
+                                {% for j in 0..(thumbDetails|length - 1) %}
+                                {% set altText = thumbDetails[j].attachment_description is not empty ? thumbDetails[j].attachment_description : 'Image description is not available' %}
+                                    <div class="{{ j == 0 ? 'active carousel-item' : 'carousel-item' }}" data-slide-number="{{ j }}">
+                                        <div id="carousel-selector-{{ currentslide }}" class="{{ currentslide == 0 ? 'selected thumb col-3 px-1 py-2' : 'thumb col-3 px-1 py-2' }}" data-target="#carouselA" data-slide-to="{{ currentslide }}">
+                                            {% set object_img = thumbDetails[j].thumb_size_URL is defined ? 'data:image/jpeg;base64,' ~ base64_encode(thumbDetails[j].thumb_size_URL) : '' %}
 
-                                          {% set server_path = thumbDetails[j].thumb_size_URL_path is defined ? thumbDetails[j].thumb_size_URL_path : '' %}
-                                          {% set relative_path = server_path|replace({'%SERVER_DOCUMENT_ROOT%': ''}) %}
-                                          {% set image_url = site_url ~ relative_path %}
+                                            {% set server_path = thumbDetails[j].thumb_size_URL_path is defined ? thumbDetails[j].thumb_size_URL_path : '' %}
+                                            {% set relative_path = server_path|replace({'%SERVER_DOCUMENT_ROOT%': ''}) %}
+                                            {% set image_url = site_url ~ relative_path %}
 
-                                          {% if object_img is empty and server_path is empty %}
-                                              <img class="d-block img-fluid" src="https://cdn.collectorsystems.com/images/noimage100.png" alt="{{altText}}"/>
-                                          {% else %}
-                                              {% if server_path is empty %}
-                                                  <img class="d-block img-fluid" src="{{ object_img }}" alt="{{altText}}"/>
-                                              {% else %}
-                                                  <img class="d-block img-fluid" src="{{ image_url }}" alt="{{altText}}"/>
-                                              {% endif %}
-                                          {% endif %}
-                                      </div>
-                                      {% set currentslide = currentslide + 1 %}
-                                  </div>
-                              {% endfor %}
-                          </div>
-                      </div>
-                      <div class="next-part col-md-1 my-auto">
-                          <a class="carousel-control-next" href="#carouselA" data-bs-slide="next">
-                              <span class="carousel-control-next-icon"><i class="bi bi-chevron-right"></i></span>
-                          </a>
-                      </div>
-                  </div>
-                {% endif %}
+                                            {% if object_img is empty and server_path is empty %}
+                                                <img class="d-block img-fluid" src="https://cdn.collectorsystems.com/images/noimage100.png" alt="{{altText}}"/>
+                                            {% else %}
+                                                {% if server_path is empty %}
+                                                    <img class="d-block img-fluid" src="{{ object_img }}" alt="{{altText}}"/>
+                                                {% else %}
+                                                    <img class="d-block img-fluid" src="{{ image_url }}" alt="{{altText}}"/>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        {% set currentslide = currentslide + 1 %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="next-part col-md-1 my-auto">
+                            <a class="carousel-control-next" href="#carouselA" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"><i class="bi bi-chevron-right"></i></span>
+                            </a>
+                        </div>
+                    </div>
+                  {% endif %}
 
-            </div>
+              </div>
 
-            <div class="col-xl-6 col-lg-6 mx-auto cs-object-details wow fadeInDown" data-wow-delay="0.3s">
-                {% for object_field in customized_fields_array %}
+              <div class="col-xl-6 col-lg-6 mx-auto cs-object-details wow fadeInDown" data-wow-delay="0.3s">
+                  {% for object_field in customized_fields_array %}
 
-                    {{ GetCustomizedObjectDetailsForTheme(object_field, "",object_details[row_number])}}
-                {% endfor %}
-            </div>
-        </div>
-    </div>
+                      {{ GetCustomizedObjectDetailsForTheme(object_field, "",object_details[row_number])}}
+                  {% endfor %}
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- About End -->
+
+  <!-- Popover hidden content -->
+  <span id="sharePopoverHiddenContent" class="visually-hidden">
+          <ul class="objectdetail_sharetools">
+            <li><a target="_blank" href="javascript:;" class="btn-media email">
+              <i class="bi bi-envelope"></i>
+            </a></li>
+            <li><a target="_blank" href="javascript:;" class="btn-media facebook">
+              <i class="bi bi-facebook"></i>
+            </a></li>
+            <!-- <li><a target="_blank" href="javascript:;" class="btn-media instagram">
+              <i class="bi bi-instagram"></i>
+            </a></li> -->
+            <li><a target="_blank" href="javascript:;" class="btn-media twitter">
+              <i class="bi bi-twitter"></i>
+            </a></li>
+            <!-- <li><a href="javascript:;" onclick="window.print()"><img src="https://simplesharebuttons.com/images/somacro/print.png" alt="Print" /></a></li> -->
+          </ul>
+          </span>
 </div>
-<!-- About End -->
-
-<!-- Popover hidden content -->
-<span id="sharePopoverHiddenContent" class="visually-hidden">
-        <ul class="objectdetail_sharetools">
-          <li><a target="_blank" href="javascript:;" class="btn-media email">
-            <i class="bi bi-envelope"></i>
-          </a></li>
-          <li><a target="_blank" href="javascript:;" class="btn-media facebook">
-            <i class="bi bi-facebook"></i>
-          </a></li>
-          <!-- <li><a target="_blank" href="javascript:;" class="btn-media instagram">
-            <i class="bi bi-instagram"></i>
-          </a></li> -->
-          <li><a target="_blank" href="javascript:;" class="btn-media twitter">
-            <i class="bi bi-twitter"></i>
-          </a></li>
-          <!-- <li><a href="javascript:;" onclick="window.print()"><img src="https://simplesharebuttons.com/images/somacro/print.png" alt="Print" /></a></li> -->
-        </ul>
-        </span>
-
