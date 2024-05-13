@@ -1,77 +1,7 @@
 <?php
-use Drupal\Core\Database\Database;
-use Drupal\Core\Database\Schema;
+
 use Drupal\custom_api_integration\Csconstants;
-use Drupal\menu_link_content\Entity\MenuLinkContent;
 
-/**
- * Creates menu items in the main navigation menu if there are no menu items created for list pages
- */
-function create_main_menu_items(){
-  // Array of menu items for the main menu
-  $main_menu_items = array(
-    array(
-      'title' => 'Objects',
-      'link' => 'internal:/objects',
-      'menu_name' => 'main',
-      'expanded' => TRUE,
-      'weight' => 0,
-
-    ),
-    array(
-      'title' => 'Artists',
-      'link' =>  'internal:/artists',
-      'menu_name' => 'main',
-      'expanded' => TRUE,
-      'weight' => 1,
-
-    ),
-    array(
-      'title' => 'Exhibitions',
-      'link' =>  'internal:/exhibitions',
-      'menu_name' => 'main',
-      'expanded' => TRUE,
-      'weight' => 2,
-
-    ),
-    array(
-      'title' => 'Groups',
-      'link' =>  'internal:/groups',
-      'menu_name' => 'main',
-      'expanded' => TRUE,
-      'weight' => 3,
-    ),
-    array(
-      'title' => 'Collectons',
-      'link' =>  'internal:/collections',
-      'menu_name' => 'main',
-      'expanded' => TRUE,
-      'weight' => 4,
-
-    ),
-    // Add more main menu items as needed
-  );
-
-  $existing_menu_items = [];
-  // Iterate through the array and create main menu items
-  foreach ($main_menu_items as $item) {
-    $existing_menu = \Drupal::entityTypeManager()
-    ->getStorage('menu_link_content')
-    ->loadByProperties(['link' => $item['link']]);
-    if($existing_menu){
-      $existing_menu_items = $existing_menu;
-    }
-
-  }
-  if (!$existing_menu_items) {
-    // Menu items does not exist, create it
-    foreach ($main_menu_items as $item) {
-      $menu_link = MenuLinkContent::create($item);
-      $menu_link->save();
-    }
-
-  }
-}
 /**
  * Implements hook_theme().
  */
@@ -104,14 +34,7 @@ function custom_api_integration_theme() {
 
   ];
 }
-/**
- * Implements hook_preprocess_HOOK() for block templates.
- */
-function custom_api_integration_preprocess_page(&$variables)
-{
-    $variables['#attached']['library'][] = 'custom_api_integration/custom_api_integration';
-    create_main_menu_items();
-}
+
 
 function getObjectImageAttachmentsByObjectId($artObjID, $mainAttachmentId)
 {

@@ -1,21 +1,18 @@
-xai.settings_form:
-  title: 'CollectorSystems API Integration Form'
+collector_systems.menu:
+  title: 'Collector Systems'
   route_name: custom_api_integration.settings_form
-  description: 'A description for the menu entry'
-  parent: system.admin_config_system
-  weight: 99
-xai.api_dashboard:
+  parent: system.admin_config
+  description: 'Collector Systems Configurations.'
+  weight: -5
+collector_systems.settings_form:
+  title: 'CollectorSystems API Integration Settings'
+  route_name: custom_api_integration.settings_form
+  description: 'Configure settings to connect to Collector Systems API'
+  parent: collector_systems.menu
+  weight: 1
+collector_systems.api_dashboard:
   title: 'CollectorSystems API Dashboard'
   route_name: custom_api_integration.dashboard
   description: 'API Dashbopard to sync the API data to database'
-  parent: system.admin_config_system
-  weight: 99
-xai.homepage_image:
-  title: 'CollectorSystems Home Page Image Settings'
-  route_name: custom_api_integration.homepage_image_form
-  description: 'Set Homepage Image'
-  parent: system.admin_config_system
-  weight: 99
-
-
-
+  parent: collector_systems.menu
+  weight: 2

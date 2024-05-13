@@ -5,13 +5,6 @@ custom_api_integration.settings_form:
     _title: 'Custom API Integration Settings'
   requirements:
     _permission: 'administer site configuration'
-custom_api_integration.homepage_image_form:
-  path: '/admin/config/custom_api_integration/homepage_image'
-  defaults:
-    _form: '\Drupal\custom_api_integration\Form\HomepageImageSettingsForm'
-    _title: 'Home Page Image'
-  requirements:
-    _permission: 'administer site configuration'
 custom_api_integration.dashboard:
   path: '/admin/config/api-dashboard'
   defaults:

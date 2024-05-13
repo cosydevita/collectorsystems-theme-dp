@@ -1,10 +1,10 @@
 name: 'Custom API Integration'
 type: module
-description: 'Integrate with an external API.'
+description: 'Integrate with Collector Systems API.'
 core_version_requirement: ^9 || ^10
 package: Custom
 dependencies:
   - node
-  - rest
+  - core:rest
 config:
   - custom_api_integration.settings
