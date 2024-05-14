@@ -4,12 +4,12 @@
 
     attach: function (context, settings) {
       var sessionToken = '';
-
+      const origin = window.location.origin;
       function getSessionToken() {
         $.ajax({
           type: 'GET',
           // url: '/rest/session/token',
-          url: '/session/token',
+          url: origin+'/session/token',
           cache: false,
           success: function(token) {
             sessionToken = token;
@@ -40,7 +40,7 @@
             button.prop('disabled', true);
              $.ajax({
                 type: 'POST',
-                url: '/v1/cs-create-tables?_format=json',
+                url: origin+'/v1/cs-create-tables?_format=json',
                 contentType: 'application/json',
                 data: JSON.stringify({
                   btn_action: btn_action
@@ -85,7 +85,7 @@
             $.ajax({
                 type: 'POST',
                 // url: 'http://collectorsystems-wp.docksal/wp-content/themes/collectorsystems-theme-wp/TableCreation/save_image_database_action.php',
-                url: '/v1/cs-save-image-database-ajax?_format=json',
+                url: origin+'/v1/cs-save-image-database-ajax?_format=json',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     action: 'save_image_database_ajax'
@@ -126,7 +126,7 @@
                 button.prop('disabled', true);
             $.ajax({
                 type: 'POST',
-                url: '/v1/cs-save-image-directory-ajax?_format=json',
+                url: origin+'/v1/cs-save-image-directory-ajax?_format=json',
                 contentType: 'application/json',
                 data: JSON.stringify({
 
@@ -165,7 +165,7 @@
             button.prop('disabled', true);
           $.ajax({
               type: 'POST',
-              url: '/v1/cs-save-object-image-database-ajax?_format=json',
+              url: origin+'/v1/cs-save-object-image-database-ajax?_format=json',
               contentType: 'application/json',
               data: JSON.stringify({
                 action: 'save_object_image_database_ajax'
@@ -199,7 +199,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/v1/cs-save-object-image-directory-ajax?_format=json',
+                url: origin+'/v1/cs-save-object-image-directory-ajax?_format=json',
                 contentType: 'application/json',
                 data: JSON.stringify({
                   action: 'save_object_image_directory_ajax'
@@ -243,7 +243,7 @@
         function fetch_group_ajax(sessionToken){
           $.ajax({
             type: 'POST',
-            url: '/v1/cs-fetch-group-ajax?_format=json',
+            url: origin+'/v1/cs-fetch-group-ajax?_format=json',
             contentType: 'application/json',
             data: JSON.stringify({
               action: 'fetch_group_ajax'

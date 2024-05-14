@@ -96,21 +96,10 @@ else
   pageskipvalue=(Number(groupLevelPageNoValue)-1) *Number(pagetopvalue);
 }
 
-/*jQuery.ajax({
-    url: 'admin-ajax.php',
-    type: 'post',
-    data: { action: 'groupLevelObjects_paging_page',pagename:pagenamevalue,groupTypeId:groupTypeId,collectionLeftExtent:collectionLeftExtent,collectionRightExtent:collectionRightExtent,groupLevelPageNo:groupLevelPageNoValue,groupLevelTopCount:pagetopvalue,groupLevelSkipCount:pageskipvalue,groupLevelTotalCount:pageTotalCount,groupLevelOrderBy:groupLevelOrderBy,groupLevelSearch:searchValue},
-    success: function(data) {
+const origin = window.location.origin;
 
-      document.getElementById("groupLevelOrderBy").value =  document.getElementById("dlGroupLevelObjectsOrderBy").value;
-     jQuery('#groupLevelObjectsData').html(data);
-
-      htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,pagenamevalue,groupLevelPageNoValue,pageTotalCount,groupLevelOrderBy,searchValue);
-   }
-});
-*/
 jQuery.ajax({
-    url: '/v1/group-level-objects-searching-page',
+    url: origin+'/v1/group-level-objects-searching-page',
     type: 'POST',
     dataType: 'json',
     data: {
@@ -223,9 +212,10 @@ var listPageSize = objectListRecTopValue;
 objectListRecSkipValue = 0;
 
 var groupLevelPageNoValue =1;
+const origin = window.location.origin;
 
 jQuery.ajax({
-      url: '/v1/group-level-objects-searching-page',
+      url: origin+'/v1/group-level-objects-searching-page',
       type: 'POST',
       dataType: 'json',
       data: {
@@ -277,9 +267,10 @@ var collectionRightExtent=jQuery("#collectionRightExtent").length > 0 ? jQuery("
 
 var groupLevelPageNoValue =1;
 
+const origin = window.location.origin;
 
 jQuery.ajax({
-    url: '/v1/group-level-objects-searching-page',
+    url: origin+'/v1/group-level-objects-searching-page',
     type: 'POST',
     dataType: 'json',
     data: {
