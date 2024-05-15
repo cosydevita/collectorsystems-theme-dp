@@ -14,28 +14,6 @@ function collector_systems_preprocess_page(&$variables){
  */
 function collector_systems_theme() {
   return [
-    'custom_api_integration_response' => [
-      'variables' => [
-        'response' => '',
-        'show_field_labels' => '',
-        'enable_zoom' => '',
-        'filter_keywords' => '',
-        'items_per_page' => '',
-        'footer_text' => '',
-      ],
-    ],
-    'dashboard' => [
-      'variables' => [
-        'response' => '',
-        'show_field_labels' => '',
-        'enable_zoom' => '',
-        'filter_keywords' => '',
-        'items_per_page' => '',
-        'footer_text' => '',
-        'API_Synced_On' => '',
-        'API_Synced_By' => ''
-      ],
-    ],
     'objects-list-page' => [
       'variables' => [
         'object_details' =>NULL,

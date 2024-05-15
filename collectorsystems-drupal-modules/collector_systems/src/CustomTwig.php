@@ -150,7 +150,7 @@ class CustomTwig extends AbstractExtension {
     {
         echo "<div class='cs-custom-pagination d-flex'>";
 
-      if($requested_page != 1) echo "<a href='".$pagingUrl."&pageNo=".($requested_page - 1)."'><i class='bi bi-chevron-left'></i></a>";
+      if($requested_page != 1) echo "<a href='".$pagingUrl."&pageNo=".($requested_page - 1)."'><i class='fas fa-chevron-left'></i></a>";
 
         for ($i=1; $i <= $pages; $i++)
         {
@@ -163,7 +163,7 @@ class CustomTwig extends AbstractExtension {
         //if ($requested_page < $pages && $showitems < $pages) echo "<a href='".\Drupal::request()->getHost()."/".$current_page."?pageNo=".($requested_page + 1)."'><i class='bi bi-chevron-right'></i></a>";
         //if ($requested_page < $pages-1 &&  $requested_page+$range-1 < $pages && $showitems < $pages) echo "<a href='".\Drupal::request()->getHost()."/".$current_page."?pageNo=".($pages)."'>&raquo;</a>";
 
-        if ($requested_page != $pages) echo "<a href='".$pagingUrl."&pageNo=".($pages)."'><i class='bi bi-chevron-right'></i></a>";
+        if ($requested_page != $pages) echo "<a href='".$pagingUrl."&pageNo=".($pages)."'><i class='fas fa-chevron-right'></i></a>";
 
         echo "</div>\n";
     }
@@ -303,7 +303,7 @@ class CustomTwig extends AbstractExtension {
 
   if(1 != $pages)
   {
-      if($requested_page != 1) echo "<a href='javascript:;' onclick=pagingForGroupLevelObjects('".$ajaxpage."',".$listPageSize.",".($requested_page - 1).")><i class='bi bi-chevron-left'></i></a>";
+      if($requested_page != 1) echo "<a href='javascript:;' onclick=pagingForGroupLevelObjects('".$ajaxpage."',".$listPageSize.",".($requested_page - 1).")><i class='fas fa-chevron-left'></i></a>";
 
       for ($i=1; $i <= $pages; $i++)
       {
@@ -313,7 +313,7 @@ class CustomTwig extends AbstractExtension {
           }
       }
 
-      if ($requested_page != $pages) echo "<a href='javascript:;' onclick=pagingForGroupLevelObjects('".$ajaxpage."',".$listPageSize.",".($pages).")><i class='bi bi-chevron-right'></i></a>";
+      if ($requested_page != $pages) echo "<a href='javascript:;' onclick=pagingForGroupLevelObjects('".$ajaxpage."',".$listPageSize.",".($pages).")><i class='fas fa-chevron-right'></i></a>";
 
       echo "\n";
   }
