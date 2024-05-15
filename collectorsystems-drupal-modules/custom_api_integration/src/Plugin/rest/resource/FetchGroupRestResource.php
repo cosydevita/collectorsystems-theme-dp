@@ -33,14 +33,6 @@ class FetchGroupRestResource extends ResourceBase {
    *   Throws exception expected.
    */
   public function post($data) {
-
-    $config = \Drupal::config('custom_api_integration.settings');
-    $subsKey = $config->get('subscription_key');
-    $subAcntId = $config->get('account_guid');
-    $subsId = $config->get('subscription_id');
-
-    $database = Database::getConnection();
-
     $apiCountForGroup = $this->GetApiGroupCount();
     $DbCountForGroup = $this-> GetDbGroupCount(  );
     $DbCountForObject  = $this->GetDbObjectCount();
@@ -73,9 +65,9 @@ class FetchGroupRestResource extends ResourceBase {
 
 
 
-//for goup
-function GetApiGroupCount()
-{
+  //for goup
+  function GetApiGroupCount()
+  {
     $config = \Drupal::config('custom_api_integration.settings');
     $subsKey = $config->get('subscription_key');
     $subAcntId = $config->get('account_guid');
@@ -103,233 +95,242 @@ function GetApiGroupCount()
     $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     if($httpcode == 403)
     {
-        get_template_part( 403 );
         exit();
     }
 
-   $data = json_decode($data, TRUE);
-   return $data['@odata.count'];
-}
-function GetDbGroupCount(){
+    $data = json_decode($data, TRUE);
+    return $data['@odata.count'];
+  }
+  function GetDbGroupCount(){
+    try {
 
-  $database = Database::getConnection();
-
-  $table_name = 'Groups';
-    // $sqlForGroup = "SELECT COUNT(*) FROM $table_name";
-    // $query2 = $wpdb->prepare($sqlForGroup);
-    // $count2 = $wpdb->get_var($query2);
-    // return $count2;
-  $query = $database->select($table_name, 'g');
-  $count = $query->countQuery()->execute()->fetchField();
-  return $count;
-
-}
-
-
-
-//for object
-function GetApiObjectCount()
-{
-
-  $config = \Drupal::config('custom_api_integration.settings');
-  $subsKey = $config->get('subscription_key');
-  $subAcntId = $config->get('account_guid');
-  $subsId = $config->get('subscription_id');
-
-    $wordforsearch="Objects";
-    $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=ObjectId';
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-    $headers = array(
-    "Accept: application/json",
-    "Ocp-Apim-Subscription-Key:$subsKey ",
-    "Cache-Control:no-cache",
-    );
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    //for debug only!
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-
-    $data = curl_exec($curl);
-    curl_close($curl);
-
-    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    if($httpcode == 403)
-    {
-        // get_template_part( 403 );
-        exit();
+      $database = Database::getConnection();
+      $table_name = 'Groups';
+      $query = $database->select($table_name, 'g');
+      $count = $query->countQuery()->execute()->fetchField();
+      return $count;
+    }catch (\Exception $e) {
+      \Drupal::logger('custom_api_integration')->error('Database query error: @message', ['@message' => $e->getMessage()]);
+      // If an exception is thrown (e.g., table not found), return 0.
+      return 0;
     }
 
-   $data = json_decode($data, TRUE);
-   return $data['@odata.count'];
-}
-
-function GetDbObjectCount(){
-  $database = \Drupal::database();
-
-	$table_name = 'CSObjects';
-    // $sql2 = "SELECT COUNT(*) FROM $table_name";
-    // $query2 = $wpdb->prepare($sql2);
-    // $count2 = $wpdb->get_var($query2);
-    $query = $database->select($table_name, 'c');
-    $count2 = $query->countQuery()->execute()->fetchField();
-
-    return $count2;
-}
+  }
 
 
-//for Artist
-function GetApiArtistCount()
-{
+
+  //for object
+  function GetApiObjectCount()
+  {
+
     $config = \Drupal::config('custom_api_integration.settings');
     $subsKey = $config->get('subscription_key');
     $subAcntId = $config->get('account_guid');
     $subsId = $config->get('subscription_id');
 
-    $wordforsearch="Artists";
-    $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=ArtistId';
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+      $wordforsearch="Objects";
+      $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=ObjectId';
+      $curl = curl_init($url);
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-    $headers = array(
-    "Accept: application/json",
-    "Ocp-Apim-Subscription-Key:$subsKey ",
-    "Cache-Control:no-cache",
-    );
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    //for debug only!
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+      $headers = array(
+      "Accept: application/json",
+      "Ocp-Apim-Subscription-Key:$subsKey ",
+      "Cache-Control:no-cache",
+      );
+      curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+      //for debug only!
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
-    $data = curl_exec($curl);
-    curl_close($curl);
+      $data = curl_exec($curl);
+      curl_close($curl);
 
-    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    if($httpcode == 403)
-    {
-        // get_template_part( 403 );
-        exit();
+      $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+      if($httpcode == 403)
+      {
+          exit();
+      }
+
+    $data = json_decode($data, TRUE);
+    return $data['@odata.count'];
+  }
+
+  function GetDbObjectCount(){
+    try{
+      $database = \Drupal::database();
+
+      $table_name = 'CSObjects';
+      $query = $database->select($table_name, 'c');
+      $count2 = $query->countQuery()->execute()->fetchField();
+
+      return $count2;
+
+    }catch (\Exception $e) {
+      \Drupal::logger('custom_api_integration')->error('Database query error: @message', ['@message' => $e->getMessage()]);
+      // If an exception is thrown (e.g., table not found), return 0.
+      return 0;
     }
 
-   $data = json_decode($data, TRUE);
-   return $data['@odata.count'];
-}
+  }
 
-function GetDbArtistCount(){
-    $database = \Drupal::database();
 
-    $table_name = 'Artists';
-    // $sql2 = "SELECT COUNT(*) FROM $table_name";
-    // $query2 = $wpdb->prepare($sql2);
-    // $count2 = $wpdb->get_var($query2);
-    $query = $database->select($table_name, 'c');
-    $count2 = $query->countQuery()->execute()->fetchField();
+  //for Artist
+  function GetApiArtistCount()
+  {
+      $config = \Drupal::config('custom_api_integration.settings');
+      $subsKey = $config->get('subscription_key');
+      $subAcntId = $config->get('account_guid');
+      $subsId = $config->get('subscription_id');
 
-    return $count2;
-}
+      $wordforsearch="Artists";
+      $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=ArtistId';
+      $curl = curl_init($url);
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-//for collection
-function GetApicollectionCount()
-{
-    $config = \Drupal::config('custom_api_integration.settings');
-    $subsKey = $config->get('subscription_key');
-    $subAcntId = $config->get('account_guid');
-    $subsId = $config->get('subscription_id');
+      $headers = array(
+      "Accept: application/json",
+      "Ocp-Apim-Subscription-Key:$subsKey ",
+      "Cache-Control:no-cache",
+      );
+      curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+      //for debug only!
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
-    $wordforsearch="Collections";
-    $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=CollectionId';
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+      $data = curl_exec($curl);
+      curl_close($curl);
 
-    $headers = array(
-    "Accept: application/json",
-    "Ocp-Apim-Subscription-Key:$subsKey ",
-    "Cache-Control:no-cache",
-    );
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    //for debug only!
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+      $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+      if($httpcode == 403)
+      {
+          // get_template_part( 403 );
+          exit();
+      }
 
-    $data = curl_exec($curl);
-    curl_close($curl);
+    $data = json_decode($data, TRUE);
+    return $data['@odata.count'];
+  }
 
-    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    if($httpcode == 403)
-    {
-        // get_template_part( 403 );
-        exit();
+  function GetDbArtistCount(){
+    try{
+      $database = \Drupal::database();
+
+      $table_name = 'Artists';
+      $query = $database->select($table_name, 'c');
+      $count2 = $query->countQuery()->execute()->fetchField();
+
+      return $count2;
+    }catch (\Exception $e) {
+      \Drupal::logger('custom_api_integration')->error('Database query error: @message', ['@message' => $e->getMessage()]);
+      // If an exception is thrown (e.g., table not found), return 0.
+      return 0;
     }
+  }
 
-   $data = json_decode($data, TRUE);
-   return $data['@odata.count'];
-}
+  //for collection
+  function GetApicollectionCount()
+  {
+      $config = \Drupal::config('custom_api_integration.settings');
+      $subsKey = $config->get('subscription_key');
+      $subAcntId = $config->get('account_guid');
+      $subsId = $config->get('subscription_id');
 
-function GetDbcollectionCount(){
-	$table_name = 'Collections';
-    $database = \Drupal::database();
+      $wordforsearch="Collections";
+      $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=CollectionId';
+      $curl = curl_init($url);
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-    // $sql2 = "SELECT COUNT(*) FROM $table_name";
-    // $query2 = $wpdb->prepare($sql2);
-    // $count2 = $wpdb->get_var($query2);
-    $query = $database->select($table_name, 'c');
-    $count2 = $query->countQuery()->execute()->fetchField();
-    return $count2;
-}
-//for collection
-function GetApiExhibitionsCount()
-{
-    $config = \Drupal::config('custom_api_integration.settings');
-    $subsKey = $config->get('subscription_key');
-    $subAcntId = $config->get('account_guid');
-    $subsId = $config->get('subscription_id');
+      $headers = array(
+      "Accept: application/json",
+      "Ocp-Apim-Subscription-Key:$subsKey ",
+      "Cache-Control:no-cache",
+      );
+      curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+      //for debug only!
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
+      $data = curl_exec($curl);
+      curl_close($curl);
 
-    $wordforsearch="Exhibitions";
-    $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=ExhibitionId';
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+      $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+      if($httpcode == 403)
+      {
+          exit();
+      }
 
-    $headers = array(
-    "Accept: application/json",
-    "Ocp-Apim-Subscription-Key:$subsKey ",
-    "Cache-Control:no-cache",
-    );
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    //for debug only!
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    $data = json_decode($data, TRUE);
+    return $data['@odata.count'];
+  }
 
-    $data = curl_exec($curl);
-    curl_close($curl);
-
-    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    if($httpcode == 403)
-    {
-        // get_template_part( 403 );
-        exit();
+  function GetDbcollectionCount(){
+    try{
+      $table_name = 'Collections';
+      $database = \Drupal::database();
+      $query = $database->select($table_name, 'c');
+      $count2 = $query->countQuery()->execute()->fetchField();
+      return $count2;
+    }catch (\Exception $e) {
+      \Drupal::logger('custom_api_integration')->error('Database query error: @message', ['@message' => $e->getMessage()]);
+      // If an exception is thrown (e.g., table not found), return 0.
+      return 0;
     }
+  }
+  //for collection
+  function GetApiExhibitionsCount()
+  {
+      $config = \Drupal::config('custom_api_integration.settings');
+      $subsKey = $config->get('subscription_key');
+      $subAcntId = $config->get('account_guid');
+      $subsId = $config->get('subscription_id');
 
-   $data = json_decode($data, TRUE);
-   return $data['@odata.count'];
-}
+      $wordforsearch="Exhibitions";
+      $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=ExhibitionId';
+      $curl = curl_init($url);
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-function GetDbExhibitionsCount(){
-  $database = \Drupal::database();
+      $headers = array(
+      "Accept: application/json",
+      "Ocp-Apim-Subscription-Key:$subsKey ",
+      "Cache-Control:no-cache",
+      );
+      curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+      //for debug only!
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
-	$table_name =  'Exhibitions'; // Use $wpdb->prefix to get the table prefix defined by WordPress
+      $data = curl_exec($curl);
+      curl_close($curl);
 
-    // $sql2 = "SELECT COUNT(*) FROM $table_name";
-    // $query2 = $wpdb->prepare($sql2);
-    // $count2 = $wpdb->get_var($query2);
-    $query = $database->select($table_name, 'c');
-    $count2 = $query->countQuery()->execute()->fetchField();
-    return $count2;
-}
+      $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+      if($httpcode == 403)
+      {
+          exit();
+      }
+
+    $data = json_decode($data, TRUE);
+    return $data['@odata.count'];
+  }
+
+  function GetDbExhibitionsCount(){
+    try{
+      $database = \Drupal::database();
+
+      $table_name =  'Exhibitions'; // Use $wpdb->prefix to get the table prefix defined by WordPress
+
+        $query = $database->select($table_name, 'c');
+        $count2 = $query->countQuery()->execute()->fetchField();
+        return $count2;
+    }catch (\Exception $e) {
+      \Drupal::logger('custom_api_integration')->error('Database query error: @message', ['@message' => $e->getMessage()]);
+      // If an exception is thrown (e.g., table not found), return 0.
+      return 0;
+    }
+  }
 
 }

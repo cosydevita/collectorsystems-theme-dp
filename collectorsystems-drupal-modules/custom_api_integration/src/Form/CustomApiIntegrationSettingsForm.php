@@ -100,11 +100,6 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('items_per_page'),
     ];
 
-    $form['footer_text'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Footer Text'),
-      '#default_value' => $config->get('footer_text'),
-    ];
 
     $form['#attached']['library'][] = 'custom_api_integration/select2';
     $form['#attached']['library'][] = 'custom_api_integration/custom_api_integration_settings_form';
@@ -122,7 +117,6 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       ->set('enable_zoom', $form_state->getValue('enable_zoom'))
       ->set('filter_keywords', $form_state->getValue('filter_keywords'))
       ->set('items_per_page', $form_state->getValue('items_per_page'))
-      ->set('footer_text', $form_state->getValue('footer_text'))
       ->save();
 
     parent::submitForm($form, $form_state);

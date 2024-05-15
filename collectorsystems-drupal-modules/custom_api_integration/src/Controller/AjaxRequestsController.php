@@ -88,7 +88,8 @@ class AjaxRequestsController extends ControllerBase
       $object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
       // Count
-      $obj_count = $query->execute()->fetchField();
+      $obj_count = count($object_details);
+
       if ($obj_count > 0) {
         $groupLevelSearchHtml = '<div class="card-group row g-5 artist-objects-container mt-5" id="groupLevelObjectsData">';
         foreach ($object_details as $value) {
@@ -156,8 +157,8 @@ class AjaxRequestsController extends ControllerBase
       $object_details = $result->fetchAllAssoc('ObjectId');
 
       //Count
-
-      $obj_count = $query->execute()->fetchField();
+      $count_query = $query->countQuery();
+      $obj_count = $count_query->execute()->fetchField();
 
       if ($obj_count > 0) {
         $groupLevelSearchHtml = '<div class="card-group row g-5 artist-objects-container mt-5" id="groupLevelObjectsData">';
@@ -228,7 +229,10 @@ class AjaxRequestsController extends ControllerBase
       //sorting
       $this->query_sort_objects_list($groupLevelOrderBy, $qSearch, $query);
 
-      $obj_count = $query->execute()->fetchField();
+
+      //Count
+      $count_query = $query->countQuery();
+      $obj_count = $count_query->execute()->fetchField();
 
       $object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
