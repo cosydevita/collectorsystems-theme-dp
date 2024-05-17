@@ -11590,6 +11590,9 @@
 .collector-systems-wrapper .cs-page-title {
   text-align: left;
   font-weight: normal;
+  margin-block-end: 0.67em;
+  margin-inline-start: 0px;
+  line-height: normal;
 }
 .collector-systems-wrapper .cs-page-total-count {
   text-align: left;
@@ -11930,7 +11933,7 @@
 }
 .collector-systems-wrapper .search-form {
   position: relative !important;
-  margin-right: 20px;
+  margin-left: 20px;
 }
 .collector-systems-wrapper .search-form .expand-search {
   width: 25px;
@@ -11947,6 +11950,7 @@
   background-size: 18px;
   cursor: pointer;
   box-shadow: none !important;
+  background-position-y: center;
 }
 .collector-systems-wrapper .clear-search {
   color: #1B1D1F;
