@@ -247,6 +247,11 @@ function custom_api_integration_theme() {
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
       ],
+    ],
+    'azure-map-page' =>[
+      'variables' => [
+        'locations' => NULL,
+      ]
     ]
 
 

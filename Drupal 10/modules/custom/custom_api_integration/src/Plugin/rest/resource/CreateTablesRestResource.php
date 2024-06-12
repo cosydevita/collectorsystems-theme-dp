@@ -674,7 +674,7 @@ class CreateTablesRestResource extends ResourceBase {
     	$wordforsearch = "Objects";
       if ($field_names != null && $field_names != "") {
         $customized_fields = $this->getCommaSeperatedUniqueFieldsForSearch($field_names);
-        $baseurl = csconstants::Public_API_URL.$subAcntId . '/Objects?$expand=MainImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL),';
+        $baseurl = csconstants::Public_API_URL.$subAcntId . '/Objects?$expand=MainImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL),Address($select=AddressId,AddressName,LatitudeDegrees,LongitudeDegrees),';
         $qSearch= '';
         $apiCallFor = '';
 
@@ -713,6 +713,17 @@ class CreateTablesRestResource extends ResourceBase {
         foreach ($data1['value'] as $value)
         {
           $combinedObjectValues = [];
+          if (!empty($value['Address']['LatitudeDegrees'])) {
+            $combinedObjectValues['LatitudeDegrees'] = $value['Address']['LatitudeDegrees'];
+          }
+          if (!empty($value['Address']['LongitudeDegrees'])) {
+            $combinedObjectValues['LongitudeDegrees'] = $value['Address']['LongitudeDegrees'];
+          }
+          if (!empty($value['Address']['AddressName'])) {
+            $combinedObjectValues['AddressName'] = $value['Address']['AddressName'];
+          }
+
+
           foreach ($field_names as $field_name)
           {
               switch($field_name)
@@ -3391,6 +3402,20 @@ class CreateTablesRestResource extends ResourceBase {
           'type' => 'text',
         ],
         'ModificationDate' => [
+          'type' => 'varchar',
+          'length' => 500,
+        ],
+        'LatitudeDegrees' => [
+          'type' => 'numeric',
+          'precision' => 9,
+          'scale' => 6,
+        ],
+        'LongitudeDegrees' => [
+          'type' => 'numeric',
+          'precision' => 9,
+          'scale' => 6,
+        ],
+        'AddressName' => [
           'type' => 'varchar',
           'length' => 500,
         ]

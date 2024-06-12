@@ -11,7 +11,7 @@ namespace Drupal\custom_api_integration;
  class csconstants {
 
   public const Public_API_URL = "https://apis.collectorsystems.com/public/v2/";
-  public const Public_API_URL_ForObjectFields = "https://cosypublicapiv22.azurewebsites.net/";
+  public const Public_API_URL_ForObjectFields = "https://apis.collectorsystems.com/public/v2/";
   //public const Public_API_URL = "https://cosypublicapiv22-staging.azurewebsites.net/";
 
   public const InventoryNumber = "InventoryNumber";

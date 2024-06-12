@@ -32,7 +32,7 @@ class ObjectFieldsService {
 
     $client = new Client(); // Assuming you've imported the Guzzle HTTP Client namespace.
 
-    $apiUrl = "https://cosypublicapiv22.azurewebsites.net/{$accountGuid}/ObjectFields";
+    $apiUrl = "https://apis.collectorsystems.com/public/v2/{$accountGuid}/ObjectFields";
     $response = $client->get($apiUrl, [
       'headers' => [
         'Ocp-Apim-Subscription-Key' => $subscriptionKey,

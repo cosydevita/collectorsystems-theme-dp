@@ -959,6 +959,48 @@ class PageTemplatesController extends ControllerBase
 
   }
 
+  public function AzureMapPage(){
+    $locations = [];
+    $object_table = 'CSObjects';
+
+    // Database query to fetch latitude and longitude values
+    $query = \Drupal::database()->select($object_table, 'o');
+    $query->fields('o', ['LatitudeDegrees', 'LongitudeDegrees', 'AddressName']);
+    $query->condition('o.LatitudeDegrees', NULL, 'IS NOT NULL');
+    $query->condition('o.LongitudeDegrees', NULL, 'IS NOT NULL');
+    $results = $query->execute()->fetchAll();
+    foreach ($results as $record) {
+      $LatitudeDegrees = $record->LatitudeDegrees;
+      $LongitudeDegrees = $record->LongitudeDegrees;
+      $AddressName = $record->AddressName;
+
+      $locations[] =    ["latitude" => $LatitudeDegrees, "longitude" => $LongitudeDegrees, "AddressName" => $AddressName];
+
+    }
+
+    $state = \Drupal::state();
+    $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+
+    $js_settings = [
+      'locations' => $locations,
+      'subscription_key' => $subscription_key
+    ];
+
+    $build = [
+      '#theme' => 'azure-map-page',
+      '#locations' => $locations,
+    ];
+
+    $build['#attached']['library'][] = 'custom_api_integration/azure_map';
+
+    foreach ($js_settings as $key => $value) {
+      $build['#attached']['drupalSettings']['azure_map'][$key] = $value;
+    }
+
+    return $build;
+
+  }
+
   public function drupal_selected($value, $current_value, $echo = true) {
     $selected = $value == $current_value ? 'selected="selected"' : '';
 

@@ -31,4 +31,16 @@ select2:
   dependencies:
   - core/jquery
 
+azure_map:
+  version: 2.2
+  js:
+    https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js: {}
+    js/azure_map.js: {}
+  css:
+    theme:
+      https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.css: {}
+  dependencies:
+  - core/jquery
+
+
 
