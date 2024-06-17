@@ -20,8 +20,8 @@ function initializeMap() {
       let maxLatitude = Number.NEGATIVE_INFINITY;
 
       locations.forEach(function (location) {
-          let longitude = location.longitude;
-          let latitude = location.latitude;
+          let longitude = dmsToDecimal(location.longitude);
+          let latitude = dmsToDecimal(location.latitude);
 
           minLongitude = Math.min(minLongitude, longitude);
           maxLongitude = Math.max(maxLongitude, longitude);
@@ -60,3 +60,25 @@ function initializeMap() {
 
 
 document.addEventListener("DOMContentLoaded", initializeMap);
+
+
+function dmsToDecimal(dms) {
+  const parts = dms.match(/(\d+)[°]\s(\d+)[′]\s([\d.]+)[″]\s([NSEW])/);
+  if (!parts) {
+      throw new Error("Invalid DMS format");
+  }
+
+  const degrees = parseFloat(parts[1]);
+  const minutes = parseFloat(parts[2]);
+  const seconds = parseFloat(parts[3]);
+  const direction = parts[4];
+
+  let decimal = degrees + minutes / 60 + seconds / 3600;
+
+  // Negate for south and west coordinates
+  if (direction === "S" || direction === "W") {
+      decimal *= -1;
+  }
+
+  return decimal;
+}

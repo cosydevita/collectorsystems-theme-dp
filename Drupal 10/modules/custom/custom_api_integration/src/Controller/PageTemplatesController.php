@@ -962,22 +962,24 @@ class PageTemplatesController extends ControllerBase
   public function AzureMapPage(){
     $locations = [];
     $object_table = 'CSObjects';
+    try {
 
-    // Database query to fetch latitude and longitude values
-    $query = \Drupal::database()->select($object_table, 'o');
-    $query->fields('o', ['LatitudeDegrees', 'LongitudeDegrees', 'AddressName']);
-    $query->condition('o.LatitudeDegrees', NULL, 'IS NOT NULL');
-    $query->condition('o.LongitudeDegrees', NULL, 'IS NOT NULL');
-    $results = $query->execute()->fetchAll();
-    foreach ($results as $record) {
-      $LatitudeDegrees = $record->LatitudeDegrees;
-      $LongitudeDegrees = $record->LongitudeDegrees;
-      $AddressName = $record->AddressName;
+      // Database query to fetch latitude and longitude values
+      $query = \Drupal::database()->select($object_table, 'o');
+      $query->fields('o', ['Latitude', 'Longitude', 'AddressName']);
+      $query->condition('o.Latitude', NULL, 'IS NOT NULL');
+      $query->condition('o.Longitude', NULL, 'IS NOT NULL');
+      $results = $query->execute()->fetchAll();
+      foreach ($results as $record) {
+        $Latitude = $record->Latitude;
+        $Longitude = $record->Longitude;
+        $AddressName = $record->AddressName;
 
-      $locations[] =    ["latitude" => $LatitudeDegrees, "longitude" => $LongitudeDegrees, "AddressName" => $AddressName];
+        $locations[] =    ["latitude" => $Latitude, "longitude" => $Longitude, "AddressName" => $AddressName];
 
+      }
+    } catch (\Exception $e) {
     }
-
     $state = \Drupal::state();
     $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
 

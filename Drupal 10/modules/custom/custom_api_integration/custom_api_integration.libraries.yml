@@ -32,7 +32,7 @@ select2:
   - core/jquery
 
 azure_map:
-  version: 2.2
+  version: 2.4
   js:
     https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js: {}
     js/azure_map.js: {}

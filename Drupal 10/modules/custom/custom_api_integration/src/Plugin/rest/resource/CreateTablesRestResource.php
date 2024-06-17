@@ -674,7 +674,7 @@ class CreateTablesRestResource extends ResourceBase {
     	$wordforsearch = "Objects";
       if ($field_names != null && $field_names != "") {
         $customized_fields = $this->getCommaSeperatedUniqueFieldsForSearch($field_names);
-        $baseurl = csconstants::Public_API_URL.$subAcntId . '/Objects?$expand=MainImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL),Address($select=AddressId,AddressName,LatitudeDegrees,LongitudeDegrees),';
+        $baseurl = csconstants::Public_API_URL.$subAcntId . '/Objects?$expand=MainImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL),Address($select=AddressId,AddressName,Latitude,Longitude),';
         $qSearch= '';
         $apiCallFor = '';
 
@@ -713,11 +713,11 @@ class CreateTablesRestResource extends ResourceBase {
         foreach ($data1['value'] as $value)
         {
           $combinedObjectValues = [];
-          if (!empty($value['Address']['LatitudeDegrees'])) {
-            $combinedObjectValues['LatitudeDegrees'] = $value['Address']['LatitudeDegrees'];
+          if (!empty($value['Address']['Latitude'])) {
+            $combinedObjectValues['Latitude'] = $value['Address']['Latitude'];
           }
-          if (!empty($value['Address']['LongitudeDegrees'])) {
-            $combinedObjectValues['LongitudeDegrees'] = $value['Address']['LongitudeDegrees'];
+          if (!empty($value['Address']['Longitude'])) {
+            $combinedObjectValues['Longitude'] = $value['Address']['Longitude'];
           }
           if (!empty($value['Address']['AddressName'])) {
             $combinedObjectValues['AddressName'] = $value['Address']['AddressName'];
@@ -3405,15 +3405,13 @@ class CreateTablesRestResource extends ResourceBase {
           'type' => 'varchar',
           'length' => 500,
         ],
-        'LatitudeDegrees' => [
-          'type' => 'numeric',
-          'precision' => 9,
-          'scale' => 6,
+        'Latitude' => [
+          'type' => 'varchar',
+          'length' => 500,
         ],
-        'LongitudeDegrees' => [
-          'type' => 'numeric',
-          'precision' => 9,
-          'scale' => 6,
+        'Longitude' => [
+          'type' => 'varchar',
+          'length' => 500,
         ],
         'AddressName' => [
           'type' => 'varchar',
