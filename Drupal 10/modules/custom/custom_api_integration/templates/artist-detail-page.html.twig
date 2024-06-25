@@ -22,7 +22,10 @@
     </div>
 </div>
 
-<div class="container-xxl py-5">
+{# Custom Tabs Block #}
+{% include module_path ~ '/templates/partials/custom-tabs-block.html.twig' %}
+
+<div id="gallery-block"  class="container-xxl py-5">
     <div class="row mb-3">
         <div class="col d-inline-flex">
             <h2 class="font-normal pl-0 m-0">Objects</h2>
@@ -47,6 +50,9 @@
         </div>
     </div>
 
+
+
+
     <div class="card-group row g-5 artist-objects-container mt-5" id="groupLevelObjectsData">
         {% for value in object_details %}
             {% set delaytm = (loadsec == 1) ? '0.01s' : ((loadsec == 2) ? '0.03s' : '0.05s') %}
@@ -58,3 +64,7 @@
         {{ customPaginationForGroupLevelObjects(artistId, ajaxfor, groupLevelPageNo, obj_count, groupLevelOrderBy, qSearch) }}
     </div>
 </div>
+
+
+{# Azure Map Block #}
+{% include module_path ~ '/templates/partials/azure-map-block.html.twig' %}

@@ -112,10 +112,56 @@ class PageTemplatesController extends ControllerBase
     $count_query = $query->countQuery();
     $total_results = $count_query->execute()->fetchField();
 
+    $query_without_range = $query;
     $query->range($shskip, $showrec);
 
     $result = $query->execute();
     $object_details = $result->fetchAllAssoc('ObjectId'); // Assuming 'ObjectId' is the primary key field
+    $module_path = \Drupal::service('extension.list.module')->getPath('custom_api_integration');
+
+
+    //start azure map
+    $locations = [];
+    $query_without_range = $query->range(); //to include all results without range
+    $result = $query_without_range->execute();
+    $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+    foreach ($object_details_without_range as $object) {
+      $Latitude = $object->Latitude;
+      $Longitude = $object->Longitude;
+      $AddressName = $object->AddressName;
+      $main_image_attachment = $object->main_image_attachment;
+      $main_image_path = $object->main_image_path;
+      $locations_data =  [
+        "latitude" => $Latitude,
+        "longitude" => $Longitude,
+        "AddressName" => $AddressName,
+        "main_image_attachment" => base64_encode($main_image_attachment),
+        "main_image_path" => $main_image_path,
+
+      ];
+      if($Latitude && $Longitude){
+        foreach($customized_fields_array as $customized_field){
+          $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+
+        }
+        $locations[] =  $locations_data;
+      }
+
+    }
+
+
+
+
+    $state = \Drupal::state();
+    $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+
+    $js_settings = [
+      'locations' => $locations,
+      'subscription_key' => $subscription_key,
+      'module_path' => $module_path
+    ];
+
+    //end azure map
 
 
 
@@ -129,14 +175,21 @@ class PageTemplatesController extends ControllerBase
       '#current_page' => $current_page,
       '#requested_pageNo' => $requested_pageNo,
       '#qSearch' => $qSearch,
+      '#module_path' => $module_path,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
 
 
+    foreach ($js_settings as $key => $value) {
+      $build['#attached']['drupalSettings']['azure_map'][$key] = $value;
+    }
+
+    $build['#attached']['library'][] = 'custom_api_integration/azure_map';
+    $build['#attached']['library'][] = 'custom_api_integration/custom_tabs';
+
+
     return $build;
-
-
 
   }
 
@@ -614,6 +667,8 @@ class PageTemplatesController extends ControllerBase
       }
     }
 
+    $module_path = \Drupal::service('extension.list.module')->getPath('custom_api_integration');
+
     $build = [
       '#theme' => 'artobject-detail-page',
       '#thumbDetails' => $thumbDetails,
@@ -626,6 +681,7 @@ class PageTemplatesController extends ControllerBase
       '#sortBy' => $sortBy,
       '#qSearch' => $qSearch,
       '#requested_pageNo' => $requested_pageNo,
+      '#module_path' => $module_path,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -697,6 +753,48 @@ class PageTemplatesController extends ControllerBase
 
     $obj_count = $count_object;
 
+    $module_path = \Drupal::service('extension.list.module')->getPath('custom_api_integration');
+
+
+    //start azure map
+    $locations = [];
+    $query_without_range = $query->range(); //to include all results without range
+    $result = $query_without_range->execute();
+    $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+    foreach ($object_details_without_range as $object) {
+      $Latitude = $object->Latitude;
+      $Longitude = $object->Longitude;
+      $AddressName = $object->AddressName;
+      $main_image_attachment = $object->main_image_attachment;
+      $main_image_path = $object->main_image_path;
+      $locations_data =  [
+        "latitude" => $Latitude,
+        "longitude" => $Longitude,
+        "AddressName" => $AddressName,
+        "main_image_attachment" => base64_encode($main_image_attachment),
+        "main_image_path" => $main_image_path,
+
+      ];
+      if($Latitude && $Longitude){
+        foreach($customized_fields_array as $customized_field){
+          $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+        }
+        $locations[] =  $locations_data;
+      }
+    }
+
+
+    $state = \Drupal::state();
+    $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+
+    $js_settings = [
+      'locations' => $locations,
+      'subscription_key' => $subscription_key,
+      'module_path' => $module_path
+    ];
+
+    //end azure map
+
 
 
     $build = [
@@ -714,9 +812,17 @@ class PageTemplatesController extends ControllerBase
       '#object_details' => $object_details,
       '#ajaxfor' => $ajaxfor,
       '#listPageSize' => $listPageSize,
+      '#module_path' => $module_path,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
+
+    foreach ($js_settings as $key => $value) {
+      $build['#attached']['drupalSettings']['azure_map'][$key] = $value;
+    }
+
+    $build['#attached']['library'][] = 'custom_api_integration/azure_map';
+    $build['#attached']['library'][] = 'custom_api_integration/custom_tabs';
 
 
     return $build;
@@ -779,6 +885,55 @@ class PageTemplatesController extends ControllerBase
     ]);
     $obj_count = $count_object->fetchField();
 
+    $module_path = \Drupal::service('extension.list.module')->getPath('custom_api_integration');
+
+     //start azure map
+     $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
+     if($customized_fields){
+       $customized_fields_array = explode(',', $customized_fields);
+     }else{
+       $customized_fields_array = [];
+     }
+
+     $locations = [];
+     $query_without_range = $query->range(); //to include all results without range
+     $result = $query_without_range->execute();
+     $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+     foreach ($object_details_without_range as $object) {
+       $Latitude = $object->Latitude;
+       $Longitude = $object->Longitude;
+       $AddressName = $object->AddressName;
+       $main_image_attachment = $object->main_image_attachment;
+       $main_image_path = $object->main_image_path;
+       $locations_data =  [
+         "latitude" => $Latitude,
+         "longitude" => $Longitude,
+         "AddressName" => $AddressName,
+         "main_image_attachment" => base64_encode($main_image_attachment),
+         "main_image_path" => $main_image_path,
+
+       ];
+       if($Latitude && $Longitude){
+         foreach($customized_fields_array as $customized_field){
+            $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+         }
+         $locations[] =  $locations_data;
+       }
+     }
+
+
+     $state = \Drupal::state();
+     $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+
+     $js_settings = [
+       'locations' => $locations,
+       'subscription_key' => $subscription_key,
+       'module_path' => $module_path
+     ];
+
+     //end azure map
+
+
 
     $build = [
       '#theme' => 'exhibition-detail-page',
@@ -795,9 +950,17 @@ class PageTemplatesController extends ControllerBase
       '#ajaxfor' => $ajaxfor,
       '#exhibitionID' => $exhibitionID,
       '#listPageSize' => $listPageSize,
+      '#module_path' => $module_path,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
+
+    foreach ($js_settings as $key => $value) {
+      $build['#attached']['drupalSettings']['azure_map'][$key] = $value;
+    }
+
+    $build['#attached']['library'][] = 'custom_api_integration/azure_map';
+    $build['#attached']['library'][] = 'custom_api_integration/custom_tabs';
 
 
     return $build;
@@ -857,10 +1020,58 @@ class PageTemplatesController extends ControllerBase
     $group_object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
 
-    $query = $database->select($groupObj_table, 'go')
+    $query_count = $database->select($groupObj_table, 'go')
       ->condition('GroupId', $groupID)
       ->countQuery();
-    $obj_count = $query->execute()->fetchField();
+    $obj_count = $query_count->execute()->fetchField();
+
+    $module_path = \Drupal::service('extension.list.module')->getPath('custom_api_integration');
+
+      //start azure map
+      $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
+      if($customized_fields){
+        $customized_fields_array = explode(',', $customized_fields);
+      }else{
+        $customized_fields_array = [];
+      }
+
+      $locations = [];
+      $query_without_range = $query->range(); //to include all results without range
+      $result = $query_without_range->execute();
+      $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+      foreach ($object_details_without_range as $object) {
+        $Latitude = $object->Latitude;
+        $Longitude = $object->Longitude;
+        $AddressName = $object->AddressName;
+        $main_image_attachment = $object->main_image_attachment;
+        $main_image_path = $object->main_image_path;
+        $locations_data =  [
+          "latitude" => $Latitude,
+          "longitude" => $Longitude,
+          "AddressName" => $AddressName,
+          "main_image_attachment" => base64_encode($main_image_attachment),
+          "main_image_path" => $main_image_path,
+
+        ];
+        if($Latitude && $Longitude){
+          foreach($customized_fields_array as $customized_field){
+              $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+          }
+          $locations[] =  $locations_data;
+        }
+      }
+
+
+      $state = \Drupal::state();
+      $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+
+      $js_settings = [
+        'locations' => $locations,
+        'subscription_key' => $subscription_key,
+        'module_path' => $module_path
+      ];
+
+      //end azure map
 
 
     $build = [
@@ -879,9 +1090,18 @@ class PageTemplatesController extends ControllerBase
       '#group_object_details' => $group_object_details,
       '#listPageSize' => $listPageSize,
       '#groupID' => $groupID,
+      '#module_path' => $module_path,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
+
+    foreach ($js_settings as $key => $value) {
+      $build['#attached']['drupalSettings']['azure_map'][$key] = $value;
+    }
+
+    $build['#attached']['library'][] = 'custom_api_integration/azure_map';
+    $build['#attached']['library'][] = 'custom_api_integration/custom_tabs';
+
     return $build;
 
   }
@@ -931,10 +1151,58 @@ class PageTemplatesController extends ControllerBase
 
 
     //Count
-    $query = $database->select($object_table, 'co')
+    $query_count = $database->select($object_table, 'co')
     ->condition('co.CollectionId', $collectionID)
     ->countQuery();
-    $obj_count = $query->execute()->fetchField();
+    $obj_count = $query_count->execute()->fetchField();
+
+    $module_path = \Drupal::service('extension.list.module')->getPath('custom_api_integration');
+
+    //start azure map
+    $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
+    if($customized_fields){
+      $customized_fields_array = explode(',', $customized_fields);
+    }else{
+      $customized_fields_array = [];
+    }
+
+    $locations = [];
+    $query_without_range = $query->range(); //to include all results without range
+    $result = $query_without_range->execute();
+    $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+    foreach ($object_details_without_range as $object) {
+      $Latitude = $object->Latitude;
+      $Longitude = $object->Longitude;
+      $AddressName = $object->AddressName;
+      $main_image_attachment = $object->main_image_attachment;
+      $main_image_path = $object->main_image_path;
+      $locations_data =  [
+        "latitude" => $Latitude,
+        "longitude" => $Longitude,
+        "AddressName" => $AddressName,
+        "main_image_attachment" => base64_encode($main_image_attachment),
+        "main_image_path" => $main_image_path,
+
+      ];
+      if($Latitude && $Longitude){
+        foreach($customized_fields_array as $customized_field){
+          $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+        }
+        $locations[] =  $locations_data;
+      }
+    }
+
+
+    $state = \Drupal::state();
+    $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+
+    $js_settings = [
+      'locations' => $locations,
+      'subscription_key' => $subscription_key,
+      'module_path' => $module_path
+    ];
+
+    //end azure map
 
 
 
@@ -953,8 +1221,17 @@ class PageTemplatesController extends ControllerBase
       '#collection_details' => $collection_details,
       '#collectionID' => $collectionID,
       '#listPageSize' => $listPageSize,
+      '#module_path' => $module_path,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
     ];
+
+    foreach ($js_settings as $key => $value) {
+      $build['#attached']['drupalSettings']['azure_map'][$key] = $value;
+    }
+
+    $build['#attached']['library'][] = 'custom_api_integration/azure_map';
+    $build['#attached']['library'][] = 'custom_api_integration/custom_tabs';
+
     return $build;
 
   }

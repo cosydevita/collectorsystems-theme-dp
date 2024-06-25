@@ -1,0 +1,11 @@
+.location-popup-content {
+  padding: 10px;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  white-space: normal;
+}
+.location-popup-content .location-marker-icon{
+  margin-right: 10px;
+}

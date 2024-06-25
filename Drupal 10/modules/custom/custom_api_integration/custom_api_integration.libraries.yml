@@ -39,8 +39,13 @@ azure_map:
   css:
     theme:
       https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.css: {}
+      css/azure_map.css: {}
   dependencies:
   - core/jquery
-
+custom_tabs:
+  js:
+    js/custom_tabs.js: {}
+  dependencies:
+    - core/jquery
 
 

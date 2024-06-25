@@ -88,7 +88,7 @@ class AjaxRequestsController extends ControllerBase
       $object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
       // Count
-      $obj_count = $query->execute()->fetchField();
+      $obj_count = count($object_details);
       if ($obj_count > 0) {
         $groupLevelSearchHtml = '<div class="card-group row g-5 artist-objects-container mt-5" id="groupLevelObjectsData">';
         foreach ($object_details as $value) {
@@ -116,7 +116,40 @@ class AjaxRequestsController extends ControllerBase
           $groupLevelSearchHtml .= $functionOutput;
         }
         $groupLevelSearchHtml .= '</div>';
+
+
+
+        //start azure map
+        $locations = [];
+        $query_without_range = $query->range(); //to include all results without range
+        $result = $query_without_range->execute();
+        $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+        foreach ($object_details_without_range as $object) {
+          $Latitude = $object->Latitude;
+          $Longitude = $object->Longitude;
+          $AddressName = $object->AddressName;
+          $main_image_attachment = $object->main_image_attachment;
+          $main_image_path = $object->main_image_path;
+          $locations_data =  [
+            "latitude" => $Latitude,
+            "longitude" => $Longitude,
+            "AddressName" => $AddressName,
+            "main_image_attachment" => base64_encode($main_image_attachment),
+            "main_image_path" => $main_image_path,
+
+          ];
+          if($Latitude && $Longitude){
+            foreach($customized_fields_array as $customized_field){
+              $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+            }
+            $locations[] =  $locations_data;
+          }
+        }
+        //end azure map
+
+
       } else {
+        $locations = [];
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }
       $groupLevelSearchHtml.= '<input type="hidden" id="hdnTotalGroupLevelObjectCount" value="'.$obj_count.'"></input>';
@@ -186,7 +219,38 @@ class AjaxRequestsController extends ControllerBase
           $groupLevelSearchHtml .= $functionOutput;
         }
         $groupLevelSearchHtml .= '</div>';
+
+        //start azure map
+        $locations = [];
+        $query_without_range = $query->range(); //to include all results without range
+        $result = $query_without_range->execute();
+        $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+        foreach ($object_details_without_range as $object) {
+          $Latitude = $object->Latitude;
+          $Longitude = $object->Longitude;
+          $AddressName = $object->AddressName;
+          $main_image_attachment = $object->main_image_attachment;
+          $main_image_path = $object->main_image_path;
+          $locations_data =  [
+            "latitude" => $Latitude,
+            "longitude" => $Longitude,
+            "AddressName" => $AddressName,
+            "main_image_attachment" => base64_encode($main_image_attachment),
+            "main_image_path" => $main_image_path,
+
+          ];
+          if($Latitude && $Longitude){
+            foreach($customized_fields_array as $customized_field){
+              $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+            }
+            $locations[] =  $locations_data;
+          }
+        }
+        //end azure map
+
+
       } else {
+        $locations = [];
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }
       $groupLevelSearchHtml.= '<input type="hidden" id="hdnTotalGroupLevelObjectCount" value="'.$obj_count.'"></input>';
@@ -259,7 +323,39 @@ class AjaxRequestsController extends ControllerBase
           $groupLevelSearchHtml .= $functionOutput;
         }
         $groupLevelSearchHtml .= '</div>';
+
+
+        //start azure map
+        $locations = [];
+        $query_without_range = $query->range(); //to include all results without range
+        $result = $query_without_range->execute();
+        $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+        foreach ($object_details_without_range as $object) {
+          $Latitude = $object->Latitude;
+          $Longitude = $object->Longitude;
+          $AddressName = $object->AddressName;
+          $main_image_attachment = $object->main_image_attachment;
+          $main_image_path = $object->main_image_path;
+          $locations_data =  [
+            "latitude" => $Latitude,
+            "longitude" => $Longitude,
+            "AddressName" => $AddressName,
+            "main_image_attachment" => base64_encode($main_image_attachment),
+            "main_image_path" => $main_image_path,
+
+          ];
+          if($Latitude && $Longitude){
+            foreach($customized_fields_array as $customized_field){
+              $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+            }
+            $locations[] =  $locations_data;
+          }
+        }
+        //end azure map
+
+
       } else {
+        $locations = [];
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }
       $groupLevelSearchHtml.= '<input type="hidden" id="hdnTotalGroupLevelObjectCount" value="'.$obj_count.'"></input>';
@@ -328,13 +424,48 @@ class AjaxRequestsController extends ControllerBase
           $groupLevelSearchHtml .= $functionOutput;
         }
         $groupLevelSearchHtml .= '</div>';
+
+
+        //start azure map
+        $locations = [];
+        $query_without_range = $query->range(); //to include all results without range
+        $result = $query_without_range->execute();
+        $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+        foreach ($object_details_without_range as $object) {
+          $Latitude = $object->Latitude;
+          $Longitude = $object->Longitude;
+          $AddressName = $object->AddressName;
+          $main_image_attachment = $object->main_image_attachment;
+          $main_image_path = $object->main_image_path;
+          $locations_data =  [
+            "latitude" => $Latitude,
+            "longitude" => $Longitude,
+            "AddressName" => $AddressName,
+            "main_image_attachment" => base64_encode($main_image_attachment),
+            "main_image_path" => $main_image_path,
+
+          ];
+          if($Latitude && $Longitude){
+            foreach($customized_fields_array as $customized_field){
+              $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+            }
+            $locations[] =  $locations_data;
+          }
+        }
+        //end azure map
+
       } else {
+        $locations = [];
+
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }
       $groupLevelSearchHtml.= '<input type="hidden" id="hdnTotalGroupLevelObjectCount" value="'.$obj_count.'"></input>';
     }
 
-    return new JsonResponse(['groupLevelSearchHtml' => $groupLevelSearchHtml]);
+    return new JsonResponse([
+      'groupLevelSearchHtml' => $groupLevelSearchHtml,
+      'locations' => $locations
+    ]);
   }
 
 

@@ -16,7 +16,10 @@
     </div>
 </div>
 
-<div class="container-xxl py-5">
+{# Custom Tabs Block #}
+{% include module_path ~ '/templates/partials/custom-tabs-block.html.twig' %}
+
+<div id="gallery-block"  class="container-xxl py-5">
     <div class="row mb-3">
         <div class="col d-inline-flex">
             <h2 class="font-normal pl-0 m-0">Objects</h2>
@@ -53,3 +56,6 @@
         {{ customPaginationForGroupLevelObjects(groupID, ajaxfor, groupLevelPageNo, groupObjectsCount, groupLevelOrderBy, qSearch) }}
     </div>
 </div>
+
+{# Azure Map Block #}
+{% include module_path ~ '/templates/partials/azure-map-block.html.twig' %}

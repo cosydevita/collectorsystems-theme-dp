@@ -108,7 +108,8 @@ function custom_api_integration_theme() {
         'dataorderby' => NULL,
         'current_page' => NULL,
         'requested_pageNo' => NULL,
-        'qSearch' => NULL
+        'qSearch' => NULL,
+        'module_path' => NULL
       ],
     ],
     'artists-list-page' => [
@@ -177,6 +178,7 @@ function custom_api_integration_theme() {
         'sortBy' =>NULL,
         'qSearch' => NULL,
         'requested_pageNo' => NULL,
+        'module_path' => NULL
       ],
     ],
     'artist-detail-page' => [
@@ -194,6 +196,7 @@ function custom_api_integration_theme() {
         'object_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
+        'module_path' => NULL
       ],
     ],
     'exhibition-detail-page' => [
@@ -211,6 +214,7 @@ function custom_api_integration_theme() {
         'exhibition_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
+        'module_path' => NULL
       ],
     ],
     'group-detail-page' => [
@@ -229,6 +233,7 @@ function custom_api_integration_theme() {
         'group_object_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
+        'module_path' => NULL
       ],
     ],
     'collection-detail-page' => [
@@ -246,6 +251,7 @@ function custom_api_integration_theme() {
         'collection_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
+        'module_path' => NULL
       ],
     ],
     'azure-map-page' =>[
