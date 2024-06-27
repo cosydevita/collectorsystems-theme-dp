@@ -68,7 +68,7 @@ function initializeMap() {
           if(data_selected_fields){
            Object.keys(data_selected_fields).forEach(function(key) {
                 let value = data_selected_fields[key];
-                html_data_selected_fields +=  "<div>"+ key + ': ' + value + "</div>";
+                html_data_selected_fields +=  "<div>" + value + "</div>";
             });
 
             popup_html += html_data_selected_fields;
@@ -78,7 +78,9 @@ function initializeMap() {
 
           let popup = new atlas.Popup({
               content: popup_html,
-              position: [longitude, latitude]
+              position: [longitude, latitude],
+              anchor: 'top' // Adjust the anchor to 'top's
+
           });
 
           map.events.add('click', marker, function () {
@@ -176,3 +178,65 @@ jQuery(document).ajaxComplete(function( event, xhr, options) {
   }
 
 })
+
+
+
+document.querySelector('#azure-map-block #locateMeButton').addEventListener('click', locateMe);
+
+function locateMe() {
+  if (navigator.geolocation) {
+    // Only secure origins are allowed, it won't work in localhost
+      navigator.geolocation.getCurrentPosition(function (position) {
+          let userLongitude = position.coords.longitude;
+          let userLatitude = position.coords.latitude;
+          let nearbyLocations = [];
+
+          locations.forEach(function (location) {
+              let longitude = dmsToDecimal(location.longitude);
+              let latitude = dmsToDecimal(location.latitude);
+
+              // Calculate distance between user location and each marker (simple approximation)
+              let distance = Math.sqrt(Math.pow(userLongitude - longitude, 2) + Math.pow(userLatitude - latitude, 2));
+
+              if (distance < 0.1) { // Assuming a threshold of 0.1 degrees for "nearby"
+                  nearbyLocations.push(location);
+              }
+          });
+
+          let marker = new atlas.HtmlMarker({
+            position: [userLongitude, userLatitude]
+          });
+          map.markers.add(marker);
+
+          // Center map on user's location
+          map.setCamera({
+              center: [userLongitude, userLatitude],
+              zoom: 10 // Adjust zoom level as needed, min is 0 max is 22
+          });
+
+
+          let popup_html = '<div>Your Location </div>';
+          popup_html = '<div class="location-popup-content">' + popup_html + '</div>';
+
+          let popup = new atlas.Popup({
+              content: popup_html,
+              position: [userLongitude, userLatitude],
+              anchor: 'top' // Adjust the anchor to 'top's
+          });
+
+          map.events.add('click', marker, function () {
+              map.popups.clear();
+              popup.open(map);
+          });
+
+
+      }, function (error) {
+          alert('Sorry! we are unable to get your location.')
+          console.error("Error getting geolocation: " + error.message);
+      });
+  } else {
+      alert("Geolocation is not supported by this browser.");
+  }
+}
+
+

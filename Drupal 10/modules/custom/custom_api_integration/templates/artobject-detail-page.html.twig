@@ -128,6 +128,12 @@
 
                     {{ GetCustomizedObjectDetailsForTheme(object_field, "",object_details[row_number])}}
                 {% endfor %}
+
+                  <div class="map-wrapper-object-details-page">
+                    {# Azure Map Block #}
+                    {% include module_path ~ '/templates/partials/azure-map-block.html.twig' %}
+                  </div>
+
             </div>
         </div>
     </div>
@@ -152,4 +158,7 @@
           <!-- <li><a href="javascript:;" onclick="window.print()"><img src="https://simplesharebuttons.com/images/somacro/print.png" alt="Print" /></a></li> -->
         </ul>
         </span>
+
+
+
 

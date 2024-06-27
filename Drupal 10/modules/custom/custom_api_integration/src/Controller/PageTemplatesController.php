@@ -577,20 +577,53 @@ class PageTemplatesController extends ControllerBase
       $query->orderBy('c.CollectionName', ($sortBy === 'Collection/CollectionName%20desc') ? 'DESC' : 'ASC');
     }
 
-    // $object_details = $query->execute()->fetchAllAssoc('ObjectId'); //
-    $object_details = $query->execute()->fetchAll(); //
+    // $object_details = $query->execute()->fetchAllAssoc('ObjectId');
+    $object_details = $query->execute()->fetchAll();
+
+    $module_path = \Drupal::service('extension.list.module')->getPath('custom_api_integration');
+
+    //start azure map
+    $customized_fields = $this->getCommaSeperatedFieldsForDetailPage();
+    $customized_fields_array = explode(',', $customized_fields);
+    $locations = [];
+    $query->condition('ObjectId', $artObjID);
+    $query_without_range = $query->range(); //to include all results without range
+    $result = $query_without_range->execute();
+    $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+    foreach ($object_details_without_range as $object) {
+      $Latitude = $object->Latitude;
+      $Longitude = $object->Longitude;
+      $AddressName = $object->AddressName;
+      $main_image_attachment = $object->main_image_attachment;
+      $main_image_path = $object->main_image_path;
+      $locations_data =  [
+        "latitude" => $Latitude,
+        "longitude" => $Longitude,
+        "AddressName" => $AddressName,
+        "main_image_attachment" => base64_encode($main_image_attachment),
+        "main_image_path" => $main_image_path,
+
+      ];
+      if($Latitude && $Longitude){
+        foreach($customized_fields_array as $customized_field){
+          $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+        }
+        $locations[] =  $locations_data;
+      }
+    }
 
 
+    $state = \Drupal::state();
+    $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
 
+    $js_settings = [
+      'locations' => $locations,
+      'subscription_key' => $subscription_key,
+      'module_path' => $module_path
+    ];
 
+    //end azure map
 
-    // $thumbImage_table = $wpdb->prefix . "ThumbImages";
-    // $check = $wpdb->get_row("SELECT object_image_path, object_image_attachment FROM $thumbImage_table", ARRAY_A);
-    // $fetch_thumbs = $wpdb->prepare("SELECT * FROM $thumbImage_table WHERE ObjectId = %d ORDER BY object_image_path DESC", $artObjID);
-    // $thumbDetails = $wpdb->get_results($fetch_thumbs, ARRAY_A);
-    // $loadsec=1;
-    // Assuming $thumbImage_table is the name of your custom table.
-    // Get the default database connection.
     $database = Database::getConnection();
 
     // Assuming $thumbImage_table is the name of your custom table.
@@ -685,6 +718,14 @@ class PageTemplatesController extends ControllerBase
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
+
+
+    foreach ($js_settings as $key => $value) {
+      $build['#attached']['drupalSettings']['azure_map'][$key] = $value;
+    }
+
+    $build['#attached']['library'][] = 'custom_api_integration/azure_map';
+    $build['#attached']['library'][] = 'custom_api_integration/custom_tabs';
 
 
     return $build;

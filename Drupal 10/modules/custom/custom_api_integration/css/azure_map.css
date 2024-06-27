@@ -9,3 +9,15 @@
 .location-popup-content .location-marker-icon{
   margin-right: 10px;
 }
+
+#azure-map-block{
+  border: 1px solid #000;
+  padding: 10px;
+}
+#azure-map-block #locateMeButton{
+  padding: 10px 20px !important;
+  text-align: center;
+}
+#azure-map-block .locate-me-icon{
+  width: 30px;
+}
