@@ -50,17 +50,21 @@ function initializeMap() {
               object_img = 'data:image/jpeg;base64,' + main_image_attachment;
               html_object_main_image =  '<img width="200" src="'+object_img+'">';
 
+            }else{
+              html_object_main_image =  '<img width="200" src="'+module_path+"/images/noimage300.png"+'">';
             }
           }
 
 
           let popup_html = '';
-          popup_html += html_object_main_image;
+          let popup_html_col_left = '';
 
+          popup_html_col_left += '<div class="col-left">' + html_object_main_image +'</div>'
 
+          let popup_html_col_right = '';
           //AddressName
           if(location.AddressName){
-            popup_html += '<div><img class="location-marker-icon" width="20" src="'+module_path+'/images/map-marker.svg">' + location.AddressName + '</div>';
+            popup_html_col_right += '<div><img class="location-marker-icon" width="20" src="'+module_path+'/images/map-marker.svg">' + location.AddressName + '</div>';
           }
 
 
@@ -68,12 +72,19 @@ function initializeMap() {
           if(data_selected_fields){
            Object.keys(data_selected_fields).forEach(function(key) {
                 let value = data_selected_fields[key];
-                html_data_selected_fields +=  "<div>" + value + "</div>";
+                if(value){
+                  html_data_selected_fields +=  "<div>" + value + "</div>";
+                }
             });
 
-            popup_html += html_data_selected_fields;
           }
+          popup_html_col_right += html_data_selected_fields;
 
+
+          popup_html_col_right = '<div class="col-right">'+ popup_html_col_right +'</div>';
+
+
+          popup_html = popup_html_col_left + popup_html_col_right;
           popup_html = '<div class="location-popup-content">' + popup_html + '</div>';
 
           let popup = new atlas.Popup({

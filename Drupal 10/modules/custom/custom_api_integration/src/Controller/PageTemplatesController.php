@@ -41,6 +41,12 @@ class PageTemplatesController extends ControllerBase
       $customized_fields_array = explode(',', $customized_fields);
     }
 
+    $customized_fields_list_and_detail_page = $this->getCommaSeparatedFieldsForListAndDetailPage();
+    $customized_fields_list_and_detail_page_array = null;
+    if($customized_fields_list_and_detail_page){
+      $customized_fields_list_and_detail_page_array = explode(',', $customized_fields_list_and_detail_page);
+    }
+
     // Count Total Objects
     $object_table = 'CSObjects';
 
@@ -52,7 +58,7 @@ class PageTemplatesController extends ControllerBase
     if($customized_fields){
       $or_condition_group = $query->orConditionGroup();
 
-      foreach($customized_fields_array as $customized_field){
+      foreach($customized_fields_list_and_detail_page_array as $customized_field){
         $or_condition_group->condition($customized_field, '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
       }
       $query->condition($or_condition_group);
@@ -1358,6 +1364,29 @@ class PageTemplatesController extends ControllerBase
     $query = $db->select($settblnm, 'c')
       ->fields('c', ['fieldname'])
       ->condition('fieldtype', 'ObjectList');
+
+    $result = $query->execute()->fetchAllAssoc('fieldname');
+
+    $values = implode(',', array_keys($result));
+
+    return $values;
+
+  }
+
+  public function getCommaSeparatedFieldsForListAndDetailPage(){
+    $db = \Drupal::database();
+
+    $tblnm = "clsobjects_fields";
+    $settblnm = $tblnm;
+
+    $query = $db->select($settblnm, 'c')
+      ->fields('c', ['fieldname']);
+    // Create a Condition object for OR logic
+    $orCondition = new Condition('OR');
+    $orCondition->condition('fieldtype', 'ObjectList');
+    $orCondition->condition('fieldtype', 'Objectdetail');
+    $query->condition($orCondition);
+
 
     $result = $query->execute()->fetchAllAssoc('fieldname');
 
