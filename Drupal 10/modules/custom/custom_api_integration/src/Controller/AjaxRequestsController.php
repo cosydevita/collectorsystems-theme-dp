@@ -57,6 +57,13 @@ class AjaxRequestsController extends ControllerBase
 
     $customized_fields_array = explode(',', $customized_fields);
 
+
+    $customized_fields_list_and_detail_page = $this->getCommaSeparatedFieldsForListAndDetailPage();
+    $customized_fields_list_and_detail_page_array = null;
+    if($customized_fields_list_and_detail_page){
+      $customized_fields_list_and_detail_page_array = explode(',', $customized_fields_list_and_detail_page);
+    }
+
     if ($Spage == "artist-detail") {
       $artistId = $groupTypeId;
       // Fetch artist details from the database
@@ -64,7 +71,7 @@ class AjaxRequestsController extends ControllerBase
 
       // Construct the WHERE clause for LIKE condition on multiple fields
       $where_conditions = new Condition('OR');
-      foreach ($customized_fields_array as $field) {
+      foreach ($customized_fields_list_and_detail_page_array as $field) {
         $where_conditions->condition($field, '%' . $qSearch . '%', 'LIKE');
       }
 
@@ -130,13 +137,14 @@ class AjaxRequestsController extends ControllerBase
           $AddressName = $object->AddressName;
           $main_image_attachment = $object->main_image_attachment;
           $main_image_path = $object->main_image_path;
+          $object_id = $object->ObjectId;
           $locations_data =  [
             "latitude" => $Latitude,
             "longitude" => $Longitude,
             "AddressName" => $AddressName,
             "main_image_attachment" => base64_encode($main_image_attachment),
             "main_image_path" => $main_image_path,
-
+            "object_detail_url" => '/artobject-detail?dataId='. $object_id,
           ];
           if($Latitude && $Longitude){
             foreach($customized_fields_array as $customized_field){
@@ -162,7 +170,7 @@ class AjaxRequestsController extends ControllerBase
 
       // Construct the WHERE clause for LIKE condition on multiple fields
       $where_conditions = new Condition('OR');
-      foreach ($customized_fields_array as $field) {
+      foreach ($customized_fields_list_and_detail_page_array as $field) {
         $where_conditions->condition($field, '%' . $qSearch . '%', 'LIKE');
       }
 
@@ -231,12 +239,14 @@ class AjaxRequestsController extends ControllerBase
           $AddressName = $object->AddressName;
           $main_image_attachment = $object->main_image_attachment;
           $main_image_path = $object->main_image_path;
+          $object_id = $object->ObjectId;
           $locations_data =  [
             "latitude" => $Latitude,
             "longitude" => $Longitude,
             "AddressName" => $AddressName,
             "main_image_attachment" => base64_encode($main_image_attachment),
             "main_image_path" => $main_image_path,
+            "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
           ];
           if($Latitude && $Longitude){
@@ -336,12 +346,14 @@ class AjaxRequestsController extends ControllerBase
           $AddressName = $object->AddressName;
           $main_image_attachment = $object->main_image_attachment;
           $main_image_path = $object->main_image_path;
+          $object_id = $object->ObjectId;
           $locations_data =  [
             "latitude" => $Latitude,
             "longitude" => $Longitude,
             "AddressName" => $AddressName,
             "main_image_attachment" => base64_encode($main_image_attachment),
             "main_image_path" => $main_image_path,
+            "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
           ];
           if($Latitude && $Longitude){
@@ -437,13 +449,14 @@ class AjaxRequestsController extends ControllerBase
           $AddressName = $object->AddressName;
           $main_image_attachment = $object->main_image_attachment;
           $main_image_path = $object->main_image_path;
+          $object_id = $object->ObjectId;
           $locations_data =  [
             "latitude" => $Latitude,
             "longitude" => $Longitude,
             "AddressName" => $AddressName,
             "main_image_attachment" => base64_encode($main_image_attachment),
             "main_image_path" => $main_image_path,
-
+            "object_detail_url" => '/artobject-detail?dataId='. $object_id,
           ];
           if($Latitude && $Longitude){
             foreach($customized_fields_array as $customized_field){
@@ -489,6 +502,29 @@ class AjaxRequestsController extends ControllerBase
     $values = implode(',', array_keys($result));
 
     return $values;
+  }
+
+  public function getCommaSeparatedFieldsForListAndDetailPage(){
+    $db = \Drupal::database();
+
+    $tblnm = "clsobjects_fields";
+    $settblnm = $tblnm;
+
+    $query = $db->select($settblnm, 'c')
+      ->fields('c', ['fieldname']);
+    // Create a Condition object for OR logic
+    $orCondition = new Condition('OR');
+    $orCondition->condition('fieldtype', 'ObjectList');
+    $orCondition->condition('fieldtype', 'Objectdetail');
+    $query->condition($orCondition);
+
+
+    $result = $query->execute()->fetchAllAssoc('fieldname');
+
+    $values = implode(',', array_keys($result));
+
+    return $values;
+
   }
 
   function query_sort_objects_list($groupLevelOrderBy, $qSearch, $query){

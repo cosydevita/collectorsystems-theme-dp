@@ -137,12 +137,15 @@ class PageTemplatesController extends ControllerBase
       $AddressName = $object->AddressName;
       $main_image_attachment = $object->main_image_attachment;
       $main_image_path = $object->main_image_path;
+      $object_id = $object->ObjectId;
+
       $locations_data =  [
         "latitude" => $Latitude,
         "longitude" => $Longitude,
         "AddressName" => $AddressName,
         "main_image_attachment" => base64_encode($main_image_attachment),
         "main_image_path" => $main_image_path,
+        "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
       ];
       if($Latitude && $Longitude){
@@ -602,12 +605,14 @@ class PageTemplatesController extends ControllerBase
       $AddressName = $object->AddressName;
       $main_image_attachment = $object->main_image_attachment;
       $main_image_path = $object->main_image_path;
+      $object_id = $object->ObjectId;
       $locations_data =  [
         "latitude" => $Latitude,
         "longitude" => $Longitude,
         "AddressName" => $AddressName,
         "main_image_attachment" => base64_encode($main_image_attachment),
         "main_image_path" => $main_image_path,
+        "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
       ];
       if($Latitude && $Longitude){
@@ -814,12 +819,14 @@ class PageTemplatesController extends ControllerBase
       $AddressName = $object->AddressName;
       $main_image_attachment = $object->main_image_attachment;
       $main_image_path = $object->main_image_path;
+      $object_id = $object->ObjectId;
       $locations_data =  [
         "latitude" => $Latitude,
         "longitude" => $Longitude,
         "AddressName" => $AddressName,
         "main_image_attachment" => base64_encode($main_image_attachment),
         "main_image_path" => $main_image_path,
+        "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
       ];
       if($Latitude && $Longitude){
@@ -952,12 +959,14 @@ class PageTemplatesController extends ControllerBase
        $AddressName = $object->AddressName;
        $main_image_attachment = $object->main_image_attachment;
        $main_image_path = $object->main_image_path;
+       $object_id = $object->ObjectId;
        $locations_data =  [
          "latitude" => $Latitude,
          "longitude" => $Longitude,
          "AddressName" => $AddressName,
          "main_image_attachment" => base64_encode($main_image_attachment),
          "main_image_path" => $main_image_path,
+         "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
        ];
        if($Latitude && $Longitude){
@@ -1092,12 +1101,14 @@ class PageTemplatesController extends ControllerBase
         $AddressName = $object->AddressName;
         $main_image_attachment = $object->main_image_attachment;
         $main_image_path = $object->main_image_path;
+        $object_id = $object->ObjectId;
         $locations_data =  [
           "latitude" => $Latitude,
           "longitude" => $Longitude,
           "AddressName" => $AddressName,
           "main_image_attachment" => base64_encode($main_image_attachment),
           "main_image_path" => $main_image_path,
+          "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
         ];
         if($Latitude && $Longitude){
@@ -1223,12 +1234,14 @@ class PageTemplatesController extends ControllerBase
       $AddressName = $object->AddressName;
       $main_image_attachment = $object->main_image_attachment;
       $main_image_path = $object->main_image_path;
+      $object_id = $object->ObjectId;
       $locations_data =  [
         "latitude" => $Latitude,
         "longitude" => $Longitude,
         "AddressName" => $AddressName,
         "main_image_attachment" => base64_encode($main_image_attachment),
         "main_image_path" => $main_image_path,
+        "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
       ];
       if($Latitude && $Longitude){
