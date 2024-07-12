@@ -616,9 +616,9 @@ class PageTemplatesController extends ControllerBase
 
       ];
       if($Latitude && $Longitude){
-        foreach($customized_fields_array as $customized_field){
-          $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
-        }
+        //only display image, title and Inventory in pin-popup  Number for the detail page
+        $locations_data['data_selected_fields']['Title'] = $object->Title;
+        $locations_data['data_selected_fields']['InventoryNumber'] = $object->InventoryNumber;
         $locations[] =  $locations_data;
       }
     }

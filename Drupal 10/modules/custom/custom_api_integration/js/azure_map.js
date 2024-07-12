@@ -128,11 +128,21 @@ function initializeMap() {
     ];
 
     // Set the map's view to fit the bounding box
-    map.setCamera({
-      center: center,
-      bounds: [minLongitude, minLatitude, maxLongitude, maxLatitude],
-      padding: 50, // Optional: padding around the bounding box
-    });
+    const total_objects = Object.keys(groupedLocations).length;
+    if(total_objects == 1){
+      map.setCamera({
+        center: center,
+        zoom: 15,
+      });
+
+    }else{
+      map.setCamera({
+        center: center,
+        bounds: [minLongitude, minLatitude, maxLongitude, maxLatitude],
+        padding: 50, // Optional: padding around the bounding box
+      });
+    }
+
   });
 }
 
