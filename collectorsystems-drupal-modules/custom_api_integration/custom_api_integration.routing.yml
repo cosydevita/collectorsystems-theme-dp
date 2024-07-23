@@ -20,5 +20,10 @@ custom_api_integration.group_level_objects_searching_page:
     _title: 'Group Level Objects Searching Page'
   requirements:
     _permission: 'access content'
-
-
+custom_api_integration.azure_map_form:
+  path: '/admin/config/custom_api_integration/azure_map'
+  defaults:
+    _form: '\Drupal\custom_api_integration\Form\AzureMapSettingsForm'
+    _title: 'Azure Map'
+  requirements:
+    _permission: 'administer site configuration'

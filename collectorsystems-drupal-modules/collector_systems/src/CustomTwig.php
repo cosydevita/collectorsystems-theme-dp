@@ -113,7 +113,7 @@ class CustomTwig extends AbstractExtension {
     $sortBy =rawurlencode($sortBy);
 
     $request = \Drupal::request();
-    $baseUrl = $request->getRequestUri();
+    $baseUrl = $request->getBasePath();
     $pagingUrl = "";
     if(!empty($sortBy) && empty($qSearch))
     {

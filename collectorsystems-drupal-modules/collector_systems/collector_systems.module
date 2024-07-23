@@ -23,7 +23,8 @@ function collector_systems_theme() {
         'dataorderby' => NULL,
         'current_page' => NULL,
         'requested_pageNo' => NULL,
-        'qSearch' => NULL
+        'qSearch' => NULL,
+        'module_path' => NULL
       ],
     ],
     'artists-list-page' => [
@@ -38,7 +39,8 @@ function collector_systems_theme() {
         'qSearch' => NULL,
         'loadsec' => NULL,
         'requested_page' => NULL,
-        'collector_systems_module_path' => NULL
+        'collector_systems_module_path' => NULL,
+        'module_path' => NULL
       ],
     ],
     'exhibitions-list-page' => [
@@ -52,6 +54,7 @@ function collector_systems_theme() {
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
+        'module_path' => NULL
       ],
     ],
     'groups-list-page' => [
@@ -65,6 +68,7 @@ function collector_systems_theme() {
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
+        'module_path' => NULL
       ],
     ],
     'collections-list-page' => [
@@ -78,7 +82,8 @@ function collector_systems_theme() {
         'requested_page' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
-        'site_url' => NULL
+        'site_url' => NULL,
+        'module_path' => NULL
       ],
     ],
     'artobject-detail-page' => [
@@ -93,6 +98,7 @@ function collector_systems_theme() {
         'sortBy' =>NULL,
         'qSearch' => NULL,
         'requested_pageNo' => NULL,
+        'module_path' => NULL
       ],
     ],
     'artist-detail-page' => [
@@ -109,7 +115,8 @@ function collector_systems_theme() {
         'object_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
-        'collector_systems_module_path' => NULL
+        'collector_systems_module_path' => NULL,
+        'module_path' => NULL
       ],
     ],
     'exhibition-detail-page' => [
@@ -126,6 +133,7 @@ function collector_systems_theme() {
         'exhibition_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
+        'module_path' => NULL
       ],
     ],
     'group-detail-page' => [
@@ -143,6 +151,7 @@ function collector_systems_theme() {
         'group_object_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
+        'module_path' => NULL
       ],
     ],
     'collection-detail-page' => [
@@ -159,6 +168,7 @@ function collector_systems_theme() {
         'collection_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
+        'module_path' => NULL
       ],
     ],
 

@@ -16,3 +16,9 @@ collector_systems.api_dashboard:
   description: 'API Dashbopard to sync the API data to database'
   parent: collector_systems.menu
   weight: 2
+collector_systems.azure_map:
+  title: 'Azure Map Settings'
+  route_name: custom_api_integration.azure_map_form
+  description: 'Azure Map Settings'
+  parent: collector_systems.menu
+  weight: 6
