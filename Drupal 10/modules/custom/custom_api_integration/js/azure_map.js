@@ -68,13 +68,13 @@ function initializeMap() {
 
         if (main_image_path) {
           html_object_main_image =
-            '<img width="200" src="' + main_image_path + '">';
+            '<img class="object-image" width="100" src="' + main_image_path + '">';
         } else if (main_image_attachment) {
           let object_img = "data:image/jpeg;base64," + main_image_attachment;
-          html_object_main_image = '<img width="200" src="' + object_img + '">';
+          html_object_main_image = '<img class="object-image" width="100" src="' + object_img + '">';
         } else {
           html_object_main_image =
-            '<img width="200" src="' +
+            '<img class="object-image" width="100" src="' +
             module_path +
             "/images/noimage300.png" +
             '">';
@@ -103,7 +103,9 @@ function initializeMap() {
         '/images/map-marker.svg">' +
         location.AddressName +
         "</div>";
-        popup_html += '<a href="'+location.object_detail_url+'" class="btn-learn-more">Learn More <img class="arrow-icon" src="' + module_path+'/images/right-arrow.svg'+'" /> </a>';
+        if (!window.location.href.includes("artobject-detail")) {
+          popup_html += '<a href="'+location.object_detail_url+'" class="btn-learn-more">Learn More <img class="arrow-icon" src="' + module_path+'/images/right-arrow.svg'+'" /> </a>';
+        }
         popup_html += "</div></div>";
       });
 
@@ -156,8 +158,6 @@ function destroyMap() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", initializeMap);
-
 function dmsToDecimal(dms) {
   const parts = dms.match(/(\d+)[°]\s(\d+)[′]\s([\d.]+)[″]\s([NSEW])/);
 
@@ -182,6 +182,8 @@ function dmsToDecimal(dms) {
 }
 
 jQuery(document).ready(function ($) {
+  initializeMap()
+
   $(".custom-tabs-wrapper button.map").click(function () {
     $(".custom-tabs-wrapper button").removeClass("active");
     $(this).addClass("active");
@@ -199,6 +201,9 @@ jQuery(document).ready(function ($) {
     $("#gallery-block").show();
     $("#azure-map-block").hide();
   });
+
+  $("#azure-map-block #locateMeButton").on("click", locateMe);
+
 });
 
 //For Group level objects searching page, after the search re-initialize the map with the new searched data
@@ -214,9 +219,6 @@ jQuery(document).ajaxComplete(function (event, xhr, options) {
   }
 });
 
-document
-  .querySelector("#azure-map-block #locateMeButton")
-  .addEventListener("click", locateMe);
 
 function locateMe() {
   if (navigator.geolocation) {

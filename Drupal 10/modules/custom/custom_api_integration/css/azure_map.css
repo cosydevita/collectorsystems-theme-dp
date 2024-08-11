@@ -12,6 +12,9 @@
   flex-direction: column;
   gap: 25px;
 }
+.location-popup-content .object-image{
+  max-width: 100px;
+}
 .location-popup-content  .location-item{
   display: flex;
   flex-direction: row;
@@ -83,7 +86,9 @@
   padding: 10px;
 }
 #azure-map-block #locateMeButton{
+  display: flex;
   padding: 10px 20px !important;
+  align-items: center;
   text-align: center;
 }
 #azure-map-block .locate-me-icon{
