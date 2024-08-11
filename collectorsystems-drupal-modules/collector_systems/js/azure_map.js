@@ -68,13 +68,13 @@ function initializeMap() {
 
         if (main_image_path) {
           html_object_main_image =
-            '<img width="200" src="' + main_image_path + '">';
+            '<img class="object-image" width="100" src="' + main_image_path + '">';
         } else if (main_image_attachment) {
           let object_img = "data:image/jpeg;base64," + main_image_attachment;
-          html_object_main_image = '<img width="200" src="' + object_img + '">';
+          html_object_main_image = '<img class="object-image" width="100" src="' + object_img + '">';
         } else {
           html_object_main_image =
-            '<img width="200" src="' +
+            '<img class="object-image" width="100" src="' +
             module_path +
             "/images/noimage300.png" +
             '">';

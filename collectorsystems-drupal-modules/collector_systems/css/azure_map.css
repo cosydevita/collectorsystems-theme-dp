@@ -7,6 +7,9 @@
   white-space: normal;
   padding-top: 48px;
 }
+.location-popup-content .object-image{
+  max-width: 100px;
+}
 .location-popup-content   .location-list {
   display: flex;
   flex-direction: column;
