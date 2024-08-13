@@ -18,8 +18,10 @@
 		</div>
 	</div>
 
-  {# Custom Tabs Block #}
-  {% include module_path ~ '/templates/partials/custom-tabs-block.html.twig' %}
+  {% if enable_maps %}
+    {# Custom Tabs Block #}
+    {% include module_path ~ '/templates/partials/custom-tabs-block.html.twig' %}
+  {% endif %}
 
 	<div id="gallery-block" class="container-xxl py-5">
 		<div class="row mb-3">
@@ -66,9 +68,10 @@
 		</div>
 	</div>
 
-  {# Azure Map Block #}
-  {% include module_path ~ '/templates/partials/azure-map-block.html.twig' %}
-
+  {% if enable_maps %}
+    {# Azure Map Block #}
+    {% include module_path ~ '/templates/partials/azure-map-block.html.twig' %}
+  {% endif %}
 </div>
 
 

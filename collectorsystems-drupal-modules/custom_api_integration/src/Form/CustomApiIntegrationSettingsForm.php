@@ -5,8 +5,6 @@ namespace Drupal\custom_api_integration\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\custom_api_integration\Csconstants;
-use Drupal\Core\Database\Database;
-use Drupal\Core\StreamWrapper\PublicStream;
 
 class CustomApiIntegrationSettingsForm extends ConfigFormBase {
 
@@ -46,6 +44,12 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Show Field Labels on Detail'),
       '#default_value' => $config->get('show_field_labels'),
+    ];
+
+    $form['enable_maps'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Maps'),
+      '#default_value' => $config->get('enable_maps'),
     ];
 
     $form['enable_zoom'] = [
@@ -114,6 +118,7 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       ->set('account_guid', $form_state->getValue('account_guid'))
       ->set('subscription_id', $form_state->getValue('subscription_id'))
       ->set('show_field_labels', $form_state->getValue('show_field_labels'))
+      ->set('enable_maps', $form_state->getValue('enable_maps'))
       ->set('enable_zoom', $form_state->getValue('enable_zoom'))
       ->set('filter_keywords', $form_state->getValue('filter_keywords'))
       ->set('items_per_page', $form_state->getValue('items_per_page'))

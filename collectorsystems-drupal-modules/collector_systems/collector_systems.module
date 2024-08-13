@@ -24,7 +24,8 @@ function collector_systems_theme() {
         'current_page' => NULL,
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
     'artists-list-page' => [
@@ -98,7 +99,8 @@ function collector_systems_theme() {
         'sortBy' =>NULL,
         'qSearch' => NULL,
         'requested_pageNo' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
     'artist-detail-page' => [
@@ -116,7 +118,8 @@ function collector_systems_theme() {
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
         'collector_systems_module_path' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
     'exhibition-detail-page' => [
@@ -133,7 +136,8 @@ function collector_systems_theme() {
         'exhibition_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
     'group-detail-page' => [
@@ -151,7 +155,8 @@ function collector_systems_theme() {
         'group_object_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
     'collection-detail-page' => [
@@ -168,7 +173,8 @@ function collector_systems_theme() {
         'collection_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
 
