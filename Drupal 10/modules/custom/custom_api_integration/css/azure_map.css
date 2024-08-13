@@ -56,7 +56,8 @@
 }
 .location-popup-content .location-name{
   margin-top: 10px;
-
+  display: flex;
+  align-items: center;
 }
 .location-popup-content .btn-learn-more:hover{
   background-color: #dedede;

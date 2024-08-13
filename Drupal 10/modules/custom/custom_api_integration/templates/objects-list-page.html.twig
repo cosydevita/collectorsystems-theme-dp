@@ -4,8 +4,10 @@
 <input type="hidden" value="{{ dataorderby }}" id="dataorderby"/>
 <div class="container-xxl py-5">
 
+{% if enable_maps %}
   {# Custom Tabs Block #}
   {% include module_path ~ '/templates/partials/custom-tabs-block.html.twig' %}
+{% endif %}
 
   <div id="gallery-block" class="container wow fadeInDown" data-wow-delay="0.1s">
       <div class="row mb-3">
@@ -54,9 +56,10 @@
       {{ customPaginationForTopLevelTabs(current_page, requested_pageNo, count, dataorderby, qSearch) }}
   </div>
 
-
-  {# Azure Map Block #}
-  {% include module_path ~ '/templates/partials/azure-map-block.html.twig' %}
+  {% if enable_maps %}
+    {# Azure Map Block #}
+    {% include module_path ~ '/templates/partials/azure-map-block.html.twig' %}
+  {% endif %}
 
 
 </div>

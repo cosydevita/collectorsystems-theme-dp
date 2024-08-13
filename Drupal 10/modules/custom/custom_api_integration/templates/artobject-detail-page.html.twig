@@ -129,10 +129,12 @@
                     {{ GetCustomizedObjectDetailsForTheme(object_field, "",object_details[row_number])}}
                 {% endfor %}
 
+                {% if enable_maps %}
                   <div class="map-wrapper-object-details-page">
                     {# Azure Map Block #}
                     {% include module_path ~ '/templates/partials/azure-map-block.html.twig' %}
                   </div>
+                {% endif %}
 
             </div>
         </div>

@@ -109,7 +109,8 @@ function custom_api_integration_theme() {
         'current_page' => NULL,
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
     'artists-list-page' => [
@@ -178,7 +179,8 @@ function custom_api_integration_theme() {
         'sortBy' =>NULL,
         'qSearch' => NULL,
         'requested_pageNo' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
     'artist-detail-page' => [
@@ -190,13 +192,13 @@ function custom_api_integration_theme() {
         'groupLevelOrderBy' => NULL,
         'groupLevelPageNo' => NULL,
         'artist_details' => NULL,
-        'groupLevelPageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
     'exhibition-detail-page' => [
@@ -206,7 +208,6 @@ function custom_api_integration_theme() {
         'obj_count' => NULL,
         'groupLevelOrderBy' => NULL,
         'groupLevelPageNo' => NULL,
-        'groupLevelPageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
@@ -214,7 +215,8 @@ function custom_api_integration_theme() {
         'exhibition_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
     'group-detail-page' => [
@@ -224,7 +226,6 @@ function custom_api_integration_theme() {
         'obj_count' => NULL,
         'groupLevelOrderBy' => NULL,
         'groupLevelPageNo' => NULL,
-        'groupLevelPageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
@@ -233,7 +234,8 @@ function custom_api_integration_theme() {
         'group_object_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
     'collection-detail-page' => [
@@ -243,7 +245,6 @@ function custom_api_integration_theme() {
         'obj_count' => NULL,
         'groupLevelOrderBy' => NULL,
         'groupLevelPageNo' => NULL,
-        'groupLevelPageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
@@ -251,7 +252,8 @@ function custom_api_integration_theme() {
         'collection_details' => NULL,
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'enable_maps' => NULL
       ],
     ],
     'azure-map-page' =>[
