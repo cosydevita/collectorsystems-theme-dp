@@ -90,6 +90,7 @@ class CollectorSystemsCollections extends BlockBase {
       $all_collections = $result->fetchAll();
 
       $base_url_with_scheme = \Drupal::request()->getSchemeAndHttpHost();
+      $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
 
     $build = [
       '#theme' => 'collections-list-page',
@@ -103,6 +104,7 @@ class CollectorSystemsCollections extends BlockBase {
       '#loadsec' => $loadsec,
       '#requested_page' => $requested_page,
       '#site_url' => $base_url_with_scheme,
+      '#showImagesOnListPages' => $showImagesOnListPages,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];

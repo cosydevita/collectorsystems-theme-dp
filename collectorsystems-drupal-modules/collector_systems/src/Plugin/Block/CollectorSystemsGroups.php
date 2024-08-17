@@ -109,7 +109,7 @@ class CollectorSystemsGroups extends BlockBase {
 
     $all_groups = $fetch_groups_record;
 
-
+    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
     $build = [
       '#theme' => 'groups-list-page',
       '#all_groups' => $all_groups,
@@ -121,6 +121,7 @@ class CollectorSystemsGroups extends BlockBase {
       '#qSearch' => $qSearch,
       '#loadsec' => $loadsec,
       '#requested_pageNo' => $requested_pageNo,
+      '#showImagesOnListPages' => $showImagesOnListPages,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];

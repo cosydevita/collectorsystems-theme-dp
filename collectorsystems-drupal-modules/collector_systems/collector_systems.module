@@ -55,7 +55,8 @@ function collector_systems_theme() {
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'showImagesOnListPages' => NULL
       ],
     ],
     'groups-list-page' => [
@@ -69,7 +70,8 @@ function collector_systems_theme() {
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'showImagesOnListPages' => NULL
       ],
     ],
     'collections-list-page' => [
@@ -84,7 +86,8 @@ function collector_systems_theme() {
         'qSearch' => NULL,
         'loadsec' => NULL,
         'site_url' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'showImagesOnListPages' => NULL
       ],
     ],
     'artobject-detail-page' => [

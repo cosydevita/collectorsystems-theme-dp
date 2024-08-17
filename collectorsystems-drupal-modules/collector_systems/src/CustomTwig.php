@@ -44,9 +44,11 @@ class CustomTwig extends AbstractExtension {
     //echo "field:" .$customized_fields;
     $customized_fields_array = explode(',', $customized_fields);
     $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
+    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
     ?>
 
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
+                  <?php if($showImagesOnListPages == 1){ ?>
                     <div class="card-body d-flex flex-column">
                         <a href="<?php echo $object_detail_link; ?>">
                                 <?php
@@ -80,6 +82,7 @@ class CustomTwig extends AbstractExtension {
                                     ?>
                     </a>
                     </div>
+                  <?php } ?>
                     <div class="card-footer text-muted">
                         <?php
 
@@ -332,8 +335,10 @@ class CustomTwig extends AbstractExtension {
   $customized_fields_array = explode(',', $customized_fields);
   $site_url = \Drupal::request()->getSchemeAndHttpHost();
   $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
+  $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
     ?>
    <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
+                <?php if($showImagesOnListPages == 1){ ?>
                   <div class="card-body d-flex flex-column">
                       <a href="<?php echo $object_detail_link; ?> " >
                               <?php
@@ -365,6 +370,7 @@ class CustomTwig extends AbstractExtension {
 
                   </a>
                   </div>
+                <?php } ?>
                   <div class="card-footer text-muted">
                       <?php
 
@@ -409,9 +415,11 @@ class CustomTwig extends AbstractExtension {
     $site_url = \Drupal::request()->getSchemeAndHttpHost();
 
     $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
+    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
 
     ?>
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
+                <?php if($showImagesOnListPages == 1){ ?>
                   <div class="card-body d-flex flex-column">
                       <a href="<?php echo $object_detail_link; ?>" >
                               <?php
@@ -441,6 +449,7 @@ class CustomTwig extends AbstractExtension {
 
                   </a>
                   </div>
+                <?php } ?>
                   <div class="card-footer text-muted">
                       <?php
 

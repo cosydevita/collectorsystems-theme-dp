@@ -38,22 +38,24 @@
                       set delaytm = (loadsec == 1 ? '0.01s' : (loadsec == 2 ? '0.03s' : '0.05s'))
                   %}
 					<div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 wow fadeInDown" data-wow-delay="{{ delaytm }}">
-						<div class="card-body d-flex flex-column">
-							<a href="javascript:;" onclick="return getmoredetailsForExhibition('{{ site_url }}', {{ exhibi.ExhibitionId }})">
-								{%
-                                  set exbi_img = exhibi.ExhibitionImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(exhibi.ExhibitionImageAttachment) : exhibi.ImagePath
+            {% if (showImagesOnListPages) %}
+              <div class="card-body d-flex flex-column">
+                <a href="javascript:;" onclick="return getmoredetailsForExhibition('{{ site_url }}', {{ exhibi.ExhibitionId }})">
+                  {%
+                                    set exbi_img = exhibi.ExhibitionImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(exhibi.ExhibitionImageAttachment) : exhibi.ImagePath
 
-                              %}
-								{% set relative_path = exbi_img ? exbi_img : '' %}
-								{% set image_url = relative_path ? relative_path : '' %}
-								{% set altText = exhibi.ExhibitionSubject is not empty ? exhibi.ExhibitionSubject : 'Image description is not available' %}
-								{% if not exbi_img and not relative_path %}
-									<img class="img-fluid" src="https://cdn.collectorsystems.com/images/noimage300.png" alt="{{ altText }}"/>
-								{% else %}
-									<img class="img-fluid" src="{{ exbi_img ? exbi_img : image_url }}" alt="{{ altText }}"/>
-								{% endif %}
-							</a>
-						</div>
+                                %}
+                  {% set relative_path = exbi_img ? exbi_img : '' %}
+                  {% set image_url = relative_path ? relative_path : '' %}
+                  {% set altText = exhibi.ExhibitionSubject is not empty ? exhibi.ExhibitionSubject : 'Image description is not available' %}
+                  {% if not exbi_img and not relative_path %}
+                    <img class="img-fluid" src="https://cdn.collectorsystems.com/images/noimage300.png" alt="{{ altText }}"/>
+                  {% else %}
+                    <img class="img-fluid" src="{{ exbi_img ? exbi_img : image_url }}" alt="{{ altText }}"/>
+                  {% endif %}
+                </a>
+              </div>
+            {% endif %}
 						<div class="card-footer text-muted">
 							<a href="javascript:;" onclick="return getmoredetailsForExhibition('{{ site_url }}', {{ exhibi.ExhibitionId }})">
 								<h5 class="card-title font-normal">{{ exhibi.ExhibitionSubject }}</h5>
