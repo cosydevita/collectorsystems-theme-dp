@@ -39,7 +39,7 @@ class CollectorSystemsExhibitions extends BlockBase {
     $shskip =   0;
     $ajaxfor=   "listexhibition";
     $current_page=   "exhibitions";
-    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "ExhibitionSubject%20desc";
+    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "ExhibitionSubject%20asc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
 
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;

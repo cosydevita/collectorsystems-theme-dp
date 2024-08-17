@@ -39,7 +39,7 @@ class CollectorSystemsGroups extends BlockBase {
     $shskip =   0;
     $ajaxfor=   "listgroup";
     $current_page=   "groups";
-    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "GroupDescription%20desc";
+    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "GroupDescription%20asc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
 
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;

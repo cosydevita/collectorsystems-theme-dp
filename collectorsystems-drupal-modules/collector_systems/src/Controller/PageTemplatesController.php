@@ -257,7 +257,7 @@ class PageTemplatesController extends ControllerBase
     $query = $connection->select($object_table, 'o')
       ->fields('o') // Specify the fields you want to select
       ->condition('o.ArtistId', $artistId);
-    $query->orderBy('Title', 'DESC');
+    $query->orderBy('Title', 'ASC');
 
 
     if ($qSearch !== NULL && count($customized_fields_array)>0) {
@@ -403,7 +403,7 @@ class PageTemplatesController extends ControllerBase
     $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
     $query->fields('co');
     $query->condition('eo.ExhibitionId', $exhibitionID);
-    $query->orderBy('Title', 'DESC');
+    $query->orderBy('Title', 'ASC');
 
     $result = $query->execute();
 
@@ -551,7 +551,7 @@ class PageTemplatesController extends ControllerBase
     $query->condition('eo.GroupId', $groupID);
     $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
     $query->fields('co');
-    $query->orderBy('Title', 'DESC');
+    $query->orderBy('Title', 'ASC');
 
 
     $group_object_details = $query->execute()->fetchAllAssoc('ObjectId');
@@ -688,7 +688,7 @@ class PageTemplatesController extends ControllerBase
 
     // Add limits.
     $query->range($shskip, $showrec);
-    $query->orderBy('Title', 'DESC');
+    $query->orderBy('Title', 'ASC');
 
     $object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
