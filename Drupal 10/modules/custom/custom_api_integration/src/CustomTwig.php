@@ -43,42 +43,47 @@ class CustomTwig extends AbstractExtension {
 
     //echo "field:" .$customized_fields;
     $customized_fields_array = explode(',', $customized_fields);
+    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
     ?>
 
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
+                  <?php if($showImagesOnListPages == 1){ ?>
                     <div class="card-body d-flex flex-column">
                         <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId'] ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)">
                                 <?php
-                                $main_image_attachment_description = isset($value['main_image_attachment_description']) && $value['main_image_attachment_description'] !== ''
-                                ? $value['main_image_attachment_description']
-                                : 'Image description is not available.';
 
-                                $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
-                                $server_path = $value['main_image_path'];
-                                if($server_path){
-                                  $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
-                                }
-                                else{
-                                  $relative_path = '';
-                                }
-                                $image_url = \Drupal::request()->getSchemeAndHttpHost() . "/" .  $relative_path;
-                                if(empty($object_img) && empty($server_path)){
-                                ?>
-                                    <img class="img-fluid" src="<?php echo $default_image_url; ?>" alt="<?php echo $main_image_attachment_description ?>"/>
-                                    <?php } else {
-                                    if (empty($server_path)) {
-                                    ?>
-                                    <img class="img-fluid" src="<?php echo $object_img; ?>" alt="<?php echo $main_image_attachment_description ?>"/>
-                                    <?php
-                                    } else {
-                                    ?>
-                                    <img class="img-fluid" src="<?php echo $image_url; ?>" alt="<?php echo $main_image_attachment_description ?>"/>
-                                    <?php
-                                    }
-                                    }
+                                  $main_image_attachment_description = isset($value['main_image_attachment_description']) && $value['main_image_attachment_description'] !== ''
+                                  ? $value['main_image_attachment_description']
+                                  : 'Image description is not available.';
+
+                                  $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
+                                  $server_path = $value['main_image_path'];
+                                  if($server_path){
+                                    $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
+                                  }
+                                  else{
+                                    $relative_path = '';
+                                  }
+                                  $image_url = \Drupal::request()->getSchemeAndHttpHost() . "/" .  $relative_path;
+                                  if(empty($object_img) && empty($server_path)){
+                                  ?>
+                                      <img class="img-fluid" src="<?php echo $default_image_url; ?>" alt="<?php echo $main_image_attachment_description ?>"/>
+                                      <?php } else {
+                                      if (empty($server_path)) {
+                                      ?>
+                                      <img class="img-fluid" src="<?php echo $object_img; ?>" alt="<?php echo $main_image_attachment_description ?>"/>
+                                      <?php
+                                      } else {
+                                      ?>
+                                      <img class="img-fluid" src="<?php echo $image_url; ?>" alt="<?php echo $main_image_attachment_description ?>"/>
+                                      <?php
+                                      }
+                                      }
+
                                     ?>
                     </a>
                     </div>
+                  <?php } ?>
                     <div class="card-footer text-muted">
                         <?php
 
@@ -333,40 +338,45 @@ class CustomTwig extends AbstractExtension {
 
   $customized_fields_array = explode(',', $customized_fields);
   $site_url = \Drupal::request()->getSchemeAndHttpHost();
+  $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
 
     ?>
    <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
+                <?php if($showImagesOnListPages == 1){ ?>
                   <div class="card-body d-flex flex-column">
                       <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId'] ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)">
                               <?php
-                               $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
-                              $server_path = $value['ObjectImagePath'];
-                              if($server_path){
-                                $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
-                              }
-                              else{
-                                $relative_path = '';
-                              }
 
-                              $image_url = $site_url. "/". $relative_path;
-                              if(empty($object_img) && empty($server_path)){
-                              ?>
-                                  <img class="img-fluid" src="<?php echo $default_image_url; ?>" alt=""/>
-                                  <?php } else {
-                                  if (empty($server_path)) {
-                                  ?>
-                                  <img class="img-fluid" src="<?php echo $object_img; ?>" alt=""/>
-                                  <?php
-                                  } else {
-                                  ?>
-                                  <img class="img-fluid" src="<?php echo $image_url; ?>" alt=""/>
-                                  <?php
-                                  }
-                                  }
+                                $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
+                                $server_path = $value['ObjectImagePath'];
+                                if($server_path){
+                                  $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
+                                }
+                                else{
+                                  $relative_path = '';
+                                }
+
+                                $image_url = $site_url. "/". $relative_path;
+                                if(empty($object_img) && empty($server_path)){
+                                ?>
+                                    <img class="img-fluid" src="<?php echo $default_image_url; ?>" alt=""/>
+                                    <?php } else {
+                                    if (empty($server_path)) {
+                                    ?>
+                                    <img class="img-fluid" src="<?php echo $object_img; ?>" alt=""/>
+                                    <?php
+                                    } else {
+                                    ?>
+                                    <img class="img-fluid" src="<?php echo $image_url; ?>" alt=""/>
+                                    <?php
+                                    }
+                                    }
+
                                   ?>
 
                   </a>
                   </div>
+                <?php } ?>
                   <div class="card-footer text-muted">
                       <?php
 
@@ -410,10 +420,12 @@ class CustomTwig extends AbstractExtension {
 
     $site_url = \Drupal::request()->getSchemeAndHttpHost();
 
+    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
 
 
     ?>
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
+              <?php if($showImagesOnListPages == 1){ ?>
                   <div class="card-body d-flex flex-column">
                       <a href="javascript:;" onclick="return getmoredetails(<?php echo $value['ObjectId'] ?>,'<?php echo $dataOrderBy ?>','<?php echo $dataSearch ?>',<?php echo $datapageNo ?>)">
                               <?php
@@ -443,6 +455,7 @@ class CustomTwig extends AbstractExtension {
 
                   </a>
                   </div>
+                <?php } ?>
                   <div class="card-footer text-muted">
                       <?php
 

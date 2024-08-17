@@ -138,6 +138,7 @@ function custom_api_integration_theme() {
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
+        'showImagesOnListPages' => NULL
       ],
     ],
     'groups-list-page' => [
@@ -151,6 +152,7 @@ function custom_api_integration_theme() {
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
+        'showImagesOnListPages' => NULL
       ],
     ],
     'collections-list-page' => [
@@ -164,7 +166,8 @@ function custom_api_integration_theme() {
         'requested_page' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
-        'site_url' => NULL
+        'site_url' => NULL,
+        'showImagesOnListPages' => NULL
       ],
     ],
     'artobject-detail-page' => [

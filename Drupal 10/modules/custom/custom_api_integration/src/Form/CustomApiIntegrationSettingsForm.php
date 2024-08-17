@@ -45,6 +45,11 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Show Field Labels on Detail'),
       '#default_value' => $config->get('show_field_labels'),
     ];
+    $form['show_images_on_list_pages'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show Images on List Pages'),
+      '#default_value' => $config->get('show_images_on_list_pages'),
+    ];
 
     $form['enable_maps'] = [
       '#type' => 'checkbox',
@@ -123,6 +128,7 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       ->set('account_guid', $form_state->getValue('account_guid'))
       ->set('subscription_id', $form_state->getValue('subscription_id'))
       ->set('show_field_labels', $form_state->getValue('show_field_labels'))
+      ->set('show_images_on_list_pages', $form_state->getValue('show_images_on_list_pages'))
       ->set('enable_maps', $form_state->getValue('enable_maps'))
       ->set('enable_zoom', $form_state->getValue('enable_zoom'))
       ->set('filter_keywords', $form_state->getValue('filter_keywords'))

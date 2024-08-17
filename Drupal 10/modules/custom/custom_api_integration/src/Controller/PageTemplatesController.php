@@ -333,6 +333,7 @@ class PageTemplatesController extends ControllerBase
       $all_exhibitions = $result->fetchAll(\PDO::FETCH_OBJ);
 
 
+    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
 
     $build = [
       '#theme' => 'exhibitions-list-page',
@@ -345,6 +346,7 @@ class PageTemplatesController extends ControllerBase
       '#qSearch' => $qSearch,
       '#loadsec' => $loadsec,
       '#requested_pageNo' => $requested_pageNo,
+      '#showImagesOnListPages' => $showImagesOnListPages,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -439,7 +441,7 @@ class PageTemplatesController extends ControllerBase
 
     $all_groups = $fetch_groups_record;
 
-
+    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
     $build = [
       '#theme' => 'groups-list-page',
       '#all_groups' => $all_groups,
@@ -451,6 +453,7 @@ class PageTemplatesController extends ControllerBase
       '#qSearch' => $qSearch,
       '#loadsec' => $loadsec,
       '#requested_pageNo' => $requested_pageNo,
+      '#showImagesOnListPages' => $showImagesOnListPages,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -527,6 +530,8 @@ class PageTemplatesController extends ControllerBase
 
       $base_url_with_scheme = \Drupal::request()->getSchemeAndHttpHost();
 
+    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
+
     $build = [
       '#theme' => 'collections-list-page',
       '#all_collections' => $all_collections,
@@ -539,6 +544,7 @@ class PageTemplatesController extends ControllerBase
       '#loadsec' => $loadsec,
       '#requested_page' => $requested_page,
       '#site_url' => $base_url_with_scheme,
+      '#showImagesOnListPages' => $showImagesOnListPages,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];

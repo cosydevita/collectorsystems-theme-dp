@@ -31,6 +31,7 @@
                     set delaytm = (loadsec == 1 ? '0.01s' : (loadsec == 2 ? '0.03s' : '0.05s'))
                 %}
                 <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 wow fadeInDown" data-wow-delay="{{ delaytm }}">
+                  {% if (showImagesOnListPages) %}
                     <div class="card-body d-flex flex-column">
                         <a href="javascript:;" onclick="return getmoredetailsForExhibition('{{ site_url }}', {{ exhibi.ExhibitionId }})">
                             {%
@@ -49,6 +50,7 @@
                             {% endif %}
                         </a>
                     </div>
+                  {% endif %}
                     <div class="card-footer text-muted">
                         <a href="javascript:;" onclick="return getmoredetailsForExhibition('{{ site_url }}', {{ exhibi.ExhibitionId }})">
                             <h5 class="card-title font-normal">{{ exhibi.ExhibitionSubject }}</h5>
