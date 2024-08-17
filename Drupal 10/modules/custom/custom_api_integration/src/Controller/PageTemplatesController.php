@@ -26,7 +26,7 @@ class PageTemplatesController extends ControllerBase
     $shskip = 0;
     $ajaxfor = "artobjects";
     $current_page = "objects";
-    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
+    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20asc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
 
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
@@ -215,7 +215,7 @@ class PageTemplatesController extends ControllerBase
     $shskip = 0;
     $ajaxfor = "artist";
     $current_page = "artists";
-    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "ArtistName%20desc";
+    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "ArtistName%20asc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
 
     $requested_page = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
@@ -287,7 +287,7 @@ class PageTemplatesController extends ControllerBase
     $shskip =   0;
     $ajaxfor=   "listexhibition";
     $current_page=   "exhibitions";
-    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "ExhibitionSubject%20desc";
+    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "ExhibitionSubject%20asc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
 
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
@@ -369,7 +369,7 @@ class PageTemplatesController extends ControllerBase
     $shskip =   0;
     $ajaxfor=   "listgroup";
     $current_page=   "groups";
-    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "GroupDescription%20desc";
+    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "GroupDescription%20asc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
 
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
@@ -477,7 +477,7 @@ class PageTemplatesController extends ControllerBase
     $ajaxfor=   "listcollection";
 
     $current_page=   "collections";
-    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "FullCollectionName%20desc";
+    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "FullCollectionName%20asc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
 
     $requested_page = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
@@ -790,7 +790,7 @@ class PageTemplatesController extends ControllerBase
     $query = $connection->select($object_table, 'o')
       ->fields('o') // Specify the fields you want to select
       ->condition('o.ArtistId', $artistId);
-    $query->orderBy('Title', 'DESC');
+    $query->orderBy('Title', 'ASC');
 
 
     if ($qSearch !== NULL && count($customized_fields_array)>0) {
@@ -934,7 +934,7 @@ class PageTemplatesController extends ControllerBase
     $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
     $query->fields('co');
     $query->condition('eo.ExhibitionId', $exhibitionID);
-    $query->orderBy('Title', 'DESC');
+    $query->orderBy('Title', 'ASC');
 
     $result = $query->execute();
 
@@ -1081,7 +1081,7 @@ class PageTemplatesController extends ControllerBase
     $query->condition('eo.GroupId', $groupID);
     $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
     $query->fields('co');
-    $query->orderBy('Title', 'DESC');
+    $query->orderBy('Title', 'ASC');
 
 
     $group_object_details = $query->execute()->fetchAllAssoc('ObjectId');
@@ -1219,7 +1219,7 @@ class PageTemplatesController extends ControllerBase
 
     // Add limits.
     $query->range($shskip, $showrec);
-    $query->orderBy('Title', 'DESC');
+    $query->orderBy('Title', 'ASC');
 
     $object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
