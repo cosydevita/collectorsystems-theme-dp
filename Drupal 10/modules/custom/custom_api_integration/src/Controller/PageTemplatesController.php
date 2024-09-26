@@ -720,6 +720,8 @@ class PageTemplatesController extends ControllerBase
     }
 
     $module_path = \Drupal::service('extension.list.module')->getPath('custom_api_integration');
+    $enable_zoom =  \Drupal::config('custom_api_integration.settings')->get('enable_zoom');
+
 
     $build = [
       '#theme' => 'artobject-detail-page',
@@ -735,6 +737,7 @@ class PageTemplatesController extends ControllerBase
       '#requested_pageNo' => $requested_pageNo,
       '#module_path' => $module_path,
       '#enable_maps' => $enable_maps,
+      '#enable_zoom' => $enable_zoom,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -747,7 +750,8 @@ class PageTemplatesController extends ControllerBase
       $build['#attached']['library'][] = 'custom_api_integration/azure_map';
       $build['#attached']['library'][] = 'custom_api_integration/custom_tabs';
     }
-
+    $build['#attached']['library'][] = 'custom_api_integration/jquery_ui';
+    $build['#attached']['library'][] = 'custom_api_integration/artobject_detail_page';
     return $build;
   }
 

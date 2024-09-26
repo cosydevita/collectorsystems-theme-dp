@@ -47,5 +47,16 @@ custom_tabs:
     js/custom_tabs.js: {}
   dependencies:
     - core/jquery
-
-
+artobject_detail_page:
+  js:
+    js/artobject-detail-page.js: {}
+  css:
+    theme:
+      css/cs_artobject_detail_page.css: {}
+  dependencies:
+    - core/jquery
+jquery_ui:
+  js:
+    js/jquery-ui.min.js: {}
+  dependencies:
+    - core/jquery
