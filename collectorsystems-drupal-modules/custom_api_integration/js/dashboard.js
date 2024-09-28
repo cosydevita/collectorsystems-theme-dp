@@ -264,14 +264,14 @@
                 $('#resp-data').append('<span class="count-number">'+data.DbCountForObject+'</span>');
                 $('#resp-data1').append('<span class="count-number">'+data.apiCountForObject+'</span>');
 
-                $('#resp-data6').append('<span class="count-number">'+data.DbcollectionCount+'</span>');
-                $('#resp-data7').append('<span class="count-number">'+data.ApicollectionCount+'</span>');
+                $('#resp-data2').append('<span class="count-number">'+data.DbcollectionCount+'</span>');
+                $('#resp-data3').append('<span class="count-number">'+data.ApicollectionCount+'</span>');
 
-                $('#resp-data2').append('<span class="count-number">'+data.DbExhibitionsCount+'</span>');
-                $('#resp-data3').append('<span class="count-number">'+data.ApiExhibitionsCount+'</span>');
+                $('#resp-data4').append('<span class="count-number">'+data.DbExhibitionsCount+'</span>');
+                $('#resp-data5').append('<span class="count-number">'+data.ApiExhibitionsCount+'</span>');
 
-                $('#resp-data4').append('<span class="count-number">'+data.DbCountForArtist+'</span>');
-                $('#resp-data5').append('<span class="count-number">'+data.apiCountForArtist+'</span>');
+                $('#resp-data6').append('<span class="count-number">'+data.DbCountForArtist+'</span>');
+                $('#resp-data7').append('<span class="count-number">'+data.apiCountForArtist+'</span>');
 
                 $('.count-wrapper .spinner').hide()
                 $('.count-wrapper .count-data').show()
