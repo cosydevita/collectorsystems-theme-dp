@@ -4211,6 +4211,9 @@ class CreateTablesRestResource extends ResourceBase {
                 //print_r($filtercount.'-'.$field);
                 switch ($field)
                 {
+                    case "AddressName":
+                      $dynamicurl.= 'Address($select=AddressId,AddressName,Latitude,Longitude),';
+                      break;
                     case "LocationName":
                     case "FullLocationName":
                       $dynamicurl.= 'Location($select=LocationId,LocationName,FullLocationName),';
