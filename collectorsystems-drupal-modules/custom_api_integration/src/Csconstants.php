@@ -1140,6 +1140,8 @@ namespace Drupal\custom_api_integration;
 
   public const WeightImperialFieldLabel = "Weight Imperial";
 
+  public const AddressNameFieldLabel = "Address Name";
+
 }
 
  ?>

@@ -268,8 +268,11 @@ class CustomTwig extends AbstractExtension {
                 if(!empty($artObjData[$object_field])){ ?>
                     <p class="my-2">
                     <?php if($showFieldLabelNames==1){
-                      $fieldLabel = constant('Drupal\custom_api_integration\csconstants::' . $object_field."FieldLabel");
-                      if(!$fieldLabel){
+                      $fieldLabelConstant = 'Drupal\custom_api_integration\csconstants::' . $object_field . 'FieldLabel';
+                      if (defined($fieldLabelConstant)) {
+                        $fieldLabel = constant($fieldLabelConstant);
+                      }
+                      else{
                         $fieldLabel = $object_field;
                       }
                       ?>
