@@ -34,7 +34,7 @@ class CollectorSystemsGroups extends BlockBase {
       return $build;
     }
 
-    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip =   0;
     $ajaxfor=   "listgroup";
@@ -109,7 +109,7 @@ class CollectorSystemsGroups extends BlockBase {
 
     $all_groups = $fetch_groups_record;
 
-    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
+    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
     $build = [
       '#theme' => 'groups-list-page',
       '#all_groups' => $all_groups,

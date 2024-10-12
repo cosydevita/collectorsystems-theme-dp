@@ -52,7 +52,7 @@ class PageTemplatesController extends ControllerBase
     $object_details = $query->execute()->fetchAll(); //
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
-    $enable_maps = \Drupal::config('custom_api_integration.settings')->get('enable_maps');
+    $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
       //start azure map
       $customized_fields = $this->getCommaSeperatedFieldsForDetailPage();
@@ -73,7 +73,7 @@ class PageTemplatesController extends ControllerBase
           "latitude" => $Latitude,
           "longitude" => $Longitude,
           "AddressName" => $AddressName,
-          "main_image_attachment" => base64_encode($main_image_attachment),
+          "main_image_attachment" => $main_image_attachment ? base64_encode($main_image_attachment) : '',
           "main_image_path" => $main_image_path,
           "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
@@ -214,7 +214,7 @@ class PageTemplatesController extends ControllerBase
 
   public function ArtistDetailPage(){
     $artistId=$_REQUEST['dataId'];
-    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
     $groupLevelSkipCount =   0;
     $ajaxfor=   "artist-detail";
@@ -278,7 +278,7 @@ class PageTemplatesController extends ControllerBase
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
 
-    $enable_maps = \Drupal::config('custom_api_integration.settings')->get('enable_maps');
+    $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
       //start azure map
       $locations = [];
@@ -361,7 +361,7 @@ class PageTemplatesController extends ControllerBase
 
   public function ExhibitionDetailPage(){
     $exhibitionID=$_REQUEST['dataId'];
-    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
     $groupLevelSkipCount =   0;
     $ajaxfor=   "exhibition-detail";
@@ -416,7 +416,7 @@ class PageTemplatesController extends ControllerBase
     $obj_count = $count_object->fetchField();
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
-    $enable_maps = \Drupal::config('custom_api_integration.settings')->get('enable_maps');
+    $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
       //start azure map
       $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
@@ -506,7 +506,7 @@ class PageTemplatesController extends ControllerBase
 
   public function GroupDetailPage(){
     $groupID=$_REQUEST['dataId'];
-    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
     $groupLevelSkipCount =   0;
     $ajaxfor=   "group-detail";
@@ -563,7 +563,7 @@ class PageTemplatesController extends ControllerBase
     $obj_count = $query_count->execute()->fetchField();
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
-    $enable_maps = \Drupal::config('custom_api_integration.settings')->get('enable_maps');
+    $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
       //start azure map
       $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
@@ -653,7 +653,7 @@ class PageTemplatesController extends ControllerBase
   public function CollectionDetailPage(){
 
     $collectionID=$_REQUEST['dataId'];
-    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip =   0;
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
@@ -701,7 +701,7 @@ class PageTemplatesController extends ControllerBase
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
 
-    $enable_maps = \Drupal::config('custom_api_integration.settings')->get('enable_maps');
+    $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
       //start azure map
       $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();

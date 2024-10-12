@@ -1,0 +1,37 @@
+collector_systems.menu:
+  title: 'Collector Systems'
+  route_name: custom_api_integration.settings_form
+  parent: system.admin_config
+  description: 'Collector Systems Configurations.'
+  weight: -5
+collector_systems.settings_form:
+  title: 'CollectorSystems API Integration Settings'
+  route_name: custom_api_integration.settings_form
+  description: 'Configure settings to connect to Collector Systems API'
+  parent: collector_systems.menu
+  weight: 1
+collector_systems.api_dashboard:
+  title: 'CollectorSystems API Dashboard'
+  route_name: custom_api_integration.dashboard
+  description: 'API Dashbopard to sync the API data to database'
+  parent: collector_systems.menu
+  weight: 2
+collector_systems.azure_map:
+  title: 'Azure Map Settings'
+  route_name: custom_api_integration.azure_map_form
+  description: 'Azure Map Settings'
+  parent: collector_systems.menu
+  weight: 6
+customize_object_detail_fields.settings_form:
+  title: 'Customize Object Detail Fields Settings Form'
+  route_name: customize_object_detail_fields.settings_form
+  description: 'Customize which fields to show in the object details page'
+  parent: collector_systems.menu
+  weight: 3
+customize_object_list_fields.settings_form:
+  title: 'Customize Object List Fields Settings Form'
+  route_name: customize_object_list_fields.settings_form
+  description: 'Customize which fields to show in the object list page'
+  parent: collector_systems.menu
+  weight: 4
+

@@ -3,3 +3,12 @@ services:
     class: Drupal\collector_systems\CustomTwig
     tags:
       - { name: twig.extension }
+  collector_systems.collector_systemsts_get_api_data:
+    class: Drupal\collector_systems\CollectorSystemsGetApiData
+    arguments: ['@entity_type.manager']
+  customize_object_detail_fields.field_info_service:
+    class: Drupal\collector_systems\FieldInfoService
+    arguments: ['@entity_field.manager', '@entity_type.bundle.info']
+  customize_object_detail_fields.object_fields_service:
+    class: Drupal\collector_systems\ObjectFieldsService
+    arguments: ['@config.factory']

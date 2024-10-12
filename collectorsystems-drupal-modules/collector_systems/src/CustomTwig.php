@@ -5,7 +5,7 @@ namespace Drupal\collector_systems;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use Drupal\custom_api_integration\Csconstants;
+use Drupal\collector_systems\Csconstants;
 
 
 /**
@@ -44,7 +44,7 @@ class CustomTwig extends AbstractExtension {
     //echo "field:" .$customized_fields;
     $customized_fields_array = explode(',', $customized_fields);
     $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
-    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
+    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
     ?>
 
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
@@ -135,7 +135,7 @@ class CustomTwig extends AbstractExtension {
     {
       $pagingUrl = $baseUrl;
     }
-    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     if(!$listPageSize){
       return;
     }
@@ -176,7 +176,7 @@ class CustomTwig extends AbstractExtension {
     {
       $site_url = \Drupal::request()->getSchemeAndHttpHost();
 
-      $showFieldLabelNames =  \Drupal::config('custom_api_integration.settings')->get('show_field_labels');
+      $showFieldLabelNames =  \Drupal::config('collector_systems.settings')->get('show_field_labels');
 
 
       if (is_array($artObjData) || is_object($artObjData)) {
@@ -268,7 +268,7 @@ class CustomTwig extends AbstractExtension {
                 if(!empty($artObjData[$object_field])){ ?>
                     <p class="my-2">
                     <?php if($showFieldLabelNames==1){
-                      $fieldLabelConstant = 'Drupal\custom_api_integration\csconstants::' . $object_field . 'FieldLabel';
+                      $fieldLabelConstant = 'Drupal\collector_systems\csconstants::' . $object_field . 'FieldLabel';
                       if (defined($fieldLabelConstant)) {
                         $fieldLabel = constant($fieldLabelConstant);
                       }
@@ -294,7 +294,7 @@ class CustomTwig extends AbstractExtension {
 
   public function customPaginationForGroupLevelObjects($groupTypeId,$ajaxpage,$requested_page,$total_records,$sortBy,$qSearch)
   {
-    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
 
 
     $showitems = $listPageSize;
@@ -338,7 +338,7 @@ class CustomTwig extends AbstractExtension {
   $customized_fields_array = explode(',', $customized_fields);
   $site_url = \Drupal::request()->getSchemeAndHttpHost();
   $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
-  $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
+  $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
     ?>
    <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
                 <?php if($showImagesOnListPages == 1){ ?>
@@ -418,7 +418,7 @@ class CustomTwig extends AbstractExtension {
     $site_url = \Drupal::request()->getSchemeAndHttpHost();
 
     $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
-    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
+    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
 
     ?>
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">

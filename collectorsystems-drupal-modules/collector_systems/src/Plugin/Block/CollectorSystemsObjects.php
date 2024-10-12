@@ -33,7 +33,7 @@ class CollectorSystemsObjects extends BlockBase {
       return $build;
     }
 
-    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
 
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip = 0;
@@ -132,7 +132,7 @@ class CollectorSystemsObjects extends BlockBase {
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
 
-    $enable_maps = \Drupal::config('custom_api_integration.settings')->get('enable_maps');
+    $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
       //start azure map
       $locations = [];
@@ -151,7 +151,7 @@ class CollectorSystemsObjects extends BlockBase {
           "latitude" => $Latitude,
           "longitude" => $Longitude,
           "AddressName" => $AddressName,
-          "main_image_attachment" => base64_encode($main_image_attachment),
+          "main_image_attachment" => $main_image_attachment ? base64_encode($main_image_attachment) : '',
           "main_image_path" => $main_image_path,
           "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 

@@ -34,7 +34,7 @@ class CollectorSystemsExhibitions extends BlockBase {
     }
 
 
-    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip =   0;
     $ajaxfor=   "listexhibition";
@@ -85,7 +85,7 @@ class CollectorSystemsExhibitions extends BlockBase {
       $all_exhibitions = $result->fetchAll(\PDO::FETCH_OBJ);
 
 
-    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
+    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
     $build = [
       '#theme' => 'exhibitions-list-page',
       '#all_exhibitions' => $all_exhibitions,

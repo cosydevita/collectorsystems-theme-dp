@@ -33,7 +33,7 @@ class CollectorSystemsArtists extends BlockBase {
       return $build;
     }
 
-    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip = 0;
     $ajaxfor = "artist";

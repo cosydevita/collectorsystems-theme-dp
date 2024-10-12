@@ -35,7 +35,7 @@ class CollectorSystemsCollections extends BlockBase {
     }
 
 
-    $listPageSize =  \Drupal::config('custom_api_integration.settings')->get('items_per_page');
+    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip =   0;
     $ajaxfor=   "listcollection";
@@ -90,7 +90,7 @@ class CollectorSystemsCollections extends BlockBase {
       $all_collections = $result->fetchAll();
 
       $base_url_with_scheme = \Drupal::request()->getSchemeAndHttpHost();
-      $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
+      $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
 
     $build = [
       '#theme' => 'collections-list-page',
