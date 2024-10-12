@@ -45,5 +45,33 @@ class ObjectFieldsService {
     return $ObjectFields;
 
   }
+
+  /**
+   * Get the value of ObjectField label from the database
+   *
+   * @param string $field_name
+   *
+   * @return string
+   *  Label string
+   */
+  public function getObjectFieldLabelFromDatabase($field_name){
+
+    $db = \Drupal::database();
+    $table = "clsobjects_fields";
+
+    $query = $db->select($table, 'c')
+    ->fields('c', ['fieldvalue'])
+    ->condition('fieldname', $field_name)
+    ->condition('fieldtype', 'ObjectDetail');
+
+    $field_value = $query->execute()->fetchField();
+    if ($field_value === FALSE) {
+      // No value found
+      $field_value = $field_name;
+    }
+
+    return $field_value;
+
+  }
 }
 

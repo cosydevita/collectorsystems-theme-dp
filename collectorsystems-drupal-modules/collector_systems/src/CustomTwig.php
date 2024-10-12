@@ -268,13 +268,9 @@ class CustomTwig extends AbstractExtension {
                 if(!empty($artObjData[$object_field])){ ?>
                     <p class="my-2">
                     <?php if($showFieldLabelNames==1){
-                      $fieldLabelConstant = 'Drupal\collector_systems\csconstants::' . $object_field . 'FieldLabel';
-                      if (defined($fieldLabelConstant)) {
-                        $fieldLabel = constant($fieldLabelConstant);
-                      }
-                      else{
-                        $fieldLabel = $object_field;
-                      }
+
+                        $ObjectFieldsService = \Drupal::service('customize_object_detail_fields.object_fields_service');
+                        $fieldLabel = $ObjectFieldsService->getObjectFieldLabelFromDatabase($object_field);
                       ?>
 
                     <span class="object_detail_fieldlabel"><?php echo $fieldLabel ?>:</span>

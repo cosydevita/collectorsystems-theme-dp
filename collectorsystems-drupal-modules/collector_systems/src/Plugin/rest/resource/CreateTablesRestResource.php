@@ -685,6 +685,8 @@ class CreateTablesRestResource extends ResourceBase {
     	$url = csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch . '?$filter=SubscriptionId%20eq%20' . $subsId;
       }
 
+      \Drupal::logger('collector_systems')->debug('Sync Objects API: %url', ['%url' => $url]);
+
       $curl = curl_init($url);
       curl_setopt($curl, CURLOPT_URL, $url);
       curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

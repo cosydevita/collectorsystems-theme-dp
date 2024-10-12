@@ -296,7 +296,7 @@ class PageTemplatesController extends ControllerBase
           "latitude" => $Latitude,
           "longitude" => $Longitude,
           "AddressName" => $AddressName,
-          "main_image_attachment" => base64_encode($main_image_attachment),
+          "main_image_attachment" => $main_image_attachment ? base64_encode($main_image_attachment) : '',
           "main_image_path" => $main_image_path,
           "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
@@ -441,7 +441,7 @@ class PageTemplatesController extends ControllerBase
           "latitude" => $Latitude,
           "longitude" => $Longitude,
           "AddressName" => $AddressName,
-          "main_image_attachment" => base64_encode($main_image_attachment),
+          "main_image_attachment" => $main_image_attachment ? base64_encode($main_image_attachment) : '',
           "main_image_path" => $main_image_path,
           "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
@@ -588,7 +588,7 @@ class PageTemplatesController extends ControllerBase
           "latitude" => $Latitude,
           "longitude" => $Longitude,
           "AddressName" => $AddressName,
-          "main_image_attachment" => base64_encode($main_image_attachment),
+          "main_image_attachment" => $main_image_attachment ? ($main_image_attachment) : '',
           "main_image_path" => $main_image_path,
           "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
@@ -726,7 +726,7 @@ class PageTemplatesController extends ControllerBase
           "latitude" => $Latitude,
           "longitude" => $Longitude,
           "AddressName" => $AddressName,
-          "main_image_attachment" => base64_encode($main_image_attachment),
+          "main_image_attachment" => $main_image_attachment ? base64_encode($main_image_attachment): '',
           "main_image_path" => $main_image_path,
           "object_detail_url" => '/artobject-detail?dataId='. $object_id,
 
