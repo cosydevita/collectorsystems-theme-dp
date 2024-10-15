@@ -20,6 +20,16 @@ class ObjectImagesImportForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $request = \Drupal::request();
+    $get_save_option = $request->query->get('save_option', '');
+    $selected_option = '';
+    if($get_save_option == 'database'){
+      $selected_option = 'save_to_database';
+    }elseif($get_save_option == 'directory'){
+      $selected_option = 'save_to_directory';
+    }
+
+
     $form['save_option'] = [
       '#type' => 'radios',
       '#title' => $this->t('Save Option'),
@@ -27,7 +37,7 @@ class ObjectImagesImportForm extends FormBase {
         'save_to_database' => $this->t('Save to Database'),
         'save_to_directory' => $this->t('Save to Directory'),
       ],
-      '#default_value' => '',
+      '#default_value' => $selected_option,
       '#required' => TRUE,
 
     ];

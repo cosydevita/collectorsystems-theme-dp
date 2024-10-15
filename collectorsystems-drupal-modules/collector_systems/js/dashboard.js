@@ -77,13 +77,13 @@
         });
 
         $(once('customDatabaseSaveButton', '#custom-database-save')).on('click.customDatabaseSaveButton', function () {
-            window.location.href = '/admin/collector-systems/other-images-import';
+            window.location.href = '/admin/collector-systems/other-images-import?save_option=database';
 
         });
 
         $(once('customDirectorySaveButton', '#custom-directory-save')).on('click.customDirectorySaveButton', function () {
 
-          window.location.href = '/admin/collector-systems/other-images-import';
+          window.location.href = '/admin/collector-systems/other-images-import?save_option=directory';
 
 
           });
@@ -91,14 +91,14 @@
         $(once('customObjectDatabaseSaveButton', '#custom-object-database-save')).on('click.customObjectDatabaseSaveButton', function () {
 
           //Redirect to Import Form page
-          window.location.href = '/admin/collector-systems/object-images-import';
+          window.location.href = '/admin/collector-systems/object-images-import?save_option=database';
 
 
         });
         $(once('customObjectDirectorySaveButton', '#custom-object-directory-save')).on('click.customObjectDirectorySaveButton', function () {
 
             //Redirect to Import Form page
-            window.location.href = '/admin/collector-systems/object-images-import';
+            window.location.href = '/admin/collector-systems/object-images-import?save_option=directory';
 
         });
 
