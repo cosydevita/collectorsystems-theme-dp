@@ -26,7 +26,7 @@ class ObjectFieldsService {
   }
 
   public function getObjectFields() {
-    $config = $this->configFactory->get('custom_api_integration.settings');
+    $config = $this->configFactory->get('collector_systems.settings');
     $subscriptionKey = $config->get('subscription_key');
     $accountGuid = $config->get('account_guid');
 
