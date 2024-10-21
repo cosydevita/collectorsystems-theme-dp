@@ -6,7 +6,7 @@
                     value: !0
                 }), t.BootstrapLightboxBuilder = void 0;
                 var n = o(936),
-                    r = function() {                        
+                    r = function() {
                         function e(e, t) {
                             this.parentSelector = e, this.config = t, this.currentActiveImage = this.config.data[0]
                         }
@@ -67,7 +67,7 @@
                             })), n.DomHelper.addEventListener("#increaseZoomBtn", "mousedown", (function() {
                                 return e.onRangeButtonMouseDown(!0)
                             })), n.DomHelper.addEventListener("#increaseZoomBtn", "mouseup", (function() {
-                                return e.onRangeButtonMouseUp()                            
+                                return e.onRangeButtonMouseUp()
                             }))
                         }, e.prototype.onRangeButtonMouseDown = function(e) {
                             var t = this;
@@ -93,7 +93,7 @@
                             var e = document.querySelector("#zoomRange");
                             document.querySelector(".bootstrap-lightbox__top__image-container__img").style.transform = "scale(" + (1 + .02 * e.value) + ")"//, console.log(e.value)
                         }, e.prototype.closeGallery = function() {
-                            this.galleryOverlay.remove()                        
+                            this.galleryOverlay.remove()
                         }, e
                     }();
                 t.BootstrapLightboxBuilder = r

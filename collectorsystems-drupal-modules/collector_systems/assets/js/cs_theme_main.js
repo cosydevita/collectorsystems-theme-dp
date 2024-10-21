@@ -151,18 +151,18 @@ for(var k=0;k<carouselAItems.length;k++)
     }
 }
 
-const { BootstrapLightbox } = BootstrapLightboxModule;
-if($("a.carouselAToggle").length > 0)
-{
-    document.addEventListener('DOMContentLoaded', () => {
-        const bootstrapLightboxA = new BootstrapLightbox('.carouselAToggle', {
-            name: 'carouselAGallery',
-            data: slideShowUrlsA,
-            drag: true
-        });
-        bootstrapLightboxA.createGallery();
-    });
-}
+// const { BootstrapLightbox } = BootstrapLightboxModule;
+// if($("a.carouselAToggle").length > 0)
+// {
+//     document.addEventListener('DOMContentLoaded', () => {
+//         const bootstrapLightboxA = new BootstrapLightbox('.carouselAToggle', {
+//             name: 'carouselAGallery',
+//             data: slideShowUrlsA,
+//             drag: true
+//         });
+//         bootstrapLightboxA.createGallery();
+//     });
+// }
 
 })(jQuery);
 

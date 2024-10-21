@@ -88,5 +88,18 @@ customize_object_list_fields:
       "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css": {}
   dependencies:
     - core/jquery
+artobject_detail_page:
+  js:
+    js/artobject-detail-page.js: {}
+  css:
+    theme:
+      css/cs_artobject_detail_page.css: {}
+  dependencies:
+    - core/jquery
+jquery_ui:
+  js:
+    js/jquery-ui.min.js: {}
+  dependencies:
+    - core/jquery
 
 

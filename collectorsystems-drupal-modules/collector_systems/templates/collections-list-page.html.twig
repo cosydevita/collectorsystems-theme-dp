@@ -37,7 +37,7 @@
           {% if (showImagesOnListPages) %}
 						<div class="card-body d-flex flex-column">
 							<a href="javascript:;" onclick="return getmoredetailsForCollection('{{ site_url }}', {{ collect.CollectionId }})">
-								{% set cltimg = collect.CollectionImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(collect.CollectionImageAttachment) : collect.ImagePath %}
+								{% set cltimg = collect.CollectionImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(collect.CollectionImageAttachment) : '/'. collect.ImagePath %}
 								{% set relative_path = cltimg ? cltimg : '' %}
 								{% set image_url = relative_path ?  relative_path : '' %}
 

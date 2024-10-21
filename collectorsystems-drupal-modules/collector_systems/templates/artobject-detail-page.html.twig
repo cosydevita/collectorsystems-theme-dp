@@ -50,17 +50,16 @@
                           {% for i, thumb in allthumb %}
                             {% set altText = thumb.attachment_description is not empty ? thumb.attachment_description : 'Image description is not available' %}
 
-                              <div class="carousel-item {{ i == 0 ? 'active' }}">
+                              <div class="carousel-item {{ i == 0 ? 'active' }}" data-slide-number="{{i}}">
 
-                                  {% if enableZoomForImages %}
-                                      <a class="carouselAToggle" data-big="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" href="javascript:;">
+                                {% set relative_path = thumb.object_image_path  %}
+                                {% set object_img = thumb.object_image_attachment  ? 'data:image/jpeg;base64,' ~ base64_encode(thumb.object_image_attachment) : '' %}
+
+                                  {% if enable_zoom %}
+                                      <a id="draggable-image-link" class="carouselAToggle" data-big="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" href="javascript:;">
                                           <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="{{altText}}"/>
                                       </a>
                                   {% else %}
-
-                                  {% set relative_path = thumb.object_image_path  %}
-                                      {% set object_img = thumb.object_image_attachment  ? 'data:image/jpeg;base64,' ~ base64_encode(thumb.object_image_attachment) : '' %}
-
                                       <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="{{altText}}"/>
                                   {% endif %}
                               </div>
@@ -100,7 +99,7 @@
                                 {% set altText = thumbDetails[j].attachment_description is not empty ? thumbDetails[j].attachment_description : 'Image description is not available' %}
                                     <div class="{{ j == 0 ? 'active carousel-item' : 'carousel-item' }}" data-slide-number="{{ j }}">
                                         <div id="carousel-selector-{{ currentslide }}" class="{{ currentslide == 0 ? 'selected thumb col-3 px-1 py-2' : 'thumb col-3 px-1 py-2' }}" data-target="#carouselA" data-slide-to="{{ currentslide }}">
-                                            {% set object_img = thumbDetails[j].thumb_size_URL is defined ? 'data:image/jpeg;base64,' ~ base64_encode(thumbDetails[j].thumb_size_URL) : '' %}
+                                            {% set object_img = thumbDetails[j].thumb_size_URL is defined and thumbDetails[j].thumb_size_URL is not null ? 'data:image/jpeg;base64,' ~ base64_encode(thumbDetails[j].thumb_size_URL) : '' %}
 
                                             {% set server_path = thumbDetails[j].thumb_size_URL_path is defined ? thumbDetails[j].thumb_size_URL_path : '' %}
                                             {% set relative_path = server_path|replace({'%SERVER_DOCUMENT_ROOT%': ''}) %}
@@ -166,4 +165,26 @@
             <!-- <li><a href="javascript:;" onclick="window.print()"><img src="https://simplesharebuttons.com/images/somacro/print.png" alt="Print" /></a></li> -->
           </ul>
           </span>
+</div>
+
+
+<!-- Custom Lightbox -->
+<div id="lightbox-custom-draggable">
+    <div id="lightbox-content">
+        <img  image_index="0" id="lightbox-image" src="" alt="Lightbox Image">
+    </div>
+    <div class="zoom-buttons">
+        <button id="zoom-in"><img width="35px" height="35px" src="{{module_path}}/images/icon-zoom-plus.svg"  alt="zoom in"></button>
+        <button id="zoom-out"><img width="35px" height="35px" src="{{module_path}}/images/icon-zoom-minus.svg"  alt="zoom out"></button>
+    </div>
+    <div id="lightbox-close"><img width="35px" height="35px" src="{{module_path}}/images/icon-close.svg"  alt="zoom out"></div>
+    <div class="prev-next-buttons">
+      <button id="btn-prev-draggable">
+        <img class="prev-icon" width="35px" height="35px" src="{{module_path}}/images/icon-prev-white.svg"  alt="next">
+      </button>
+      <button id="btn-next-draggable">
+        <img class="next-icon" width="35px" height="35px" src="{{module_path}}/images/icon-next-white.svg"  alt="next">
+      </button>
+
+    </div>
 </div>

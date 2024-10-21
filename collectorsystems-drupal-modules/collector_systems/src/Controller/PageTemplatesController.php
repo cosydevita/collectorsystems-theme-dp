@@ -176,6 +176,9 @@ class PageTemplatesController extends ControllerBase
       }
     }
 
+    $enable_zoom =  \Drupal::config('collector_systems.settings')->get('enable_zoom');
+
+
     $build = [
       '#theme' => 'artobject-detail-page',
       '#thumbDetails' => $thumbDetails,
@@ -190,6 +193,7 @@ class PageTemplatesController extends ControllerBase
       '#requested_pageNo' => $requested_pageNo,
       '#module_path' => $module_path,
       '#enable_maps' => $enable_maps,
+      '#enable_zoom' => $enable_zoom,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -204,10 +208,8 @@ class PageTemplatesController extends ControllerBase
       $build['#attached']['library'][] = 'collector_systems/azure_map';
       $build['#attached']['library'][] = 'collector_systems/custom_tabs';
     }
-
-
-
-
+    $build['#attached']['library'][] = 'collector_systems/jquery_ui';
+    $build['#attached']['library'][] = 'collector_systems/artobject_detail_page';
     return $build;
 
   }

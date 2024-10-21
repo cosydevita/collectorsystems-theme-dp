@@ -103,7 +103,8 @@ function collector_systems_theme() {
         'qSearch' => NULL,
         'requested_pageNo' => NULL,
         'module_path' => NULL,
-        'enable_maps' => NULL
+        'enable_maps' => NULL,
+        'enable_zoom' => NULL
       ],
     ],
     'artist-detail-page' => [
