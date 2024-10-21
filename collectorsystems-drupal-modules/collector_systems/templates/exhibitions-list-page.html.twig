@@ -42,10 +42,10 @@
               <div class="card-body d-flex flex-column">
                 <a href="javascript:;" onclick="return getmoredetailsForExhibition('{{ site_url }}', {{ exhibi.ExhibitionId }})">
                   {%
-                                    set exbi_img = exhibi.ExhibitionImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(exhibi.ExhibitionImageAttachment) : exhibi.ImagePath
+                                    set exbi_img = exhibi.ExhibitionImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(exhibi.ExhibitionImageAttachment) : ''
 
                                 %}
-                  {% set relative_path = exbi_img ? exbi_img : '' %}
+                  {% set relative_path = exhibi.ImagePath ? "/" ~ exhibi.ImagePath : '' %}
                   {% set image_url = relative_path ? relative_path : '' %}
                   {% set altText = exhibi.ExhibitionSubject is not empty ? exhibi.ExhibitionSubject : 'Image description is not available' %}
                   {% if not exbi_img and not relative_path %}

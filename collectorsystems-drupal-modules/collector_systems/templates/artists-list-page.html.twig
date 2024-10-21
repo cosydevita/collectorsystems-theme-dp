@@ -42,8 +42,7 @@
 								{% set artist_img = artist.ArtistPhotoAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(artist.ArtistPhotoAttachment) : '' %}
 								{% set server_path = artist.ImagePath %}
 								{# {% set relative_path = server_path|replace({'^' ~ server['DOCUMENT_ROOT']: ''}) %} #}
-								{% set relative_path = artist.ImagePath %}
-
+								{% set relative_path = '/' ~ artist.ImagePath %}
 
 								{% set image_url =  relative_path %}
 

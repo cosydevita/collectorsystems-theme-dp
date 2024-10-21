@@ -3950,8 +3950,8 @@ class CreateTablesRestResource extends ResourceBase {
           'not null' => TRUE,
         ],
         'GroupMemo' => [
-          'type' => 'varchar',
-          'length' => 500,
+          'type' => 'text',
+          'size' => 'big'
         ],
         'GroupImageAttachment' => [
           'type' => 'blob',
