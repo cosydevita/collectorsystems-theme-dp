@@ -263,6 +263,90 @@ class CustomTwig extends AbstractExtension {
                   <?php }
 
                 break;
+              //richtext fields
+              case csconstants::DimensionMemo:
+              case csconstants::InventoryMemo:
+              case csconstants::ObjectDescription:
+              case csconstants::Signatures:
+              case csconstants::Inscriptions:
+              case csconstants::Labels:
+              case csconstants::Provenance:
+              case csconstants::ReferenceNotes:
+              case csconstants::ResearchNotes:
+              case csconstants::StaffNotes:
+              case csconstants::RelatedCollections:
+              case csconstants::KeyDescriptor:
+              case csconstants::WithinSiteProveniance:
+              case csconstants::SubspeciesDescriptiveName:
+              case csconstants::History:
+              case csconstants::Transcription:
+              case csconstants::CastAndCrew:
+              case csconstants::Synopsis:
+              case csconstants::Waterbody:
+              case csconstants::AssociatedSpecies:
+              case csconstants::Drainage:
+              case csconstants::ObjectUse:
+              case csconstants::StartingInstructions:
+              case csconstants::RegistrationNotes:
+              case csconstants::TitleStatusNotes:
+              case csconstants::RepairsMade:
+              case csconstants::CompletenessNote:
+              case csconstants::MovementMemo:
+              case csconstants::LocationAccessMemo:
+              case csconstants::LocationConditionMemo:
+              case csconstants::LocationSecurityMemo:
+              case csconstants::ObjectNameNote:
+              case csconstants::FieldCollectionMemo:
+              case csconstants::HabitatMemo:
+              case csconstants::StratigraphicUnitMemo:
+                if(!empty($artObjData[$object_field])){ ?>
+                  <p class="my-2">
+                  <?php if($showFieldLabelNames==1){
+
+                      $ObjectFieldsService = \Drupal::service('customize_object_detail_fields.object_fields_service');
+                      $fieldLabel = $ObjectFieldsService->getObjectFieldLabelFromDatabase($object_field);
+                    ?>
+
+                  <span class="object_detail_fieldlabel"><?php echo $fieldLabel ?>:</span>
+
+                  <?php } ?>
+                    <div class="mb-2 cstheme-show-more-richtext"><?php echo $artObjData[$object_field]  ?></div>
+                  </p>
+                  <?php }
+                break;
+              case csconstants::UserDefinedRichText1:
+              case csconstants::UserDefinedRichText2:
+              case csconstants::UserDefinedRichText3:
+              case csconstants::UserDefinedRichText4:
+              case csconstants::UserDefinedRichText5:
+              case csconstants::UserDefinedRichText6:
+              case csconstants::UserDefinedRichText7:
+              case csconstants::UserDefinedRichText8:
+              case csconstants::UserDefinedRichText9:
+              case csconstants::UserDefinedRichText10:
+              case csconstants::UserDefinedRichText11:
+              case csconstants::UserDefinedRichText12:
+              case csconstants::UserDefinedRichText13:
+              case csconstants::UserDefinedRichText14:
+              case csconstants::UserDefinedRichText15:
+              case csconstants::UserDefinedRichText16:
+              case csconstants::UserDefinedRichText17:
+              case csconstants::UserDefinedRichText18:
+                if(!empty($artObjData[$object_field])){ ?>
+                  <p class="my-2">
+                  <?php if($showFieldLabelNames==1){
+
+                      $ObjectFieldsService = \Drupal::service('customize_object_detail_fields.object_fields_service');
+                      $fieldLabel = $ObjectFieldsService->getObjectFieldLabelFromDatabase($object_field);
+                    ?>
+
+                  <span class="object_detail_fieldlabel"><?php echo $fieldLabel ?>:</span>
+
+                  <?php } ?>
+                    <div class="mb-2 cstheme-show-more-richtext"><?php echo $artObjData[$object_field]  ?></div>
+                  </p>
+                  <?php }
+                break;
 
               default:
                 if(!empty($artObjData[$object_field])){ ?>

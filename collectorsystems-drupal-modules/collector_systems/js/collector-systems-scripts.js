@@ -396,3 +396,55 @@ function htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,ajaxpage,reques
   }
   jQuery("#groupLevelPagingData").html(pagingHtmlContent);
 }
+
+
+jQuery(document).ready(function($){
+  var minimized_elements = $('div.cstheme-show-more-richtext');
+  var maxchars = 500;
+
+  minimized_elements.each(function () {
+      var $this = $(this);
+      if ($this.text().length >= 500) {
+          $this.hide();
+          var children = $this.contents();
+          var $shortDesc = $('<div />');
+          var len = children.length;
+          var count = 0;
+          var i = 0;
+          while (i < len) {
+              var $elem = $(children[i]).clone();
+              var text = $elem.text();
+              var l = text.length;
+              if (count + l > maxchars) {
+                  var newText = text.slice(0, maxchars - count);
+                  if ($elem.get(0).nodeType === 3) {
+                      $elem = document.createTextNode(newText);
+                  } else {
+                      $elem.text(newText);
+                  }
+                  $shortDesc.append($elem);
+                  break;
+              }
+              count += l;
+              $shortDesc.append($elem);
+              i++;
+          }
+
+          $shortDesc.append($('<span>... </span>'));
+          $this.after($shortDesc);
+          $shortDesc.append($('<a style="font-size:0.8rem;text-decoration: underline;" href="#" class="more">Show More</a>').on('click', function (ev) {
+              ev.preventDefault();
+              $this.show();
+              $shortDesc.hide();
+          }));
+          $this.append($('<a style="font-size:0.8rem;text-decoration: underline;" href="#" class="less">Show Less</a>').on('click', function (ev) {
+              ev.preventDefault();
+              $shortDesc.show();
+              $this.hide();
+          }));
+      }
+      else {
+
+      }
+  });
+});
