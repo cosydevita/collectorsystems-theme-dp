@@ -3377,6 +3377,10 @@ class CreateTablesRestResource extends ResourceBase {
                       break;
 
                   default:
+                    if (!empty($value[$field_name])) {
+                        $combinedObjectValues[$field_name] = $value[$field_name];
+                    }
+                    else{ $combinedObjectValues[$field_name] = ""; }
                     break;
                 }
 

@@ -184,8 +184,8 @@ function dmsToDecimal(dms) {
 jQuery(document).ready(function ($) {
   initializeMap()
 
-  $(".custom-tabs-wrapper button.map").click(function () {
-    $(".custom-tabs-wrapper button").removeClass("active");
+  $(".block-collector-systems-tab button.map").click(function () {
+    $(".block-collector-systems-tab button").removeClass("active");
     $(this).addClass("active");
     $("#gallery-block").hide();
     $("#azure-map-block").show();
@@ -194,8 +194,8 @@ jQuery(document).ready(function ($) {
     });
   });
 
-  $(".custom-tabs-wrapper button.gallery").click(function () {
-    $(".custom-tabs-wrapper button").removeClass("active");
+  $(".block-collector-systems-tab button.gallery").click(function () {
+    $(".block-collector-systems-tab button").removeClass("active");
     $(this).addClass("active");
 
     $("#gallery-block").show();
