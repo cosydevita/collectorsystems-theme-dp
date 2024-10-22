@@ -3828,6 +3828,7 @@ class CreateTablesRestResource extends ResourceBase {
             $schema['fields'][$field] = [
                 'type' => 'text',
             ];
+            break;
         }
 
       }
