@@ -3825,10 +3825,9 @@ class CreateTablesRestResource extends ResourceBase {
             ];
             break;
           default:
-              $schema['fields'][$field] = [
-                  'type' => 'varchar',
-                  'length' => 500
-              ];
+            $schema['fields'][$field] = [
+                'type' => 'text',
+            ];
         }
 
       }
