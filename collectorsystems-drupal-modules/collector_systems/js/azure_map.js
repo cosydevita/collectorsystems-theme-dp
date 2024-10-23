@@ -22,13 +22,17 @@ function initializeMap() {
     let groupedLocations = {};
 
     // Group locations by AddressName
+    countUnknownAddressName = 0;
     locations.forEach(function (location) {
-      let addressName = location.AddressName || "Unknown";
+      let addressName = location.AddressName || "Unknown"+countUnknownAddressName;
       if (!groupedLocations[addressName]) {
         groupedLocations[addressName] = [];
       }
       groupedLocations[addressName].push(location);
+      countUnknownAddressName++;
     });
+
+    // console.log(groupedLocations)
 
     // Iterate over grouped locations
     Object.keys(groupedLocations).forEach(function (addressName) {
@@ -97,12 +101,15 @@ function initializeMap() {
 
         popup_html += '<div class="col-right">';
         popup_html += html_data_selected_fields;
-        popup_html +=
-        '<div class="location-name"><img class="location-marker-icon" width="20" src="' +
-        module_path +
-        '/images/map-marker.svg">' +
-        location.AddressName +
-        "</div>";
+        if(location.AddressName){
+          popup_html +=
+          '<div class="location-name"><img class="location-marker-icon" width="20" src="' +
+          module_path +
+          '/images/map-marker.svg">' +
+          location.AddressName +
+          "</div>";
+        }
+
         if (!window.location.href.includes("artobject-detail")) {
           popup_html += '<a href="'+location.object_detail_url+'" class="btn-learn-more">Learn More <img class="arrow-icon" src="' + module_path+'/images/right-arrow.svg'+'" /> </a>';
         }
@@ -159,27 +166,47 @@ function destroyMap() {
 }
 
 function dmsToDecimal(dms) {
-  const parts = dms.match(/(\d+)[°]\s(\d+)[′]\s([\d.]+)[″]\s([NSEW])/);
+  // console.log('DMS Input: ' + dms);
 
-  if (!parts) {
+  // Check if input is already in decimal degree format (e.g., -117.909° E)
+  const decimalDegreeMatch = dms.match(/^([-]?[\d.]+)[°]\s*([NSEW])$/);
+  if (decimalDegreeMatch) {
+    let decimal = parseFloat(decimalDegreeMatch[1]);
+    const direction = decimalDegreeMatch[2];
+
+    // Negate for south and west coordinates
+    if (direction === 'S' || direction === 'W') {
+      decimal *= -1;
+    }
+
+    // console.log('Decimal Output (already in decimal format): ' + decimal);
+    return decimal;
+  }
+
+  // Check for full DMS format (including negative degrees like -117.909° 0′ 0″ E)
+  const dmsMatch = dms.match(/^([-]?[\d.]+)[°]\s*(\d+)?[′]?\s*([\d.]*)?[″]?\s*([NSEW])$/);
+  if (!dmsMatch) {
     console.error("Invalid DMS format: " + dms);
     return null;
   }
 
-  const degrees = parseFloat(parts[1]);
-  const minutes = parseFloat(parts[2]);
-  const seconds = parseFloat(parts[3]);
-  const direction = parts[4];
+  const degrees = parseFloat(dmsMatch[1]);
+  const minutes = dmsMatch[2] ? parseFloat(dmsMatch[2]) : 0;
+  const seconds = dmsMatch[3] ? parseFloat(dmsMatch[3]) : 0;
+  const direction = dmsMatch[4];
 
   let decimal = degrees + minutes / 60 + seconds / 3600;
 
-  // Negate for south and west coordinates
-  if (direction === "S" || direction === "W") {
+  // Negate for south and west coordinates, if direction is S or W
+  if (direction === 'S' || direction === 'W') {
     decimal *= -1;
   }
 
+  // console.log('Decimal Output (converted from DMS): ' + decimal);
   return decimal;
 }
+
+
 
 jQuery(document).ready(function ($) {
   initializeMap()
