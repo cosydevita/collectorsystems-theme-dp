@@ -72,13 +72,13 @@ function initializeMap() {
 
         if (main_image_path) {
           html_object_main_image =
-            '<img class="object-image" width="100" src="' + main_image_path + '">';
+            '<img class="object-image" width="100" src="/' + main_image_path + '">';
         } else if (main_image_attachment) {
           let object_img = "data:image/jpeg;base64," + main_image_attachment;
           html_object_main_image = '<img class="object-image" width="100" src="' + object_img + '">';
         } else {
           html_object_main_image =
-            '<img class="object-image" width="100" src="' +
+            '<img class="object-image" width="100" src="/' +
             module_path +
             "/images/noimage300.png" +
             '">';
@@ -103,7 +103,7 @@ function initializeMap() {
         popup_html += html_data_selected_fields;
         if(location.AddressName){
           popup_html +=
-          '<div class="location-name"><img class="location-marker-icon" width="20" src="' +
+          '<div class="location-name"><img class="location-marker-icon" width="20" src="/' +
           module_path +
           '/images/map-marker.svg">' +
           location.AddressName +
@@ -111,7 +111,7 @@ function initializeMap() {
         }
 
         if (!window.location.href.includes("artobject-detail")) {
-          popup_html += '<a href="'+location.object_detail_url+'" class="btn-learn-more">Learn More <img class="arrow-icon" src="' + module_path+'/images/right-arrow.svg'+'" /> </a>';
+          popup_html += '<a href="'+location.object_detail_url+'" class="btn-learn-more">Learn More <img class="arrow-icon" src="/' + module_path+'/images/right-arrow.svg'+'" /> </a>';
         }
         popup_html += "</div></div>";
       });
