@@ -83,7 +83,7 @@ class OtherImagesImportForm extends FormBase {
       if($import_type == 'ArtistsImages'){
         $total_count = $collector_systemsts_get_api_data->getTotalArtistsCount();
       }elseif($import_type == 'CollectionsImages'){
-        $total_count = $collector_systemsts_get_api_data->getTotalColletionsCount();
+        $total_count = $collector_systemsts_get_api_data->getTotalCollectionsCount();
       }elseif($import_type == 'GroupsImages'){
         $total_count = $collector_systemsts_get_api_data->getTotalGroupsCount();
       }elseif($import_type == 'ExhibitionsImages'){

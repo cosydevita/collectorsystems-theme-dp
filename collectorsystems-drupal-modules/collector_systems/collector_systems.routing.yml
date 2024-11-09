@@ -76,6 +76,13 @@ custom_api_integration.other_images_import:
     _title: 'Other Images Import'
   requirements:
     _permission: 'access administration pages'
+collector_systems.create_tables_form:
+  path: '/admin/collector-systems/create-tables-form'
+  defaults:
+    _form: '\Drupal\collector_systems\Form\CreateTablesForm'
+    _title: 'Import Data from Collector Systems API'
+  requirements:
+    _permission: 'access administration pages'
 customize_object_detail_fields.settings_form:
   path: '/admin/collector-systems/customize_object_detail_fields/settings'
   defaults:
