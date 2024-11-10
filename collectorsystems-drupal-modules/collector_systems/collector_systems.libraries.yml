@@ -69,7 +69,7 @@ select2:
   - core/jquery
 
 customize_object_detail_fields:
-  version: 1.x
+  version: 1.23
   js:
     js/customize_object_detail_fields.js: {}
   css:

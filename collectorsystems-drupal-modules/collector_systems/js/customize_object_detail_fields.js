@@ -90,7 +90,7 @@
 
     //Form submit
     $('#customize-object-detail-fields-settings-form').submit( function(event){
-
+      event.preventDefault();
       update_curerentSelectField1Options()
       update_curerentSelectField2Options()
 
@@ -106,6 +106,8 @@
           return false;
       }
 
+      // If all validations pass, submit the form
+      $(this).off('submit').submit();
     })
 
     function moveOption(direction) {

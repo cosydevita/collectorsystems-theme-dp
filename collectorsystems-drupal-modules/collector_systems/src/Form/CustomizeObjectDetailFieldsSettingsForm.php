@@ -25,7 +25,7 @@ class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
         // First Multiple Select List
         $form['select_field1'] = array(
           '#type' => 'select',
-          '#title' => t('Available fields'),
+          '#title' => $this->t('Available fields'),
           '#multiple' => TRUE,
           '#options' => $this->get_select_field1_options(),
           '#default_value' => $config->get('select_field1'),
@@ -40,7 +40,6 @@ class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
         // Add a hidden field to store the current state of select_field1.
         $form['current_select_field1_options'] = [
           '#type' => 'hidden',
-          '#default_value' => '',
           '#default_value' => $config->get('select_field1'),
           '#attributes' => [
             'id' => 'current-select-field1-options',
@@ -59,7 +58,7 @@ class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
         // Second Multiple Select List
         $form['select_field2'] = array(
           '#type' => 'select',
-          '#title' => t('Selected field for Display'),
+          '#title' => $this->t('Selected field for Display'),
           '#multiple' => TRUE,
           '#options' => $this->get_select_field2_options(),
           '#prefix' => '<div id="select-field2-wrapper">',
