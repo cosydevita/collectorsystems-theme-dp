@@ -41,7 +41,8 @@ function collector_systems_theme() {
         'loadsec' => NULL,
         'requested_page' => NULL,
         'collector_systems_module_path' => NULL,
-        'module_path' => NULL
+        'module_path' => NULL,
+        'showImagesOnListPages' => NULL
       ],
     ],
     'exhibitions-list-page' => [

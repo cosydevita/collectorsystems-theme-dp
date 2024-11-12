@@ -121,14 +121,24 @@ class CollectorSystemsObjects extends BlockBase {
 
     // Ensure the SELECT clause includes all necessary columns
     $query->fields('o');
+    try{
+      $count_query = $query->countQuery();
+      $total_results = $count_query->execute()->fetchField();
+    } catch (\Exception $e) {
+      \Drupal::logger('collector_systems')->error('Error in count query: @message', ['@message' => $e->getMessage()]);
+      $total_results = 0; // Default value in case of failure
+    }
 
-    $count_query = $query->countQuery();
-    $total_results = $count_query->execute()->fetchField();
+    try{
+      $query->range($shskip, $showrec);
 
-    $query->range($shskip, $showrec);
+      $result = $query->execute();
+      $object_details = $result->fetchAllAssoc('ObjectId'); // Assuming 'ObjectId' is the primary key field
+    } catch (\Exception $e) {
+      \Drupal::logger('collector_systems')->error('Error in main query execution: @message', ['@message' => $e->getMessage()]);
+      $object_details = []; // Default empty array in case of failure
+    }
 
-    $result = $query->execute();
-    $object_details = $result->fetchAllAssoc('ObjectId'); // Assuming 'ObjectId' is the primary key field
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
 
@@ -136,9 +146,15 @@ class CollectorSystemsObjects extends BlockBase {
     if($enable_maps){
       //start azure map
       $locations = [];
-      $query_without_range = $query->range(); //to include all results without range
-      $result = $query_without_range->execute();
-      $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+      try{
+        $query_without_range = $query->range(); //to include all results without range
+        $result = $query_without_range->execute();
+        $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+
+      }catch (\Exception $e) {
+          \Drupal::logger('collector_systems')->error('Error generating map locations: @message', ['@message' => $e->getMessage()]);
+          $object_details_without_range = [];
+      }
       foreach ($object_details_without_range as $object) {
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
