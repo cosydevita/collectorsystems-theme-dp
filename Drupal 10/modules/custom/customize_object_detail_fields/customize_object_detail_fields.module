@@ -44,12 +44,13 @@ function customize_object_detail_fields_setting_add_button_ajax_callback($form, 
 function customize_object_detail_fields_form_alter(&$form, &$form_state, $form_id) {
   // Check if this is the form you want to attach JavaScript to.
   if ($form_id === 'customize_object_detail_fields_settings_form') {
-
+    $form['#validate'][] = 'customize_object_detail_fields_custom_validate_allowed_values';
     // Attach the JavaScript file.
     $form['#attached']['library'][] = 'customize_object_detail_fields/customize_object_detail_fields';
 
   }
   if ( $form_id === 'customize_object_list_fields_settings_form') {
+    $form['#validate'][] = 'customize_object_detail_fields_custom_validate_allowed_values';
     $form['#attached']['library'][] = 'customize_object_detail_fields/customize_object_list_fields';
   }
 }
@@ -94,3 +95,30 @@ function create_table_clsobjects_fields(){
   $database->schema()->createTable($table_name, $schema);
 
 }
+
+
+
+/*
+* Custom validation callback to bypass allowed values check for dynamic values.
+*/
+function  customize_object_detail_fields_custom_validate_allowed_values(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $field_name = 'select_field2';
+
+   // Ensure the form field exists and has options defined.
+   if (isset($form[$field_name]) && isset($form[$field_name]['#options'])) {
+     // Retrieve the submitted value.
+     $submitted_value = $form_state->getValue($field_name);
+
+     // Handle multi-value fields or a single submitted value.
+     $submitted_values = is_array($submitted_value) ? $submitted_value : [$submitted_value];
+
+     // Loop through each submitted value to check if it exists in the #options array.
+     foreach ($submitted_values as $value) {
+       if (!isset($form[$field_name]['#options'][$value])) {
+         // Clear the error if the submitted value is not in the options.
+         $form_state->clearErrors();
+         break; // Exit after clearing errors for any unlisted value.
+       }
+     }
+   }
+ }
