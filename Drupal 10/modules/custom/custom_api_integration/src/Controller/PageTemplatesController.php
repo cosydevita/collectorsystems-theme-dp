@@ -251,6 +251,7 @@ class PageTemplatesController extends ControllerBase
     $nxshskip = $shskip;
 
     $loadsec = 1;
+    $showImagesOnListPages =  \Drupal::config('custom_api_integration.settings')->get('show_images_on_list_pages');
 
     $build = [
       '#theme' => 'artists-list-page',
@@ -263,6 +264,7 @@ class PageTemplatesController extends ControllerBase
       '#qSearch' => $qSearch,
       '#loadsec' => $loadsec,
       '#requested_page' => $requested_page,
+      '#showImagesOnListPages' => $showImagesOnListPages,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];

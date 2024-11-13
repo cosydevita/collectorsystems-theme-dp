@@ -31,6 +31,7 @@
                     4: '0.07s'
                 }[loadsec] %}
                 <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 wow fadeInDown" data-wow-delay="{{ delaytm }}">
+                  {% if (showImagesOnListPages) %}
                     <div class="card-body d-flex flex-column">
                         <a href="javascript:;" onclick="return getmoredetailsForArtist('{{  app.request.schemeAndHttpHost }}',{{ artist.ArtistId }})">
                             {% set artist_img = artist.ArtistPhotoAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(artist.ArtistPhotoAttachment) : '' %}
@@ -65,6 +66,7 @@
                             {% endif %}
                         </a>
                     </div>
+                  {% endif %}
                     <div class="card-footer text-muted">
                         <a href="javascript:;" onclick="return getmoredetailsForArtist('{{  app.request.schemeAndHttpHost }}',{{ artist.ArtistId }})">
                             <h5 class="card-title font-normal">

@@ -124,7 +124,8 @@ function custom_api_integration_theme() {
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
-        'requested_page' => NULL
+        'requested_page' => NULL,
+        'showImagesOnListPages' => NULL
       ],
     ],
     'exhibitions-list-page' => [
