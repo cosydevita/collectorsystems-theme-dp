@@ -9,3 +9,7 @@ services:
   customize_object_detail_fields.object_fields_service:
     class: Drupal\collector_systems\ObjectFieldsService
     arguments: ['@config.factory']
+  collector_systems.synchronizer:
+    class: Drupal\collector_systems\Synchronizer
+    arguments: ['@logger.factory', '@collector_systems.collector_systemsts_get_api_data']
+

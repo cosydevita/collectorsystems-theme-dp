@@ -201,7 +201,8 @@ function collector_systems_theme() {
         'items_per_page' => '',
         'footer_text' => '',
         'API_Synced_On' => '',
-        'API_Synced_By' => ''
+        'API_Synced_By' => '',
+        'automatic_sync_settings_form' => ''
       ],
     ],
 
@@ -343,5 +344,66 @@ function collector_systems_custom_validate_allowed_values(array &$form, \Drupal\
         break; // Exit after clearing errors for any unlisted value.
       }
     }
+  }
+}
+
+
+/**
+ * Implements hook_cron().
+ */
+function collector_systems_cron() {
+  $config = \Drupal::config('collector_systems.settings');
+  $sync_frequency = $config->get('collector_systems_automatic_sync');
+  $sync_time = $config->get('collector_systems_automatic_sync_time');
+
+  // Get the current time.
+  $current_time = time();
+
+  // Convert the sync time to a Unix timestamp.
+  $sync_timestamp = strtotime($sync_time);
+
+  // Check if it's time to run the synchronization based on the frequency.
+  switch ($sync_frequency) {
+    case 'every-night':
+      // Run every night at the specified time.
+      if (date('H', $current_time) == date('H', $sync_timestamp)) {
+        \Drupal::service('collector_systems.synchronizer')->runAutomaticSync();
+      }
+      break;
+
+    case '7-days':
+      // Run every 7 days at the specified time.
+      if (date('w', $current_time) == 0 && date('H', $current_time) == date('H', $sync_timestamp)) {
+        \Drupal::service('collector_systems.synchronizer')->runAutomaticSync();
+      }
+      break;
+
+    case '14-days':
+      // Run every 14 days at the specified time.
+      if (date('j', $current_time) % 14 == 0 && date('H', $current_time) == date('H', $sync_timestamp)) {
+        \Drupal::service('collector_systems.synchronizer')->runAutomaticSync();
+      }
+      break;
+
+    case '30-days':
+      // Run every 30 days at the specified time.
+      if (date('j', $current_time) == 1 && date('H', $current_time) == date('H', $sync_timestamp)) {
+        \Drupal::service('collector_systems.synchronizer')->runAutomaticSync();
+      }
+      break;
+
+    case '90-days':
+      // Run every 90 days at the specified time.
+      if (date('j', $current_time) == 1 && date('n', $current_time) % 3 == 0 && date('H', $current_time) == date('H', $sync_timestamp)) {
+        \Drupal::service('collector_systems.synchronizer')->runAutomaticSync();
+      }
+      break;
+
+    case 'annually':
+      // Run every year at the specified time.
+      if (date('z', $current_time) == 0 && date('H', $current_time) == date('H', $sync_timestamp)) {
+        \Drupal::service('collector_systems.synchronizer')->runAutomaticSync();
+      }
+      break;
   }
 }

@@ -61,7 +61,7 @@ class CreateTablesForm extends FormBase
   /**
    * Get the data for batch processing.
    */
-  protected function getDataForProcessing()
+  public function getDataForProcessing()
   {
 
 
@@ -118,7 +118,7 @@ class CreateTablesForm extends FormBase
   /**
    * Start the batch process.
    */
-  protected function startBatchProcess($data, $btn_action)
+  public function startBatchProcess($data, $btn_action)
   {
 
     $operations = [];
@@ -135,9 +135,14 @@ class CreateTablesForm extends FormBase
       'finished' => [$this, 'batchFinished'],
     ];
 
-    // Set and process the batch.
-    batch_set($batch);
-    // batch_process();
+    // If triggered by Cron, ensure batch processing works without UI interaction.
+    if (PHP_SAPI === 'cli') {
+      batch_set($batch);
+      drush_backend_batch_process(); // For Drush
+    } else {
+      batch_set($batch);
+    }
+
   }
 
   /**

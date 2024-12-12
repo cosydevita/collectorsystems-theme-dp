@@ -6,9 +6,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Session\AccountInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Database\Database;
 
 /**
@@ -67,9 +64,11 @@ class DashboardController extends ControllerBase implements ContainerInjectionIn
       }
 
     }
+    $automatic_sync_settings_form = \Drupal::formBuilder()->getForm('Drupal\collector_systems\Form\AutomaticSyncSettingsForm');
 
     $build = [
       '#theme' => 'dashboard',
+      '#automatic_sync_settings_form' => $automatic_sync_settings_form,
       '#API_Synced_On' => $last_synced_date_time,
       '#API_Synced_By' => $last_synced_by
 
@@ -78,10 +77,5 @@ class DashboardController extends ControllerBase implements ContainerInjectionIn
 
     return $build;
   }
-
-
-
-
-
 
 }
