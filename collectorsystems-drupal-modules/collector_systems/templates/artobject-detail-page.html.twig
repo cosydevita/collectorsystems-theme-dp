@@ -50,19 +50,36 @@
                           {% for i, thumb in allthumb %}
                             {% set altText = thumb.attachment_description is not empty ? thumb.attachment_description : 'Image description is not available' %}
 
-                              <div class="carousel-item {{ i == 0 ? 'active' }}" data-slide-number="{{i}}">
+                            <div class="carousel-item {{ i == 0 ? 'active' }}" data-slide-number="{{i}}">
 
-                                {% set relative_path = thumb.object_image_path  %}
-                                {% set object_img = thumb.object_image_attachment  ? 'data:image/jpeg;base64,' ~ base64_encode(thumb.object_image_attachment) : '' %}
+                              {% set relative_path = thumb.object_image_path  %}
+                              {% set object_img = thumb.object_image_attachment  ? 'data:image/jpeg;base64,' ~ base64_encode(thumb.object_image_attachment) : '' %}
+                              {% set object_slideshow_img = thumb.slide_show_attachment  ? 'data:image/jpeg;base64,' ~ base64_encode(thumb.slide_show_attachment) : '' %}
 
-                                  {% if enable_zoom %}
-                                      <a id="draggable-image-link" class="carouselAToggle" data-big="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" href="javascript:;">
-                                          <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="{{altText}}"/>
-                                      </a>
-                                  {% else %}
-                                      <img class="d-block img-fluid" src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}" alt="{{altText}}"/>
-                                  {% endif %}
-                              </div>
+                              {% set slide_show_path = thumb.slide_show_URL_path ?  thumb.slide_show_URL_path : "" %}
+                              {% set relative_slide_show_path = thumb.slide_show_URL_path  %}
+
+                              {% if enable_zoom %}
+                                  <a
+                                    id="draggable-image-link"
+                                    class="carouselAToggle"
+                                    data-big="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
+                                    href="javascript:;"
+                                  >
+                                      <img class="d-block img-fluid"
+                                      src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
+                                      src-slideshow = "{{ object_slideshow_img|default(server_path|default(site_url ~ relative_slide_show_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
+                                      alt="{{altText}}"
+                                      />
+                                  </a>
+                              {% else %}
+                                  <img
+                                  class="d-block img-fluid"
+                                  src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
+                                  alt="{{altText}}"
+                                  />
+                              {% endif %}
+                            </div>
                           {% endfor %}
                       </div>
                   </div>

@@ -4081,6 +4081,14 @@ class CreateTablesForm extends FormBase
           'type' => 'varchar',
           'length' => 500,
         ],
+        'slide_show_attachment' => [
+          'type' => 'blob',
+          'size' => 'big',
+        ],
+        'slide_show_URL_path' => [
+          'type' => 'varchar',
+          'length' => 500,
+        ],
         'FileURL' => [
           'type' => 'text',
         ],
@@ -4455,6 +4463,13 @@ class CreateTablesForm extends FormBase
           'size' => 'big',
         ],
         'thumb_size_URL_path' => [
+          'type' => 'text',
+        ],
+        'slide_show_attachment' => [
+          'type' => 'blob',
+          'size' => 'big',
+        ],
+        'slide_show_URL_path' => [
           'type' => 'text',
         ],
         'MainImageAttachmentId' => [

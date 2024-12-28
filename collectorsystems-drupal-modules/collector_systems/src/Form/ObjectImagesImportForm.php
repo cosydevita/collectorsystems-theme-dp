@@ -176,6 +176,7 @@ class ObjectImagesImportForm extends FormBase {
       ->fields([
         'thumb_size_URL_path' => NULL,
         'object_image_path' => NULL,
+        'slide_show_URL_path' => NULL
       ])
       ->execute();
 
@@ -183,6 +184,7 @@ class ObjectImagesImportForm extends FormBase {
       ->fields([
         'main_image_path' => NULL,
         'thumb_size_URL_path' => NULL,
+        'slide_show_URL_path' => NULL,
         'object_image_path' => NULL,
       ])
       ->execute();
@@ -280,6 +282,12 @@ class ObjectImagesImportForm extends FormBase {
                  $thumbImageData = curl_exec($curlObject1);
                  curl_close($curlObject1);
 
+                  $objectImageSlideShowURL = $objectImage['Attachment']['SlideShowURL'];
+                  $curlObject1 = curl_init($objectImageSlideShowURL);
+                  curl_setopt($curlObject1, CURLOPT_RETURNTRANSFER, true);
+                  $slideShowImageData = curl_exec($curlObject1);
+                  curl_close($curlObject1);
+
                  if ($objectImageData !== false)
                  {
                      $id1 = $image['ObjectId'];
@@ -289,6 +297,7 @@ class ObjectImagesImportForm extends FormBase {
                        ->fields([
                          'object_image_attachment' => $objectImageData,
                          'thumb_size_URL' => $thumbImageData,
+                         'slide_show_attachment' => $slideShowImageData,
                          'FileURL' => $fileName1,
                        ])
                        ->condition('ObjectId', $id1)
@@ -307,6 +316,7 @@ class ObjectImagesImportForm extends FormBase {
                              'ThumbURL' => $fileName1,
                              'ObjectId' => $id1,
                              'thumb_size_URL' => $thumbImageData,
+                             'slide_show_attachment' => $slideShowImageData,
                              'object_image_attachment' => $objectImageData,
                              'keywords' => $keywords_serialized,
                              'MainImageAttachmentId' => $mainId,
@@ -323,6 +333,7 @@ class ObjectImagesImportForm extends FormBase {
                            'ThumbURL' => $fileName1,
                            'ObjectId' => $id1,
                            'thumb_size_URL' => $thumbImageData,
+                           'slide_show_attachment' => $slideShowImageData,
                            'object_image_attachment' => $objectImageData,
                            'AttachmentId' => $AttachmentId,
                            'keywords' => $keywords_serialized,
@@ -359,6 +370,7 @@ class ObjectImagesImportForm extends FormBase {
       ->fields([
         'main_image_attachment' => null,
         'object_image_attachment' => null,
+        'slide_show_attachment' => null,
         'thumb_size_URL' => null,
       ]);
       $update_object_data->execute();
@@ -380,6 +392,14 @@ class ObjectImagesImportForm extends FormBase {
     if (!file_exists($objectDirectory))
     {
         mkdir($objectDirectory, 0755, true);
+    }
+
+    //Create object's SlideShowImages Directory
+    $SlideShowImagesDirectory = ( PublicStream::basePath().'/All Images/Objects/SlideShowImages');
+
+    if (!file_exists($SlideShowImagesDirectory))
+    {
+        mkdir($SlideShowImagesDirectory, 0755, true);
     }
 
     //Create object's objectImageAttachment Directory
@@ -405,12 +425,17 @@ class ObjectImagesImportForm extends FormBase {
     {
       $object_main_image_path = '';
       $mainImageDescription = $image['MainImageAttachment']['Description'] ?? null;
+      $object_slideshow_image_path = "";
+      $objectSlideShowImageURL = '';
 
       if (
         isset($image['MainImageAttachment']) &&
         isset($image['MainImageAttachment']['FileName'])
       ) {
           $object_main_image_path = $objectDirectory . '/' . $image['MainImageAttachment']['FileName'];
+
+          $object_slideshow_image_path = $SlideShowImagesDirectory . '/' . $image['MainImageAttachment']['FileName'];
+          $objectSlideShowImageURL = $image['MainImageAttachment']['SlideShowURL'];
       }
         $mainImageURL = $image['MainImageAttachment']['DetailLargeURL'] ?? null;
         $objectImages = $image['ObjectImageAttachments'] ?? null;
@@ -441,6 +466,16 @@ class ObjectImagesImportForm extends FormBase {
 
         }
 
+        // save slideshow image
+        $slideShowImageURL = $image['MainImageAttachment']['SlideShowURL'] ?? null;
+        $curlMain1 = curl_init($slideShowImageURL);
+        curl_setopt($curlMain1, CURLOPT_RETURNTRANSFER, true);
+        $slideShowImageData = curl_exec($curlMain1);
+        curl_close($curlMain1);
+        if($object_main_image_path &&  $slideShowImageData){
+          file_put_contents($object_slideshow_image_path, $slideShowImageData);
+        }
+
         if (!empty($objectImages))
         {
             foreach ($objectImages as $objectImage)
@@ -465,7 +500,9 @@ class ObjectImagesImportForm extends FormBase {
 
                 $object_image_path = $objectDirectory1 . '/' . $objectImage['Attachment']['FileName'];
                 $thumb_image_path = $objectDirectory2 . '/' . $objectImage['Attachment']['FileName'];
+                $slideshow_image_path = $SlideShowImagesDirectory . '/' . $objectImage['Attachment']['FileName'];
                 $objectImageDetailLargeURL = $objectImage['Attachment']['DetailXLargeURL'];
+                $slideShowImageURL = $objectImage['Attachment']['SlideShowURL'];
                 $objectImageThumbSizeURL = $objectImage['Attachment']['ThumbSizeURL'];
                 $curlObject = curl_init($objectImageDetailLargeURL);
                 curl_setopt($curlObject, CURLOPT_RETURNTRANSFER, true);
@@ -481,6 +518,16 @@ class ObjectImagesImportForm extends FormBase {
                 file_put_contents($thumb_image_path, $thumbImageData);
                 //for local hosts only
                 // $thumb_image_path = preg_replace("#.*?\\\\wp-content#", "/wp-content", $thumb_image_path);
+
+                //save slideshow image to directory
+                if(!empty($slideShowImageURL)){
+                  $curlObject1 = curl_init($slideShowImageURL);
+                  curl_setopt($curlObject1, CURLOPT_RETURNTRANSFER, true);
+                  $slideShowImageData = curl_exec($curlObject1);
+                  curl_close($curlObject1);
+                  file_put_contents($slideshow_image_path, $slideShowImageData);
+                }
+
                 $id1 = $image['ObjectId'];
                 $fileName1 = $objectImage['Attachment']['FileURL'];
                 if($objectImageData!==false)
@@ -490,6 +537,7 @@ class ObjectImagesImportForm extends FormBase {
                     ->fields([
                       'object_image_path' => $object_image_path,
                       'thumb_size_URL_path' => $thumb_image_path,
+                      'slide_show_URL_path' => $slideshow_image_path,
                       'FileURL' => $fileName1,
                     ])
                     ->condition('ObjectId', $id1);
@@ -501,6 +549,7 @@ class ObjectImagesImportForm extends FormBase {
                       'ThumbURL' => $fileName1,
                       'ObjectId' => $id1,
                       'thumb_size_URL_path' => $thumb_image_path,
+                      'slide_show_URL_path' => $slideshow_image_path,
                       'object_image_path' => $object_image_path,
                       'AttachmentId' => $AttachmentId,
                       'keywords' => $keywords_serialized,

@@ -3,16 +3,18 @@
     attach: function (context, settings) {
       function feature_custom_image_lightbox_draggable() {
         let scale = 1; // Initial scale factor
+        let current_image_index  = 0;
 
         // Show lightbox when image is clicked
         // $("body", context).on("click", "#draggable-image-link", function (event) {
         $(once('draggable-image-link', '#draggable-image-link', context)).on('click', function () {
-          current_image_src = $(this).children('img').attr('src');
+          current_image_src = $(this).children('img').attr('src-slideshow');
           $("#lightbox-image").attr('src', current_image_src);
           $("#lightbox-custom-draggable").fadeIn();
           $("#lightbox-image").draggable();
           fitImageToScreen();
           resetImageTransform();
+          current_image_index = parseInt($("#lightbox-image").attr('image_index'));
         });
 
         // Close the lightbox
@@ -86,13 +88,13 @@
           $("#lightbox-image").css("transform", `scale(${scale})`);
         });
 
-        let current_image_index = parseInt($("#lightbox-image").attr('image_index'));
+
 
         // $('#btn-next-draggable', context).on('click', function () {
         $(once('btn-next-draggable', '#btn-next-draggable', context)).on('click', function () {
 
           let next_image_index = parseInt(current_image_index + 1);
-          next_image_src = $(`#carouselA div[data-slide-number="${next_image_index}"] img`).attr('src');
+          next_image_src = $(`#carouselA div[data-slide-number="${next_image_index}"] img`).attr('src-slideshow');
           if (next_image_src) {
             $("#lightbox-image").attr('src', next_image_src);
             current_image_index = next_image_index;
@@ -105,7 +107,7 @@
         $(once('btn-prev-draggable', '#btn-prev-draggable', context)).on('click', function () {
 
           let prev_image_index = parseInt(current_image_index - 1);
-          prev_image_src = $(`#carouselA div[data-slide-number="${prev_image_index}"] img`).attr('src');
+          prev_image_src = $(`#carouselA div[data-slide-number="${prev_image_index}"] img`).attr('src-slideshow');
           if (prev_image_src) {
             $("#lightbox-image").attr('src', prev_image_src);
             current_image_index = prev_image_index;
