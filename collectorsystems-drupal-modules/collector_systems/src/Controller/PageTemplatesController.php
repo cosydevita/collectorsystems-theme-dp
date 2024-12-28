@@ -53,11 +53,11 @@ class PageTemplatesController extends ControllerBase
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
     $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
+    $locations = [];
     if($enable_maps){
       //start azure map
       $customized_fields = $this->getCommaSeperatedFieldsForDetailPage();
       $customized_fields_array = explode(',', $customized_fields);
-      $locations = [];
       $query->condition('ObjectId', $artObjID);
       $query_without_range = $query->range(); //to include all results without range
       $result = $query_without_range->execute();
@@ -194,6 +194,7 @@ class PageTemplatesController extends ControllerBase
       '#module_path' => $module_path,
       '#enable_maps' => $enable_maps,
       '#enable_zoom' => $enable_zoom,
+      '#locations' => $locations,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];

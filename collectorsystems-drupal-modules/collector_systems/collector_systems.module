@@ -105,7 +105,8 @@ function collector_systems_theme() {
         'requested_pageNo' => NULL,
         'module_path' => NULL,
         'enable_maps' => NULL,
-        'enable_zoom' => NULL
+        'enable_zoom' => NULL,
+        'locations' => NULL
       ],
     ],
     'artist-detail-page' => [
