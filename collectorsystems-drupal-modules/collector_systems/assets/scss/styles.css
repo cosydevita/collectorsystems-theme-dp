@@ -11636,7 +11636,7 @@
 }
 .collector-systems-wrapper .artists-container .card-body, .collector-systems-wrapper .collections-container .card-body, .collector-systems-wrapper .exhibitions-container .card-body, .collector-systems-wrapper .objects-container .card-body, .collector-systems-wrapper .groups-container > .card-body,
 .collector-systems-wrapper .artist-objects-container .card-body, .collector-systems-wrapper .collection-objects-container .card-body, .collector-systems-wrapper .exhibition-objects-container .card-body, .collector-systems-wrapper .group-objects-container .card-body {
-  justify-content: center;
+  justify-content: flex-start;
 }
 @media screen and (min-width: 900px) {
   .collector-systems-wrapper .card {

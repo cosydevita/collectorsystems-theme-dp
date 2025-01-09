@@ -396,7 +396,7 @@ a:hover h4, a:hover h5, a:hover h6 {
 
 .artists-container .card-body, .collections-container .card-body, .exhibitions-container .card-body, .objects-container .card-body, .groups-container > .card-body,
 .artist-objects-container .card-body, .collection-objects-container .card-body, .exhibition-objects-container .card-body, .group-objects-container .card-body {
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 /* .objects-container .card-img-top, .artist-objects-container .card-img-top {
