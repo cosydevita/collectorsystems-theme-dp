@@ -1,0 +1,25 @@
+uuid: 00f03d37-9a52-4060-bba0-ef2490791d0c
+langcode: en
+status: true
+dependencies:
+  module:
+    - collector_systems
+    - system
+  theme:
+    - collectorsystems
+id: collectorsystems_collectorsytemsexhibitions
+theme: collectorsystems
+region: content
+weight: 0
+provider: null
+plugin: collector_systems_exhibitions
+settings:
+  id: collector_systems_exhibitions
+  label: 'Collector Sytems Exhibitions'
+  label_display: '0'
+  provider: collector_systems
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /exhibitions

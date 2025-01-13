@@ -6,8 +6,6 @@ dependencies:
     - collector_systems
     - serialization
     - user
-_core:
-  default_config_hash: vNI6C9_Ln8I0PmM1qSv1HHcp6Ojp8c2ChQGzFSuTZ3Y
 id: cs_fetch_group_ajax
 plugin_id: cs_fetch_group_ajax
 granularity: resource

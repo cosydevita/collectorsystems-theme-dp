@@ -1,0 +1,168 @@
+.bootstrap-lightbox-overlay{
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    z-index:999999;
+    backdrop-filter:blur(2px);
+    animation-duration:.35s
+}
+.bootstrap-lightbox-overlay--hidden{
+    display:none !important
+}
+.bootstrap-lightbox{
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    /* background-color:rgba(255,255,255,.6) */
+    background-color: rgba(0,0,0,.9);
+}
+.bootstrap-lightbox__top{
+    display:flex;
+    align-items:flex-start;
+    height:calc(100vh - 100px)
+}
+.bootstrap-lightbox__top__logo{
+    width:250px;
+    margin-top:20px;
+    display:flex;
+    justify-content:center
+}
+.bootstrap-lightbox__top__logo__img{
+    max-width:200px;
+    max-height:80px
+}
+.bootstrap-lightbox__top__image-container{
+    flex-grow:1;
+    display:flex;
+    justify-content:center;
+    overflow:hidden;
+    margin-top:20px;
+    max-width:90%;
+    margin-left:auto;
+    margin-right:auto
+}
+.bootstrap-lightbox__top__image-container__img{
+    max-height:calc(100vh - 100px - 20px);
+    max-width:calc(100vw - 400px)
+}
+.bootstrap-lightbox__top__controls{
+    display:flex;
+    align-items:center;
+    justify-content:right;
+    width:250px;
+    padding-top:10px;
+    padding-right:10px
+}
+.bootstrap-lightbox__top__controls .bi{
+    font-size:26px
+}
+.bootstrap-lightbox__top__controls .btn-close{
+    width:52px;
+    height:53px;
+    padding:0 !important;
+    margin-left:20px;
+    font-size:20px
+}
+.bootstrap-lightbox__bottom{
+    height:100px;
+    width:100%
+}
+.bootstrap-lightbox__bottom__zoom{
+    display:flex;
+    align-items:center;
+    max-width:40%;
+    margin:0 auto;
+    position:relative;
+    transform:translateY(-50%);
+    top:50%
+}
+.bootstrap-lightbox__bottom .bi{
+    font-size:26px
+}
+@media all and (max-width: 700px){
+    .bootstrap-lightbox__top{
+        flex-wrap:wrap;
+        height:calc(100vh - 60px)
+    }
+    .bootstrap-lightbox__top__logo{
+        order:1;
+        justify-content:left;
+        margin-top:10px;
+        margin-left:20px
+    }
+    .bootstrap-lightbox__top__logo__img{
+        max-height:60px
+    }
+    .bootstrap-lightbox__top__image-container{
+        order:3;
+        margin-top:10px;
+        padding-left:10px;
+        padding-right:10px
+    }
+    .bootstrap-lightbox__top__image-container__img{
+        max-width:calc(100vw - 20px);
+        max-height:calc(100vh - 60px - 60px - 20px)
+    }
+    .bootstrap-lightbox__top__controls{
+        order:2;
+        flex-grow:1
+    }
+    .bootstrap-lightbox__bottom{
+        height:60px
+    }
+    .bootstrap-lightbox__bottom__zoom{
+        max-width:80%
+    }
+}
+@media(max-width: 520px){
+    .bootstrap-lightbox__top__logo{
+        width:auto
+    }
+    .bootstrap-lightbox__top__controls{
+        width:auto
+    }
+}
+@media(max-width: 400px){
+    .bootstrap-lightbox__top__logo__img{
+        max-width:calc(100vw - 180px)
+    }
+    .bootstrap-lightbox__top__controls{
+        padding-top:5px;
+        padding-right:5px
+    }
+    .bootstrap-lightbox__top__controls .bi{
+        font-size:22px
+    }
+    .bootstrap-lightbox__bottom__zoom{
+        max-width:90%
+    }
+}
+
+
+.bootstrap-lightbox__bottom__zoom .btn {
+    color:#b3b3b3;
+}
+
+.bootstrap-lightbox__bottom__zoom .btn:hover {
+    color:#fff;
+}
+
+.bootstrap-lightbox__top__controls .btn .bi.bi-chevron-left, .bootstrap-lightbox__top__controls .btn .bi.bi-chevron-right,.bootstrap-lightbox__top__controls .btn .bi.bi-x-lg {
+    color:#b3b3b3;
+    font-size:26px
+}
+
+.bootstrap-lightbox__top__controls .btn:hover .bi.bi-chevron-left, .bootstrap-lightbox__top__controls .btn:hover .bi.bi-chevron-right,.bootstrap-lightbox__top__controls .btn:hover .bi.bi-x-lg {
+    color:#fff;
+    font-size:26px
+}
+
+.bootstrap-lightbox__top__controls .btn.btn-check:focus + .bootstrap-lightbox__top__controls .btn.btn, .bootstrap-lightbox__top__controls .btn:focus,
+.bootstrap-lightbox__bottom__zoom .btn:focus
+{
+    box-shadow: none;
+}

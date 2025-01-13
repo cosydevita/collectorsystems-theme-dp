@@ -89,7 +89,7 @@ function collectorsystems_preprocess_page(&$variables){
 
 
   //pass homepage_image_url
-  $homepage_image =  \Drupal::config('homepage_image.settings')->get('homepage_image');
+  $homepage_image =  \Drupal::config('collector_systems.settings')->get('homepage_image');
   if($homepage_image){
     $file_id_homepage_image = $homepage_image[0];
     $file_homepage_image = File::load($file_id_homepage_image[0]);

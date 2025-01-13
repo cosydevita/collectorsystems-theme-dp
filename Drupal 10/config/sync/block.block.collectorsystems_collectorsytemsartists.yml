@@ -1,0 +1,25 @@
+uuid: eb692885-6d54-4e6c-af50-07b932773002
+langcode: en
+status: true
+dependencies:
+  module:
+    - collector_systems
+    - system
+  theme:
+    - collectorsystems
+id: collectorsystems_collectorsytemsartists
+theme: collectorsystems
+region: content
+weight: 0
+provider: null
+plugin: collector_systems_artists
+settings:
+  id: collector_systems_artists
+  label: 'Collector Sytems Artists'
+  label_display: '0'
+  provider: collector_systems
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /artists

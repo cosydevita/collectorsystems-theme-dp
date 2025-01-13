@@ -1,5 +1,0 @@
-services:
-  custom_api_integration.twig.CustomTwig:
-    class: Drupal\custom_api_integration\CustomTwig
-    tags:
-      - { name: twig.extension }

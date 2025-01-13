@@ -1,0 +1,25 @@
+uuid: f1216837-df33-445b-b205-f6a1e4bcda76
+langcode: en
+status: true
+dependencies:
+  module:
+    - collector_systems
+    - system
+  theme:
+    - collectorsystems
+id: collectorsystems_collectorsytemscollections
+theme: collectorsystems
+region: content
+weight: 0
+provider: null
+plugin: collector_systems_collections
+settings:
+  id: collector_systems_collections
+  label: 'Collector Sytems Collections'
+  label_display: '0'
+  provider: collector_systems
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /collections
