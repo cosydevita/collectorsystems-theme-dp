@@ -110,6 +110,16 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('items_per_page'),
     ];
 
+    $form['homepage_image'] = [
+      '#type' => 'managed_file',
+      '#title' => $this->t('Hoamepage Image'),
+      '#default_value' => $config->get('homepage_image'),
+      '#upload_location' => 'public://images/homepage', // Adjust the upload location as needed
+      '#upload_validators' => [
+        'file_validate_extensions' => ['png gif jpg jpeg'],
+      ],
+    ];
+
 
     $form['#attached']['library'][] = 'collector_systems/select2';
     $form['#attached']['library'][] = 'collector_systems/custom_api_integration_settings_form';
@@ -129,6 +139,7 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       ->set('enable_zoom', $form_state->getValue('enable_zoom'))
       ->set('filter_keywords', $form_state->getValue('filter_keywords'))
       ->set('items_per_page', $form_state->getValue('items_per_page'))
+      ->set('homepage_image', $form_state->getValue('homepage_image'))
       ->save();
 
     parent::submitForm($form, $form_state);
