@@ -26,9 +26,16 @@ class AutomaticSyncSettingsForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = \Drupal::config('collector_systems.settings');
 
-    $form['collector_systems_automatic_sync'] = [
+    $form['container'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['form-inline', 'sync-row'], // Add your custom classes here for styling.
+      ],
+    ];
+
+    $form['container']['collector_systems_automatic_sync'] = [
       '#type' => 'select',
-      '#title' => $this->t('Automatic Sync Frequency'),
+      // '#title' => $this->t('Automatic Sync Frequency'),
       '#options' => [
         'manually' => $this->t('Manually'),
         'every-night' => $this->t('Every Night'),
@@ -40,16 +47,15 @@ class AutomaticSyncSettingsForm extends FormBase {
       ],
       '#default_value' => $config->get('collector_systems_automatic_sync') ?? 'manually',
     ];
-    $form['collector_systems_automatic_sync_time'] = [
+    $form['container']['collector_systems_automatic_sync_time'] = [
       '#type' => 'datetime',
       '#date_date_element' => 'none',
       '#date_time_element' => 'time',
-      '#title' => 'Automatic Sync Time',
+      // '#title' => 'Automatic Sync Time',
       '#default_value' => $config->get(key: 'collector_systems_automatic_sync_time') ? new DrupalDateTime($config->get(key: 'collector_systems_automatic_sync_time')) : NULL,
     ];
 
-    $form['actions']['#type'] = 'actions';
-    $form['actions']['submit'] = [
+    $form['container']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Save'),
       '#button_type' => 'primary',

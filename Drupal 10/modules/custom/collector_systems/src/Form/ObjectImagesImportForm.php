@@ -5,7 +5,8 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Database\Database;
 use Drupal\Core\StreamWrapper\PublicStream;
-
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ObjectImagesImportForm extends FormBase {
 
@@ -99,7 +100,7 @@ class ObjectImagesImportForm extends FormBase {
       'progress_message' => t('Processed @current out of @total.'),
       'error_message' => t('An error occurred during the download.'),
       'operations' => $operations,
-      'finished' => '::batchFinishedCallback',
+      'finished' => [$this, 'batchFinished'],
     ];
 
     // Set and process the batch.
@@ -131,12 +132,15 @@ class ObjectImagesImportForm extends FormBase {
   /**
    * Batch finished callback.
    */
-  public function batchFinishedCallback($success, $results, $operations) {
+  public function batchFinished($success, $results, $operations) {
     if ($success) {
-      \Drupal::messenger()->addMessage(t('Batch processing complete.'));
+      \Drupal::messenger()->addMessage(t('Collector Systems Object Images Import: Import is successfully completed.'));
+
+      $redirect_url = Url::fromRoute('custom_api_integration.dashboard')->toString();
+      return new RedirectResponse($redirect_url);
     }
     else {
-      \Drupal::messenger()->addError(t('An error occurred during batch processing.'));
+      \Drupal::messenger()->addError(t('Collector Systems Object Images Import: An error occurred during batch processing.'));
     }
   }
 
