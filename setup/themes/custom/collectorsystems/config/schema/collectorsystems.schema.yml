@@ -1,5 +1,0 @@
-# Schema for the configuration files of the collectorsystems theme.
-
-collectorsystems.settings:
-  type: theme_settings
-  label: 'collectorsystems settings'
