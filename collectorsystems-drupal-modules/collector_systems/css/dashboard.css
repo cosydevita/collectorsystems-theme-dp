@@ -268,3 +268,14 @@
     }
 
     /*lds-dual-ring spinner end*/
+
+
+.sync-row {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Adjust spacing between elements */
+}
+
+.sync-row .sync-submit {
+  margin-left: auto; /* Push the button to the right, if needed */
+}
