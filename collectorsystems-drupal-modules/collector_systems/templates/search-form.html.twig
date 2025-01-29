@@ -1,7 +1,0 @@
-{% set current_path = path('<current>') %}
-{% set pagename = current_path | split('/') | last %}
-
-<form class="search-form" onsubmit="return chksearchfordata('{{ pagename }}');">
-  <input id="searchindata" type="search" class="expand-search" autocomplete="off" name="" value="{{ qSearch }}" placeholder="Search...">
-  <span id="clearInputText" class="clear-search" onclick="return clearSearchData('{{ pagename }}');">&times;</span>
-</form>
