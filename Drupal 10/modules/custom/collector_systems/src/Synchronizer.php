@@ -30,9 +30,10 @@ class Synchronizer
       $form_object = new \Drupal\collector_systems\Form\CreateTablesForm();
       $data = $form_object->getDataForProcessing();
 
-      // Start the batch process.
-      $form_object->startBatchProcess($data, $btn_action);
+      $this->logger->debug('Automatic sync start.');
 
-      $this->logger->info('Automatic sync triggered.');
+      // Start the batch process.
+      $form_object->startBatchProcess($data, $btn_action, TRUE);
+
     }
 }

@@ -118,7 +118,7 @@ class CreateTablesForm extends FormBase
   /**
    * Start the batch process.
    */
-  public function startBatchProcess($data, $btn_action)
+  public function startBatchProcess($data, $btn_action, $is_automatic_sync = null)
   {
 
     $operations = [];
@@ -135,11 +135,24 @@ class CreateTablesForm extends FormBase
       'finished' => [$this, 'batchFinished'],
     ];
 
+    \Drupal::logger('collector_systems')->debug('PHP_SAPI: '. PHP_SAPI);
+
     // If triggered by Cron, ensure batch processing works without UI interaction.
-    if (PHP_SAPI === 'cli') {
+    if ($is_automatic_sync == TRUE) {
+      $batch['progressive'] = FALSE; // Ensure batch runs non-interactively.
+
+      \Drupal::logger('collector_systems')->debug('Operations:'. json_encode($operations));
+      \Drupal::logger('collector_systems')->debug('Automatic sync Triggered');
       batch_set($batch);
-      drush_backend_batch_process(); // For Drush
+
+      // Explicitly process the batch during cron.
+      $batch =& batch_get();
+      if (!empty($batch)) {
+        $batch['progressive'] = FALSE; // Ensure non-interactive mode.
+        batch_process();
+      }
     } else {
+      \Drupal::logger('collector_systems')->debug('Batch Process triggered for: ' . $btn_action);
       batch_set($batch);
     }
 
@@ -150,6 +163,7 @@ class CreateTablesForm extends FormBase
    */
   public function processItem($item, $btn_action, &$context)
   {
+    \Drupal::logger('collector_systems')->debug('processItem Triggered');
 
     $collector_systemsts_get_api_data = \Drupal::service('collector_systems.collector_systemsts_get_api_data');
     $import_type = $item['import_type'];
@@ -197,7 +211,10 @@ class CreateTablesForm extends FormBase
    */
   public function batchFinished($success, $results, $operations)
   {
+    \Drupal::logger('collector_systems')->debug('Batch Finished.');
+
     if ($success) {
+      \Drupal::logger('collector_systems')->debug('Batch success.');
       $this->update_CSSynced_table();
       \Drupal::messenger()->addMessage($this->t('Collector Systems: Import completed successfully.'));
 
@@ -205,6 +222,7 @@ class CreateTablesForm extends FormBase
       return new RedirectResponse($redirect_url);
 
     } else {
+      \Drupal::logger('collector_systems')->debug('Batch was not successful.');
       \Drupal::messenger()->addError($this->t('Collector Systems: An error occurred during the import.'));
     }
   }
@@ -227,7 +245,7 @@ class CreateTablesForm extends FormBase
   {
     if ($current_batch_number == 0 && $import_type == 'Artists') {
       //This will run only once at the first batch
-      \Drupal::logger(channel: 'collector_systems')->debug('Started data sync');
+      \Drupal::logger('collector_systems')->debug('Start processSyncData.');
        //drop tables
       $this->custom_api_integration_drop_tables($btn_action);
 
@@ -269,6 +287,7 @@ class CreateTablesForm extends FormBase
 
   public function processImportArtists($Detaildata, $btn_action)
   {
+    \Drupal::logger('collector_systems')->debug('Start process Import Artists.');
     $database = Database::getConnection();
     $table_name = 'Artists';
     $ArtistData = $Detaildata;
@@ -364,6 +383,8 @@ class CreateTablesForm extends FormBase
 
   public function processImportObjects($Detaildata, $btn_action)
   {
+    \Drupal::logger('collector_systems')->debug('Start process Import Objects.');
+
     $data1 = $Detaildata; //End Object's API Data
 
     $table_name = 'CSObjects';
@@ -3994,6 +4015,8 @@ class CreateTablesForm extends FormBase
    * Helper function to create the dynamic table.
    */
   function custom_api_integration_create_tables($btn_action) {
+    \Drupal::logger('collector_systems')->debug('Start Create Tables Process.');
+
     if($btn_action == 'update_dataset'){
       $this->create_table_ExhibitionObjects();
       $this->create_table_GroupObjects();

@@ -203,7 +203,8 @@ function collector_systems_theme() {
         'footer_text' => '',
         'API_Synced_On' => '',
         'API_Synced_By' => '',
-        'automatic_sync_settings_form' => ''
+        'automatic_sync_settings_form' => '',
+        'scheduled_date_and_time_information' => ''
       ],
     ],
 
