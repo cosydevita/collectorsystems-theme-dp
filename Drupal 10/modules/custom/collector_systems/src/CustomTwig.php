@@ -43,7 +43,7 @@ class CustomTwig extends AbstractExtension {
 
     //echo "field:" .$customized_fields;
     $customized_fields_array = explode(',', $customized_fields);
-    $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
+    $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."&pageNo=".$datapageNo;
     $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
     ?>
 

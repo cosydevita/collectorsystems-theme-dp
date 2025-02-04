@@ -2,19 +2,39 @@
 
 namespace Drupal\collector_systems\Controller;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
-use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Database\Query\Condition;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 
 class PageTemplatesController extends ControllerBase
 {
+  /**
+   * A request stack symfony instance.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  public function __construct(RequestStack $request_stack) {
+    $this->requestStack = $request_stack;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('request_stack'),
+    );
+  }
 
   public function ObjectDetailPage(){
-
+    $request = $this->requestStack->getCurrentRequest();
     $artObjID=$_REQUEST['dataId'];
-    $sortBy=isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
+    $sortBy = $request->query->get('sortBy', 'Title asc');
     $qSearch=isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
     $requested_pageNo=isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
 
@@ -32,20 +52,20 @@ class PageTemplatesController extends ControllerBase
     $query = \Drupal::database()->select($object_table, 'o');
     $query ->fields('o');
 
-    if ($sortBy === 'Title%20desc' || $sortBy === 'Title asc') {
-      $query->orderBy('Title', ($sortBy === 'Title%20desc') ? 'DESC' : 'ASC');
+    if ($sortBy === 'Title desc' || $sortBy === 'Title asc') {
+      $query->orderBy('Title', ($sortBy === 'Title desc') ? 'DESC' : 'ASC');
     }
-    elseif ($sortBy === 'InventoryNumber%20asc' || $sortBy === 'InventoryNumber%20desc') {
-      $query->orderBy('InventoryNumber', ($sortBy === 'InventoryNumber%20desc') ? 'DESC' : 'ASC');
+    elseif ($sortBy === 'InventoryNumber asc' || $sortBy === 'InventoryNumber desc') {
+      $query->orderBy('InventoryNumber', ($sortBy === 'InventoryNumber desc') ? 'DESC' : 'ASC');
 
     }
-    elseif ($sortBy === 'ObjectDate%20desc' || $sortBy === 'ObjectDate%20asc') {
-      $query->orderBy('ObjectDate', ($sortBy === 'ObjectDate%20desc') ? 'DESC' : 'ASC');
+    elseif ($sortBy === 'ObjectDate desc' || $sortBy === 'ObjectDate asc') {
+      $query->orderBy('ObjectDate', ($sortBy === 'ObjectDate desc') ? 'DESC' : 'ASC');
     }
-    elseif ($sortBy === 'Collection/CollectionName%20asc' || $sortBy === 'Collection/CollectionName%20desc') {
+    elseif ($sortBy === 'Collection/CollectionName asc' || $sortBy === 'Collection/CollectionName desc') {
       $query->join($collection_table, 'c', 'o.CollectionId = c.CollectionId');
       $query->fields('c', ['CollectionName']);
-      $query->orderBy('c.CollectionName', ($sortBy === 'Collection/CollectionName%20desc') ? 'DESC' : 'ASC');
+      $query->orderBy('c.CollectionName', ($sortBy === 'Collection/CollectionName desc') ? 'DESC' : 'ASC');
     }
 
     // $object_details = $query->execute()->fetchAllAssoc('ObjectId'); //
