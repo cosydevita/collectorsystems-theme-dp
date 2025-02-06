@@ -173,9 +173,11 @@ class CollectorSystemsObjects extends BlockBase {
 
         ];
         if($Latitude && $Longitude){
-          foreach($customized_fields_array as $customized_field){
-            $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+          if($customized_fields && !empty($customized_fields_array)){
+            foreach($customized_fields_array as $customized_field){
+              $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
 
+            }
           }
           $locations[] =  $locations_data;
         }

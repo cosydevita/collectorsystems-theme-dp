@@ -22,7 +22,7 @@ class ObjectImagesImportForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $request = \Drupal::request();
-    $get_save_option = $request->query->get('save_option', '');
+    $get_save_option = $request->query->get('save_option', default: '');
     $selected_option = '';
     if($get_save_option == 'database'){
       $selected_option = 'save_to_database';
@@ -62,11 +62,11 @@ class ObjectImagesImportForm extends FormBase {
   /**
    * Get the data for batch processing.
    */
-  protected function getDataForProcessing() {
+  public function getDataForProcessing() {
     $collector_systemsts_get_api_data = \Drupal::service('collector_systems.collector_systemsts_get_api_data');
     $total_objects_count = $collector_systemsts_get_api_data->getApiTotalObjectsCount();
 
-    $chunk_size = 10; // number of objects to process in a batch
+    $chunk_size = 5; // number of objects to process in a batch
     $total_chunks = ceil($total_objects_count / $chunk_size);
     $data = [];
 
@@ -111,7 +111,7 @@ class ObjectImagesImportForm extends FormBase {
   /**
    * Batch operation to process each item.
    */
-  public function processItem($item, $selected_option, &$context) {
+  public function processItem($item, $selected_option): void {
 
     $collector_systemsts_get_api_data = \Drupal::service('collector_systems.collector_systemsts_get_api_data');
     $chunk_size = $item['chunk_size'];

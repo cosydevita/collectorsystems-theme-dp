@@ -63,10 +63,10 @@ class OtherImagesImportForm extends FormBase {
   /**
    * Get the data for batch processing.
    */
-  protected function getDataForProcessing() {
+  public function getDataForProcessing() {
 
 
-    $chunk_size = 10; // number of objects to process in a batch
+    $chunk_size = 5; // number of objects to process in a batch
 
     $collector_systemsts_get_api_data = \Drupal::service('collector_systems.collector_systemsts_get_api_data');
     $import_types = [
@@ -145,7 +145,7 @@ class OtherImagesImportForm extends FormBase {
   /**
    * Batch operation to process each item.
    */
-  public function processItem($item, $selected_option, &$context) {
+  public function processItem($item, $selected_option) {
 
     $collector_systemsts_get_api_data = \Drupal::service('collector_systems.collector_systemsts_get_api_data');
     $import_type = $item['import_type'];

@@ -9,6 +9,8 @@ use Drupal\collector_systems\Csconstants;
 use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 class CreateTablesForm extends FormBase
 {
@@ -158,18 +160,28 @@ class CreateTablesForm extends FormBase
 
   }
 
+  // public function startQueueProcess($data, $btn_action){
+  //   // Add items to the queue.
+  //   foreach ($data as $item) {
+  //     $this->queue->createItem([
+  //       'data' => $item,
+  //       'btn_action' => $btn_action,
+  //     ]);
+  //   }
+  // }
+
   /**
    * Batch operation to process each item.
    */
-  public function processItem($item, $btn_action, &$context)
+  public function processItem($item, $btn_action)
   {
-    \Drupal::logger('collector_systems')->debug('processItem Triggered');
-
     $collector_systemsts_get_api_data = \Drupal::service('collector_systems.collector_systemsts_get_api_data');
     $import_type = $item['import_type'];
     $chunk_size = $item['chunk_size'];
     $offset = $item['offset'];
     $current_batch_number = $item['current_batch_number'];
+
+    \Drupal::logger('collector_systems')->debug('processItem: '. $import_type);
 
     if ($import_type == 'Artists') {
       $getApiArtistsData = $collector_systemsts_get_api_data->getApiArtistsData($chunk_size, $offset);
