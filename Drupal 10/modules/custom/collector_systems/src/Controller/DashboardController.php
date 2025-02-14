@@ -94,15 +94,10 @@ class DashboardController extends ControllerBase implements ContainerInjectionIn
 
     if ($saved_value_collector_systems_automatic_sync !== 'manually') {
       $event_timestamp = $config->get('collector_systems_automatic_sync_time');
-
-
       if ($event_timestamp) {
         // Create a DateTime object from the timestamp
-        $date_time = new DrupalDateTime($event_timestamp, 'UTC');
-
-        // Get the timezone from site settings
         $timezone = $this->configFactory->get('system.date')->get('timezone')['default'] ?? 'UTC';
-        $date_time->setTimezone(new \DateTimeZone($timezone));
+        $date_time = new DrupalDateTime($event_timestamp, new \DateTimeZone($timezone));
 
         $formatted_time = $date_time->format('l, F j, Y \a\t g:i A T');
 
