@@ -198,7 +198,7 @@ class PageTemplatesController extends ControllerBase
 
     $enable_zoom =  \Drupal::config('collector_systems.settings')->get('enable_zoom');
 
-
+    $base_url_with_scheme = \Drupal::request()->getSchemeAndHttpHost();
     $build = [
       '#theme' => 'artobject-detail-page',
       '#thumbDetails' => $thumbDetails,
@@ -211,6 +211,7 @@ class PageTemplatesController extends ControllerBase
       '#sortBy' => $sortBy,
       '#qSearch' => $qSearch,
       '#requested_pageNo' => $requested_pageNo,
+      '#site_url' => $base_url_with_scheme,
       '#module_path' => $module_path,
       '#enable_maps' => $enable_maps,
       '#enable_zoom' => $enable_zoom,

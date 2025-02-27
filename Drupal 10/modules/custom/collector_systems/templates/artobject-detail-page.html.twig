@@ -63,19 +63,19 @@
                                   <a
                                     id="draggable-image-link"
                                     class="carouselAToggle"
-                                    data-big="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
+                                    data-big="{{ object_img|default(server_path|default(site_url ~ '/' ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
                                     href="javascript:;"
                                   >
                                       <img class="d-block img-fluid"
-                                      src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
-                                      src-slideshow = "{{ object_slideshow_img|default(server_path|default(site_url ~ relative_slide_show_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
+                                      src="{{ object_img|default(server_path|default(site_url ~ '/' ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
+                                      src-slideshow = "{{ object_slideshow_img|default(server_path|default(site_url ~ '/' ~ relative_slide_show_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
                                       alt="{{altText}}"
                                       />
                                   </a>
                               {% else %}
                                   <img
                                   class="d-block img-fluid"
-                                  src="{{ object_img|default(server_path|default(site_url ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
+                                  src="{{ object_img|default(server_path|default(site_url ~ '/' ~ relative_path)|default('https://cdn.collectorsystems.com/images/noimage100.png')) }}"
                                   alt="{{altText}}"
                                   />
                               {% endif %}
@@ -120,7 +120,7 @@
 
                                             {% set server_path = thumbDetails[j].thumb_size_URL_path is defined ? thumbDetails[j].thumb_size_URL_path : '' %}
                                             {% set relative_path = server_path|replace({'%SERVER_DOCUMENT_ROOT%': ''}) %}
-                                            {% set image_url = site_url ~ relative_path %}
+                                            {% set image_url = site_url ~ '/' ~ relative_path %}
 
                                             {% if object_img is empty and server_path is empty %}
                                                 <img class="d-block img-fluid" src="https://cdn.collectorsystems.com/images/noimage100.png" alt="{{altText}}"/>
