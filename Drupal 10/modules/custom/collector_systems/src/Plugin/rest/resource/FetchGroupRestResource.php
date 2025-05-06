@@ -4,11 +4,8 @@ namespace Drupal\collector_systems\Plugin\rest\resource;
 
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
-use Drupal\Core\Database\Connection;
 use Drupal\collector_systems\Csconstants;
 use Drupal\Core\Database\Database;
-use Drupal\Core\StreamWrapper\PublicStream;
-
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -23,11 +20,10 @@ use Drupal\Core\StreamWrapper\PublicStream;
  */
 class FetchGroupRestResource extends ResourceBase {
 
-
    /**
    * Responds to POST requests.
    *
-   * Creates a user account.
+   * Provides count for different data types
    *
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.

@@ -157,6 +157,12 @@ Use "Update Dataset" when you have added/updated  Objects, Artists, Collections,
       <div class="wrapper-automatic-sync">
         {{ automatic_sync_settings_form }}
       </div>
+
+      <h5 class="help-text strong">For automatic sync to work properly in the background:</h5>
+      <li>The Drupal cron must be triggered frequently. Recommended atleast every 3 min. <br>
+      You can trigger the cron in every 3 min interval using third party service like <a target="_blank" href="https://www.easycron.com/">Easy Cron</a> or your server <a target="_blank" href="https://www.geeksforgeeks.org/crontab-in-linux-with-examples/">Crontab </a>.</li>
+      <li>Also please ensure the php "max_execution_time" is set to atleast 180 seconds in your server so that it can process enough items in a single cron run.</li>
+      <li> Every time the Drupal cron runs, the queued items are processed in the background.</li>
     </div>
 
 

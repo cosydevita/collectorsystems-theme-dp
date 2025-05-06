@@ -110,16 +110,18 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('items_per_page'),
     ];
 
-    $form['homepage_image'] = [
-      '#type' => 'managed_file',
-      '#title' => $this->t('Hoamepage Image'),
-      '#default_value' => $config->get('homepage_image'),
-      '#upload_location' => 'public://images/homepage', // Adjust the upload location as needed
-      '#upload_validators' => [
-        'file_validate_extensions' => ['png gif jpg jpeg'],
-      ],
-    ];
-
+    $active_theme =  \Drupal::config('system.theme')->get('default');
+    if($active_theme == 'collectorsystems'){
+      $form['homepage_image'] = [
+        '#type' => 'managed_file',
+        '#title' => $this->t('Home Page Image'),
+        '#default_value' => $config->get('homepage_image'),
+        '#upload_location' => 'public://images/homepage', // Adjust the upload location as needed
+        '#upload_validators' => [
+          'file_validate_extensions' => ['png gif jpg jpeg'],
+        ],
+      ];
+    }
 
     $form['#attached']['library'][] = 'collector_systems/select2';
     $form['#attached']['library'][] = 'collector_systems/custom_api_integration_settings_form';

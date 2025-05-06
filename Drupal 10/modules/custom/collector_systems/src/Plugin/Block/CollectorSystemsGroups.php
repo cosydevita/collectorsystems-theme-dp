@@ -14,7 +14,7 @@ use Drupal\Core\Database\Query\Condition;
  *
  * @Block(
  *   id = "collector_systems_groups",
- *   admin_label = @Translation("Collector Sytems Groups"),
+ *   admin_label = @Translation("Groups"),
  * )
  */
 
