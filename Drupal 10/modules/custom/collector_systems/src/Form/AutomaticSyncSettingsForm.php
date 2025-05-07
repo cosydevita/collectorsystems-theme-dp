@@ -26,6 +26,16 @@ class AutomaticSyncSettingsForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = \Drupal::config('collector_systems.settings');
 
+    $form['save_images_on_automatic_sync_to'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Save Images on Automatic Sync to:'),
+      '#options' => [
+        'save_to_database' => $this->t('Database'),
+        'save_to_directory' => $this->t('Directory'),
+      ],
+      '#default_value' => $config->get('save_images_on_automatic_sync_to') ?? 'directory',
+    ];
+
     $form['container'] = [
       '#type' => 'container',
       '#attributes' => [
@@ -76,11 +86,12 @@ class AutomaticSyncSettingsForm extends FormBase {
     if ($collector_systems_automatic_sync_time instanceof DrupalDateTime) {
       $collector_systems_automatic_sync_time = $collector_systems_automatic_sync_time->format('Y-m-d\TH:i:s');
     }
+    $save_images_on_automatic_sync_to = $form_state->getValue('save_images_on_automatic_sync_to');
     // Save the configuration settings.
     \Drupal::configFactory()->getEditable('collector_systems.settings')
       ->set('collector_systems_automatic_sync', $values['collector_systems_automatic_sync'])
       ->set('collector_systems_automatic_sync_time', $collector_systems_automatic_sync_time)
-
+      ->set('save_images_on_automatic_sync_to', $save_images_on_automatic_sync_to)
       ->save();
 
     // Set a message to indicate successful saving.

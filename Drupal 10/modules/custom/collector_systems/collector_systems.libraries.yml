@@ -7,10 +7,10 @@ collector-systems:
       assets/fontawesome/css/fontawesome.css: {}
 
   js:
-    assets/js/cs_theme_bootstrap.bundle.min.js: {}
+    # assets/js/cs_theme_bootstrap.bundle.min.js: {}
     assets/lib/wow/wow.js: {}
     assets/lib/wow/wow.min.js: {}
-    assets/js/cs_theme_bootstrap-lightbox.js: {}
+    # assets/js/cs_theme_bootstrap-lightbox.js: {}
     assets/js/cs_theme_main.js: {}
     js/collector-systems-scripts.js: {}
   dependencies:
@@ -96,6 +96,7 @@ artobject_detail_page:
       css/cs_artobject_detail_page.css: {}
   dependencies:
     - core/jquery
+    - core/once
 jquery_ui:
   js:
     js/jquery-ui.min.js: {}

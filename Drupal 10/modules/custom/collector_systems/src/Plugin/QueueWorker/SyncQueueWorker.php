@@ -34,6 +34,9 @@ class SyncQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginI
   }
 
   public function processItem($item) {
+    $config_collector_systems = \Drupal::config('collector_systems.settings');
+    $save_images_on_automatic_sync_to = $config_collector_systems->get('save_images_on_automatic_sync_to') ?? 'save_to_directory';
+
     $queue_type = $item['queue_type'];
     // Process each item in the queue.
     $this->logger->info('Processing item: ' . print_r($item, TRUE));
@@ -44,14 +47,12 @@ class SyncQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginI
       $form_object->processItem($item['data'], $btn_action);
     }
     elseif ($queue_type == 'object_images'){
-      $selected_option = 'save_to_database';
       $form_object = new \Drupal\collector_systems\Form\ObjectImagesImportForm();
-      $form_object->processItem($item['data'], $selected_option);
+      $form_object->processItem($item['data'], $save_images_on_automatic_sync_to);
     }
     elseif ($queue_type == 'other_images'){
-      $selected_option = 'save_to_database';
       $form_object = new \Drupal\collector_systems\Form\OtherImagesImportForm();
-      $form_object->processItem($item['data'], $selected_option);
+      $form_object->processItem($item['data'], $save_images_on_automatic_sync_to);
     }
   }
 }
