@@ -8,6 +8,9 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Database\Query\Condition;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 
 /**
  * Provides a custom shortcode block.
@@ -18,8 +21,39 @@ use Drupal\Core\Database\Query\Condition;
  * )
  */
 
-class CollectorSystemsObjects extends BlockBase {
+class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPluginInterface{
 
+ /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+    /**
+   * Constructs a new CollectorSystemsObjects object.
+   *
+   * @param array $configuration
+   * @param string $plugin_id
+   * @param mixed $plugin_definition
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->configFactory = $config_factory;
+  }
+
+   /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('config.factory')
+    );
+  }
 
  /**
    * {@inheritdoc}
@@ -33,7 +67,7 @@ class CollectorSystemsObjects extends BlockBase {
       return $build;
     }
 
-    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
+    $listPageSize =  $this->configFactory->get('collector_systems.settings')->get('items_per_page');
 
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip = 0;
@@ -142,7 +176,7 @@ class CollectorSystemsObjects extends BlockBase {
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
 
-    $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
+    $enable_maps = $this->configFactory->get('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
       //start azure map
       $locations = [];
@@ -184,12 +218,13 @@ class CollectorSystemsObjects extends BlockBase {
 
       }
 
-      $state = \Drupal::state();
-      $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+
+      $config = $this->configFactory->get('collector_systems.settings');
+      $azure_subscription_key = $config->get('azure_map_subscription_key');
 
       $js_settings = [
         'locations' => $locations,
-        'subscription_key' => $subscription_key,
+        'subscription_key' => $azure_subscription_key,
         'module_path' => $module_path
       ];
 

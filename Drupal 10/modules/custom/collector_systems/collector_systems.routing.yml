@@ -55,13 +55,6 @@ custom_api_integration.group_level_objects_searching_page:
     _title: 'Group Level Objects Searching Page'
   requirements:
     _permission: 'access content'
-custom_api_integration.azure_map_form:
-  path: '/admin/collector-systems/custom_api_integration/azure_map'
-  defaults:
-    _form: '\Drupal\collector_systems\Form\AzureMapSettingsForm'
-    _title: 'Azure Map'
-  requirements:
-    _permission: 'administer site configuration'
 custom_api_integration.object_images_import:
   path: '/admin/collector-systems/object-images-import'
   defaults:

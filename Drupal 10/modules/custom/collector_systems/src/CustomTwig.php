@@ -310,7 +310,7 @@ class CustomTwig extends AbstractExtension {
                   <span class="object_detail_fieldlabel"><?php echo $fieldLabel ?>:</span>
 
                   <?php } ?>
-                    <div class="mb-2 cstheme-show-more-richtext"><?php echo $artObjData[$object_field]  ?></div>
+                    <span class="mb-2 cstheme-show-more-richtext"><?php echo $artObjData[$object_field]  ?></span>
                   </p>
                   <?php }
                 break;
@@ -343,7 +343,7 @@ class CustomTwig extends AbstractExtension {
                   <span class="object_detail_fieldlabel"><?php echo $fieldLabel ?>:</span>
 
                   <?php } ?>
-                    <div class="mb-2 cstheme-show-more-richtext"><?php echo $artObjData[$object_field]  ?></div>
+                    <span class="mb-2 cstheme-show-more-richtext"><?php echo $artObjData[$object_field]  ?></span>
                   </p>
                   <?php }
                 break;

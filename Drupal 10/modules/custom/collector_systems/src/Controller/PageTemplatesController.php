@@ -7,6 +7,7 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Database\Query\Condition;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 
 class PageTemplatesController extends ControllerBase
@@ -18,8 +19,14 @@ class PageTemplatesController extends ControllerBase
    */
   protected $requestStack;
 
-  public function __construct(RequestStack $request_stack) {
+  /**
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  public function __construct(RequestStack $request_stack, ConfigFactoryInterface $config_factory) {
     $this->requestStack = $request_stack;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -28,6 +35,7 @@ class PageTemplatesController extends ControllerBase
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('request_stack'),
+      $container->get('config.factory')
     );
   }
 
@@ -107,12 +115,12 @@ class PageTemplatesController extends ControllerBase
       }
 
 
-      $state = \Drupal::state();
-      $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+      $config = $this->configFactory->get('collector_systems.settings');
+      $azure_subscription_key = $config->get('azure_map_subscription_key');
 
       $js_settings = [
         'locations' => $locations,
-        'subscription_key' => $subscription_key,
+        'subscription_key' => $azure_subscription_key,
         'module_path' => $module_path
       ];
 
@@ -333,13 +341,12 @@ class PageTemplatesController extends ControllerBase
         }
       }
 
-
-      $state = \Drupal::state();
-      $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+      $config = $this->configFactory->get('collector_systems.settings');
+      $azure_subscription_key = $config->get('azure_map_subscription_key');
 
       $js_settings = [
         'locations' => $locations,
-        'subscription_key' => $subscription_key,
+        'subscription_key' => $azure_subscription_key,
         'module_path' => $module_path
       ];
 
@@ -479,12 +486,12 @@ class PageTemplatesController extends ControllerBase
       }
 
 
-      $state = \Drupal::state();
-      $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+      $config = $this->configFactory->get('collector_systems.settings');
+      $azure_subscription_key = $config->get('azure_map_subscription_key');
 
       $js_settings = [
         'locations' => $locations,
-        'subscription_key' => $subscription_key,
+        'subscription_key' => $azure_subscription_key,
         'module_path' => $module_path
       ];
 
@@ -625,12 +632,12 @@ class PageTemplatesController extends ControllerBase
         }
       }
 
-      $state = \Drupal::state();
-      $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+      $config = $this->configFactory->get('collector_systems.settings');
+      $azure_subscription_key = $config->get('azure_map_subscription_key');
 
       $js_settings = [
         'locations' => $locations,
-        'subscription_key' => $subscription_key,
+        'subscription_key' => $azure_subscription_key,
         'module_path' => $module_path
       ];
 
