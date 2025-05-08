@@ -1,20 +1,10 @@
 <?php
 
-/**
- * @file
- * Functions to support theming in the collectorsystems theme.
- */
-
-
  use Drupal\file\Entity\File;
- use Drupal\Core\Menu\MenuTreeParameters;
-
 
 function collectorsystems_preprocess_page(&$variables){
   $footer_text =  \Drupal::config('custom_api_integration.settings')->get('footer_text');
   $variables['footer_text'] = $footer_text;
-
-
 
   //pass homepage_image_url
   $homepage_image =  \Drupal::config('collector_systems.settings')->get('homepage_image');
@@ -33,6 +23,7 @@ function collectorsystems_preprocess_page(&$variables){
   }
   $variables['homepage_image_url'] = $homepage_image_url;
 
+  // pass site logo path to the page template.
   $theme = \Drupal::theme()->getActiveTheme();
   $logo_path = $theme->getLogo();
   $variables['site_logo_path'] = $logo_path;
@@ -40,3 +31,5 @@ function collectorsystems_preprocess_page(&$variables){
   $variables['#cache']['max-age'] = 0;
 
 }
+
+
