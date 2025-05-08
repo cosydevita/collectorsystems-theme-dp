@@ -1,13 +1,36 @@
 .collector-systems-wrapper{
-  @import "style";
   @import "cs_theme_bootstrap-lightbox";
   @import "cs_theme_bootstrap.min";
   @import "cs_theme_style";
   @import "mobile";
   @import "../fontawesome/css/all.min";
+  @import "../lib/animate/animate";
   .card-group{
     .card{
       box-shadow: none;
     }
   }
+
+}
+
+body.cs-disable-transition .collector-systems-wrapper  .fadeInDown{
+  transition: none !important;
+  animation: none !important;
+  animation-name: none !important;
+}
+
+body.cs-bold-customized-field-labels .collector-systems-wrapper .object_detail_fieldlabel{
+  font-weight: 700;
+}
+
+body.cs-underline-all-hyperlinks .collector-systems-wrapper a {
+  text-decoration: underline;
+}
+
+/* Center align image and add background color */
+body.cs-center-align-images .collector-systems-wrapper .card-body a.image-wrapper-link{
+  background: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

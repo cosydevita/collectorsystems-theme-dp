@@ -50,7 +50,8 @@ class CustomTwig extends AbstractExtension {
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
                   <?php if($showImagesOnListPages == 1){ ?>
                     <div class="card-body d-flex flex-column">
-                        <a href="<?php echo $object_detail_link; ?>">
+                        <div class="image-wrapper">
+                            <a href="<?php echo $object_detail_link; ?>" class="image-wrapper-link">
                                 <?php
                                 $main_image_attachment_description = isset($value['main_image_attachment_description']) && $value['main_image_attachment_description'] !== ''
                                 ? $value['main_image_attachment_description']
@@ -80,7 +81,8 @@ class CustomTwig extends AbstractExtension {
                                     }
                                     }
                                     ?>
-                    </a>
+                            </a>
+                          </div>
                     </div>
                   <?php } ?>
                     <div class="card-footer text-muted">
@@ -423,7 +425,8 @@ class CustomTwig extends AbstractExtension {
    <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
                 <?php if($showImagesOnListPages == 1){ ?>
                   <div class="card-body d-flex flex-column">
-                      <a href="<?php echo $object_detail_link; ?> " >
+                    <div class="image-wrapper">
+                      <a href="<?php echo $object_detail_link; ?> "  class="image-wrapper-link">
                               <?php
                                $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
                               $server_path = $value['ObjectImagePath'];
@@ -451,7 +454,8 @@ class CustomTwig extends AbstractExtension {
                                   }
                                   ?>
 
-                  </a>
+                      </a>
+                    </div>
                   </div>
                 <?php } ?>
                   <div class="card-footer text-muted">
@@ -504,7 +508,8 @@ class CustomTwig extends AbstractExtension {
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
                 <?php if($showImagesOnListPages == 1){ ?>
                   <div class="card-body d-flex flex-column">
-                      <a href="<?php echo $object_detail_link; ?>" >
+                    <div class="image-wrapper">
+                      <a href="<?php echo $object_detail_link; ?>" class="image-wrapper-link" >
                               <?php
                               $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
                               $server_path = $value['ObjectImagePath'];
@@ -530,7 +535,8 @@ class CustomTwig extends AbstractExtension {
                                   }
                                   ?>
 
-                  </a>
+                      </a>
+                    </div>
                   </div>
                 <?php } ?>
                   <div class="card-footer text-muted">

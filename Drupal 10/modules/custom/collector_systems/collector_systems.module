@@ -417,3 +417,41 @@ function collector_systems_cron() {
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function collector_systems_preprocess_html(array &$variables) {
+  $config_cs = \Drupal::config('collector_systems.settings');
+
+  $underline_all_hyperlinks = $config_cs->get('underline_all_hyperlinks');
+  $center_align_images = $config_cs->get('center_align_images');
+  $bold_customized_field_labels = $config_cs->get('bold_customized_field_labels');
+  $enable_transition = $config_cs->get('enable_transition');
+  $image_bg_color = $config_cs->get('image_bg_color');
+
+  if($underline_all_hyperlinks){
+    $variables['attributes']['class'][] = 'cs-underline-all-hyperlinks';
+  }
+
+  if($center_align_images){
+    $variables['attributes']['class'][] = 'cs-center-align-images';
+  }
+
+
+  if($bold_customized_field_labels){
+    $variables['attributes']['class'][] = 'cs-bold-customized-field-labels';
+  }
+
+  if($enable_transition){
+    $variables['attributes']['class'][] = 'cs-enable-transition';
+  }else{
+    $variables['attributes']['class'][] = 'cs-disable-transition';
+  }
+
+  if($image_bg_color){
+    $variables['attributes']['data-cs-image-bg'][] = $image_bg_color;
+  }
+
+}
+

@@ -1,8 +1,6 @@
 collector-systems:
   css:
     theme:
-      assets/lib/animate/animate.css: {}
-      assets/lib/animate/animate.min.css: {}
       assets/scss/styles.css: {}
       assets/fontawesome/css/fontawesome.css: {}
 

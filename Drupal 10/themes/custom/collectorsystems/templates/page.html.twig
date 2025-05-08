@@ -131,7 +131,9 @@
 <header class="header">
 	<nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top" style="top: -100px;">
 		<div class="container px-lg-1 px-2">
-				{{page.site_branding}}
+      <a href="/" class="navbar-brand d-flex align-items-center ps-lg-2 ps-3 pe-4 pe-lg-4">
+        <img class="img-fluid cs-logo-img" src="/{{site_logo_path}}" alt="cs-mobile-logo">
+      </a>
 			<button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -144,7 +146,7 @@
                             <input id="searchindata" type="search" class="expand-search" autocomplete="off" name="" value="" placeholder="Search...">
                                 <span id="clearInputText" class="clear-search" onclick="return clearSearchData('collection-detail');">×</span>
                         </form> #}
-                        {{page.secondary_menu}}
+                        {# {{page.secondary_menu}} #}
                         </div>
 		</div>
 	</nav>
@@ -155,7 +157,7 @@
 
 <main>
 <div class="container-xxl py-4">
-   <div class="container wow fadeInDown" data-wow-delay="0.1s">
+   <div class="wow fadeInDown" data-wow-delay="0.1s">
 {{page.content}}
 </div>
 </div>

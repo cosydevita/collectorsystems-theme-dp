@@ -40,6 +40,13 @@
     <js-placeholder token="{{ placeholder_token }}">
   </head>
   <body{{ attributes.addClass(body_classes) }}>
+    <div class="collector-systems-wrapper">
+      <!-- Spinner Start -->
+      <div id="spinner" class="show cs-custom-spinner position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+          <div class="spinner-border" role="status">
+          </div>
+      </div>
+    </div>
     {#
       Keyboard navigation/accessibility link to main content section in
       page.html.twig.

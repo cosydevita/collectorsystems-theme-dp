@@ -6,7 +6,7 @@
 	<input type="hidden" value="{{ dataorderby }}" id="dataorderby"/>
 
 	<div class="container-xxl py-4">
-		<div class="container wow fadeInDown" data-wow-delay="0.1s">
+		<div class="wow fadeInDown" data-wow-delay="0.1s">
 			<div class="row mb-3">
 				<div class="col d-inline-flex">
 					<h1 class="cs-page-title">Groups</h1>
@@ -33,18 +33,20 @@
 					{% set delaytm = loadsec == 1 ? '0.01s' : (loadsec == 2 ? '0.03s' : '0.05s') %}
 					<div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 wow fadeInDown" data-wow-delay="{{ delaytm }}">
           {% if (showImagesOnListPages) %}
-						<div
-							class="card-body d-flex flex-column">
-							{# <a href="javascript:;" onclick="return getmoredetailsForGroup('{{ site_url }}', {{ groupdata.GroupId }})">
-							                              {% set group_img = groupdata.GroupImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(groupdata.GroupImageAttachment) : groupdata.ImagePath ? site_url() ~ groupdata.ImagePath : 'https://cdn.collectorsystems.com/images/noimage300.png' %}
-							                              <img class="img-fluid" src="{{ group_img }}" alt=""/>
-							                          </a> #}
-							<a href="javascript:;" onclick="return getmoredetailsForGroup('{{ site_url }}', {{ groupdata.GroupId }})">
-								{% set group_img = groupdata.GroupImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(groupdata.GroupImageAttachment) : groupdata.ImagePath ? "/" ~ groupdata.ImagePath : 'https://cdn.collectorsystems.com/images/noimage300.png' %}
+						<div class="card-body d-flex flex-column">
+              <div class="image-wrapper">
 
-								{% set altText = groupdata.GroupDescription is not empty ? groupdata.GroupDescription : 'Image description is not available' %}
-								<img class="img-fluid" src="{{ group_img }}" alt="{{ altText }}"/>
-							</a>
+                {# <a href="javascript:;" onclick="return getmoredetailsForGroup('{{ site_url }}', {{ groupdata.GroupId }})">
+                                              {% set group_img = groupdata.GroupImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(groupdata.GroupImageAttachment) : groupdata.ImagePath ? site_url() ~ groupdata.ImagePath : 'https://cdn.collectorsystems.com/images/noimage300.png' %}
+                                              <img class="img-fluid" src="{{ group_img }}" alt=""/>
+                                          </a> #}
+                <a href="javascript:;" onclick="return getmoredetailsForGroup('{{ site_url }}', {{ groupdata.GroupId }})" class="image-wrapper-link">
+                  {% set group_img = groupdata.GroupImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(groupdata.GroupImageAttachment) : groupdata.ImagePath ? "/" ~ groupdata.ImagePath : 'https://cdn.collectorsystems.com/images/noimage300.png' %}
+
+                  {% set altText = groupdata.GroupDescription is not empty ? groupdata.GroupDescription : 'Image description is not available' %}
+                  <img class="img-fluid" src="{{ group_img }}" alt="{{ altText }}"/>
+                </a>
+              </div>
 
 						</div>
           {% endif %}

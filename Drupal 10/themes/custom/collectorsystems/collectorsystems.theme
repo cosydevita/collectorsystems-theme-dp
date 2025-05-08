@@ -7,11 +7,13 @@
 
 
  use Drupal\file\Entity\File;
+ use Drupal\Core\Menu\MenuTreeParameters;
 
 
 function collectorsystems_preprocess_page(&$variables){
   $footer_text =  \Drupal::config('custom_api_integration.settings')->get('footer_text');
   $variables['footer_text'] = $footer_text;
+
 
 
   //pass homepage_image_url
@@ -30,6 +32,10 @@ function collectorsystems_preprocess_page(&$variables){
 
   }
   $variables['homepage_image_url'] = $homepage_image_url;
+
+  $theme = \Drupal::theme()->getActiveTheme();
+  $logo_path = $theme->getLogo();
+  $variables['site_logo_path'] = $logo_path;
 
   $variables['#cache']['max-age'] = 0;
 

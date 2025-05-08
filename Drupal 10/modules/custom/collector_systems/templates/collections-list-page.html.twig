@@ -7,7 +7,7 @@
 	type="hidden" value="{{ dataorderby }}" id="dataorderby"/>
 	<!-- Team Start -->
 	<div class="container-xxl py-5">
-		<div class="container wow fadeInDown" data-wow-delay="0.1s">
+		<div class="wow fadeInDown" data-wow-delay="0.1s">
 			<div class="row mb-3">
 				<div class="col d-inline-flex">
 					<h1 class="cs-page-title">Collections</h1>
@@ -36,18 +36,20 @@
 					<div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 wow fadeInDown" data-wow-delay="{{ delaytm }}">
           {% if (showImagesOnListPages) %}
 						<div class="card-body d-flex flex-column">
-							<a href="javascript:;" onclick="return getmoredetailsForCollection('{{ site_url }}', {{ collect.CollectionId }})">
-								{% set cltimg = collect.CollectionImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(collect.CollectionImageAttachment) : '' %}
-								{% set relative_path = collect.ImagePath ? '/' ~ collect.ImagePath : '' %}
-								{% set image_url = relative_path ?  relative_path : '' %}
+              <div class="image-wrapper">
+                <a href="javascript:;" onclick="return getmoredetailsForCollection('{{ site_url }}', {{ collect.CollectionId }})" class="image-wrapper-link">
+                  {% set cltimg = collect.CollectionImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(collect.CollectionImageAttachment) : '' %}
+                  {% set relative_path = collect.ImagePath ? '/' ~ collect.ImagePath : '' %}
+                  {% set image_url = relative_path ?  relative_path : '' %}
 
-								{% set altText = collect.FullCollectionName is not empty ? collect.FullCollectionName : 'Image description is not available' %}
-								{% if not cltimg and not relative_path %}
-									<img class="img-fluid" src="https://cdn.collectorsystems.com/images/noimage300.png" alt="{{ altText }}"/>
-								{% else %}
-									<img class="img-fluid" src="{{ image_url ? image_url : cltimg }}" alt="{{ altText }} "/>
-								{% endif %}
-							</a>
+                  {% set altText = collect.FullCollectionName is not empty ? collect.FullCollectionName : 'Image description is not available' %}
+                  {% if not cltimg and not relative_path %}
+                    <img class="img-fluid" src="https://cdn.collectorsystems.com/images/noimage300.png" alt="{{ altText }}"/>
+                  {% else %}
+                    <img class="img-fluid" src="{{ image_url ? image_url : cltimg }}" alt="{{ altText }} "/>
+                  {% endif %}
+                </a>
+              </div>
 						</div>
           {% endif %}
 						<div class="card-footer text-muted">

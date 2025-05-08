@@ -164,6 +164,16 @@ for(var k=0;k<carouselAItems.length;k++)
 //     });
 // }
 
+$(document).ready(function(){
+  // Add background color dynamically to the image wrapper link in the center aligned images.
+  let cs_bg_image_color = $('body').data('cs-image-bg');
+
+  if(cs_bg_image_color){
+    $('body.cs-center-align-images .card-body a.image-wrapper-link').css('background', cs_bg_image_color);
+}
+})
+
+
 })(jQuery);
 
 
