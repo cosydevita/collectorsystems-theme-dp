@@ -206,4 +206,31 @@
   //     $("a.twitter").attr("href", "https://twitter.com/intent/tweet?url=" + pageUrl + "&text=Sample%20Tweet");
   //     $("a.facebook").attr("href", "https://www.facebook.com/sharer/sharer.php?u=" + window.location.href);
   //     $("a.email").attr("href", "mailto:?subject=Sample%20Email&body="+pageUrl);
+
+  $(document).ajaxStart(function () {
+      showLoader();
+  });
+
+  $(document).ajaxStop(function () {
+      hideLoader();
+  });
+
+  $(document).ajaxError(function () {
+      hideLoader();
+  });
+
+  function showLoader()
+  {
+    if ($('#spinner').length > 0) {
+        $('#spinner').addClass('show');
+    }
+  }
+
+  function hideLoader()
+  {
+    if ($('#spinner').length > 0) {
+        $('#spinner').removeClass('show');
+    }
+  }
+
 })(jQuery);
