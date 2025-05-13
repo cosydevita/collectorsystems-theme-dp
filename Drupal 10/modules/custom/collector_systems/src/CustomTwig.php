@@ -48,7 +48,6 @@ class CustomTwig extends AbstractExtension {
     ?>
 
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
-                  <?php if($showImagesOnListPages == 1){ ?>
                     <div class="card-body d-flex flex-column">
                         <div class="image-wrapper">
                             <a href="<?php echo $object_detail_link; ?>" class="image-wrapper-link">
@@ -84,7 +83,6 @@ class CustomTwig extends AbstractExtension {
                             </a>
                           </div>
                     </div>
-                  <?php } ?>
                     <div class="card-footer text-muted">
                         <?php
 
