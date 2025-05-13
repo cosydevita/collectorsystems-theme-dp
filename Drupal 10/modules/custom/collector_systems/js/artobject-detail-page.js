@@ -49,14 +49,14 @@
           img.css({
             'width': 'auto',
             'height': 'auto',
-            'transform': 'scale(1)' // Reset scale
+            'transform': 'scale(1)', // Reset scale
+            'max-width': '100%'
           });
 
-          const scale = Math.min(viewportWidth / img.width(), viewportHeight / img.height());
-          img.css({
-            'width': img.width() * scale,
-            'height': img.height() * scale
-          });
+
+          // // Scale to fit image to screen.
+          // const scale = Math.min(viewportWidth / img.width());
+          // $("#lightbox-image").css("transform", `scale(${scale})`);
         }
 
         // Function to reset image transform
