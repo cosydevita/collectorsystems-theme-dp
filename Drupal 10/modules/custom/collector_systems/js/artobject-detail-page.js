@@ -116,7 +116,6 @@
           }
         });
       }
-      $('#lightbox-custom-draggable').appendTo('body');
       feature_custom_image_lightbox_draggable();
 
     }

@@ -89,9 +89,6 @@ customize_object_list_fields:
 artobject_detail_page:
   js:
     js/artobject-detail-page.js: {}
-  css:
-    theme:
-      css/cs_artobject_detail_page.css: {}
   dependencies:
     - core/jquery
     - core/once

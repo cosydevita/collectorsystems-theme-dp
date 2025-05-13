@@ -60,6 +60,10 @@
   /*X-Large devices (large desktops, 1200px and up)*/
   /*XX-Large devices (larger desktops, 1400px and up)*/
   /*Small devices*/
+  /* Lightbox styles */
+  /* .zoom-buttons button:hover {
+      background-color: #eee;
+  } */
   /*!
    * Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com
    * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
@@ -11167,6 +11171,106 @@
   .collector-systems-wrapper .cs-page-total-count {
     margin-top: 18px;
   }
+}
+.collector-systems-wrapper #lightbox-custom-draggable {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 999999;
+  overflow: hidden;
+}
+.collector-systems-wrapper #lightbox-content {
+  position: relative;
+  margin: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.collector-systems-wrapper #lightbox-image {
+  max-width: 100%;
+  max-height: 100%;
+  cursor: move;
+  transition: transform 0.3s ease;
+  z-index: 1;
+  margin: auto;
+}
+.collector-systems-wrapper .zoom-buttons {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+}
+.collector-systems-wrapper .zoom-buttons button {
+  margin: 5px;
+  padding: 0;
+  background-color: #000;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+}
+.collector-systems-wrapper #lightbox-close {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  background-color: #000;
+  border: 1px solid #fff;
+  cursor: pointer;
+  z-index: 999;
+  border-radius: 100%;
+}
+.collector-systems-wrapper #lightbox-custom-draggable .prev-next-buttons {
+  position: fixed;
+  z-index: 1;
+  top: 50%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin: 0 50px;
+  left: 0;
+  right: 0;
+}
+.collector-systems-wrapper #btn-next-draggable .next-icon,
+.collector-systems-wrapper #btn-prev-draggable .prev-icon {
+  width: 18px !important;
+  height: unset;
+  cursor: pointer;
+}
+.collector-systems-wrapper #btn-next-draggable,
+.collector-systems-wrapper #btn-prev-draggable {
+  background: none;
+  outline: none;
+  background-color: #000;
+  border: 1px solid #fff;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 @media (min-width: 981px) {
   .collector-systems-wrapper .mob-header {
