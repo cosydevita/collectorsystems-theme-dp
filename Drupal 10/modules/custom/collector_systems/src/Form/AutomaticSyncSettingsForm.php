@@ -59,8 +59,7 @@ class AutomaticSyncSettingsForm extends FormBase {
     ];
     $form['container']['collector_systems_automatic_sync_time'] = [
       '#type' => 'datetime',
-      '#date_date_element' => 'none',
-      '#date_time_element' => 'time',
+      // '#date_date_element' => 'none',
       // '#title' => 'Automatic Sync Time',
       '#default_value' => $config->get(key: 'collector_systems_automatic_sync_time') ? new DrupalDateTime($config->get(key: 'collector_systems_automatic_sync_time')) : NULL,
     ];
