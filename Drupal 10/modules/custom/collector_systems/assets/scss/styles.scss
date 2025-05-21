@@ -1,6 +1,7 @@
 .collector-systems-wrapper{
   @import "cs_theme_bootstrap-lightbox";
   @import "cs_theme_bootstrap.min";
+  @import "_cs_theme_bootstrap_overrides";
   @import "cs_theme_style";
   @import "cs_artobject_detail_page";
   @import "mobile";

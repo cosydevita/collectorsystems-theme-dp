@@ -9,8 +9,6 @@
   /********** Template CSS **********/
   /*** Spinner ***/
   /*** Button ***/
-  /*** Navbar ***/
-  /*** Header carousel ***/
   /*** Section Title ***/
   /*** Service ***/
   /* .cs-shadow i.bi-arrow-up {
@@ -10277,6 +10275,14 @@
     display: none !important;
   }
 }
+.collector-systems-wrapper .row {
+  margin-left: 0;
+  margin-right: 0;
+}
+.collector-systems-wrapper .row > * {
+  padding-left: 0;
+  padding-right: 0;
+}
 .collector-systems-wrapper :root {
   --primary: #06BBCC;
   --light: #F0FBFC;
@@ -10354,125 +10360,6 @@
   justify-content: center;
   font-weight: normal;
   border-radius: 0px;
-}
-.collector-systems-wrapper .navbar .dropdown-toggle::after {
-  border: none;
-  content: "\f107";
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  vertical-align: middle;
-  margin-left: 8px;
-}
-.collector-systems-wrapper .navbar-light .navbar-toggler {
-  border-color: transparent;
-  box-shadow: none;
-}
-.collector-systems-wrapper .navbar-light .navbar-nav .nav-link {
-  margin-right: 30px;
-  padding: 25px 0;
-  color: #FFFFFF;
-  font-size: 15px;
-  text-transform: uppercase;
-  outline: none;
-  font-weight: 500;
-}
-.collector-systems-wrapper .navbar-light .navbar-nav .nav-link:hover,
-.collector-systems-wrapper .navbar-light .navbar-nav .nav-link.active {
-  color: rgba(0, 0, 0, 0.9);
-}
-@media (max-width: 991.98px) {
-  .collector-systems-wrapper .navbar-light .navbar-nav .nav-link {
-    margin-right: 0;
-    padding: 10px 0;
-  }
-  .collector-systems-wrapper .navbar-light .navbar-nav {
-    border-top: 1px solid #EEEEEE;
-  }
-  .collector-systems-wrapper .footer-menu {
-    margin-top: 15px;
-  }
-}
-.collector-systems-wrapper .navbar-light .navbar-brand {
-  height: 70px;
-}
-.collector-systems-wrapper .navbar-light a.btn {
-  height: 75px;
-}
-.collector-systems-wrapper .navbar-light .navbar-nav .nav-link {
-  color: #1B1D1F;
-}
-.collector-systems-wrapper .navbar-light.sticky-top {
-  top: -100px;
-  transition: 0.5s;
-}
-@media (min-width: 992px) {
-  .collector-systems-wrapper .navbar .nav-item .dropdown-menu {
-    display: block;
-    margin-top: 0;
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.5s;
-  }
-  .collector-systems-wrapper .navbar .dropdown-menu.fade-down {
-    top: 100%;
-    transform: rotateX(-75deg);
-    transform-origin: 0% 0%;
-  }
-  .collector-systems-wrapper .navbar .nav-item:hover .dropdown-menu {
-    top: 100%;
-    transform: rotateX(0deg);
-    visibility: visible;
-    transition: 0.5s;
-    opacity: 1;
-  }
-  .collector-systems-wrapper .cs-logo-img {
-    width: 190px;
-  }
-}
-@media (max-width: 768px) {
-  .collector-systems-wrapper .header-carousel .owl-carousel-item {
-    position: relative;
-    min-height: 500px;
-  }
-  .collector-systems-wrapper .header-carousel .owl-carousel-item img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -o-object-fit: cover;
-       object-fit: cover;
-  }
-}
-@media (max-width: 411px) {
-  .collector-systems-wrapper .cs-page-title {
-    margin-bottom: 25px;
-  }
-}
-.collector-systems-wrapper .header-carousel .owl-nav {
-  position: absolute;
-  top: 50%;
-  right: 8%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-}
-.collector-systems-wrapper .header-carousel .owl-nav .owl-prev,
-.collector-systems-wrapper .header-carousel .owl-nav .owl-next {
-  margin: 7px 0;
-  width: 45px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #FFFFFF;
-  background: transparent;
-  border: 1px solid #FFFFFF;
-  font-size: 22px;
-  transition: 0.5s;
-}
-.collector-systems-wrapper .header-carousel .owl-nav .owl-prev:hover,
-.collector-systems-wrapper .header-carousel .owl-nav .owl-next:hover {
-  background: var(--primary);
-  border-color: var(--primary);
 }
 .collector-systems-wrapper .page-header {
   background: linear-gradient(rgba(24, 29, 56, 0.7), rgba(24, 29, 56, 0.7)), url(../img/carousel-1.jpg);
@@ -10592,6 +10479,39 @@
   top: 50%;
   -webkit-transform: translateY(-50%) translateX(-50%);
 }
+.collector-systems-wrapper .artists-container, .collector-systems-wrapper .collections-container, .collector-systems-wrapper .exhibitions-container, .collector-systems-wrapper .objects-container, .collector-systems-wrapper .groups-container, .collector-systems-wrapper .artist-objects-container, .collector-systems-wrapper .collection-objects-container, .collector-systems-wrapper .exhibition-objects-container, .collector-systems-wrapper .group-objects-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 80px;
+}
+@media (max-width: 768px) {
+  .collector-systems-wrapper .artists-container, .collector-systems-wrapper .collections-container, .collector-systems-wrapper .exhibitions-container, .collector-systems-wrapper .objects-container, .collector-systems-wrapper .groups-container, .collector-systems-wrapper .artist-objects-container, .collector-systems-wrapper .collection-objects-container, .collector-systems-wrapper .exhibition-objects-container, .collector-systems-wrapper .group-objects-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+  }
+}
+@media (max-width: 576px) {
+  .collector-systems-wrapper .artists-container, .collector-systems-wrapper .collections-container, .collector-systems-wrapper .exhibitions-container, .collector-systems-wrapper .objects-container, .collector-systems-wrapper .groups-container, .collector-systems-wrapper .artist-objects-container, .collector-systems-wrapper .collection-objects-container, .collector-systems-wrapper .exhibition-objects-container, .collector-systems-wrapper .group-objects-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+.collector-systems-wrapper .artists-container .card-body, .collector-systems-wrapper .collections-container .card-body, .collector-systems-wrapper .exhibitions-container .card-body, .collector-systems-wrapper .objects-container .card-body, .collector-systems-wrapper .groups-container .card-body, .collector-systems-wrapper .artist-objects-container .card-body, .collector-systems-wrapper .collection-objects-container .card-body, .collector-systems-wrapper .exhibition-objects-container .card-body, .collector-systems-wrapper .group-objects-container .card-body {
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.collector-systems-wrapper .artists-container .card, .collector-systems-wrapper .collections-container .card, .collector-systems-wrapper .exhibitions-container .card, .collector-systems-wrapper .objects-container .card, .collector-systems-wrapper .groups-container .card, .collector-systems-wrapper .artist-objects-container .card, .collector-systems-wrapper .collection-objects-container .card, .collector-systems-wrapper .exhibition-objects-container .card, .collector-systems-wrapper .group-objects-container .card {
+  padding-left: 0;
+  padding-right: 0;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.collector-systems-wrapper .artists-container .card-footer, .collector-systems-wrapper .collections-container .card-footer, .collector-systems-wrapper .exhibitions-container .card-footer, .collector-systems-wrapper .objects-container .card-footer, .collector-systems-wrapper .groups-container .card-footer, .collector-systems-wrapper .artist-objects-container .card-footer, .collector-systems-wrapper .collection-objects-container .card-footer, .collector-systems-wrapper .exhibition-objects-container .card-footer, .collector-systems-wrapper .group-objects-container .card-footer {
+  padding-left: 0;
+  padding-right: 0;
+}
 .collector-systems-wrapper .artists-container > .card, .collector-systems-wrapper .collections-container > .card, .collector-systems-wrapper .exhibitions-container > .card, .collector-systems-wrapper .objects-container > .card, .collector-systems-wrapper .groups-container > .card,
 .collector-systems-wrapper .artist-objects-container > .card, .collector-systems-wrapper .collection-objects-container > .card, .collector-systems-wrapper .exhibition-objects-container > .card, .collector-systems-wrapper .group-objects-container > .card {
   flex: 1 0 auto;
@@ -10599,12 +10519,6 @@
 .collector-systems-wrapper .artists-container .card-body, .collector-systems-wrapper .collections-container .card-body, .collector-systems-wrapper .exhibitions-container .card-body, .collector-systems-wrapper .objects-container .card-body, .collector-systems-wrapper .groups-container > .card-body,
 .collector-systems-wrapper .artist-objects-container .card-body, .collector-systems-wrapper .collection-objects-container .card-body, .collector-systems-wrapper .exhibition-objects-container .card-body, .collector-systems-wrapper .group-objects-container .card-body {
   justify-content: flex-start;
-}
-@media screen and (min-width: 900px) {
-  .collector-systems-wrapper .card {
-    padding-right: 2vw;
-    padding-left: 2vw;
-  }
 }
 .collector-systems-wrapper .card {
   border: none;
@@ -10908,6 +10822,7 @@
   padding: 5px;
   outline: none;
   padding-left: 25px;
+  padding-right: 0;
   background-position: 0px 2px;
   background-size: 18px;
   cursor: pointer;

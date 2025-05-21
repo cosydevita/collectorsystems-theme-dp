@@ -104,149 +104,6 @@ body
 }
 
 
-/*** Navbar ***/
-.navbar .dropdown-toggle::after {
-    border: none;
-    content: "\f107";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    vertical-align: middle;
-    margin-left: 8px;
-}
-
-.navbar-light .navbar-toggler {
-    border-color: transparent;
-    box-shadow: none;
-}
-
-.navbar-light .navbar-nav .nav-link {
-    margin-right: 30px;
-    padding: 25px 0;
-    color: #FFFFFF;
-    font-size: 15px;
-    text-transform: uppercase;
-    outline: none;
-    font-weight: 500;
-}
-
-.navbar-light .navbar-nav .nav-link:hover,
-.navbar-light .navbar-nav .nav-link.active {
-    color: rgba(0, 0, 0, 0.9);
-
-}
-
-@media (max-width: 991.98px) {
-    .navbar-light .navbar-nav .nav-link  {
-        margin-right: 0;
-        padding: 10px 0;
-    }
-
-    .navbar-light .navbar-nav {
-        border-top: 1px solid #EEEEEE;
-    }
-
-    .footer-menu{
-        margin-top:15px;
-    }
-}
-
-.navbar-light .navbar-brand {
-    height: 70px;
-}
-
-.navbar-light a.btn {
-    height: 75px;
-}
-
-.navbar-light .navbar-nav .nav-link {
-    color: #1B1D1F;
-}
-
-.navbar-light.sticky-top {
-    top: -100px;
-    transition: .5s;
-}
-
-@media (min-width: 992px) {
-    .navbar .nav-item .dropdown-menu {
-        display: block;
-        margin-top: 0;
-        opacity: 0;
-        visibility: hidden;
-        transition: .5s;
-    }
-
-    .navbar .dropdown-menu.fade-down {
-        top: 100%;
-        transform: rotateX(-75deg);
-        transform-origin: 0% 0%;
-    }
-
-    .navbar .nav-item:hover .dropdown-menu {
-        top: 100%;
-        transform: rotateX(0deg);
-        visibility: visible;
-        transition: .5s;
-        opacity: 1;
-    }
-
-    .cs-logo-img {
-        width: 190px;
-    }
-}
-
-
-/*** Header carousel ***/
-@media (max-width: 768px) {
-    .header-carousel .owl-carousel-item {
-        position: relative;
-        min-height: 500px;
-    }
-
-    .header-carousel .owl-carousel-item img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-}
-
-@media (max-width: 411px) {
-    .cs-page-title {
-        margin-bottom: 25px;
-    }
-}
-
-.header-carousel .owl-nav {
-    position: absolute;
-    top: 50%;
-    right: 8%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-}
-
-.header-carousel .owl-nav .owl-prev,
-.header-carousel .owl-nav .owl-next {
-    margin: 7px 0;
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #FFFFFF;
-    background: transparent;
-    border: 1px solid #FFFFFF;
-    font-size: 22px;
-    transition: .5s;
-}
-
-.header-carousel .owl-nav .owl-prev:hover,
-.header-carousel .owl-nav .owl-next:hover {
-    background: var(--primary);
-    border-color: var(--primary);
-}
-
 .page-header {
     background: linear-gradient(rgba(24, 29, 56, .7), rgba(24, 29, 56, .7)), url(../img/carousel-1.jpg);
     background-position: center center;
@@ -407,6 +264,39 @@ a:hover h4, a:hover h5, a:hover h6 {
     -webkit-transform: translateY(-50%) translateX(-50%);
 }
 
+.artists-container, .collections-container, .exhibitions-container, .objects-container, .groups-container, .artist-objects-container, .collection-objects-container, .exhibition-objects-container, .group-objects-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 80px;
+    
+    @media(max-width: 768px){
+        grid-template-columns:  1fr 1fr;
+        gap: 60px;
+    }
+
+    @media(max-width: 576px){
+        grid-template-columns:  1fr;
+        gap: 40px;
+    }
+    .card-body{
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .card{
+        padding-left: 0;
+        padding-right: 0;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .card-footer{
+        padding-left: 0;
+        padding-right: 0;
+    }
+   
+}
+
 .artists-container > .card, .collections-container > .card, .exhibitions-container > .card, .objects-container > .card, .groups-container > .card,
  .artist-objects-container > .card, .collection-objects-container > .card, .exhibition-objects-container > .card, .group-objects-container > .card {
     flex: 1 0 auto;
@@ -426,13 +316,13 @@ a:hover h4, a:hover h5, a:hover h6 {
     bottom: -3vh;
   } */
 
-   @media screen and (min-width: 900px)
-  {
-     .card {
-    padding-right: 2vw;
-    padding-left: 2vw;
-    }
-  }
+//    @media screen and (min-width: 900px)
+//   {
+//      .card {
+//     padding-right: 2vw;
+//     padding-left: 2vw;
+//     }
+//   }
 
 .card {
     border:none;
@@ -830,6 +720,7 @@ padding-bottom: 1.2rem;
     padding:5px;
     outline:none;
     padding-left: 25px;
+    padding-right: 0;
     background-position: 0px 2px;
     background-size: 18px;
     cursor: pointer;

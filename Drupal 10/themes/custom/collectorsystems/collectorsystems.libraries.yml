@@ -2,7 +2,6 @@ global-styling:
   version: VERSION
   css:
     theme:
-      assets/css/style.css: {}
       assets/css/cs_theme_bootstrap.min.css: {}
       assets/css/cs_theme_style.css: {}
       assets/css/mobile.css: {}
@@ -10,8 +9,7 @@ global-styling:
 
 global-script:
   js:
-    assets/js/cs_theme_bootstrap.bundle.min.js: {}
-    # assets/js/cs_theme_bootstrap-lightbox.js: {}
+    # assets/js/cs_theme_bootstrap.bundle.min.js: {}
     assets/js/cs_theme_main.js: {}
   dependencies:
     - core/jquery
