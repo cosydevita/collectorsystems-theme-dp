@@ -392,7 +392,7 @@ function htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,ajaxpage,reques
           }
       }
 
-      if (requested_page != calculated_pages) pagingHtmlContent+= "<a href='javascript:;'onclick=pagingForGroupLevelObjects(\'"+ajaxpage+"\',"+listPageSize+","+calculated_pages+")><i class=\'fas fa-chevron-right\'></i></a>";
+      if (requested_page != calculated_pages) pagingHtmlContent+= "<a href='javascript:;'onclick=pagingForGroupLevelObjects(\'"+ajaxpage+"\',"+listPageSize+","+(requested_page+1)+")><i class=\'fas fa-chevron-right\'></i></a>";
   }
   jQuery("#groupLevelPagingData").html(pagingHtmlContent);
 }
