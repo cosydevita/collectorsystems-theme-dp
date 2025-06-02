@@ -180,16 +180,7 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
     if($enable_maps){
       //start azure map
       $locations = [];
-      try{
-        $query_without_range = $query->range(); //to include all results without range
-        $result = $query_without_range->execute();
-        $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
-
-      }catch (\Exception $e) {
-          \Drupal::logger('collector_systems')->error('Error generating map locations: @message', ['@message' => $e->getMessage()]);
-          $object_details_without_range = [];
-      }
-      foreach ($object_details_without_range as $object) {
+      foreach ($object_details as $object) {
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
         $AddressName = $object->AddressName;

@@ -83,7 +83,7 @@
           {% set loadsec = (loadsec + 1) % 4 %}
         {% endfor %}
       </div>
-      {% if groupObjectsCount > groupLevelTopCount %}
+      {% if obj_count > groupLevelTopCount %}
         <div class="view-more" style="display:none">
           <a id="loadBtn" style="cursor:pointer" onclick="return fetch('{{ ajaxfor }}');">
             View more
@@ -91,7 +91,7 @@
         </div>
       {% endif %}
       <div class="cs-custom-pagination d-flex" id="groupLevelPagingData">
-        {{ customPaginationForGroupLevelObjects(groupID, ajaxfor, groupLevelPageNo, groupObjectsCount, groupLevelOrderBy, qSearch) }}
+        {{ customPaginationForGroupLevelObjects(groupID, ajaxfor, groupLevelPageNo, obj_count, groupLevelOrderBy, qSearch) }}
       </div>
     </div>
 

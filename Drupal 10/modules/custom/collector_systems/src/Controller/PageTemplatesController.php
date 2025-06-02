@@ -76,8 +76,11 @@ class PageTemplatesController extends ControllerBase
       $query->orderBy('c.CollectionName', ($sortBy === 'Collection/CollectionName desc') ? 'DESC' : 'ASC');
     }
 
+    $query->condition('ObjectId', $artObjID);
+
     // $object_details = $query->execute()->fetchAllAssoc('ObjectId'); //
-    $object_details = $query->execute()->fetchAll(); //
+    $object_details = $query->execute()->fetchAll(); 
+    
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
     $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
@@ -86,11 +89,7 @@ class PageTemplatesController extends ControllerBase
       //start azure map
       $customized_fields = $this->getCommaSeperatedFieldsForDetailPage();
       $customized_fields_array = explode(',', $customized_fields);
-      $query->condition('ObjectId', $artObjID);
-      $query_without_range = $query->range(); //to include all results without range
-      $result = $query_without_range->execute();
-      $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
-      foreach ($object_details_without_range as $object) {
+      foreach ($object_details as $object) {
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
         $AddressName = $object->AddressName;
@@ -295,6 +294,7 @@ class PageTemplatesController extends ControllerBase
     if ($qSearch !== NULL && count($customized_fields_array)>0) {
       $query->condition($where_conditions);
     }
+    $query->range($groupLevelSkipCount, $nxshowrec);
     $object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
     // Count
@@ -314,10 +314,7 @@ class PageTemplatesController extends ControllerBase
     if($enable_maps){
       //start azure map
       $locations = [];
-      $query_without_range = $query->range(); //to include all results without range
-      $result = $query_without_range->execute();
-      $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
-      foreach ($object_details_without_range as $object) {
+      foreach ($object_details as $object) {
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
         $AddressName = $object->AddressName;
@@ -434,6 +431,7 @@ class PageTemplatesController extends ControllerBase
     $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
     $query->fields('co');
     $query->condition('eo.ExhibitionId', $exhibitionID);
+    $query->range($nxshskip, $nxshowrec);
     $query->orderBy('Title', 'ASC');
 
     $result = $query->execute();
@@ -458,10 +456,7 @@ class PageTemplatesController extends ControllerBase
       }
 
       $locations = [];
-      $query_without_range = $query->range(); //to include all results without range
-      $result = $query_without_range->execute();
-      $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
-      foreach ($object_details_without_range as $object) {
+      foreach ($object_details as $object) {
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
         $AddressName = $object->AddressName;
@@ -582,6 +577,7 @@ class PageTemplatesController extends ControllerBase
     $query->condition('eo.GroupId', $groupID);
     $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
     $query->fields('co');
+    $query->range($nxshskip, $nxshowrec);
     $query->orderBy('Title', 'ASC');
 
 
@@ -605,10 +601,7 @@ class PageTemplatesController extends ControllerBase
       }
 
       $locations = [];
-      $query_without_range = $query->range(); //to include all results without range
-      $result = $query_without_range->execute();
-      $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
-      foreach ($object_details_without_range as $object) {
+      foreach ($group_object_details as $object) {
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
         $AddressName = $object->AddressName;
@@ -743,10 +736,7 @@ class PageTemplatesController extends ControllerBase
       }
 
       $locations = [];
-      $query_without_range = $query->range(); //to include all results without range
-      $result = $query_without_range->execute();
-      $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
-      foreach ($object_details_without_range as $object) {
+      foreach ($object_details as $object) {
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
         $AddressName = $object->AddressName;
