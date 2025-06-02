@@ -91,7 +91,6 @@ class AjaxRequestsController extends ControllerBase
       $obj_count = count($object_details);
 
       if ($obj_count > 0) {
-        $groupLevelSearchHtml = '<div class="card-group row g-5 artist-objects-container mt-5" id="groupLevelObjectsData">';
         foreach ($object_details as $value) {
           // Calculate delay time based on $loadsec.
           if ($loadsec == 1) {
@@ -116,7 +115,6 @@ class AjaxRequestsController extends ControllerBase
 
           $groupLevelSearchHtml .= $functionOutput;
         }
-        $groupLevelSearchHtml .= '</div>';
       } else {
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }
@@ -161,7 +159,6 @@ class AjaxRequestsController extends ControllerBase
       $obj_count = $count_query->execute()->fetchField();
 
       if ($obj_count > 0) {
-        $groupLevelSearchHtml = '<div class="card-group row g-5 artist-objects-container mt-5" id="groupLevelObjectsData">';
         foreach ($object_details as $value) {
           // Calculate delay time based on $loadsec.
           if ($loadsec == 1) {
@@ -186,7 +183,6 @@ class AjaxRequestsController extends ControllerBase
 
           $groupLevelSearchHtml .= $functionOutput;
         }
-        $groupLevelSearchHtml .= '</div>';
       } else {
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }
@@ -237,7 +233,6 @@ class AjaxRequestsController extends ControllerBase
       $object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
       if ($obj_count > 0) {
-        $groupLevelSearchHtml = '<div class="card-group row g-5 artist-objects-container mt-5" id="groupLevelObjectsData">';
         foreach ($object_details as $value) {
           // Calculate delay time based on $loadsec.
           if ($loadsec == 1) {
@@ -262,7 +257,6 @@ class AjaxRequestsController extends ControllerBase
 
           $groupLevelSearchHtml .= $functionOutput;
         }
-        $groupLevelSearchHtml .= '</div>';
       } else {
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }
