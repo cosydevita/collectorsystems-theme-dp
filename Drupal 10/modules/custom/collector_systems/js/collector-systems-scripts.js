@@ -118,6 +118,8 @@ jQuery.ajax({
         jQuery('#groupLevelObjectsData').html(data.groupLevelSearchHtml);
         jQuery('#groupLevelPageNo').val(groupLevelPageNoValue)
         htmlForGroupLevelObjectsPaging(listPageSize,groupTypeId,pagenamevalue,groupLevelPageNoValue,pageTotalCount,groupLevelOrderBy,searchValue);
+        // Scroll to top of page after clicking next/prev page buttons.
+        jQuery(window).scrollTop(0);
   }
 });
 
