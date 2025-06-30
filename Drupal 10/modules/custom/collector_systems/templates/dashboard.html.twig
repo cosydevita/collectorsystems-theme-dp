@@ -1,18 +1,72 @@
 
 <h2>Database Sync Menu</h2>
 
-<p>Use this menu to copy your collection information into your websites MySQL database.</p>
-<p>Use "Reset and Create Dataset" when you add new fields. This will delete your current dataset and re-create it with the new data.
-</br>
-Use "Update Dataset" when you have added/updated  Objects, Artists, Collections, Exhibitions, or Groups. This will update the existing database without rewriting it.
+<p>Please follow these steps to copy your collection information into your website's MySQL database.</p>
+
+<p>
+    First, sync the <strong>Data</strong> (which should take a few minutes). </br>
+    Then, sync the  <strong>Images</strong>. Please note that the images can take up to a few hours to sync.
+
+</p>
+<p>
+    When installing for the first time, you must manually sync the data.
 </p>
 
-<br>
 
-<h2>Data</h2>
-         <!--Add the button element -->
-    <!--<button id="create-image-list-button"></button>-->
-    <div class="wrapper">
+<section id="section-data">
+  <h2>1. Data</h2>
+
+  <div class="section-inner">
+    <h3>Select data types to sync</h3>
+    <div class="custom-checkbox-wrapper">
+        <div class="custom-checkbox">
+            <input type="checkbox" id="checkbox-objects" name="checkbox-objects" checked disabled>
+            <label for="checkbox-objects">Objects</label>
+        </div>
+
+        <div class="custom-checkbox">
+            <input type="checkbox" id="checkbox-groups" name="checkbox-groups" {% if checkboxes_data.checkbox_groups %} checked {% endif %} >
+            <label for="checkbox-groups">Groups</label>
+        </div>
+
+        <div class="custom-checkbox">
+            <input type="checkbox" id="checkbox-collections" name="checkbox-collections" {% if checkboxes_data.checkbox_collections %} checked {% endif %}>
+            <label for="checkbox-collections">Collections</label>
+        </div>
+
+        <div class="custom-checkbox">
+            <input type="checkbox" id="checkbox-exhibitions" name="checkbox-exhibitions" {% if checkboxes_data.checkbox_exhibitions %} checked {% endif %}>
+            <label for="checkbox-exhibitions">Exhibitions</label>
+        </div>
+
+        <div class="custom-checkbox">
+            <input type="checkbox" id="checkbox-artists" name="checkbox-artists" {% if checkboxes_data.checkbox_artists %} checked {% endif %} >
+            <label for="checkbox-artists">Artists</label>
+        </div>
+    </div>
+
+
+    {# <br> #}
+
+    <h3>Sync data</h3>
+    <p>Use <strong>"Reset and Create Dataset"</strong> when you add/remove new fields. This will delete your current dataset and re-create it with the new data.</p>
+
+    <p> Use <strong>"Update Dataset"</strong> when you have added/updated Objects, Artists, Collections, Exhibitions, or Groups. This will update the existing database without rewriting it.</p>
+    
+    <div class="wrapper">'
+
+     <div class="custom-object-data">
+            <label><h5> Objects </h5></label>
+
+          <div class="count-wrapper">
+            <div class="lds-dual-ring spinner"></div>
+            <div class="count-data">
+              <p id="resp-data">DB Count: </p>
+              <p id="resp-data1">API Count: </p>
+            </div>
+          </div>
+
+        </div>
 
       <div class="custom-group-data">
           <label><h5>Groups </h5></label>
@@ -25,19 +79,6 @@ Use "Update Dataset" when you have added/updated  Objects, Artists, Collections,
             </div>
 
       </div>
-
-      <div class="custom-object-data">
-            <label><h5> Objects </h5></label>
-
-          <div class="count-wrapper">
-            <div class="lds-dual-ring spinner"></div>
-            <div class="count-data">
-              <p id="resp-data">DB Count: </p>
-              <p id="resp-data1">API Count: </p>
-            </div>
-          </div>
-
-        </div>
 
         <div class="custom-collection-data">
             <label><h5> Collections </h5></label>
@@ -84,16 +125,73 @@ Use "Update Dataset" when you have added/updated  Objects, Artists, Collections,
       <button id="btn-update-dataset" class="dataset-btn btn btn-dark">Update Dataset</button>
     </div>
 
-    {% if API_Synced_On is not empty and API_Synced_By is not empty %}
-      <p class="last-synced-wrapper">Last synced on: {{API_Synced_On}} by {{API_Synced_By}}</p>
+    {% if sync_tracked_info.info_manual_sync_data and sync_tracked_info.info_manual_sync_data.SyncCompleted %}
+      <p class="last-synced-wrapper">Last Manual Sync completed on {{sync_tracked_info.info_manual_sync_data.SyncCompleted}} ({{sync_tracked_info.info_manual_sync_data.SyncCompletionTime}}) performed by {{sync_tracked_info.info_manual_sync_data.LastSyncedBy}}.</p>
     {% endif %}
 
+  </div>
+</section>
+<section id="section-images">
+
+  <h2>2. Images</h2>
+  <div class="section-inner">
+    <p>Set the way you would like the Images to be saved. There are two options:</p>
+
+    <p><strong>Option 1 (Directory):</strong> Save images in a directory (Folder/File System). This will store image files like regular files on your server's root directory inside uploads folder with folder named "All Images" and each image file directly consumes disk space in that directory.</p>
+
+    <p><strong>Option 2 (Database):</strong> Save images in the database (Embedded in the "Document" as File Blobs). This will directly store image data (binary code) as a blob within your MySQL database itself and will increase your database storage based on image size.</p>
+
+    <div id="images-count-wrapper">
+      <div class="image-group">
+          <label class="">
+              <h5>Object Images </h5>
+          </label>
+          <div class="count-wrapper-images">
+              <div class="lds-dual-ring spinner-count"></div>
+              <div class="count-data">
+                  <p>DB Count: <span id="object-images-db-count"></span></p>
+                  <p>API Count: <span id="object-images-api-count"></span</p>
+              </div>
+          </div>
+
+      </div>
+
+      <div class="image-group">
+          <label class="">
+              <h5>Other Images </h5>
+          </label>
+          <div class="count-wrapper-images">
+              <div class="lds-dual-ring spinner-count"></div>
+              <div class="count-data">
+                  <p>DB Count: <span id="other-images-db-count"></span></p>
+                  <p>API Count: <span id="other-images-api-count"></span></p>
+              </div>
+          </div>
+      </div>
+      
+
+      
+    </div>
+
+    {# <label for="save_images_on_sync_to">Save Images to:</label>
+    <select name="save_images_on_sync_to" id="select-save-images-on-sync-to">
+        <option value="directory">Directory</option>
+        <option value="database">Database</option>
+    </select>
+    <button class="btn btn btn-dark" id="btn-sync-images">Sync Images</button> #}
 
 
-    <h2>Images</h2>
+      {{ form_sync_images }}
+
+    {% if sync_tracked_info.info_manual_sync_images and sync_tracked_info.info_manual_sync_images.SyncCompleted %}
+      <p id="status-message-sync-images">Image Sync last started {{sync_tracked_info.info_manual_sync_images.SyncStarted}}, completed {{sync_tracked_info.info_manual_sync_images.SyncCompleted}} ({{sync_tracked_info.info_manual_sync_images.SyncCompletionTime}}) performed by {{sync_tracked_info.info_manual_sync_images.LastSyncedBy}}.</p>
+    
+    {% elseif sync_tracked_info.info_manual_sync_images.SyncStarted and not sync_tracked_info.info_manual_sync_images.SyncCompleted %}
+     <p id="status-message-sync-images">Image Sync last started {{sync_tracked_info.info_manual_sync_images.SyncStarted}}, actively running performed by {{sync_tracked_info.info_manual_sync_images.LastSyncedBy}}.</p>
+    {% endif %}
 
     <!---save other images -->
-    <div class="section-save-other-images">
+    {# <div class="section-save-other-images">
       <div class="loading-class">
         <div class="loading-indicator-image"></div>
       </div>
@@ -117,11 +215,11 @@ Use "Update Dataset" when you have added/updated  Objects, Artists, Collections,
               <button class="btn btn btn-dark" id="custom-database-save">Database</button>
           </div>
       </div>
-    </div>
+    </div> #}
 
 
     <!---save object images -->
-    <div class="loading-class">
+    {# <div class="loading-class">
         <div class="loading-indicator-image-object"></div>
     </div>
 
@@ -142,15 +240,21 @@ Use "Update Dataset" when you have added/updated  Objects, Artists, Collections,
         <div class="db-save">
             <button class="btn btn btn-dark" id="custom-object-database-save">Database</button>
         </div>
-    </div>
+    </div> #}
 
 
+  </div>
+</section>
+
+<hr class="page-break">
+
+ <section id="section-automatic-sync" class="section-automatic-sync">
     <div class="section-automatic-sync">
       <div class="main-heading">
         <h2>Automatic Sync</h2>
       </div>
 
-      <p>The Automatic Sync updates your dataset. This will also include images in your preferred location.</p>
+       <p>Once your data has been manually synced, you can set up the <strong>Automatic Sync</strong> to update your dataset and images in their preferred location that you have set.</p>
 
       {{ scheduled_date_and_time_information|raw }}
 
@@ -158,14 +262,22 @@ Use "Update Dataset" when you have added/updated  Objects, Artists, Collections,
         {{ automatic_sync_settings_form }}
       </div>
 
+      {% if sync_tracked_info.info_automatic_sync and sync_tracked_info.info_automatic_sync.SyncCompleted %}
+      <p id="status-message-automatic-images">Automatic Sync last started {{sync_tracked_info.info_automatic_sync.SyncStarted}}, completed {{sync_tracked_info.info_automatic_sync.SyncCompleted}} ({{sync_tracked_info.info_automatic_sync.SyncCompletionTime}}).</p>
+    
+      {% elseif sync_tracked_info.info_automatic_sync.SyncStarted and not sync_tracked_info.info_automatic_sync.SyncCompleted %}
+      <p id="status-message-automatic-images">Automatic Sync last started {{sync_tracked_info.info_automatic_sync.SyncStarted}}, actively running.</p>
+      {% endif %}
+
+
       <h5 class="help-text strong">For automatic sync to work properly in the background:</h5>
-      <li>The Drupal cron must be triggered frequently. Recommended atleast every 3 min. <br>
+      <li>The Drupal cron must be triggered frequently. Recommended atleast every 3 min or 5 min. <br>
       You can trigger the cron in every 3 min interval using third party service like <a target="_blank" href="https://www.easycron.com/">Easy Cron</a> or your server <a target="_blank" href="https://www.geeksforgeeks.org/crontab-in-linux-with-examples/">Crontab </a>.</li>
       <li>Also please ensure the php "max_execution_time" is set to atleast 180 seconds in your server so that it can process enough items in a single cron run.</li>
       <li> Every time the Drupal cron runs, the queued items are processed in the background.</li>
     </div>
 
-
+</div>
 
 
 

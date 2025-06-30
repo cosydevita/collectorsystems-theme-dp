@@ -26,12 +26,20 @@ class AutomaticSyncSettingsForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = \Drupal::config('collector_systems.settings');
 
-    $form['save_images_on_automatic_sync_to'] = [
+    $form['container_save_images_on_automatic_sync_to'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['form-inline', 'container-save-images-on-automatic-sync-to'], // Add your custom classes here for styling.
+      ],
+    ];
+
+    $form['container_save_images_on_automatic_sync_to']['save_images_on_automatic_sync_to'] = [
       '#type' => 'select',
-      '#title' => $this->t('Save Images on Automatic Sync to:'),
+      // '#title' => $this->t('Save Images on Automatic Sync to: '),
+      '#prefix' => $this->t('<label class="form-item__label">Save Images on Automatic Sync to: </label>'),
       '#options' => [
-        'save_to_database' => $this->t('Database'),
         'save_to_directory' => $this->t('Directory'),
+        'save_to_database' => $this->t('Database'),
       ],
       '#default_value' => $config->get('save_images_on_automatic_sync_to') ?? 'directory',
     ];
@@ -46,6 +54,7 @@ class AutomaticSyncSettingsForm extends FormBase {
     $form['container']['collector_systems_automatic_sync'] = [
       '#type' => 'select',
       // '#title' => $this->t('Automatic Sync Frequency'),
+      '#prefix' => $this->t('<label class="form-item__label">Set date and time for automatic sync: </label>'),
       '#options' => [
         'manually' => $this->t('Manually'),
         'every-night' => $this->t('Every Night'),
@@ -66,7 +75,7 @@ class AutomaticSyncSettingsForm extends FormBase {
 
     $form['container']['submit'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Save'),
+      '#value' => $this->t('Save Automatic Sync'),
       '#button_type' => 'primary',
       '#attributes' => [
         'class' => ['btn btn-dark'],

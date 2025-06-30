@@ -10,6 +10,8 @@ use Drupal\Core\Database\Query\Condition;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig\Environment;
+use Drupal\collector_systems\Csconstants;
+
 
 class AjaxRequestsController extends ControllerBase
 {
@@ -408,4 +410,155 @@ class AjaxRequestsController extends ControllerBase
       $query->orderBy('c.CollectionName', 'DESC');
     }
   }
+
+  public function getImagesCountData(){
+    $collector_systemsts_get_api_data = \Drupal::service('collector_systems.collector_systemsts_get_api_data');
+
+    $object_images_db_count = $this->getCsGetDbImageTypeCount('object_images');
+    $object_images_api_count = $collector_systemsts_get_api_data->getApiImageTypeCount('objects_images');
+
+    // other images api count.
+    $artists_images_api_count =  $collector_systemsts_get_api_data->getApiImageTypeCount('artists_images');
+    $collections_images_api_count =  $collector_systemsts_get_api_data->getApiImageTypeCount('collections_images');
+    $exhibitions_images_api_count =  $collector_systemsts_get_api_data->getApiImageTypeCount('exhibitions_images');
+    $groups_images_api_count =  $collector_systemsts_get_api_data->getApiImageTypeCount('groups_images');
+    $other_images_api_count = $artists_images_api_count + $collections_images_api_count + $exhibitions_images_api_count + $groups_images_api_count;
+    
+
+
+    // other images db count.
+    $artists_images_db_count =  $this->getCsGetDbImageTypeCount('artists_images');
+    $collections_images_db_count =  $this->getCsGetDbImageTypeCount('collections_images');
+    $exhibitions_images_db_count =  $this->getCsGetDbImageTypeCount('exhibitions_images');
+    $groups_images_db_count =  $this->getCsGetDbImageTypeCount('groups_images');
+    $other_images_db_count = $artists_images_db_count + $collections_images_db_count + $exhibitions_images_db_count + $groups_images_db_count;
+    
+    $other_images_db_count = $artists_images_db_count + $collections_images_db_count + $exhibitions_images_db_count + $groups_images_db_count;
+
+
+    $response = [
+        'object_images_api_count' => $object_images_api_count,
+        'object_images_db_count' => $object_images_db_count,
+        'other_images_api_count' => $other_images_api_count,
+        'other_images_db_count' => $other_images_db_count,
+        'all_details_count' => [
+            'object_images_db_count' => $object_images_db_count,
+            'object_images_api_count' => $object_images_api_count,
+            'artists_images_db_count'=> $artists_images_db_count,
+            'artists_images_api_count'=> $artists_images_api_count,
+            'collections_images_db_count' => $collections_images_db_count,
+            'collections_images_api_count' => $collections_images_api_count,
+            'groups_images_api_count' => $groups_images_api_count,
+            'groups_images_db_count' => $groups_images_db_count,
+            'exhibitions_images_db_count' => $exhibitions_images_db_count,
+            'exhibitions_images_api_count' => $exhibitions_images_api_count
+        ]
+
+    ];
+
+    return new JsonResponse($response);
+
+  }
+
+  public function saveCheckBoxOptionsDataType(){
+    if(!isset($_POST['checkboxes'])){
+     return new JsonResponse([
+        'success' => False,
+        'message' => 'Missing data.'
+      ]);
+    }
+
+    $checkbox_groups= $_POST['checkboxes']['groups'];
+    $checkbox_collections = $_POST['checkboxes']['collections'];
+    $checkbox_exhibitions = $_POST['checkboxes']['exhibitions'];
+    $checkbox_artists = $_POST['checkboxes']['artists'];
+
+    \Drupal::configFactory()->getEditable('collector_systems.settings')
+    ->set('checkboxes.groups', $checkbox_groups)
+    ->set('checkboxes.collections', $checkbox_collections)
+    ->set('checkboxes.exhibitions', $checkbox_exhibitions)
+    ->set('checkboxes.artists', $checkbox_artists)
+    ->save();
+
+
+    return new JsonResponse([
+      'success' => True,
+      'message' => 'Checkboxes settings saved successfully.'
+    ]);
+
+  }
+
+  
+
+
+  /**
+ * Get image count for a given image type.
+ *
+ * @param string $image_type
+ *   One of: object_images, artists_images, collections_images, exhibitions_images, groups_images.
+ *
+ * @return int|null
+ *   The count of image records, or NULL on error.
+ */
+function getCsGetDbImageTypeCount($image_type) {
+  $connection = \Drupal::database();
+
+  try {
+    switch ($image_type) {
+      case 'object_images':
+        return $connection->query("SELECT COUNT(*) FROM {ThumbImages}")->fetchField();
+
+      case 'artists_images':
+        return $connection->query("
+          SELECT COUNT(*) 
+          FROM {Artists} 
+          WHERE 
+            (ArtistPhotoAttachment IS NOT NULL AND ArtistPhotoAttachment != '') 
+            OR 
+            (ImagePath IS NOT NULL AND ImagePath != '')
+        ")->fetchField();
+
+      case 'collections_images':
+        return $connection->query("
+          SELECT COUNT(*) 
+          FROM {Collections} 
+          WHERE 
+            (CollectionImageAttachment IS NOT NULL AND CollectionImageAttachment != '') 
+            OR 
+            (ImagePath IS NOT NULL AND ImagePath != '')
+        ")->fetchField();
+
+      case 'exhibitions_images':
+        return $connection->query("
+          SELECT COUNT(*) 
+          FROM {Exhibitions} 
+          WHERE 
+            (ExhibitionImageAttachment IS NOT NULL AND ExhibitionImageAttachment != '') 
+            OR 
+            (ImagePath IS NOT NULL AND ImagePath != '')
+        ")->fetchField();
+
+      case 'groups_images':
+        return $connection->query("
+          SELECT COUNT(*) 
+          FROM {Groups} 
+          WHERE 
+            (GroupImageAttachment IS NOT NULL AND GroupImageAttachment != '') 
+            OR 
+            (ImagePath IS NOT NULL AND ImagePath != '')
+        ")->fetchField();
+
+      default:
+        return NULL;
+    }
+
+  } catch (\Exception $e) {
+    \Drupal::logger('collector_systems')->error('Error GetDbImageCount: @message', ['@message' => $e->getMessage()]);
+    return NULL;
+  }
 }
+
+
+}
+
+

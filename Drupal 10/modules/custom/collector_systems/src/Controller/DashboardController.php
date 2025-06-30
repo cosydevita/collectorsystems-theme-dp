@@ -52,35 +52,65 @@ class DashboardController extends ControllerBase implements ContainerInjectionIn
     $database = Database::getConnection();
     $table_CSSynced = 'CSSynced';
     $table_exists = $database->schema()->tableExists($table_CSSynced);
-    $last_synced_date_time = '';
-    $last_synced_by = '';
+    $sync_tracked_info = [];
     if($table_exists){
        // Check if the record exists and fetch the LastSyncedDateTime and LastSyncedBy.
-      $record_exists = $database->select($table_CSSynced)
-      ->fields($table_CSSynced, ['LastSyncedDateTime', 'LastSyncedBy'])
+      $info_manual_sync_data = $database->select($table_CSSynced)
+      ->fields($table_CSSynced, ['LastSyncedBy', 'SyncStarted', 'SyncCompleted', 'SyncType', 'SyncTrigger', 'SyncCompletionTime'])
+      ->condition('SyncType', 'data')
+      ->condition('SyncTrigger', 'manual')
       ->execute()
       ->fetchAssoc();
 
-      // Check if a record was found.
-      if ($record_exists) {
-      // Retrieve the values.
-      $last_synced_date_time = $record_exists['LastSyncedDateTime'];
-      $last_synced_by = $record_exists['LastSyncedBy'];
+      $info_manual_sync_images = $database->select($table_CSSynced)
+      ->fields($table_CSSynced, ['LastSyncedBy', 'SyncStarted', 'SyncCompleted', 'SyncType', 'SyncTrigger', 'SyncCompletionTime'])
+      ->condition('SyncType', 'images')
+      ->condition('SyncTrigger', 'manual')
+      ->execute()
+      ->fetchAssoc();
 
-      }
+      $info_automatic_sync = $database->select($table_CSSynced)
+      ->fields($table_CSSynced, ['LastSyncedBy', 'SyncStarted', 'SyncCompleted', 'SyncType', 'SyncTrigger', 'SyncCompletionTime'])
+      ->condition('SyncType', 'data_and_images')
+      ->condition('SyncTrigger', 'automatic')
+      ->execute()
+      ->fetchAssoc();
 
+
+
+      $sync_tracked_info['info_manual_sync_data'] = $info_manual_sync_data;
+      $sync_tracked_info['info_manual_sync_images'] = $info_manual_sync_images;
+      $sync_tracked_info['info_automatic_sync'] = $info_automatic_sync;
     }
 
     $automatic_sync_settings_form = \Drupal::formBuilder()->getForm('Drupal\collector_systems\Form\AutomaticSyncSettingsForm');
 
+    $form_sync_images = \Drupal::formBuilder()->getForm('Drupal\collector_systems\Form\SyncImagesForm');
+
+
     $scheduled_date_and_time_information = $this->getScheduledDateAndTimeInformation();
+
+    $config_collector_systems = \Drupal::config('collector_systems.settings');
+    $checkbox_groups = $config_collector_systems->get('checkboxes.groups');
+    $checkbox_collections = $config_collector_systems->get('checkboxes.collections');
+    $checkbox_exhibitions = $config_collector_systems->get('checkboxes.exhibitions');
+    $checkbox_artists = $config_collector_systems->get('checkboxes.artists');
+    
+    $checkboxes_data = [
+      'checkbox_groups' => $checkbox_groups,
+      'checkbox_collections' => $checkbox_collections,
+      'checkbox_exhibitions' => $checkbox_exhibitions,
+      'checkbox_artists' => $checkbox_artists,
+    ];
+  
 
     $build = [
       '#theme' => 'dashboard',
       '#automatic_sync_settings_form' => $automatic_sync_settings_form,
-      '#API_Synced_On' => $last_synced_date_time,
-      '#API_Synced_By' => $last_synced_by,
-      '#scheduled_date_and_time_information' => $scheduled_date_and_time_information
+      '#scheduled_date_and_time_information' => $scheduled_date_and_time_information,
+      '#form_sync_images' => $form_sync_images,
+      '#sync_tracked_info' => $sync_tracked_info,
+      '#checkboxes_data' => $checkboxes_data
     ];
     $build['#attached']['library'][] = 'collector_systems/dashboard';
 

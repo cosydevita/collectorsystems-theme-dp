@@ -14,6 +14,7 @@
           success: function (token) {
             sessionToken = token;
             fetch_group_ajax(sessionToken);
+            fetch_images_count_ajax(sessionToken);
           },
         });
       }
@@ -81,19 +82,11 @@
         }
       );
 
-      $(once("customDatabaseSaveButton", "#custom-database-save")).on(
-        "click.customDatabaseSaveButton",
+      $(once("syncImagesButton", "#btn-sync-images")).on(
+        "click.syncImagesButton",
         function () {
           window.location.href =
             "/admin/collector-systems/other-images-import?save_option=database";
-        }
-      );
-
-      $(once("customDirectorySaveButton", "#custom-directory-save")).on(
-        "click.customDirectorySaveButton",
-        function () {
-          window.location.href =
-            "/admin/collector-systems/other-images-import?save_option=directory";
         }
       );
 
@@ -183,6 +176,67 @@
             // Handle errors if the AJAX request fails
             console.log("Error: " + error);
           },
+        });
+      }
+      
+
+      function fetch_images_count_ajax(sessionToken) {
+        $.ajax({
+          type: "POST",
+          url: origin + "/collector-systems/get-images-count-data?_format=json",
+          contentType: "application/json",
+          data: JSON.stringify({
+            action: "fetch_group_ajax",
+          }),
+          headers: {
+            Accept: "application/json",
+            "X-CSRF-Token": sessionToken, // Include the CSRF token
+          },
+          success: function (response) {
+            object_images_db_count = response.object_images_db_count;
+            object_images_api_count = response.object_images_api_count;
+            other_images_api_count = response.other_images_api_count;
+            other_images_db_count = response.other_images_db_count;
+
+            $('#object-images-db-count').text(object_images_db_count);
+            $('#object-images-api-count').text(object_images_api_count);
+            $('#other-images-api-count').text(other_images_api_count);
+            $('#other-images-db-count').text(other_images_db_count);
+
+            $('.count-wrapper-images .spinner-count').hide()
+            $('.count-wrapper-images .count-data').show()
+          },
+          error: function(xhr, status, error) {
+            // Handle errors if the AJAX request fails
+            console.log('Error: ' + error);
+          }
+        })
+
+        $('.custom-checkbox input[type="checkbox"]').on('change', function() {
+          $.ajax({
+              url: origin + "/collector-systems/save-checkbox-options-data-type",
+              type: 'POST',
+              headers: {
+                Accept: "application/json",
+                "X-CSRF-Token": sessionToken, // Include the CSRF token
+              },
+              data: {
+                checkboxes: {
+                    groups: $('#checkbox-groups').is(':checked') ? 1 : 0,
+                    collections: $('#checkbox-collections').is(':checked') ? 1 : 0,
+                    exhibitions: $('#checkbox-exhibitions').is(':checked') ? 1 : 0,
+                    artists: $('#checkbox-artists').is(':checked') ? 1 : 0,
+                },
+              },
+              success: function(response) {
+                  // Handle the response from the server
+                  console.log('Checkbox options saved successfully:', response);
+              },
+              error: function(xhr, status, error) {
+                  console.error('AJAX Error: ' + status + error);
+              }
+          });
+
         });
       }
     },

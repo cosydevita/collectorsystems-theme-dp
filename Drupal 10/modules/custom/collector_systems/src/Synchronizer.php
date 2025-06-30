@@ -23,6 +23,12 @@ class Synchronizer
   {
     $queue = \Drupal::queue('collector_systems_sync_queue_worker');
 
+    try {
+      collector_systems_update_CSSynced_table('data_and_images', 'automatic', true, false);
+    } catch (\Throwable $e) {
+      $this->logger->error('Error in collector_systems_update_CSSynced_table: @message', ['@message' => $e->getMessage()]);
+    }
+
     // Collect data for processing.
     $form_object = new \Drupal\collector_systems\Form\CreateTablesForm();
     $data = $form_object->getDataForProcessing();
@@ -35,9 +41,9 @@ class Synchronizer
       ]);
     }
 
+    $form_sync_images = new \Drupal\collector_systems\Form\SyncImagesForm();
     //Add Other Images data to the queue
-    $form_other_images = new \Drupal\collector_systems\Form\OtherImagesImportForm();
-    $data_other_images = $form_other_images->getDataForProcessing();
+    $data_other_images = $form_sync_images->getDataForProcessingOtherImages();
     // Add items to the queue.
     $queue_type = 'other_images';
     foreach ($data_other_images as $item) {
@@ -48,8 +54,7 @@ class Synchronizer
     }
 
     //Add object Images data to the queue
-    $form_object_images = new \Drupal\collector_systems\Form\ObjectImagesImportForm();
-    $data_object_images = $form_object_images->getDataForProcessing();
+    $data_object_images = $form_sync_images->getDataForProcessingObjectImages();
     // Add items to the queue.
     $queue_type = 'object_images';
     foreach ($data_object_images as $item) {

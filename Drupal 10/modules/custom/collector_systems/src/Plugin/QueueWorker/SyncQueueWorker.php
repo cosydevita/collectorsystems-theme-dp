@@ -11,7 +11,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
  * @QueueWorker(
  *   id = "collector_systems_sync_queue_worker",
  *   title = @Translation("Collector Systems Sync Queue Worker"),
- *   cron = {"time" = 60}
+ *   cron = {"time" = 180}
  * )
  */
 class SyncQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
@@ -47,12 +47,20 @@ class SyncQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginI
       $form_object->processItem($item['data'], $btn_action);
     }
     elseif ($queue_type == 'object_images'){
-      $form_object = new \Drupal\collector_systems\Form\ObjectImagesImportForm();
-      $form_object->processItem($item['data'], $save_images_on_automatic_sync_to);
+      $form_object = new \Drupal\collector_systems\Form\SyncImagesForm();
+      $form_object->processItem_ObjectImages($item['data'], $save_images_on_automatic_sync_to);
     }
     elseif ($queue_type == 'other_images'){
-      $form_object = new \Drupal\collector_systems\Form\OtherImagesImportForm();
-      $form_object->processItem($item['data'], $save_images_on_automatic_sync_to);
+      $form_object = new \Drupal\collector_systems\Form\SyncImagesForm();
+      $form_object->processItem_OtherImages($item['data'], $save_images_on_automatic_sync_to);
+    }
+
+     // Check if more items are left in the queue
+    $queue = \Drupal::queue('collector_systems_sync_queue_worker');
+    $remaining_items = $queue->numberOfItems();
+    if ($remaining_items === 0) {
+      // automatic sync completed. store the info in the database table.
+      collector_systems_update_CSSynced_table('data_and_images', 'automatic', false,  true);
     }
   }
 }

@@ -55,20 +55,6 @@ custom_api_integration.group_level_objects_searching_page:
     _title: 'Group Level Objects Searching Page'
   requirements:
     _permission: 'access content'
-custom_api_integration.object_images_import:
-  path: '/admin/collector-systems/object-images-import'
-  defaults:
-    _form: '\Drupal\collector_systems\Form\ObjectImagesImportForm'
-    _title: 'Object Images Import'
-  requirements:
-    _permission: 'access administration pages'
-custom_api_integration.other_images_import:
-  path: '/admin/collector-systems/other-images-import'
-  defaults:
-    _form: '\Drupal\collector_systems\Form\OtherImagesImportForm'
-    _title: 'Other Images Import'
-  requirements:
-    _permission: 'access administration pages'
 collector_systems.create_tables_form:
   path: '/admin/collector-systems/create-tables-form'
   defaults:
@@ -90,4 +76,23 @@ customize_object_list_fields.settings_form:
     _title: 'Customize Object List Fields Settings'
   requirements:
     _permission: 'administer site configuration'
-
+collector_systems.get_images_count_data:
+  path: '/collector-systems/get-images-count-data'
+  defaults:
+    _controller: '\Drupal\collector_systems\Controller\AjaxRequestsController::getImagesCountData'
+    _title: 'Get Images Count Data'
+  requirements:
+    _permission: 'administer site configuration'
+collector_systems.sync_queue_process:
+  path: '/collector-systems/sync-queue-process'
+  defaults:
+    _controller: '\Drupal\collector_systems\Controller\SyncQueueProcessController::run'
+  requirements:
+    _access: 'TRUE'
+collector_systems.save_checkbox_options_data_type:
+  path: '/collector-systems/save-checkbox-options-data-type'
+  defaults:
+    _controller: '\Drupal\collector_systems\Controller\AjaxRequestsController::saveCheckBoxOptionsDataType'
+    _title: 'Get Images Count Data'
+  requirements:
+    _permission: 'administer site configuration'

@@ -3,6 +3,8 @@
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Url;
+use Drupal\Core\Datetime\DrupalDateTime;
 
 
 function collector_systems_preprocess_page(&$variables){
@@ -202,9 +204,10 @@ function collector_systems_theme() {
         'filter_keywords' => '',
         'items_per_page' => '',
         'footer_text' => '',
-        'API_Synced_On' => '',
-        'API_Synced_By' => '',
+        'sync_tracked_info' => null,
+        'checkboxes_data' => null,
         'automatic_sync_settings_form' => '',
+        'form_sync_images' => '',
         'scheduled_date_and_time_information' => ''
       ],
     ],
@@ -416,6 +419,18 @@ function collector_systems_cron() {
         break;
     }
   }
+
+  // Process queue items in parallel using curl.
+  $url = Url::fromRoute('collector_systems.sync_queue_process', [], ['absolute' => TRUE])->toString();
+  $total_parallel_queue_processes = 3;
+  for ($i = 0; $i < $total_parallel_queue_processes; $i++) {
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+    curl_setopt($ch, CURLOPT_NOSIGNAL, true);
+    curl_exec($ch);
+    curl_close($ch);
+  }
 }
 
 /**
@@ -453,5 +468,112 @@ function collector_systems_preprocess_html(array &$variables) {
     $variables['attributes']['data-cs-image-bg'][] = $image_bg_color;
   }
 
+}
+
+
+/**
+ * Updates or inserts a record in the CSSynced table based on sync state.
+ *
+ * @param string $sync_type
+ *   The sync type (e.g., 'data', 'images', 'data_and_images').
+ *
+ * @param string $sync_trigger
+ *   The sync trigger (e.g., 'manual', 'automatic').
+ *
+ * @param bool $sync_started
+ *   TRUE to record SyncStarted with the current datetime, FALSE to skip.
+ *
+ * @param bool $sync_completed
+ *   TRUE to record SyncCompleted with the current datetime, FALSE to skip.
+ */
+function collector_systems_update_CSSynced_table($sync_type, $sync_trigger, $sync_started = false, $sync_completed = false) {
+  $database = \Drupal::database();
+
+  $fields = [];
+
+
+  if ($sync_started === true) {
+    $fields['SyncStarted'] = (new DrupalDateTime())->format('m/d/y \a\t h:i:s A');
+  }
+
+  if ($sync_completed === true) {
+    $fields['SyncCompleted'] = (new DrupalDateTime())->format('m/d/y \a\t h:i:s A');
+
+    // Fetch SyncStarted datetime string from DB first
+    $result = $database->select('CSSynced', 'c')
+    ->fields('c', ['SyncStarted'])
+    ->condition('SyncType', $sync_type)
+    ->condition('SyncTrigger', $sync_trigger)
+    ->execute()
+    ->fetchAssoc();
+
+    $start_time_str = $result['SyncStarted'] ?? null;
+
+    if ($start_time_str) {
+      $now = new DrupalDateTime();
+      // Parse the existing SyncStarted datetime
+      $start = DrupalDateTime::createFromFormat('m/d/y \a\t h:i:s A', $start_time_str);
+      $interval = $start ? $start->diff($now) : null;
+
+      if ($interval) {
+        // Format duration as human-readable string
+        $parts = [];
+        if ($interval->h > 0) {
+          $parts[] = $interval->h . ' hr';
+        }
+        if ($interval->i > 0) {
+          $parts[] = $interval->i . ' min';
+        }
+        if ($interval->h === 0 && $interval->i === 0) {
+          $parts[] = $interval->s . ' sec';
+        }
+        $fields['SyncCompletionTime'] = implode(' ', $parts);
+      }
+    }
+
+
+  }
+
+  if($sync_trigger == 'manual'){
+    // Get the current user object.
+    $current_user = \Drupal::currentUser();
+
+    // Check if the user is authenticated.
+    if ($current_user->isAuthenticated()) {
+      // Get the user name.
+      $username = $current_user->getAccountName();
+      $fields['LastSyncedBy'] = $username;
+    }
+    
+  }
+  
+
+  $existing = $database->select('CSSynced', 'c')
+    ->fields('c', ['SyncType', 'SyncTrigger'])
+    ->condition('SyncType', $sync_type)
+    ->condition('SyncTrigger', $sync_trigger)
+    ->execute()
+    ->fetchAssoc();
+
+  if ($existing) {
+    if (!empty($fields)) {
+      $database->update('CSSynced')
+        ->fields($fields)
+        ->condition('SyncType', $sync_type)
+        ->condition('SyncTrigger', $sync_trigger)
+        ->execute();
+    }
+  }
+  else {
+    $fields += [
+      'SyncType'           => $sync_type,
+      'SyncTrigger'        => $sync_trigger,
+      'LastSyncedDateTime' => '',
+    ];
+
+    $database->insert('CSSynced')
+      ->fields($fields)
+      ->execute();
+  }
 }
 

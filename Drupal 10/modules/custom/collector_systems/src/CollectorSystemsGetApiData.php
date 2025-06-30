@@ -1735,5 +1735,70 @@ class CollectorSystemsGetApiData{
     return $ExhibitionObjects;
   }
 
+  /**
+   * Fetches the count of items with images for a specific entity type from the public API.
+   *
+   * Supported $image_type values:
+   *  - 'objects_images'     : Counts artists with non-null AttachmentId.
+   *  - 'artists_images'     : Counts artists with non-null ArtistPhotoAttachmentId.
+   *  - 'collections_images' : Counts collections with non-null CollectionImageAttachmentId.
+   *  - 'exhibitions_images' : Counts exhibitions with non-null ExhibitionImageAttachmentId.
+   *  - 'groups_images'      : Counts groups with non-null GroupImageAttachmentId.
+   *
+   * @param string $image_type The type of image to count (e.g. 'artists_images').
+   * @return int|null The count of entities with images, or null on failure.
+   */
+  public function getApiImageTypeCount($image_type){
+    $subsKey = $this->subsKey;
+    $subAcntId = $this->subAcntId;
+    $subsId = $this->subsId;
 
+    $url = '';
+
+    if($image_type == 'objects_images'){
+        $wordforsearch="ObjectImageAttachments";
+        $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=AttachmentId,ObjectId';
+    }
+    else if($image_type == 'artists_images'){
+        $wordforsearch="Artists";
+        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and ArtistPhotoAttachmentId ne null&$select=ArtistId';
+    } else if($image_type == 'collections_images'){
+        $wordforsearch="Collections";
+        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and CollectionImageAttachmentId ne null&$select=CollectionId';
+    } else if($image_type == 'exhibitions_images'){
+        $wordforsearch="Exhibitions";
+        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and ExhibitionImageAttachmentId ne null&$select=ExhibitionId';
+    }else if($image_type == 'groups_images'){
+        $wordforsearch="Groups";
+        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and GroupImageAttachmentId ne null&$select=GroupId';
+    }
+    
+
+    if($url){
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    
+        $headers = array(
+        "Accept: application/json",
+        "Ocp-Apim-Subscription-Key:$subsKey ",
+        "Cache-Control:no-cache",
+        );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    
+        $Detaildata = curl_exec($curl);
+    
+    
+        curl_close($curl);
+    
+        $Detaildata = json_decode($Detaildata, TRUE);
+        $count = $Detaildata['@odata.count'];
+    
+        return $count;
+    } else {
+        return null;
+    }
+  }
 }

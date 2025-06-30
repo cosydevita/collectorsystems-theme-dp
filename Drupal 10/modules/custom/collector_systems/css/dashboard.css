@@ -69,7 +69,7 @@
         display: flex;
         justify-content: start;
         text-align: center;
-        margin-top: 50px;
+        margin-top: 30px;
         gap: 60px;
         align-items: center;
     }
@@ -96,12 +96,13 @@
 
 
     .btn-dark, form#collector-systems-automatic-sync-settings-form .btn-dark {
-        padding: 10px 20px;
-        background-color: #000;
-        color: #fff;
+        padding: 10px 20px !important;
+        background-color: #000 !important;
+        color: #fff !important;
         border: none;
-        border-radius: 5px;
+        border-radius: 5px !important;
         cursor: pointer;
+        font-weight: normal !important;
     }
     .btn-dark:disabled, .btn-dark:disabled:hover, form#collector-systems-automatic-sync-settings-form .btn-dark:disabled:hover, form#collector-systems-automatic-sync-settings-form .btn-dark :disabled{
       border: 1px solid #999999;
@@ -278,4 +279,92 @@
 
 .sync-row .sync-submit {
   margin-left: auto; /* Push the button to the right, if needed */
+}
+
+form#collector-systems-automatic-sync-settings-form .container-save-images-on-automatic-sync-to{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.section-inner{
+    padding-left: 30px;
+}
+hr.page-break{
+    margin: 20px 0;
+    border: none;
+    height: 2px;
+    background: #000;
+}
+
+label, #section-data label, #section-images label, #section-automatic-sync label{
+font-weight: bold;
+font-size: 16px;
+}
+
+
+#images-count-wrapper{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+#images-count-wrapper .image-group:first-child{
+    margin-left: 0;
+}
+#images-count-wrapper h5{
+    margin-top: 0;
+}
+
+#images-count-wrapper .image-group{
+    display: flex;
+    border-radius: 30px;
+    flex-direction: column;
+    justify-content: start;
+    margin: 10px;
+    width: 15%;
+}
+#images-count-wrapper .image-group p{
+    margin-top: 0;
+    margin-bottom: 0;
+
+}
+.count-wrapper-images .count-data {
+    display: none;
+
+}
+.form-horizontal-wrapper{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.form-item--save-option{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.custom-checkbox-wrapper{
+    margin: 20px 0 20px 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 50px;
+}
+.custom-checkbox{
+    display: flex;
+    align-items: center;
+}
+
+.custom-checkbox-wrapper input[type = 'checkbox']{
+    width: 20px;
+    height: 20px;
+    outline: none;
+    box-shadow: none;
+}
+.custom-checkbox-wrapper label{
+    font-weight: 400;
+    margin-left: 10px;
+}
+#section-images{
+    margin-top: 40px;
 }

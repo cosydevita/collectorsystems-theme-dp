@@ -426,7 +426,7 @@ class CustomTwig extends AbstractExtension {
                       <a href="<?php echo $object_detail_link; ?> "  class="image-wrapper-link">
                               <?php
                                $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
-                              $server_path = $value['ObjectImagePath'];
+                              $server_path = $value['main_image_path'];
                               if($server_path){
                                 $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
                               }
@@ -469,7 +469,9 @@ class CustomTwig extends AbstractExtension {
               break;
             default:
             ?>
+            <?php if (isset($value['ArtistName'])) { ?>
               <h6 class="font-normal" title="<?php echo $value['ArtistName']; ?>" >
+            <?php } ?>
               <small class="flex-fill">
                 <a href="<?php echo $object_detail_link; ?>" ><?php echo $value[$object_field]  ?></a>
               </small>
@@ -507,7 +509,7 @@ class CustomTwig extends AbstractExtension {
                       <a href="<?php echo $object_detail_link; ?>" class="image-wrapper-link" >
                               <?php
                               $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
-                              $server_path = $value['ObjectImagePath'];
+                              $server_path = $value['main_image_path'];
                               if ($server_path !== null) {
                                 $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
                               }else{

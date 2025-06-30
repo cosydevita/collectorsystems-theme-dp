@@ -2,6 +2,7 @@
 
 namespace Drupal\collector_systems\Form;
 
+use DateTime;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Database\Database;
@@ -79,6 +80,31 @@ class CreateTablesForm extends FormBase
       'ExhibitionsObjects',
       'GroupsObjects',
     ];
+
+    $config_collector_systems = \Drupal::config('collector_systems.settings');
+    $checkbox_groups = $config_collector_systems->get('checkboxes.groups');
+    $checkbox_collections = $config_collector_systems->get('checkboxes.collections');
+    $checkbox_exhibitions = $config_collector_systems->get('checkboxes.exhibitions');
+    $checkbox_artists = $config_collector_systems->get('checkboxes.artists');
+
+    // Do not import if checkbox is not checked.
+    if($checkbox_groups == 0){
+      unset($import_types[array_search('Groups', $import_types)]);
+      unset($import_types[array_search('GroupsObjects', $import_types)]);
+    }
+    if($checkbox_collections == 0){
+      unset($import_types[array_search('Collections', $import_types)]);      
+    }
+    if($checkbox_exhibitions == 0){
+      unset($import_types[array_search('Exhibitions', $import_types)]);
+      unset($import_types[array_search('ExhibitionsObjects', $import_types)]);
+    }
+    if($checkbox_artists == 0){
+      unset($import_types[array_search('Artists', $import_types)]);
+    }
+    
+
+
     $data = [];
 
     foreach ($import_types as $import_type) {
@@ -227,7 +253,8 @@ class CreateTablesForm extends FormBase
 
     if ($success) {
       \Drupal::logger('collector_systems')->debug('Batch success.');
-      $this->update_CSSynced_table();
+      // store the sync completed info in databse.
+      collector_systems_update_CSSynced_table('data', 'manual', false,  true);
       \Drupal::messenger()->addMessage($this->t('Collector Systems: Import completed successfully.'));
 
       $redirect_url = "/admin/collector-systems/api-dashboard";
@@ -244,7 +271,20 @@ class CreateTablesForm extends FormBase
    */
   public function submitForm(array &$form, FormStateInterface $form_state)
   {
+    
+
     $btn_action = $form_state->getValue('btn_action');
+
+    //drop tables
+    $this->custom_api_integration_drop_tables($btn_action);
+
+    // create tables
+    $this->custom_api_integration_create_tables($btn_action);
+
+    // store the sync started info in databse.
+    collector_systems_update_CSSynced_table('data', 'manual', true,  false);
+
+    // start batch process.
     $data = $this->getDataForProcessing();
     $this->startBatchProcess($data, $btn_action);
   }
@@ -258,8 +298,6 @@ class CreateTablesForm extends FormBase
     if ($current_batch_number == 0 && $import_type == 'Artists') {
       //This will run only once at the first batch
       \Drupal::logger('collector_systems')->debug('Start processSyncData.');
-       //drop tables
-      $this->custom_api_integration_drop_tables($btn_action);
 
       if($btn_action == 'reset_and_create_dataset'){
 
@@ -271,11 +309,6 @@ class CreateTablesForm extends FormBase
         }
 
       }
-
-      // create tables
-      $this->custom_api_integration_create_tables($btn_action);
-
-
 
     }
 
@@ -4373,15 +4406,7 @@ class CreateTablesForm extends FormBase
           'unsigned' => TRUE,
           'not null' => TRUE,
         ],
-        'ObjectImage' => [
-          'type' => 'blob',
-          'size' => 'big',
-        ],
-        'ObjectImagePath' => [
-          'type' => 'text',
-        ],
       ],
-      'primary key' => ['ExhibitionId', 'ObjectId'],
     ];
     // Create the table
     Database::getConnection()->schema()->createTable($table_name, $schema);
@@ -4403,15 +4428,7 @@ class CreateTablesForm extends FormBase
           'unsigned' => TRUE,
           'not null' => TRUE,
         ],
-        'ObjectImage' => [
-          'type' => 'blob',
-          'size' => 'big',
-        ],
-        'ObjectImagePath' => [
-          'type' => 'text',
-        ],
       ],
-      'primary key' => ['GroupId', 'ObjectId'],
     ];
     // Create the table
     Database::getConnection()->schema()->createTable($table_name, $schema);
@@ -4425,54 +4442,44 @@ class CreateTablesForm extends FormBase
         'LastSyncedDateTime' => [
           'type' => 'varchar',
           'length' => 255,
-          'not null' => TRUE,
+          'not null' => FALSE,
         ],
         'LastSyncedBy' => [
           'type' => 'varchar',
           'length' => 255,
-          'not null' => TRUE,
+          'not null' => FALSE,
         ],
+        'SyncStarted' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ],
+        'SyncCompleted' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ],
+        'SyncType' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ],
+        'SyncTrigger' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ],
+        'SyncCompletionTime' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ]
 
       ]
     ];
     Database::getConnection()->schema()->createTable($table_name, $schema);
 
   }
-
-  public function update_CSSynced_table(){
-    $table_name = 'CSSynced';
-    $database = Database::getConnection();
-
-    // Get the current user object.
-    $current_user = \Drupal::currentUser();
-
-    // Check if the user is authenticated.
-    if ($current_user->isAuthenticated()) {
-      // Truncate the CSSynced table.
-      $truncate_query = $database->truncate($table_name);
-      $truncate_query->execute();
-
-
-      // Get the user name.
-      $username = $current_user->getAccountName();
-      // Output the username.
-      $current_date_time = new DrupalDateTime();
-      $formatted_date_time = $current_date_time->format('m/d/y H:i:s');
-
-      $data = array(
-        'LastSyncedBy' => $username,
-        'LastSyncedDateTime' => $formatted_date_time,
-
-      );
-
-
-      $database->insert($table_name)
-      ->fields($data)
-      ->execute();
-    }
-
-  }
-
 
   function create_table_ThumbImages(){
     // Create the new table
