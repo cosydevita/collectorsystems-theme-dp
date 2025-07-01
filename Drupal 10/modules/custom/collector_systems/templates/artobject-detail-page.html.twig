@@ -1,5 +1,5 @@
 <div
-	class="collector-systems-wrapper">
+	class="collector-systems-wrapper page-object-details">
 
 	<!-- About Start -->
 	<input type="hidden" value="{{ sortBy }}" id="seldataorderby"/>
@@ -16,8 +16,8 @@
 						</label>
 					</div>
 					<ul class="pagination justify-content-end">
-						{% if object_details[row_before] is defined and row_before >= 0 %}
-							{% set previous_object_detail_link = "/artobject-detail?dataId=" ~ object_details[row_before]. ObjectId ~"&sortBy=" ~ sortBy %}
+						{% if object_ids_for_prev_next[row_before] is defined and row_before >= 0 %}
+							{% set previous_object_detail_link = "/artobject-detail?dataId=" ~ object_ids_for_prev_next[row_before]. ObjectId ~"&sortBy=" ~ sortBy %}
 
 							<li class="page-item">
 								<a class="page-link prev-btn" href="{{ previous_object_detail_link }}">
@@ -36,9 +36,9 @@
 							</li>
 						{% endif %}
 
-						{% set next_object_detail_link = "/artobject-detail?dataId=" ~ object_details[row_after]. ObjectId ~"&sortBy=" ~ sortBy %}
+						{% set next_object_detail_link = "/artobject-detail?dataId=" ~ object_ids_for_prev_next[row_after]. ObjectId ~"&sortBy=" ~ sortBy %}
 
-						{% if object_details[row_after] is defined and row_after < count %}
+						{% if object_ids_for_prev_next[row_after] is defined and row_after < count %}
 							<li class="page-item">
 								<a class="page-link next-btn" href="{{ next_object_detail_link }}">
 									Next
@@ -49,7 +49,7 @@
 					</ul>
 				</div>
 			</div>
-			<div class="row g-5">
+			<div class="row g-5 row-carousel-and-details">
 				<div class="col-xl-6 col-lg-6 py-4 mx-auto wow fadeInDown" data-wow-delay="0.1s">
 
 					{% set allthumb = thumbDetails %}
@@ -157,10 +157,11 @@
 
 				</div>
 
+				
 				<div class="col-xl-6 col-lg-6 mx-auto cs-object-details wow fadeInDown" data-wow-delay="0.3s">
 					{% for object_field in customized_fields_array %}
 
-						{{ GetCustomizedObjectDetailsForTheme(object_field, "",object_details[row_number]) }}
+						{{ GetCustomizedObjectDetailsForTheme(object_field, "",object_details) }}
 					{% endfor %}
 
 					{# Only show map block if locations is not empty #}
@@ -203,7 +204,7 @@
 	</span>
 
 	<!-- Custom Lightbox -->
-	<div id="lightbox-custom-draggable">
+	<div id="cs-lightbox-custom-draggable">
 		<div id="lightbox-content">
 			<img image_index="0" id="lightbox-image" src="" alt="Lightbox Image"></div>
 		<div class="zoom-buttons">

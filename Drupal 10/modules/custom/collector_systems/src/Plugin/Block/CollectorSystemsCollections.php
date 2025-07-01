@@ -68,12 +68,10 @@ class CollectorSystemsCollections extends BlockBase {
       $query->fields('c');
 
       // Add conditions based on $dataorderby and $qSearch.
-      if ($dataorderby === 'CollectionName%20asc') {
-          $query->orderBy('c.CollectionName');
-      } elseif ($dataorderby === 'CollectionName%20desc') {
-          $query->orderBy('c.CollectionName', 'DESC');
-      }elseif ($dataorderby === 'FullCollectionName%20desc') {
-        $query->orderBy('c.FullCollectionName', 'DESC');
+      if ($dataorderby === 'FullCollectionName%20asc') {
+          $query->orderBy('c.FullCollectionName');
+      } elseif ($dataorderby === 'FullCollectionName%20desc') {
+          $query->orderBy('c.FullCollectionName', 'DESC');
       }
 
       if ($qSearch !== NULL) {

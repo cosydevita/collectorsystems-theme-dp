@@ -84,31 +84,146 @@ class CustomTwig extends AbstractExtension {
                           </div>
                     </div>
                     <div class="card-footer text-muted">
-                        <?php
+                    <?php
 
-            /*get first 3 array fields*/
-            //$customized_fields_array = array_slice($customized_fields_array, 0, 3);
-            foreach($customized_fields_array as $object_field)
-            {
-           switch($object_field)
-            {
-              case '':
-                break;
-              default:
-              ?>
-                <h6 class="font-normal" title="<?php echo $value['ArtistName'] ?? ''; ?>" >
-                <small class="flex-fill">
-                  <a href="<?php echo $object_detail_link; ?>"><?php echo $value[$object_field]  ?></a>
-                </small>
-                </h6>
-              <?php
-              break;
-            }
-          } ?>
+                      /*get first 3 array fields*/
+                      //$customized_fields_array = array_slice($customized_fields_array, 0, 3);
+                      $this->fillObjectListHtml($customized_fields_array, $value, $dataOrderBy, $datapageNo,$dataSearch,$delaytm, $default_image_url);
+          
+                    ?>
           </div>
         </div>
       <?php
     }
+
+  public function fillObjectListHtml($customized_fields_array, $value, $dataOrderBy, $datapageNo,$dataSearch,$delaytm, $default_image_url)
+  {
+    $site_url = \Drupal::request()->getSchemeAndHttpHost();
+    $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."&pageNo=".$datapageNo;
+
+    foreach($customized_fields_array as $object_field)
+    {
+    switch($object_field)
+    {   
+      case csconstants::InventoryNumber:
+        if(!empty($value['InventoryNumber'])){ ?>            
+          <h6 class="font-normal" title="<?php echo $value['InventoryNumber']; ?>" >
+            <small class="flex-fill">
+              <a href="<?php echo $object_detail_link ?>" ><?php echo $value['InventoryNumber']  ?></a>
+            </small>
+          </h6>
+        <?php }    
+        break;
+  
+    case csconstants::Title:       
+      if(!empty($value['Title'])){ ?>            
+          <h6 class="font-normal cs-theme-label-withunderline">
+            <small class="flex-fill">
+              <a href="<?php echo $object_detail_link ?>"><?php echo $value['Title']  ?></a>
+            </small>
+          </h6>
+        <?php }    
+        break;
+  
+    case  csconstants::FullCollectionName:
+        if(!empty($value['FullCollectionName'])){
+          ?>            
+        <h6 class="font-normal" title="<?php echo $value['FullCollectionName']; ?>" >
+          <small class="flex-fill">
+          <a href="javascript:;"onclick="return getmoredetailsForCollection('<?php echo  $site_url ?>', <?php echo $value['CollectionId']; ?>)"><?php echo $value['FullCollectionName']  ?></a>
+          </small>
+        </h6>
+      <?php
+        }
+        break;
+  
+    case csconstants::ArtistName:
+    case csconstants::ArtistFirst:
+    case csconstants::ArtistLast:
+      if(!empty($value[$object_field])){
+            ?>            
+          <h6 class="font-normal" title="<?php echo $value[$object_field]; ?>" >
+            <small class="flex-fill">
+            <a href="<?php echo $site_url ?>/artist-detail?dataId=<?php echo $value['ArtistId']; ?>"><?php echo $value[$object_field] ?></a>
+            </small>
+          </h6>
+        <?php
+          }
+          break;
+  
+      case csconstants::AdditionalArtists:
+      if(!empty($value['AdditionalArtists'])){ ?>
+          <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo implodeChildArrayProperty($value['AdditionalArtists'],"Artist","ArtistId","ArtistName");  ?></small></h6>
+        <?php }    
+        break;
+  
+      case csconstants::ArtistMakerName:
+      case csconstants::ArtistMakerFirst:
+      case csconstants::ArtistMakerLast:
+        if(!empty($value[$object_field])){ ?>            
+          <h6 class="font-normal" title="<?php echo $value[$object_field]; ?>" >
+            <small class="flex-fill">
+            <a href="<?php echo  $site_url ?>/artist-detail?dataId=<?php echo $value['ArtistMakerId']; ?>"><?php echo $value[$object_field] ?></a>
+            </small>
+          </h6>
+          <?php }
+          break;
+  
+      case csconstants::AdditionalArtistMakers:
+      if(!empty($value['AdditionalArtistMakers'])){ ?>
+          <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo implodeChildArrayProperty($value['AdditionalArtistMakers'],"ArtistMaker","ArtistMakerId","ArtistMakerName");  ?></small></h6>
+        <?php }    
+        break;
+        
+  
+      //date fields
+      case csconstants::InventoryDate:
+      case csconstants::CatalogDate:
+      case csconstants::CollectionDate:
+      case csconstants::IdentifiedDate:
+      case csconstants::SpeciesAuthorDate:
+      case csconstants::SubspeciesAuthorDate:
+      case csconstants::ManufactureDate: 
+      case csconstants::ReleaseDate:
+      case csconstants::ProductionDate:
+      case csconstants::ThreatenedEndangeredDate: 
+      case csconstants::CompletenessDate:
+      case csconstants::MovementAuthorizationDate: 
+      case csconstants::LocationConditionDate:
+      if(!empty($value[$object_field])){ ?>
+          <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo date('m/d/Y',strtotime($value[$object_field]))  ?></small></h6>
+        <?php }
+        break;
+  
+      //boolean fields
+      case csconstants::CatalogFolder:
+      case csconstants::ControlledProperty:
+      case csconstants::ThreatenedEndangeredSpeciesSynonym:
+      case csconstants::ThinSection:
+        if(!empty($value[$object_field])){ ?>
+          <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo $value[$object_field] == true ? 'Yes' : 'No'  ?></small></h6>   
+        <?php }
+        break;
+  
+      /*udf fields*/
+  
+      case csconstants::UserDefinedDate1:
+      case csconstants::UserDefinedDate2:
+      if(!empty($value[$object_field])){ ?>
+          <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo date('m/d/Y',strtotime($value[$object_field]))  ?></small></h6>
+        <?php }    
+        break;
+  
+        default:
+        if(!empty($value[$object_field])){ ?>
+          <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo $value[$object_field]  ?></small></h6>
+          <?php }
+        break;
+  
+          /*end*/
+    }
+    }
+  }
 
 
   public function customPaginationForTopLevelTabs($requested_page,$total_records,$sortBy,$qSearch)

@@ -1,4 +1,4 @@
-.collector-systems-wrapper{
+.collector-systems-wrapper {
   @import "cs_theme_bootstrap-lightbox";
   @import "cs_theme_bootstrap.min";
   @import "_cs_theme_bootstrap_overrides";
@@ -7,21 +7,23 @@
   @import "mobile";
   @import "../fontawesome/css/all.min";
   @import "../lib/animate/animate";
-  .card-group{
-    .card{
+  @import "bootstrap-icons";
+
+  .card-group {
+    .card {
       box-shadow: none;
     }
   }
 
 }
 
-body.cs-disable-transition .collector-systems-wrapper  .fadeInDown{
+body.cs-disable-transition .collector-systems-wrapper .fadeInDown {
   transition: none !important;
   animation: none !important;
   animation-name: none !important;
 }
 
-body.cs-bold-customized-field-labels .collector-systems-wrapper .object_detail_fieldlabel{
+body.cs-bold-customized-field-labels .collector-systems-wrapper .object_detail_fieldlabel {
   font-weight: 700;
 }
 
@@ -30,9 +32,128 @@ body.cs-underline-all-hyperlinks .collector-systems-wrapper a {
 }
 
 /* Center align image and add background color */
-body.cs-center-align-images .collector-systems-wrapper .card-body a.image-wrapper-link{
+body.cs-center-align-images .collector-systems-wrapper .card-body a.image-wrapper-link {
   background: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.collector-systems-wrapper.page-object-details .carousel-control-next-icon {
+  background-image: none;
+}
+
+
+/* Lightbox styles */
+#cs-lightbox-custom-draggable {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 999999;
+  overflow: hidden;
+
+  #lightbox-content {
+    position: relative;
+    margin: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  #lightbox-image {
+    max-width: 100%;
+    max-height: 100%;
+    cursor: move;
+    transition: transform 0.3s ease;
+    z-index: 1;
+    margin: auto;
+  }
+
+  .zoom-buttons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .zoom-buttons button {
+    margin: 5px;
+    padding: 0;
+    background-color: #000;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+  }
+
+  /* .zoom-buttons button:hover {
+      background-color: #eee;
+  } */
+  #lightbox-close {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    background-color: #000;
+    border: 1px solid #fff;
+    cursor: pointer;
+    z-index: 999;
+    border-radius: 100%;
+  }
+
+  .prev-next-buttons {
+    position: fixed;
+    z-index: 1;
+    top: 50%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin: 0 50px;
+    left: 0;
+    right: 0;
+  }
+
+  #btn-next-draggable .next-icon,
+  #btn-prev-draggable .prev-icon {
+    width: 18px !important;
+    height: unset;
+    cursor: pointer;
+
+  }
+
+  #btn-next-draggable,
+  #btn-prev-draggable {
+    background: none;
+    outline: none;
+    background-color: #000;
+    border: 1px solid #fff;
+    width: 35px;
+    height: 35px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

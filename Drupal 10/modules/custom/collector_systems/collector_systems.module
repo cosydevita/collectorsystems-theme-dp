@@ -98,6 +98,7 @@ function collector_systems_theme() {
         'thumbDetails' => NULL,
         'customized_fields_array' => NULL,
         'object_details' => NULL,
+        'object_ids_for_prev_next' => NULL,
         'row_number' => NULL,
         'row_before' => NULL,
         'row_after' => NULL,

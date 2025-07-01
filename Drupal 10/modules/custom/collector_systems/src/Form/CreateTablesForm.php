@@ -2,16 +2,12 @@
 
 namespace Drupal\collector_systems\Form;
 
-use DateTime;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Database\Database;
 use Drupal\collector_systems\Csconstants;
 use Drupal\Core\StreamWrapper\PublicStream;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Drupal\Core\Queue\QueueFactory;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 class CreateTablesForm extends FormBase
 {
@@ -68,7 +64,7 @@ class CreateTablesForm extends FormBase
   {
 
 
-    $chunk_size = 10; // number of objects to process in a batch
+    $chunk_size = 20; // number of objects to process in a batch
 
     $collector_systemsts_get_api_data = \Drupal::service('collector_systems.collector_systemsts_get_api_data');
     $import_types = [
@@ -3599,6 +3595,8 @@ class CreateTablesForm extends FormBase
       $collectionIds_API[] = $collectionId;
       $collectionName = $collection['CollectionName'];
       $collectionFullName = $collection['FullCollectionName'];
+      $collectionLeftExtent = isset($collection['LeftExtent']) ? $collection['LeftExtent'] : null;
+      $collectionRightExtent = isset($collection['RightExtent']) ? $collection['RightExtent'] : null;
 
       if (isset($collection['ModificationDate']) && $collection['ModificationDate'] !== NULL) {
         $ModificationDate = $collection['ModificationDate'];
@@ -3615,10 +3613,9 @@ class CreateTablesForm extends FormBase
           'CollectionName' => $collectionName,
           'FullCollectionName' => $collectionFullName,
           'ModificationDate' => $ModificationDate,
-
+          'LeftExtent' => $collectionLeftExtent,
+          'RightExtent' => $collectionRightExtent
         ];
-
-
 
         if ($btn_action == 'update_dataset') {
           // Check if the record exists.
@@ -4282,6 +4279,14 @@ class CreateTablesForm extends FormBase
         'FullCollectionName' => [
           'type' => 'varchar',
           'length' => 500,
+        ],
+        'LeftExtent' => [
+          'type' => 'int',
+          'size' => 'normal',
+        ],
+        'RightExtent' => [
+          'type' => 'int',
+          'size' => 'normal',
         ],
         'CollectionImageAttachment' => [
           'type' => 'blob',

@@ -269,30 +269,77 @@ class AjaxRequestsController extends ControllerBase
       // Fetch artist details from the database
       $connection = Database::getConnection();
 
-      // Construct the WHERE clause for LIKE condition on multiple fields
-      $where_conditions = new Condition('OR');
-      foreach ($customized_fields_array as $field) {
-        $where_conditions->condition($field, '%' . $qSearch . '%', 'LIKE');
-      }
+    
 
       //Fetch Collection Detail From Database
       $database = \Drupal::database();
 
 
-      //Fetch Objects Where CollectionId
+      //Fetch Collection Objects 
       $object_table = 'CSObjects';
-      $query = $database->select($object_table, 'co')
-        ->fields('co')
-        ->condition('co.CollectionId', $collectionID);
+      $connection = \Drupal::database();
+      $query = $connection->select('CSObjects', 'o');
+      $query->innerJoin('Collections', 'c', 'o.CollectionId = c.CollectionId');
+      $query->innerJoin('Collections', 'c_target', 'c_target.CollectionId = '.$collectionID);
+      $query->fields('o');
+      $query->fields('c');
+
+      // WHERE (o.CollectionId = :group_id OR o.ObjectId BETWEEN c_target.LeftExtent AND c_target.RightExtent)
+      $or_condition = $query->orConditionGroup()
+        ->condition('o.CollectionId', $collectionID)
+        ->where('o.ObjectId BETWEEN c_target.LeftExtent AND c_target.RightExtent');
+
+      $query->condition($or_condition);
 
       if ($qSearch !== NULL && count($customized_fields_array) > 0) {
+        // Construct the WHERE clause for LIKE condition on multiple fields
+        $where_conditions = new Condition('OR');
+        foreach ($customized_fields_array as $field) {
+          $where_conditions->condition('o.'.$field, '%' . $qSearch . '%', 'LIKE');
+        }
         $query->condition($where_conditions);
       }
 
-      $query->range($groupLevelSkipCount, $groupLevelTopCount);
 
-      //sorting
-      $this->query_sort_objects_list($groupLevelOrderBy, $qSearch, $query);
+      $query->range($groupLevelSkipCount, $groupLevelTopCount);
+      
+      //start sort
+      if ($groupLevelOrderBy === "Title%20desc" && $qSearch !== NULL) {
+
+        $query->orderBy('Title', 'DESC');
+      }
+      else if($groupLevelOrderBy === "Title%20asc" && $qSearch !== NULL)
+      {
+
+        $query->orderBy('Title', 'ASC');
+      }
+      else if($groupLevelOrderBy === "InventoryNumber%20asc" && $qSearch !== NULL)
+      {
+          $query->orderBy('InventoryNumber', 'ASC');
+      }
+      else if($groupLevelOrderBy === "InventoryNumber%20desc" && $qSearch !== NULL)
+      {
+
+        $query->orderBy('InventoryNumber', 'DESC');
+      }
+      else if($groupLevelOrderBy === "ObjectDate%20desc" && $qSearch !== NULL)
+      {
+
+        $query->orderBy('ObjectDate', 'DESC');
+      }
+      else if($groupLevelOrderBy === "ObjectDate%20asc" && $qSearch !== NULL)
+      {
+
+        $query->orderBy('ObjectDate', 'ASC');
+      }
+      else if($groupLevelOrderBy === "Collection/CollectionName%20asc" && $qSearch !== NULL){
+        $query->orderBy('c.CollectionName', 'ASC');
+
+      }
+      else if($groupLevelOrderBy === "Collection/CollectionName%20desc" && $qSearch !== NULL){
+        $query->orderBy('c.CollectionName', 'DESC');
+      }
+      //end sort
 
       $object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
@@ -302,7 +349,6 @@ class AjaxRequestsController extends ControllerBase
 
 
       if ($obj_count > 0) {
-        $groupLevelSearchHtml = '<div class="card-group row g-5 artist-objects-container mt-5" id="groupLevelObjectsData">';
         foreach ($object_details as $value) {
           // Calculate delay time based on $loadsec.
           if ($loadsec == 1) {
@@ -327,7 +373,6 @@ class AjaxRequestsController extends ControllerBase
 
           $groupLevelSearchHtml .= $functionOutput;
         }
-        $groupLevelSearchHtml .= '</div>';
       } else {
         $groupLevelSearchHtml .= '<div class="cs-theme-nodata">No results found. Please try another search.</div>';
       }

@@ -313,17 +313,10 @@ return false;
 }
 
 function clearSearchData(pageName){
-  document.getElementById("searchindata").value = "";
+  var url = new URL(window.location.href);
+  url.searchParams.delete('qSearch');
 
-  if(pageName=="artist-detail" || pageName=="exhibition-detail" || pageName=="group-detail" || pageName=="collection-detail")
-  {
-    clearSearchForGroupLevelObjects(pageName);
-  }
-  else
-  {
-    clearSearchForTopLevelTabs(pageName);
-  }
-  return false;
+  location.href = url.toString();
 }
 
 

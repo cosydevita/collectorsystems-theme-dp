@@ -1,4 +1,6 @@
 (function ($, Drupal) {
+  $("body").append($("#cs-lightbox-custom-draggable"));
+
   Drupal.behaviors.customImageLightbox = {
     attach: function (context, settings) {
       function feature_custom_image_lightbox_draggable() {
@@ -10,7 +12,7 @@
         $(once('draggable-image-link', '#draggable-image-link', context)).on('click', function () {
           current_image_src = $(this).children('img').attr('src-slideshow');
           $("#lightbox-image").attr('src', current_image_src);
-          $("#lightbox-custom-draggable").fadeIn();
+          $("#cs-lightbox-custom-draggable").fadeIn();
           $("#lightbox-image").draggable();
           fitImageToScreen();
           resetImageTransform();
@@ -19,7 +21,7 @@
 
         // Close the lightbox
         $("#lightbox-close", context).on("click", function () {
-          $("#lightbox-custom-draggable").fadeOut();
+          $("#cs-lightbox-custom-draggable").fadeOut();
         });
 
         // Zoom in functionality
@@ -76,7 +78,7 @@
 
 
         // Mouse scroll zoom
-        $("#lightbox-custom-draggable", context).on("wheel", function (event) {
+        $("#cs-lightbox-custom-draggable", context).on("wheel", function (event) {
           let currentImageWidth = $("#lightbox-image").width() * scale;
           event.preventDefault();
 

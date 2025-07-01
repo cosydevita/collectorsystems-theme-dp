@@ -1573,10 +1573,11 @@ class CollectorSystemsGetApiData{
   public function getApiCollectionsData($top, $skip){
     $subsKey = $this->subsKey;
     $subAcntId = $this->subAcntId;
+    $subsId = $this->subsId;
 
     //Fetching Collection's API Data
     $wordforsearch = "Collections";
-    $url = csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$top='.$top.'&$skip='.$skip;
+    $url = csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$filter=SubscriptionId%20eq%20' . $subsId . '&$top='.$top.'&$skip='.$skip;
 
       $curl = curl_init($url);
       curl_setopt($curl, CURLOPT_URL, $url);
@@ -1607,10 +1608,11 @@ class CollectorSystemsGetApiData{
   public function getApiGroupsData($top, $skip){
     $subsKey = $this->subsKey;
     $subAcntId = $this->subAcntId;
+    $subsId = $this->subsId;
 
     //Fetching Group's API Data
     $wordforsearch = "Groups";
-    $url = csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$top='.$top.'&$skip='.$skip;
+    $url = csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$filter=SubscriptionId%20eq%20' . $subsId . '&$top='.$top.'&$skip='.$skip;
 
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -1640,10 +1642,12 @@ class CollectorSystemsGetApiData{
   public function getApiExhibitionsData($top, $skip){
     $subsKey = $this->subsKey;
     $subAcntId = $this->subAcntId;
+    $subsId = $this->subsId;
+
 
     //Fetching Exhibition's API Data
     $wordforsearch = "Exhibitions";
-    $url = csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$top='.$top.'&$skip='.$skip;
+    $url = csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$filter=SubscriptionId%20eq%20' . $subsId . '&$top='.$top.'&$skip='.$skip;
 
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);

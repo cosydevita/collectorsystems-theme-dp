@@ -78,8 +78,9 @@ class PageTemplatesController extends ControllerBase
 
     $query->condition('ObjectId', $artObjID);
 
-    // $object_details = $query->execute()->fetchAllAssoc('ObjectId'); //
-    $object_details = $query->execute()->fetchAll(); 
+    $object_details = $query->execute()->fetchAllAssoc('ObjectId');
+    $object_details = $object_details[$artObjID];
+
     
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
@@ -89,13 +90,13 @@ class PageTemplatesController extends ControllerBase
       //start azure map
       $customized_fields = $this->getCommaSeperatedFieldsForDetailPage();
       $customized_fields_array = explode(',', $customized_fields);
-      foreach ($object_details as $object) {
-        $Latitude = $object->Latitude;
-        $Longitude = $object->Longitude;
-        $AddressName = $object->AddressName;
-        $main_image_attachment = $object->main_image_attachment;
-        $main_image_path = $object->main_image_path;
-        $object_id = $object->ObjectId;
+      if ($object_details) {
+        $Latitude = $object_details->Latitude;
+        $Longitude = $object_details->Longitude;
+        $AddressName = $object_details->AddressName;
+        $main_image_attachment = $object_details->main_image_attachment;
+        $main_image_path = $object_details->main_image_path;
+        $object_id = $object_details->ObjectId;
         $locations_data =  [
           "latitude" => $Latitude,
           "longitude" => $Longitude,
@@ -107,8 +108,8 @@ class PageTemplatesController extends ControllerBase
         ];
         if($Latitude && $Longitude){
           //only display image, title and Inventory in pin-popup  Number for the detail page
-          $locations_data['data_selected_fields']['Title'] = $object->Title;
-          $locations_data['data_selected_fields']['InventoryNumber'] = $object->InventoryNumber;
+          $locations_data['data_selected_fields']['Title'] = $object_details->Title;
+          $locations_data['data_selected_fields']['InventoryNumber'] = $object_details->InventoryNumber;
           $locations[] =  $locations_data;
         }
       }
@@ -148,9 +149,11 @@ class PageTemplatesController extends ControllerBase
 
     $row_number=-1;
 
-    if($object_details)
+    $getObjectIdsForPrevNext = $this->getObjectIdsForPrevNext($sortBy);
+
+    if($getObjectIdsForPrevNext)
     {
-        foreach($object_details as $key=>$object)
+        foreach($getObjectIdsForPrevNext as $key=>$object)
         {
             // if($object['ObjectId'] == $artObjID)
             if ($object->ObjectId == $artObjID)
@@ -211,6 +214,7 @@ class PageTemplatesController extends ControllerBase
       '#thumbDetails' => $thumbDetails,
       '#customized_fields_array' => $customized_fields_array,
       '#object_details' => $object_details,
+      '#object_ids_for_prev_next' => $getObjectIdsForPrevNext,
       '#row_number' => $row_number,
       '#row_before' => $row_before,
       '#row_after' => $row_after,
@@ -240,6 +244,36 @@ class PageTemplatesController extends ControllerBase
     $build['#attached']['library'][] = 'collector_systems/jquery_ui';
     $build['#attached']['library'][] = 'collector_systems/artobject_detail_page';
     return $build;
+
+  }
+
+  public function getObjectIdsForPrevNext($sortBy){
+    $object_table = 'CSObjects';
+    $collection_table = 'Collections';
+     
+    // Fetch object details from database
+    $query = \Drupal::database()->select($object_table, 'o');
+    $query ->fields('o', ['ObjectId']);
+
+    if ($sortBy === 'Title desc' || $sortBy === 'Title asc') {
+      $query->orderBy('Title', ($sortBy === 'Title desc') ? 'DESC' : 'ASC');
+    }
+    elseif ($sortBy === 'InventoryNumber asc' || $sortBy === 'InventoryNumber desc') {
+      $query->orderBy('InventoryNumber', ($sortBy === 'InventoryNumber desc') ? 'DESC' : 'ASC');
+
+    }
+    elseif ($sortBy === 'ObjectDate desc' || $sortBy === 'ObjectDate asc') {
+      $query->orderBy('ObjectDate', ($sortBy === 'ObjectDate desc') ? 'DESC' : 'ASC');
+    }
+    elseif ($sortBy === 'Collection/CollectionName asc' || $sortBy === 'Collection/CollectionName desc') {
+      $query->join($collection_table, 'c', 'o.CollectionId = c.CollectionId');
+      $query->fields('c', ['CollectionName']);
+      $query->orderBy('c.CollectionName', ($sortBy === 'Collection/CollectionName desc') ? 'DESC' : 'ASC');
+    }
+
+    $object_ids = $query->execute()->fetchAll(); 
+
+    return $object_ids;
 
   }
 
@@ -704,24 +738,36 @@ class PageTemplatesController extends ControllerBase
     ->range(0, 1); // Assuming you only expect one result.
     $collection_details = $query->execute()->fetchAssoc();
 
-
+    // collection object details.
     $object_table = 'CSObjects';
-    $query = $database->select($object_table, 'co')
-      ->fields('co')
-      ->condition('co.CollectionId', $collectionID);
+    $connection = \Drupal::database();
+    $query = $connection->select('CSObjects', 'o');
+    $query->innerJoin('Collections', 'c', 'o.CollectionId = c.CollectionId');
+    $query->innerJoin('Collections', 'c_target', 'c_target.CollectionId = '.$collectionID);
+
+    $query->fields('o');
+    $query->fields('c');
+
+    // WHERE (o.CollectionId = :group_id OR o.ObjectId BETWEEN c_target.LeftExtent AND c_target.RightExtent)
+    $or_condition = $query->orConditionGroup()
+      ->condition('o.CollectionId', $collectionID)
+      ->where('o.ObjectId BETWEEN c_target.LeftExtent AND c_target.RightExtent');
+
+    $query->condition($or_condition);
+
+    $query_objects_total_count = $query->countQuery();
 
     // Add limits.
     $query->range($shskip, $showrec);
     $query->orderBy('Title', 'ASC');
 
     $object_details = $query->execute()->fetchAllAssoc('ObjectId');
+    //end collection object details.
 
-
-    //Count
-    $query_count = $database->select($object_table, 'co')
-    ->condition('co.CollectionId', $collectionID)
-    ->countQuery();
+    //Count collection objects.
+    $query_count = $query_objects_total_count->countQuery();
     $obj_count = $query_count->execute()->fetchField();
+    
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
 
