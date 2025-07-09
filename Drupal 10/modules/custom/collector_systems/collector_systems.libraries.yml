@@ -15,7 +15,7 @@ collector-systems:
     - core/jquery
     - core/drupal
 azure_map:
-  version: 2.6
+  version: 2.7
   js:
     https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js: {}
     js/azure_map.js: {}

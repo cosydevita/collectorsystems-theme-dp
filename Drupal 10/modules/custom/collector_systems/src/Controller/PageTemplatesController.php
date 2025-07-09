@@ -319,17 +319,17 @@ class PageTemplatesController extends ControllerBase
     }
     // Fetch objects where ArtistId
     $object_table = $connection->prefixTables('CSObjects');
-    $query = $connection->select($object_table, 'o')
+    $query_object_details = $connection->select($object_table, 'o')
       ->fields('o') // Specify the fields you want to select
       ->condition('o.ArtistId', $artistId);
-    $query->orderBy('Title', 'ASC');
+    $query_object_details->orderBy('Title', 'ASC');
 
 
     if ($qSearch !== NULL && count($customized_fields_array)>0) {
-      $query->condition($where_conditions);
+      $query_object_details->condition($where_conditions);
     }
-    $query->range($groupLevelSkipCount, $nxshowrec);
-    $object_details = $query->execute()->fetchAllAssoc('ObjectId');
+    $query_object_details->range($groupLevelSkipCount, $nxshowrec);
+    $object_details = $query_object_details->execute()->fetchAllAssoc('ObjectId');
 
     // Count
     $count_object = $connection->select($object_table, 'o')
@@ -346,9 +346,12 @@ class PageTemplatesController extends ControllerBase
 
     $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
+      $query_map_object_details = $query_object_details->range();
+      $result = $query_map_object_details->execute();
+      $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
       //start azure map
       $locations = [];
-      foreach ($object_details as $object) {
+      foreach ($object_details_without_range as $object) {
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
         $AddressName = $object->AddressName;
@@ -460,15 +463,15 @@ class PageTemplatesController extends ControllerBase
     $exhibitionObj_table = 'ExhibitionObjects';
     $object_table = 'CSObjects';
 
-    $query = \Drupal::database()->select($exhibitionObj_table, 'eo');
-    $query->fields('eo');
-    $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
-    $query->fields('co');
-    $query->condition('eo.ExhibitionId', $exhibitionID);
-    $query->range($nxshskip, $nxshowrec);
-    $query->orderBy('Title', 'ASC');
+    $query_exhibition_objects = \Drupal::database()->select($exhibitionObj_table, 'eo');
+    $query_exhibition_objects->fields('eo');
+    $query_exhibition_objects->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
+    $query_exhibition_objects->fields('co');
+    $query_exhibition_objects->condition('eo.ExhibitionId', $exhibitionID);
+    $query_exhibition_objects->range($nxshskip, $nxshowrec);
+    $query_exhibition_objects->orderBy('Title', 'ASC');
 
-    $result = $query->execute();
+    $result = $query_exhibition_objects->execute();
 
     $object_details = $result->fetchAllAssoc('ObjectId');
 
@@ -482,6 +485,10 @@ class PageTemplatesController extends ControllerBase
     $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
       //start azure map
+      $query_map_exhibition_objects = $query_exhibition_objects->range();
+      $result = $query_map_exhibition_objects->execute();
+      $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+
       $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
       if($customized_fields){
         $customized_fields_array = explode(',', $customized_fields);
@@ -490,7 +497,9 @@ class PageTemplatesController extends ControllerBase
       }
 
       $locations = [];
-      foreach ($object_details as $object) {
+      
+      foreach ($object_details_without_range as $object) {
+
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
         $AddressName = $object->AddressName;
@@ -606,17 +615,14 @@ class PageTemplatesController extends ControllerBase
 
 
     $object_table = "CSObjects";
-    $query = $database->select($groupObj_table, 'eo');
-    $query->fields('eo');
-    $query->condition('eo.GroupId', $groupID);
-    $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
-    $query->fields('co');
-    $query->range($nxshskip, $nxshowrec);
-    $query->orderBy('Title', 'ASC');
-
-
-    $group_object_details = $query->execute()->fetchAllAssoc('ObjectId');
-
+    $query_group_objects = $database->select($groupObj_table, 'eo');
+    $query_group_objects->fields('eo');
+    $query_group_objects->condition('eo.GroupId', $groupID);
+    $query_group_objects->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
+    $query_group_objects->fields('co');
+    $query_group_objects->range($nxshskip, $nxshowrec);
+    $query_group_objects->orderBy('Title', 'ASC');
+    $group_object_details = $query_group_objects->execute()->fetchAllAssoc('ObjectId');
 
     $query_count = $database->select($groupObj_table, 'go')
       ->condition('GroupId', $groupID)
@@ -626,6 +632,12 @@ class PageTemplatesController extends ControllerBase
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
     $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
+      //Fetch Group Objects without range for map to show all objects in the group.
+      $object_table = "CSObjects";
+      $query_map_group_objects = $query_group_objects->range();
+      $result = $query_map_group_objects->execute();
+      $group_object_details_without_range =  $result->fetchAllAssoc('ObjectId');
+  
       //start azure map
       $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
       if($customized_fields){
@@ -635,7 +647,7 @@ class PageTemplatesController extends ControllerBase
       }
 
       $locations = [];
-      foreach ($group_object_details as $object) {
+      foreach ($group_object_details_without_range as $object) {
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
         $AddressName = $object->AddressName;
@@ -741,27 +753,27 @@ class PageTemplatesController extends ControllerBase
     // collection object details.
     $object_table = 'CSObjects';
     $connection = \Drupal::database();
-    $query = $connection->select('CSObjects', 'o');
-    $query->innerJoin('Collections', 'c', 'o.CollectionId = c.CollectionId');
-    $query->innerJoin('Collections', 'c_target', 'c_target.CollectionId = '.$collectionID);
+    $query_collection_objects = $connection->select('CSObjects', 'o');
+    $query_collection_objects->innerJoin('Collections', 'c', 'o.CollectionId = c.CollectionId');
+    $query_collection_objects->innerJoin('Collections', 'c_target', 'c_target.CollectionId = '.$collectionID);
 
-    $query->fields('o');
-    $query->fields('c');
+    $query_collection_objects->fields('o');
+    $query_collection_objects->fields('c');
 
     // WHERE (o.CollectionId = :group_id OR o.ObjectId BETWEEN c_target.LeftExtent AND c_target.RightExtent)
-    $or_condition = $query->orConditionGroup()
+    $or_condition = $query_collection_objects->orConditionGroup()
       ->condition('o.CollectionId', $collectionID)
       ->where('o.ObjectId BETWEEN c_target.LeftExtent AND c_target.RightExtent');
 
-    $query->condition($or_condition);
+    $query_collection_objects->condition($or_condition);
 
-    $query_objects_total_count = $query->countQuery();
+    $query_objects_total_count = $query_collection_objects->countQuery();
 
     // Add limits.
-    $query->range($shskip, $showrec);
-    $query->orderBy('Title', 'ASC');
+    $query_collection_objects->range($shskip, $showrec);
+    $query_collection_objects->orderBy('Title', 'ASC');
 
-    $object_details = $query->execute()->fetchAllAssoc('ObjectId');
+    $object_details = $query_collection_objects->execute()->fetchAllAssoc('ObjectId');
     //end collection object details.
 
     //Count collection objects.
@@ -773,6 +785,9 @@ class PageTemplatesController extends ControllerBase
 
     $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
+      $query_map_collection_objects = $query_collection_objects->range();
+      $result = $query_map_collection_objects->execute();
+      $object_details_without_range =  $result->fetchAllAssoc('ObjectId');
       //start azure map
       $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
       if($customized_fields){
@@ -782,7 +797,7 @@ class PageTemplatesController extends ControllerBase
       }
 
       $locations = [];
-      foreach ($object_details as $object) {
+      foreach ($object_details_without_range as $object) {
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
         $AddressName = $object->AddressName;
@@ -807,12 +822,12 @@ class PageTemplatesController extends ControllerBase
       }
 
 
-      $state = \Drupal::state();
-      $subscription_key = $state->get('collector_systems_azure_map.subscription_key');
+      $config = $this->configFactory->get('collector_systems.settings');
+      $azure_subscription_key = $config->get('azure_map_subscription_key');
 
       $js_settings = [
         'locations' => $locations,
-        'subscription_key' => $subscription_key,
+        'subscription_key' => $azure_subscription_key,
         'module_path' => $module_path
       ];
 

@@ -153,6 +153,11 @@ function initializeMap() {
     }
 
   });
+
+  // Add zoom control to the map
+  map.controls.add(new atlas.control.ZoomControl(), {
+    position: "top-right" // or "top-left", "bottom-left", "bottom-right"
+  });
 }
 
 function destroyMap() {

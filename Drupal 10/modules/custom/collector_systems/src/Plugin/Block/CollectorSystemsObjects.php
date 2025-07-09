@@ -178,9 +178,17 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
 
     $enable_maps = $this->configFactory->get('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
+      $query = Database::getConnection()->select($object_table, 'o');
+      $query->fields('o');
+      $query->condition('o.Latitude', NULL, 'IS NOT NULL');
+      $query->condition('o.Latitude', '', '<>');
+      $query->condition('o.Longitude', NULL, 'IS NOT NULL');
+      $query->condition('o.Longitude', '', '<>');
+      $result = $query->execute();
+      $object_details_for_map = $result->fetchAllAssoc('ObjectId');
       //start azure map
       $locations = [];
-      foreach ($object_details as $object) {
+      foreach ($object_details_for_map as $object) {
         $Latitude = $object->Latitude;
         $Longitude = $object->Longitude;
         $AddressName = $object->AddressName;
@@ -200,8 +208,10 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
         if($Latitude && $Longitude){
           if($customized_fields && !empty($customized_fields_array)){
             foreach($customized_fields_array as $customized_field){
-              $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
-
+              if(isset($object->$customized_field)){
+                // Check if the field exists in the object
+                $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+              }
             }
           }
           $locations[] =  $locations_data;
