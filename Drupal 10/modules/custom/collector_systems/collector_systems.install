@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * Adds new columns to the CSSynced table:
+ * - SyncStarted (varchar 255)
+ * - SyncCompleted (varchar 255)
+ * - SyncType (varchar 255)
+ * - SyncTrigger (varchar 255)
+ * - SyncCompletionTime (varchar 255)
+ *
+ * @return void
+ */
+function collector_systems_update_9000() {
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->fieldExists('CSSynced', 'SyncStarted')) {
+    $schema->addField('CSSynced', 'SyncStarted', [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+    ]);
+  }
+
+  if (!$schema->fieldExists('CSSynced', 'SyncCompleted')) {
+    $schema->addField('CSSynced', 'SyncCompleted', [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+    ]);
+  }
+
+  if (!$schema->fieldExists('CSSynced', 'SyncType')) {
+    $schema->addField('CSSynced', 'SyncType', [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+    ]);
+  }
+
+  if (!$schema->fieldExists('CSSynced', 'SyncTrigger')) {
+    $schema->addField('CSSynced', 'SyncTrigger', [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+    ]);
+  }
+
+  if (!$schema->fieldExists('CSSynced', 'SyncCompletionTime')) {
+    $schema->addField('CSSynced', 'SyncCompletionTime', [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+    ]);
+  }
+
+}
