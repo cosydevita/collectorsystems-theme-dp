@@ -266,30 +266,32 @@ class AjaxRequestsController extends ControllerBase
     } else if ($Spage == "collection-detail") {
 
       $collectionID = $groupTypeId;
-      // Fetch artist details from the database
-      $connection = Database::getConnection();
 
-    
-
-      //Fetch Collection Detail From Database
       $database = \Drupal::database();
-
-
-      //Fetch Collection Objects 
+      // collection object details.
       $object_table = 'CSObjects';
       $connection = \Drupal::database();
-      $query = $connection->select('CSObjects', 'o');
+
+      $connection = \Drupal::database();
+      $extent = $connection->select('Collections', 'c')
+      ->fields('c', ['LeftExtent', 'RightExtent'])
+      ->condition('CollectionId', $collectionID)
+      ->execute()
+      ->fetchAssoc();
+
+      $leftExtent = $extent['LeftExtent'];
+      $rightExtent = $extent['RightExtent'];
+      
+
+      $query = $connection->select($object_table, 'o');
       $query->innerJoin('Collections', 'c', 'o.CollectionId = c.CollectionId');
-      $query->innerJoin('Collections', 'c_target', 'c_target.CollectionId = '.$collectionID);
+
+      // Apply value bounds to LeftExtent and RightExtent
+      $query->condition('c.LeftExtent', $leftExtent, '>=');
+      $query->condition('c.RightExtent', $rightExtent, '<=');
+
       $query->fields('o');
       $query->fields('c');
-
-      // WHERE (o.CollectionId = :group_id OR o.ObjectId BETWEEN c_target.LeftExtent AND c_target.RightExtent)
-      $or_condition = $query->orConditionGroup()
-        ->condition('o.CollectionId', $collectionID)
-        ->where('o.ObjectId BETWEEN c_target.LeftExtent AND c_target.RightExtent');
-
-      $query->condition($or_condition);
 
       if ($qSearch !== NULL && count($customized_fields_array) > 0) {
         // Construct the WHERE clause for LIKE condition on multiple fields
@@ -300,7 +302,7 @@ class AjaxRequestsController extends ControllerBase
         $query->condition($where_conditions);
       }
 
-
+      $count_query = $query->countQuery();
       $query->range($groupLevelSkipCount, $groupLevelTopCount);
       
       //start sort
@@ -344,7 +346,6 @@ class AjaxRequestsController extends ControllerBase
       $object_details = $query->execute()->fetchAllAssoc('ObjectId');
 
       //Count
-      $count_query = $query->countQuery();
       $obj_count = $count_query->execute()->fetchField();
 
 

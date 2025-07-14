@@ -753,19 +753,27 @@ class PageTemplatesController extends ControllerBase
     // collection object details.
     $object_table = 'CSObjects';
     $connection = \Drupal::database();
-    $query_collection_objects = $connection->select('CSObjects', 'o');
+
+    $connection = \Drupal::database();
+    $extent = $connection->select('Collections', 'c')
+    ->fields('c', ['LeftExtent', 'RightExtent'])
+    ->condition('CollectionId', $collectionID)
+    ->execute()
+    ->fetchAssoc();
+
+    $leftExtent = $extent['LeftExtent'];
+    $rightExtent = $extent['RightExtent'];
+    
+
+    $query_collection_objects = $connection->select($object_table, 'o');
     $query_collection_objects->innerJoin('Collections', 'c', 'o.CollectionId = c.CollectionId');
-    $query_collection_objects->innerJoin('Collections', 'c_target', 'c_target.CollectionId = '.$collectionID);
+
+    // Apply value bounds to LeftExtent and RightExtent
+    $query_collection_objects->condition('c.LeftExtent', $leftExtent, '>=');
+    $query_collection_objects->condition('c.RightExtent', $rightExtent, '<=');
 
     $query_collection_objects->fields('o');
     $query_collection_objects->fields('c');
-
-    // WHERE (o.CollectionId = :group_id OR o.ObjectId BETWEEN c_target.LeftExtent AND c_target.RightExtent)
-    $or_condition = $query_collection_objects->orConditionGroup()
-      ->condition('o.CollectionId', $collectionID)
-      ->where('o.ObjectId BETWEEN c_target.LeftExtent AND c_target.RightExtent');
-
-    $query_collection_objects->condition($or_condition);
 
     $query_objects_total_count = $query_collection_objects->countQuery();
 
@@ -774,6 +782,7 @@ class PageTemplatesController extends ControllerBase
     $query_collection_objects->orderBy('Title', 'ASC');
 
     $object_details = $query_collection_objects->execute()->fetchAllAssoc('ObjectId');
+    
     //end collection object details.
 
     //Count collection objects.
