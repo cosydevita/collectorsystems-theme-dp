@@ -6,9 +6,12 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Url;
 use Drupal\Core\Datetime\DrupalDateTime;
 
+if (!class_exists('Drupal\collector_systems\Csconstants')) {
+  require_once __DIR__ .'/src/Csconstants.php';
+}
 
-function collector_systems_preprocess_page(&$variables){
-  $variables['#cache']['max-age'] = 0;
+if (!class_exists('Drupal\collector_systems\CustomTwigExtension')) {
+  require_once __DIR__ .'/src/CustomTwig.php';
 }
 
 /**
@@ -287,47 +290,7 @@ function collector_systems_form_alter(&$form, &$form_state, $form_id) {
     $form['#attached']['library'][] = 'collector_systems/customize_object_list_fields';
   }
 }
-$database = Database::getConnection();
 
-if (!($database->schema()->tableExists('clsobjects_fields'))) {
-  create_table_clsobjects_fields();
-}
-
-function create_table_clsobjects_fields(){
-
-  $database = Database::getConnection();
-  $table_name = 'clsobjects_fields'; // Replace {table_name} with your actual table name.
-  $schema = [
-    'description' => 'Your table description',
-    'fields' => [
-      'id' => [
-        'type' => 'serial',
-        'not null' => TRUE,
-        'description' => 'Primary Key: Unique identifier for the record.',
-      ],
-      'fieldname' => [
-        'type' => 'text',
-        'not null' => TRUE,
-        'description' => 'Field name',
-      ],
-      'fieldvalue' => [
-        'type' => 'text',
-        'not null' => TRUE,
-        'description' => 'Field value',
-      ],
-      'fieldtype' => [
-        'type' => 'text',
-        'not null' => TRUE,
-        'description' => 'Field type',
-      ],
-    ],
-    'primary key' => ['id'],
-  ];
-
-  // Create the table.
-  $database->schema()->createTable($table_name, $schema);
-
-}
 
 /*
 * Custom validation callback to bypass allowed values check for dynamic values.
@@ -370,7 +333,9 @@ function collector_systems_cron() {
   // Convert the sync time to a Unix timestamp.
   $sync_timestamp = strtotime($sync_time);
 
-  \Drupal::logger(channel: 'collector_systems')->debug('Total items in the queue:' . $collector_systems_sync_queue_worker->numberOfItems());
+  $total_items_in_queue_for_sync = $collector_systems_sync_queue_worker->numberOfItems();
+
+  \Drupal::logger(channel: 'collector_systems')->debug('Total items in the queue:' . $total_items_in_queue_for_sync);
 
   // only add items to the queue if the queue is empty.
   if ($collector_systems_sync_queue_worker->numberOfItems() === 0) {
@@ -422,16 +387,21 @@ function collector_systems_cron() {
   }
 
   // Process queue items in parallel using curl.
-  $url = Url::fromRoute('collector_systems.sync_queue_process', [], ['absolute' => TRUE])->toString();
-  $total_parallel_queue_processes = 3;
-  for ($i = 0; $i < $total_parallel_queue_processes; $i++) {
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 1);
-    curl_setopt($ch, CURLOPT_NOSIGNAL, true);
-    curl_exec($ch);
-    curl_close($ch);
+  if($total_items_in_queue_for_sync > 0) {
+    \Drupal::logger(channel: 'collector_systems')->debug('Processing queue items in parallel using curl.');
+
+    $url = Url::fromRoute('collector_systems.sync_queue_process', [], ['absolute' => TRUE])->toString();
+    $total_parallel_queue_processes = 3;
+    for ($i = 0; $i < $total_parallel_queue_processes; $i++) {
+      $ch = curl_init($url);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+      curl_setopt($ch, CURLOPT_NOSIGNAL, true);
+      curl_exec($ch);
+      curl_close($ch);
+    }
   }
+ 
 }
 
 /**
@@ -491,7 +461,7 @@ function collector_systems_update_CSSynced_table($sync_type, $sync_trigger, $syn
   $database = \Drupal::database();
 
   //first check if the table exists
-  if (!$database->schema()->tableExists('CSSynced')) {
+  if (!$database->schema()->tableExists('collector_systems_cssynced')) {
     \Drupal::logger('collector_systems')->error('CSSynced table does not exist.');
     return;
   }
@@ -508,7 +478,7 @@ function collector_systems_update_CSSynced_table($sync_type, $sync_trigger, $syn
     $fields['SyncCompleted'] = (new DrupalDateTime())->format('m/d/y \a\t h:i:s A');
 
     // Fetch SyncStarted datetime string from DB first
-    $result = $database->select('CSSynced', 'c')
+    $result = $database->select('collector_systems_cssynced', 'c')
     ->fields('c', ['SyncStarted'])
     ->condition('SyncType', $sync_type)
     ->condition('SyncTrigger', $sync_trigger)
@@ -556,7 +526,7 @@ function collector_systems_update_CSSynced_table($sync_type, $sync_trigger, $syn
   }
   
 
-  $existing = $database->select('CSSynced', 'c')
+  $existing = $database->select('collector_systems_cssynced', 'c')
     ->fields('c', ['SyncType', 'SyncTrigger'])
     ->condition('SyncType', $sync_type)
     ->condition('SyncTrigger', $sync_trigger)
@@ -565,7 +535,7 @@ function collector_systems_update_CSSynced_table($sync_type, $sync_trigger, $syn
 
   if ($existing) {
     if (!empty($fields)) {
-      $database->update('CSSynced')
+      $database->update('collector_systems_cssynced')
         ->fields($fields)
         ->condition('SyncType', $sync_type)
         ->condition('SyncTrigger', $sync_trigger)
@@ -579,9 +549,28 @@ function collector_systems_update_CSSynced_table($sync_type, $sync_trigger, $syn
       'LastSyncedDateTime' => '',
     ];
 
-    $database->insert('CSSynced')
+    $database->insert('collector_systems_cssynced')
       ->fields($fields)
       ->execute();
   }
 }
 
+/**
+ * Implements hook_uninstall().
+ *
+ * This hook is invoked when the module is uninstalled (via Drupal UI or Drush).
+ * It performs cleanup tasks to remove any data or files created by the module.
+ *
+ * In this implementation, we delete the entire 'collector_systems/images' directory
+ * within the public files directory, which contains all images managed by this module.
+ *
+ * This ensures no orphaned files remain after uninstalling the module.
+ */
+function collector_systems_uninstall() {
+  $directory = \Drupal::service('file_system')->realpath('public://collector_systems/images');
+  if (is_dir($directory)) {
+    // This deletes all files and subdirectories inside 'collector_systems/images',
+    // then removes the directory itself.
+    \Drupal::service('file_system')->deleteRecursive($directory);
+  }
+}

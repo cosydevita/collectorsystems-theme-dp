@@ -123,7 +123,7 @@ class CustomizeObjectListFieldsSettingsForm extends ConfigFormBase {
   public function get_select_field2_options(){
     $db = \Drupal::database();
 
-    $tblnm = "clsobjects_fields";
+    $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')
@@ -140,7 +140,7 @@ class CustomizeObjectListFieldsSettingsForm extends ConfigFormBase {
 
       $current_field_2_options = json_decode($form_state->getValue('current_select_field2_options'), true);
 
-      $table_name = 'clsobjects_fields';
+      $table_name = 'collector_systems_clsobjects_fields';
 
       // Delete rows where fieldtype is 'ObjectList'.
       \Drupal::database()->delete($table_name)

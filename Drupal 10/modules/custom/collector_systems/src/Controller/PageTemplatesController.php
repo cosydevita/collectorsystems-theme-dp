@@ -47,14 +47,14 @@ class PageTemplatesController extends ControllerBase
     $requested_pageNo=isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
 
     // Fetch Objects Data from database
-    $object_table = 'CSObjects';
+    $object_table = 'collector_systems_objects';
     $count = \Drupal::database()->select($object_table)
       ->countQuery()
       ->execute()
       ->fetchField();
 
     // Collection Table
-    $collection_table = 'Collections';
+    $collection_table = 'collector_systems_collections';
 
     // Fetch object details from database
     $query = \Drupal::database()->select($object_table, 'o');
@@ -131,7 +131,7 @@ class PageTemplatesController extends ControllerBase
     $database = Database::getConnection();
 
     // Assuming $thumbImage_table is the name of your custom table.
-    $thumbImage_table = $database->prefixTables('ThumbImages');
+    $thumbImage_table = $database->prefixTables('collector_systems_thumb_images');
 
     // Fetching multiple rows based on a condition.
     $query = $database->select($thumbImage_table, 'ti')
@@ -248,8 +248,8 @@ class PageTemplatesController extends ControllerBase
   }
 
   public function getObjectIdsForPrevNext($sortBy){
-    $object_table = 'CSObjects';
-    $collection_table = 'Collections';
+    $object_table = 'collector_systems_objects';
+    $collection_table = 'collector_systems_collections';
      
     // Fetch object details from database
     $query = \Drupal::database()->select($object_table, 'o');
@@ -304,7 +304,7 @@ class PageTemplatesController extends ControllerBase
 
     // Fetch artist details from the database
     $connection = Database::getConnection();
-    $artist_table = $connection->prefixTables('Artists');
+    $artist_table = $connection->prefixTables('collector_systems_artists');
     $fetch_artist_details = $connection->select($artist_table, 'a')
       ->fields('a', ['ArtistId', 'ArtistName', 'ArtistFirst', 'ArtistLast', 'ArtistYears', 'ArtistNationality', 'ArtistLocale', 'ArtistBio'])
       ->condition('ArtistId', $artistId)
@@ -318,7 +318,7 @@ class PageTemplatesController extends ControllerBase
       $where_conditions->condition($field, '%' . $qSearch . '%', 'LIKE');
     }
     // Fetch objects where ArtistId
-    $object_table = $connection->prefixTables('CSObjects');
+    $object_table = $connection->prefixTables('collector_systems_objects');
     $query_object_details = $connection->select($object_table, 'o')
       ->fields('o') // Specify the fields you want to select
       ->condition('o.ArtistId', $artistId);
@@ -447,7 +447,7 @@ class PageTemplatesController extends ControllerBase
     //Fetch Exhibition Data from database
     $database = \Drupal::database();
     // Define the table name using Drupal's table() method.
-    $exhibition_table = 'Exhibitions';
+    $exhibition_table = 'collector_systems_exhibitions';
 
     // Build the database query.
     $query = $database->select($exhibition_table);
@@ -460,8 +460,8 @@ class PageTemplatesController extends ControllerBase
 
 
     //Fetch Objects Where ExhibitionId
-    $exhibitionObj_table = 'ExhibitionObjects';
-    $object_table = 'CSObjects';
+    $exhibitionObj_table = 'collector_systems_exhibition_objects';
+    $object_table = 'collector_systems_objects';
 
     $query_exhibition_objects = \Drupal::database()->select($exhibitionObj_table, 'eo');
     $query_exhibition_objects->fields('eo');
@@ -598,7 +598,7 @@ class PageTemplatesController extends ControllerBase
 
     //Fetch Group Details From Database
 
-    $group_table = 'Groups';
+    $group_table = 'collector_systems_groups';
     $query = $database->select($group_table, 'g')
     ->fields('g', ['GroupId', 'GroupDescription', 'GroupMemo'])
     ->condition('GroupId', $groupID)
@@ -607,14 +607,14 @@ class PageTemplatesController extends ControllerBase
 
 
     //Fetch Objects Where GroupId
-    $groupObj_table = "GroupObjects";
+    $groupObj_table = "collector_systems_group_objects";
     $query = $database->select($groupObj_table, 'go')
     ->fields('go')
     ->condition('GroupId', $groupID);
     $object_details = $query->execute()->fetchAssoc();
 
 
-    $object_table = "CSObjects";
+    $object_table = "collector_systems_objects";
     $query_group_objects = $database->select($groupObj_table, 'eo');
     $query_group_objects->fields('eo');
     $query_group_objects->condition('eo.GroupId', $groupID);
@@ -633,7 +633,7 @@ class PageTemplatesController extends ControllerBase
     $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
     if($enable_maps){
       //Fetch Group Objects without range for map to show all objects in the group.
-      $object_table = "CSObjects";
+      $object_table = "collector_systems_objects";
       $query_map_group_objects = $query_group_objects->range();
       $result = $query_map_group_objects->execute();
       $group_object_details_without_range =  $result->fetchAllAssoc('ObjectId');
@@ -743,7 +743,7 @@ class PageTemplatesController extends ControllerBase
 
     //Fetch Collection Detail From Database
     $database = \Drupal::database();
-    $collection_table = 'Collections';
+    $collection_table = 'collector_systems_collections';
     $query = $database->select($collection_table, 'c')
     ->fields('c', ['CollectionId', 'FullCollectionName'])
     ->condition('c.CollectionId', $collectionID)
@@ -751,11 +751,11 @@ class PageTemplatesController extends ControllerBase
     $collection_details = $query->execute()->fetchAssoc();
 
     // collection object details.
-    $object_table = 'CSObjects';
+    $object_table = 'collector_systems_objects';
     $connection = \Drupal::database();
 
     $connection = \Drupal::database();
-    $extent = $connection->select('Collections', 'c')
+    $extent = $connection->select('collector_systems_collections', 'c')
     ->fields('c', ['LeftExtent', 'RightExtent'])
     ->condition('CollectionId', $collectionID)
     ->execute()
@@ -766,7 +766,7 @@ class PageTemplatesController extends ControllerBase
     
 
     $query_collection_objects = $connection->select($object_table, 'o');
-    $query_collection_objects->innerJoin('Collections', 'c', 'o.CollectionId = c.CollectionId');
+    $query_collection_objects->innerJoin('collector_systems_collections', 'c', 'o.CollectionId = c.CollectionId');
 
     // Apply value bounds to LeftExtent and RightExtent
     $query_collection_objects->condition('c.LeftExtent', $leftExtent, '>=');
@@ -892,7 +892,7 @@ class PageTemplatesController extends ControllerBase
 
     $db = \Drupal::database();
 
-    $tblnm = "clsobjects_fields";
+    $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')
@@ -909,7 +909,7 @@ class PageTemplatesController extends ControllerBase
   public function getCommaSeparatedFieldsForListPage(){
     $db = \Drupal::database();
 
-    $tblnm = "clsobjects_fields";
+    $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')
@@ -927,7 +927,7 @@ class PageTemplatesController extends ControllerBase
   public function getCommaSeperatedFieldsForListPageObject(){
     $db = \Drupal::database();
 
-    $tblnm = "clsobjects_fields";
+    $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')
@@ -944,14 +944,14 @@ class PageTemplatesController extends ControllerBase
 
   public function is_CS_tables_exists(){
     $tables = [
-      'CSObjects',
-      'Artists',
-      'Collections',
-      'Groups',
-      'Exhibitions',
-      'ExhibitionObjects',
-      'GroupObjects',
-      'ThumbImages'
+      'collector_systems_objects',
+      'collector_systems_artists',
+      'collector_systems_collections',
+      'collector_systems_groups',
+      'collector_systems_exhibitions',
+      'collector_systems_exhibition_objects',
+      'collector_systems_group_objects',
+      'collector_systems_thumb_images'
 
     ];
     $tables_exists = true;

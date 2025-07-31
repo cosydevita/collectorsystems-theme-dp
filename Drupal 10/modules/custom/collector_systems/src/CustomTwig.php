@@ -228,7 +228,7 @@ class CustomTwig extends AbstractExtension {
 
   public function customPaginationForTopLevelTabs($requested_page,$total_records,$sortBy,$qSearch)
   {
-    $sortBy =rawurlencode($sortBy);
+    $sortBy = $sortBy ? rawurlencode($sortBy) : '';
 
     $request = \Drupal::request();
     $baseUrl = $request->getBasePath();
@@ -679,7 +679,7 @@ class CustomTwig extends AbstractExtension {
   public function getCommaSeparatedFieldsForListPage(){
     $db = \Drupal::database();
 
-    $tblnm = "clsobjects_fields";
+    $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')

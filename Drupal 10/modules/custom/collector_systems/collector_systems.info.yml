@@ -2,10 +2,7 @@ name: 'Collector Systems'
 type: module
 description: 'Collectory Systems Module to integrate with the Collector Systems API.'
 core_version_requirement: ^9 || ^10
-package: Custom
-version: '1.8'
-dependencies:
-  - drupal:node
-  - drupal:rest
+package: Collector Systems
+version: '1.0.1'
 config:
   - collector_systems.settings

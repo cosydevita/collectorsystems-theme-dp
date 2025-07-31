@@ -50,7 +50,7 @@ class DashboardController extends ControllerBase implements ContainerInjectionIn
    */
   public function dashboardPage() {
     $database = Database::getConnection();
-    $table_CSSynced = 'CSSynced';
+    $table_CSSynced = 'collector_systems_cssynced';
     $table_exists = $database->schema()->tableExists($table_CSSynced);
     $sync_tracked_info = [];
     if($table_exists){

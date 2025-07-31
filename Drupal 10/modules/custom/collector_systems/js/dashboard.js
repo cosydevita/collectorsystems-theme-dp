@@ -113,7 +113,7 @@
       function fetch_group_ajax(sessionToken) {
         $.ajax({
           type: "POST",
-          url: origin + "/v1/cs-fetch-group-ajax?_format=json",
+          url: origin + "/collector-systems/get-total-count-data?_format=json",
           contentType: "application/json",
           data: JSON.stringify({
             action: "fetch_group_ajax",

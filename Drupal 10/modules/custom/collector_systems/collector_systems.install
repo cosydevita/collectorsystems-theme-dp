@@ -6,7 +6,7 @@
 function collector_systems_schema() {
   $schema = array();
   
-  $schema['CSObjects'] = [
+  $schema['collector_systems_objects'] = [
     'fields' => [
       'ObjectId' => [
         'type' => 'serial',
@@ -94,7 +94,7 @@ function collector_systems_schema() {
     'primary key' => ['ObjectId'],
   ];
 
-  $schema['Artists'] = [
+  $schema['collector_systems_artists'] = [
     'fields' => [
       'ArtistId' => [
         'type' => 'serial',
@@ -145,7 +145,7 @@ function collector_systems_schema() {
     'primary key' => ['ArtistId'],
   ];
 
-  $schema['Collections'] = [
+  $schema['collector_systems_collections'] = [
     'fields' => [
       'CollectionId' => [
         'type' => 'serial',
@@ -185,7 +185,7 @@ function collector_systems_schema() {
     'primary key' => ['CollectionId'],
   ];
 
-  $schema['Groups'] = [
+  $schema['collector_systems_groups'] = [
     'fields' => [
       'GroupId' => [
         'type' => 'serial',
@@ -217,7 +217,7 @@ function collector_systems_schema() {
     'primary key' => ['GroupId'],
   ];
 
-  $schema['Exhibitions'] = [
+  $schema['collector_systems_exhibitions'] = [
     'fields' => [
       'ExhibitionId' => [
         'type' => 'serial',
@@ -257,7 +257,7 @@ function collector_systems_schema() {
     'primary key' => ['ExhibitionId'],
   ];
 
-  $schema['ExhibitionObjects'] = [
+  $schema['collector_systems_exhibition_objects'] = [
     'fields' => [
       'ExhibitionId' => [
         'type' => 'int',
@@ -272,7 +272,7 @@ function collector_systems_schema() {
     ],
   ];
 
-  $schema['GroupObjects'] = [
+  $schema['collector_systems_group_objects'] = [
     'fields' => [
       'GroupId' => [
         'type' => 'int',
@@ -287,7 +287,7 @@ function collector_systems_schema() {
     ],
   ];
 
-  $schema['ThumbImages'] = [
+  $schema['collector_systems_thumb_images'] = [
     'fields' => [
       'ID' => [
         'type' => 'serial',
@@ -351,7 +351,7 @@ function collector_systems_schema() {
     ],
   ];
 
-  $schema['CSSynced'] = [
+  $schema['collector_systems_cssynced'] = [
     'fields' => [
       'LastSyncedDateTime' => [
         'type' => 'varchar',
@@ -392,7 +392,7 @@ function collector_systems_schema() {
     ]
   ];
 
-  $schema['clsobjects_fields'] = [
+  $schema['collector_systems_clsobjects_fields'] = [
     'description' => 'Your table description',
     'fields' => [
       'id' => [

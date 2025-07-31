@@ -89,10 +89,10 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
     }
 
     // Count Total Objects
-    $object_table = 'CSObjects';
+    $object_table = 'collector_systems_objects';
 
     // Collection Table
-    $collection_table = 'Collections';
+    $collection_table = 'collector_systems_collections';
 
     // Fetch object details from the database
     $query = Database::getConnection()->select($object_table, 'o');
@@ -264,14 +264,14 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
 
   public function is_CS_tables_exists(){
     $tables = [
-      'CSObjects',
-      'Artists',
-      'Collections',
-      'Groups',
-      'Exhibitions',
-      'ExhibitionObjects',
-      'GroupObjects',
-      'ThumbImages'
+      'collector_systems_objects',
+      'collector_systems_artists',
+      'collector_systems_collections',
+      'collector_systems_groups',
+      'collector_systems_exhibitions',
+      'collector_systems_exhibition_objects',
+      'collector_systems_group_objects',
+      'collector_systems_thumb_images'
 
     ];
     $tables_exists = true;
@@ -289,7 +289,7 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
   public function getCommaSeparatedFieldsForListPage(){
     $db = \Drupal::database();
 
-    $tblnm = "clsobjects_fields";
+    $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')

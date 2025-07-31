@@ -46,7 +46,7 @@ class CollectorSystemsArtists extends BlockBase {
 
 
     // Fetch Count From the Database
-    $artist_table = 'Artists'; // Replace with your table name
+    $artist_table = 'collector_systems_artists'; // Replace with your table name
     $query = Database::getConnection()->select($artist_table, 'a');
     $query->addExpression('COUNT(*)');
     $count = $query->execute()->fetchField();
@@ -100,14 +100,14 @@ class CollectorSystemsArtists extends BlockBase {
 
   public function is_CS_tables_exists(){
     $tables = [
-      'CSObjects',
-      'Artists',
-      'Collections',
-      'Groups',
-      'Exhibitions',
-      'ExhibitionObjects',
-      'GroupObjects',
-      'ThumbImages'
+      'collector_systems_objects',
+      'collector_systems_artists',
+      'collector_systems_collections',
+      'collector_systems_groups',
+      'collector_systems_exhibitions',
+      'collector_systems_exhibition_objects',
+      'collector_systems_group_objects',
+      'collector_systems_thumb_images'
 
     ];
     $tables_exists = true;
@@ -125,7 +125,7 @@ class CollectorSystemsArtists extends BlockBase {
   public function getCommaSeparatedFieldsForListPage(){
     $db = \Drupal::database();
 
-    $tblnm = "clsobjects_fields";
+    $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')

@@ -57,7 +57,7 @@ class ObjectFieldsService {
   public function getObjectFieldLabelFromDatabase($field_name){
 
     $db = \Drupal::database();
-    $table = "clsobjects_fields";
+    $table = "collector_systems_clsobjects_fields";
 
     $query = $db->select($table, 'c')
     ->fields('c', ['fieldvalue'])

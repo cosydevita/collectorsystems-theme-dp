@@ -71,7 +71,7 @@ class AjaxRequestsController extends ControllerBase
       }
 
       // Fetch objects where ArtistId
-      $object_table = $connection->prefixTables('CSObjects');
+      $object_table = $connection->prefixTables('collector_systems_objects');
 
       $query = $connection->select($object_table, 'o')
         ->fields('o') // Specify the fields you want to select
@@ -135,8 +135,8 @@ class AjaxRequestsController extends ControllerBase
       }
 
       //Fetch Objects Where ExhibitionId
-      $exhibitionObj_table = 'ExhibitionObjects';
-      $object_table = 'CSObjects';
+      $exhibitionObj_table = 'collector_systems_exhibition_objects';
+      $object_table = 'collector_systems_objects';
 
       $query = \Drupal::database()->select($exhibitionObj_table, 'eo');
       $query->fields('eo');
@@ -203,14 +203,14 @@ class AjaxRequestsController extends ControllerBase
       }
 
       //Fetch Objects Where GroupId
-      $groupObj_table = "GroupObjects";
+      $groupObj_table = "collector_systems_group_objects";
       $query = $database->select($groupObj_table, 'go')
         ->fields('go')
         ->condition('GroupId', $groupID);
       $object_details = $query->execute()->fetchAssoc();
 
 
-      $object_table = "CSObjects";
+      $object_table = "collector_systems_objects";
       $query = $database->select($groupObj_table, 'eo');
       $query->fields('eo');
       $query->condition('eo.GroupId', $groupID);
@@ -269,11 +269,11 @@ class AjaxRequestsController extends ControllerBase
 
       $database = \Drupal::database();
       // collection object details.
-      $object_table = 'CSObjects';
+      $object_table = 'collector_systems_objects';
       $connection = \Drupal::database();
 
       $connection = \Drupal::database();
-      $extent = $connection->select('Collections', 'c')
+      $extent = $connection->select('collector_systems_collections', 'c')
       ->fields('c', ['LeftExtent', 'RightExtent'])
       ->condition('CollectionId', $collectionID)
       ->execute()
@@ -284,7 +284,7 @@ class AjaxRequestsController extends ControllerBase
       
 
       $query = $connection->select($object_table, 'o');
-      $query->innerJoin('Collections', 'c', 'o.CollectionId = c.CollectionId');
+      $query->innerJoin('collector_systems_collections', 'c', 'o.CollectionId = c.CollectionId');
 
       // Apply value bounds to LeftExtent and RightExtent
       $query->condition('c.LeftExtent', $leftExtent, '>=');
@@ -392,7 +392,7 @@ class AjaxRequestsController extends ControllerBase
   {
     $db = \Drupal::database();
 
-    $tblnm = "clsobjects_fields";
+    $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')
@@ -409,7 +409,7 @@ class AjaxRequestsController extends ControllerBase
   function query_sort_objects_list($groupLevelOrderBy, $qSearch, $query){
     $connection = Database::getConnection();
 
-    $collection_table =  $connection->prefixTables('Collections');
+    $collection_table =  $connection->prefixTables('collector_systems_collections');
 
     //for sorting
     if ($groupLevelOrderBy === "Title%20desc" && $qSearch !== NULL) {
@@ -534,76 +534,376 @@ class AjaxRequestsController extends ControllerBase
 
   }
 
-  
+  /**
+   * Get image count for a given image type.
+   *
+   * @param string $image_type
+   *   One of: object_images, artists_images, collections_images, exhibitions_images, groups_images.
+   *
+   * @return int|null
+   *   The count of image records, or NULL on error.
+  */
+  function getCsGetDbImageTypeCount($image_type) {
+    $connection = \Drupal::database();
 
+    try {
+      switch ($image_type) {
+        case 'object_images':
+          return $connection->query("SELECT COUNT(*) FROM {collector_systems_thumb_images}")->fetchField();
+
+        case 'artists_images':
+          return $connection->query("
+            SELECT COUNT(*) 
+            FROM {collector_systems_artists} 
+            WHERE 
+              (ArtistPhotoAttachment IS NOT NULL AND ArtistPhotoAttachment != '') 
+              OR 
+              (ImagePath IS NOT NULL AND ImagePath != '')
+          ")->fetchField();
+
+        case 'collections_images':
+          return $connection->query("
+            SELECT COUNT(*) 
+            FROM {collector_systems_collections} 
+            WHERE 
+              (CollectionImageAttachment IS NOT NULL AND CollectionImageAttachment != '') 
+              OR 
+              (ImagePath IS NOT NULL AND ImagePath != '')
+          ")->fetchField();
+
+        case 'exhibitions_images':
+          return $connection->query("
+            SELECT COUNT(*) 
+            FROM {collector_systems_exhibitions} 
+            WHERE 
+              (ExhibitionImageAttachment IS NOT NULL AND ExhibitionImageAttachment != '') 
+              OR 
+              (ImagePath IS NOT NULL AND ImagePath != '')
+          ")->fetchField();
+
+        case 'groups_images':
+          return $connection->query("
+            SELECT COUNT(*) 
+            FROM {collector_systems_groups} 
+            WHERE 
+              (GroupImageAttachment IS NOT NULL AND GroupImageAttachment != '') 
+              OR 
+              (ImagePath IS NOT NULL AND ImagePath != '')
+          ")->fetchField();
+
+        default:
+          return NULL;
+      }
+
+    } catch (\Exception $e) {
+      \Drupal::logger('collector_systems')->error('Error GetDbImageCount: @message', ['@message' => $e->getMessage()]);
+      return NULL;
+    }
+  }
 
   /**
- * Get image count for a given image type.
- *
- * @param string $image_type
- *   One of: object_images, artists_images, collections_images, exhibitions_images, groups_images.
- *
- * @return int|null
- *   The count of image records, or NULL on error.
- */
-function getCsGetDbImageTypeCount($image_type) {
-  $connection = \Drupal::database();
+   * Provides count for different data types
+  */
+  public function getTotalCountData() {
+    $apiCountForGroup = $this->GetApiGroupCount();
+    $DbCountForGroup = $this-> GetDbGroupCount(  );
+    $DbCountForObject  = $this->GetDbObjectCount();
+    $apiCountForObject = $this->GetApiObjectCount( );
+    $apiCountForArtist = $this->GetApiArtistCount();
+    $DbCountForArtist= $this->GetDbArtistCount( );
+    $DbcollectionCount = $this-> GetDbcollectionCount( );
+    $ApicollectionCount = $this-> GetApicollectionCount( );
 
-  try {
-    switch ($image_type) {
-      case 'object_images':
-        return $connection->query("SELECT COUNT(*) FROM {ThumbImages}")->fetchField();
+    $DbExhibitionsCount = $this-> GetDbExhibitionsCount( );
+    $ApiExhibitionsCount = $this-> GetApiExhibitionsCount( );
 
-      case 'artists_images':
-        return $connection->query("
-          SELECT COUNT(*) 
-          FROM {Artists} 
-          WHERE 
-            (ArtistPhotoAttachment IS NOT NULL AND ArtistPhotoAttachment != '') 
-            OR 
-            (ImagePath IS NOT NULL AND ImagePath != '')
-        ")->fetchField();
+    // $this->save_image_directory();
+    $response = [
+      'DbCountForGroup' => $DbCountForGroup,
+      'apiCountForGroup' => $apiCountForGroup,
+      'DbCountForObject' => $DbCountForObject,
+      'apiCountForObject' => $apiCountForObject,
+      'DbCountForArtist' => $DbCountForArtist,
+      'apiCountForArtist' => $apiCountForArtist,
+      'DbcollectionCount' => $DbcollectionCount,
+      'ApicollectionCount' => $ApicollectionCount,
+      'DbExhibitionsCount' => $DbExhibitionsCount,
+      'ApiExhibitionsCount' => $ApiExhibitionsCount,
 
-      case 'collections_images':
-        return $connection->query("
-          SELECT COUNT(*) 
-          FROM {Collections} 
-          WHERE 
-            (CollectionImageAttachment IS NOT NULL AND CollectionImageAttachment != '') 
-            OR 
-            (ImagePath IS NOT NULL AND ImagePath != '')
-        ")->fetchField();
+    ];
 
-      case 'exhibitions_images':
-        return $connection->query("
-          SELECT COUNT(*) 
-          FROM {Exhibitions} 
-          WHERE 
-            (ExhibitionImageAttachment IS NOT NULL AND ExhibitionImageAttachment != '') 
-            OR 
-            (ImagePath IS NOT NULL AND ImagePath != '')
-        ")->fetchField();
+    return new JsonResponse($response);
+  }
 
-      case 'groups_images':
-        return $connection->query("
-          SELECT COUNT(*) 
-          FROM {Groups} 
-          WHERE 
-            (GroupImageAttachment IS NOT NULL AND GroupImageAttachment != '') 
-            OR 
-            (ImagePath IS NOT NULL AND ImagePath != '')
-        ")->fetchField();
 
-      default:
-        return NULL;
+
+  //for goup
+  function GetApiGroupCount()
+  {
+    $config = \Drupal::config('collector_systems.settings');
+    $subsKey = $config->get('subscription_key');
+    $subAcntId = $config->get('account_guid');
+    $subsId = $config->get('subscription_id');
+
+    $wordforsearch="Groups";
+    $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=GroupId';
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $headers = array(
+    "Accept: application/json",
+    "Ocp-Apim-Subscription-Key:$subsKey ",
+    "Cache-Control:no-cache",
+    );
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    //for debug only!
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+    $data = curl_exec($curl);
+    curl_close($curl);
+
+    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    if($httpcode == 403)
+    {
+        exit();
     }
 
-  } catch (\Exception $e) {
-    \Drupal::logger('collector_systems')->error('Error GetDbImageCount: @message', ['@message' => $e->getMessage()]);
-    return NULL;
+    $data = json_decode($data, TRUE);
+    return $data['@odata.count'];
   }
-}
+  function GetDbGroupCount(){
+    try {
 
+      $database = Database::getConnection();
+      $table_name = 'collector_systems_groups';
+      $query = $database->select($table_name, 'g');
+      $count = $query->countQuery()->execute()->fetchField();
+      return $count;
+    }catch (\Exception $e) {
+      \Drupal::logger('collector_systems')->error('Database query error: @message', ['@message' => $e->getMessage()]);
+      // If an exception is thrown (e.g., table not found), return 0.
+      return 0;
+    }
+
+  }
+
+
+
+  //for object
+  function GetApiObjectCount()
+  {
+
+    $config = \Drupal::config('collector_systems.settings');
+    $subsKey = $config->get('subscription_key');
+    $subAcntId = $config->get('account_guid');
+    $subsId = $config->get('subscription_id');
+
+      $wordforsearch="Objects";
+      $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=ObjectId';
+      $curl = curl_init($url);
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+      $headers = array(
+      "Accept: application/json",
+      "Ocp-Apim-Subscription-Key:$subsKey ",
+      "Cache-Control:no-cache",
+      );
+      curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+      //for debug only!
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+      $data = curl_exec($curl);
+      curl_close($curl);
+
+      $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+      if($httpcode == 403)
+      {
+          exit();
+      }
+
+    $data = json_decode($data, TRUE);
+    return $data['@odata.count'];
+  }
+
+  function GetDbObjectCount(){
+    try{
+      $database = \Drupal::database();
+
+      $table_name = 'collector_systems_objects';
+      $query = $database->select($table_name, 'c');
+      $count2 = $query->countQuery()->execute()->fetchField();
+
+      return $count2;
+
+    }catch (\Exception $e) {
+      \Drupal::logger('collector_systems')->error('Database query error: @message', ['@message' => $e->getMessage()]);
+      // If an exception is thrown (e.g., table not found), return 0.
+      return 0;
+    }
+
+  }
+
+
+  //for Artist
+  function GetApiArtistCount()
+  {
+      $config = \Drupal::config('collector_systems.settings');
+      $subsKey = $config->get('subscription_key');
+      $subAcntId = $config->get('account_guid');
+      $subsId = $config->get('subscription_id');
+
+      $wordforsearch="Artists";
+      $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=ArtistId';
+      $curl = curl_init($url);
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+      $headers = array(
+      "Accept: application/json",
+      "Ocp-Apim-Subscription-Key:$subsKey ",
+      "Cache-Control:no-cache",
+      );
+      curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+      //for debug only!
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+      $data = curl_exec($curl);
+      curl_close($curl);
+
+      $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+      if($httpcode == 403)
+      {
+          // get_template_part( 403 );
+          exit();
+      }
+
+    $data = json_decode($data, TRUE);
+    return $data['@odata.count'];
+  }
+
+  function GetDbArtistCount(){
+    try{
+      $database = \Drupal::database();
+
+      $table_name = 'collector_systems_artists';
+      $query = $database->select($table_name, 'c');
+      $count2 = $query->countQuery()->execute()->fetchField();
+
+      return $count2;
+    }catch (\Exception $e) {
+      \Drupal::logger('collector_systems')->error('Database query error: @message', ['@message' => $e->getMessage()]);
+      // If an exception is thrown (e.g., table not found), return 0.
+      return 0;
+    }
+  }
+
+  //for collection
+  function GetApicollectionCount()
+  {
+      $config = \Drupal::config('collector_systems.settings');
+      $subsKey = $config->get('subscription_key');
+      $subAcntId = $config->get('account_guid');
+      $subsId = $config->get('subscription_id');
+
+      $wordforsearch="Collections";
+      $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=CollectionId';
+      $curl = curl_init($url);
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+      $headers = array(
+      "Accept: application/json",
+      "Ocp-Apim-Subscription-Key:$subsKey ",
+      "Cache-Control:no-cache",
+      );
+      curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+      //for debug only!
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+      $data = curl_exec($curl);
+      curl_close($curl);
+
+      $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+      if($httpcode == 403)
+      {
+          exit();
+      }
+
+    $data = json_decode($data, TRUE);
+    return $data['@odata.count'];
+  }
+
+  function GetDbcollectionCount(){
+    try{
+      $table_name = 'collector_systems_collections';
+      $database = \Drupal::database();
+      $query = $database->select($table_name, 'c');
+      $count2 = $query->countQuery()->execute()->fetchField();
+      return $count2;
+    }catch (\Exception $e) {
+      \Drupal::logger('collector_systems')->error('Database query error: @message', ['@message' => $e->getMessage()]);
+      // If an exception is thrown (e.g., table not found), return 0.
+      return 0;
+    }
+  }
+  //for collection
+  function GetApiExhibitionsCount()
+  {
+      $config = \Drupal::config('collector_systems.settings');
+      $subsKey = $config->get('subscription_key');
+      $subAcntId = $config->get('account_guid');
+      $subsId = $config->get('subscription_id');
+
+      $wordforsearch="Exhibitions";
+      $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=ExhibitionId';
+      $curl = curl_init($url);
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+      $headers = array(
+      "Accept: application/json",
+      "Ocp-Apim-Subscription-Key:$subsKey ",
+      "Cache-Control:no-cache",
+      );
+      curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+      //for debug only!
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+      $data = curl_exec($curl);
+      curl_close($curl);
+
+      $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+      if($httpcode == 403)
+      {
+          exit();
+      }
+
+    $data = json_decode($data, TRUE);
+    return $data['@odata.count'];
+  }
+
+  function GetDbExhibitionsCount(){
+    try{
+      $database = \Drupal::database();
+
+      $table_name =  'collector_systems_exhibitions'; // Use $wpdb->prefix to get the table prefix defined by WordPress
+
+        $query = $database->select($table_name, 'c');
+        $count2 = $query->countQuery()->execute()->fetchField();
+        return $count2;
+    }catch (\Exception $e) {
+      \Drupal::logger('collector_systems')->error('Database query error: @message', ['@message' => $e->getMessage()]);
+      // If an exception is thrown (e.g., table not found), return 0.
+      return 0;
+    }
+  }
 
 }
 

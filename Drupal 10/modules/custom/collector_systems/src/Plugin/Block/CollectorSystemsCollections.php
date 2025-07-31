@@ -53,7 +53,7 @@ class CollectorSystemsCollections extends BlockBase {
     $loadsec=1;
 
     //Fetch Collections From Database
-    $collection_table = "Collections";
+    $collection_table = "collector_systems_collections";
     $database = \Drupal::database();
     $connection = Database::getConnection();
 
@@ -115,14 +115,14 @@ class CollectorSystemsCollections extends BlockBase {
 
   public function is_CS_tables_exists(){
     $tables = [
-      'CSObjects',
-      'Artists',
-      'Collections',
-      'Groups',
-      'Exhibitions',
-      'ExhibitionObjects',
-      'GroupObjects',
-      'ThumbImages'
+      'collector_systems_objects',
+      'collector_systems_artists',
+      'collector_systems_collections',
+      'collector_systems_groups',
+      'collector_systems_exhibitions',
+      'collector_systems_exhibition_objects',
+      'collector_systems_group_objects',
+      'collector_systems_thumb_images'
 
     ];
     $tables_exists = true;
@@ -140,7 +140,7 @@ class CollectorSystemsCollections extends BlockBase {
   public function getCommaSeparatedFieldsForListPage(){
     $db = \Drupal::database();
 
-    $tblnm = "clsobjects_fields";
+    $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')

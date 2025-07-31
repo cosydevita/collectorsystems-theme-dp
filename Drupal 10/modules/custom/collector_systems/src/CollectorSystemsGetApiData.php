@@ -519,7 +519,7 @@ class CollectorSystemsGetApiData{
   }
 
   public function get_field_names(){
-    $source_table_name = 'clsobjects_fields';
+    $source_table_name = 'collector_systems_clsobjects_fields';
 
     // Define the fields to exclude.
     $exclude_fields = ['Title', 'InventoryNumber', 'ObjectDate'];

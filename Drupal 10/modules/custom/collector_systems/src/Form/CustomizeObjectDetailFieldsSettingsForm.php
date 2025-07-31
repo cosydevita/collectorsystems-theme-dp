@@ -124,7 +124,7 @@ class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
 
     $db = \Drupal::database();
 
-    $tblnm = "clsobjects_fields";
+    $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')
@@ -141,7 +141,7 @@ class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
 
       $current_field_2_options = json_decode($form_state->getValue('current_select_field2_options'), true);
 
-      $table_name = 'clsobjects_fields';
+      $table_name = 'collector_systems_clsobjects_fields';
 
       // Delete rows where fieldtype is 'ObjectDetail'.
       \Drupal::database()->delete($table_name)

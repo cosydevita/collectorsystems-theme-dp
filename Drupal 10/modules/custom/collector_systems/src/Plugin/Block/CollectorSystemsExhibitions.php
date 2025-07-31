@@ -48,7 +48,7 @@ class CollectorSystemsExhibitions extends BlockBase {
     $nxshskip =   $shskip;
     $loadsec=1;
 
-    $exhibition_table = "Exhibitions";
+    $exhibition_table = "collector_systems_exhibitions";
 
     // Fetch Count From the Database
     $query = Database::getConnection()->select($exhibition_table, 'a');
@@ -109,14 +109,14 @@ class CollectorSystemsExhibitions extends BlockBase {
 
   public function is_CS_tables_exists(){
     $tables = [
-      'CSObjects',
-      'Artists',
-      'Collections',
-      'Groups',
-      'Exhibitions',
-      'ExhibitionObjects',
-      'GroupObjects',
-      'ThumbImages'
+      'collector_systems_objects',
+      'collector_systems_artists',
+      'collector_systems_collections',
+      'collector_systems_groups',
+      'collector_systems_exhibitions',
+      'collector_systems_exhibition_objects',
+      'collector_systems_group_objects',
+      'collector_systems_thumb_images'
 
     ];
     $tables_exists = true;
@@ -134,7 +134,7 @@ class CollectorSystemsExhibitions extends BlockBase {
   public function getCommaSeparatedFieldsForListPage(){
     $db = \Drupal::database();
 
-    $tblnm = "clsobjects_fields";
+    $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')

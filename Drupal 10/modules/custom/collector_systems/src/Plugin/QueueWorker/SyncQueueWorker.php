@@ -6,7 +6,8 @@ use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-
+use Drupal\collector_systems\ImagesSyncManager;
+use Drupal\collector_systems\DataSyncManager;
 /**
  * @QueueWorker(
  *   id = "collector_systems_sync_queue_worker",
@@ -18,10 +19,21 @@ class SyncQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginI
 
   protected $syncService;
   protected $logger;
+  protected $imagesSyncManager;
+  protected $dataSyncManager;
 
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(
+    array $configuration, 
+    $plugin_id,
+    $plugin_definition,
+    LoggerChannelFactoryInterface $logger_factory,
+    ImagesSyncManager $imagesSyncManager,
+    DataSyncManager $dataSyncManager
+  ){
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->logger = $logger_factory->get('collector_systems');
+    $this->imagesSyncManager = $imagesSyncManager;
+    $this->dataSyncManager = $dataSyncManager;
   }
 
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -29,7 +41,9 @@ class SyncQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginI
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('logger.factory')
+      $container->get('logger.factory'),
+      $container->get('collector_systems.images_sync_manager'),
+      $container->get('collector_systems.data_sync_manager')
     );
   }
 
@@ -42,17 +56,15 @@ class SyncQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginI
     $this->logger->info('Processing item: ' . print_r($item, TRUE));
 
     if ($queue_type == 'dataset') {
+      // hardcoded update_dataset because the queue is for automatic sync and we only update dataset in automatic sync.
       $btn_action = 'update_dataset';
-      $form_object = new \Drupal\collector_systems\Form\CreateTablesForm();
-      $form_object->processItem($item['data'], $btn_action);
+      $this->dataSyncManager->processItem($item['data'], $btn_action);
     }
     elseif ($queue_type == 'object_images'){
-      $form_object = new \Drupal\collector_systems\Form\SyncImagesForm();
-      $form_object->processItem_ObjectImages($item['data'], $save_images_on_automatic_sync_to);
+      $this->imagesSyncManager->processItem_ObjectImages($item['data'], $save_images_on_automatic_sync_to);
     }
     elseif ($queue_type == 'other_images'){
-      $form_object = new \Drupal\collector_systems\Form\SyncImagesForm();
-      $form_object->processItem_OtherImages($item['data'], $save_images_on_automatic_sync_to);
+      $this->imagesSyncManager->processItem_OtherImages($item['data'], $save_images_on_automatic_sync_to);
     }
 
      // Check if more items are left in the queue
