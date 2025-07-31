@@ -1,6 +1,428 @@
 <?php
 
 /**
+ * Implements hook_schema().
+ */
+function collector_systems_schema() {
+  $schema = array();
+  
+  $schema['CSObjects'] = [
+    'fields' => [
+      'ObjectId' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'Title' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'InventoryNumber' => [
+        'type' => 'varchar',
+        'length' => 50,
+      ],
+      'ObjectDate' => [
+        'type' => 'text',
+      ],
+      'MainImageAttachmentId' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ],
+      'main_image_attachment' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'main_image_attachment_description' => [
+        'type' => 'text'
+      ],
+      'object_image_attachment' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'main_image_path' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'object_image_path' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ArtistId' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ],
+      'CollectionId' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ],
+      'thumb_size_URL' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'thumb_size_URL_path' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'slide_show_attachment' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'slide_show_URL_path' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'FileURL' => [
+        'type' => 'text',
+      ],
+      'ModificationDate' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'Latitude' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'Longitude' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'AddressName' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ]
+    ],
+    'primary key' => ['ObjectId'],
+  ];
+
+  $schema['Artists'] = [
+    'fields' => [
+      'ArtistId' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'ArtistName' => [
+        'type' => 'varchar',
+        'length' => 500,
+        'not null' => TRUE,
+      ],
+      'ArtistFirst' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ArtistLast' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ArtistYears' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ArtistNationality' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ArtistLocale' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ArtistBio' => [
+        'type' => 'text',
+      ],
+      'ArtistPhotoAttachment' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'ImagePath' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ModificationDate' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ]
+    ],
+    'primary key' => ['ArtistId'],
+  ];
+
+  $schema['Collections'] = [
+    'fields' => [
+      'CollectionId' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'CollectionName' => [
+        'type' => 'varchar',
+        'length' => 500,
+        'not null' => TRUE,
+      ],
+      'FullCollectionName' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'LeftExtent' => [
+        'type' => 'int',
+        'size' => 'normal',
+      ],
+      'RightExtent' => [
+        'type' => 'int',
+        'size' => 'normal',
+      ],
+      'CollectionImageAttachment' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'ImagePath' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ModificationDate' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ]
+    ],
+    'primary key' => ['CollectionId'],
+  ];
+
+  $schema['Groups'] = [
+    'fields' => [
+      'GroupId' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'GroupDescription' => [
+        'type' => 'varchar',
+        'length' => 500,
+        'not null' => TRUE,
+      ],
+      'GroupMemo' => [
+        'type' => 'text',
+        'size' => 'big'
+      ],
+      'GroupImageAttachment' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'ImagePath' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ModificationDate' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ]
+    ],
+    'primary key' => ['GroupId'],
+  ];
+
+  $schema['Exhibitions'] = [
+    'fields' => [
+      'ExhibitionId' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'ExhibitionSubject' => [
+        'type' => 'varchar',
+        'length' => 500,
+        'not null' => TRUE,
+      ],
+      'ExhibitionLocation' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ExhibitionDate' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ExhibitionMemo' => [
+        'type' => 'text',
+        'size' => 'big'
+      ],
+      'ExhibitionImageAttachment' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'ImagePath' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ],
+      'ModificationDate' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ]
+    ],
+    'primary key' => ['ExhibitionId'],
+  ];
+
+  $schema['ExhibitionObjects'] = [
+    'fields' => [
+      'ExhibitionId' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'ObjectId' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+    ],
+  ];
+
+  $schema['GroupObjects'] = [
+    'fields' => [
+      'GroupId' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'ObjectId' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+    ],
+  ];
+
+  $schema['ThumbImages'] = [
+    'fields' => [
+      'ID' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'ThumbURL' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'ObjectId' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ],
+      'thumb_size_URL' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'thumb_size_URL_path' => [
+        'type' => 'text',
+      ],
+      'slide_show_attachment' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'slide_show_URL_path' => [
+        'type' => 'text',
+      ],
+      'MainImageAttachmentId' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ],
+      'object_image_attachment' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'object_image_path' => [
+        'type' => 'text',
+      ],
+      'AttachmentId' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ],
+      'attachment_description' => [
+        'type' => 'text'
+      ],
+      'keywords' => [
+        'type' => 'blob',
+        'size' => 'big',
+      ],
+      'ModificationDate' => [
+        'type' => 'varchar',
+        'length' => 500,
+      ]
+
+    ],
+    'primary key' => ['ID'],
+    'unique keys' => [
+      'ThumbURL' => ['ThumbURL'],
+    ],
+  ];
+
+  $schema['CSSynced'] = [
+    'fields' => [
+      'LastSyncedDateTime' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ],
+      'LastSyncedBy' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ],
+      'SyncStarted' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ],
+      'SyncCompleted' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ],
+      'SyncType' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ],
+      'SyncTrigger' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ],
+      'SyncCompletionTime' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ]
+
+    ]
+  ];
+
+  $schema['clsobjects_fields'] = [
+    'description' => 'Your table description',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique identifier for the record.',
+      ],
+      'fieldname' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Field name',
+      ],
+      'fieldvalue' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Field value',
+      ],
+      'fieldtype' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Field type',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+}
+
+/**
  * Adds new columns to the CSSynced table:
  * - SyncStarted (varchar 255)
  * - SyncCompleted (varchar 255)

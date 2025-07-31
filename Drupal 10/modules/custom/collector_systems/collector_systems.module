@@ -490,8 +490,15 @@ function collector_systems_preprocess_html(array &$variables) {
 function collector_systems_update_CSSynced_table($sync_type, $sync_trigger, $sync_started = false, $sync_completed = false) {
   $database = \Drupal::database();
 
-  $fields = [];
+  //first check if the table exists
+  if (!$database->schema()->tableExists('CSSynced')) {
+    \Drupal::logger('collector_systems')->error('CSSynced table does not exist.');
+    return;
+  }
 
+
+  // Prepare the fields to update or insert.
+  $fields = [];
 
   if ($sync_started === true) {
     $fields['SyncStarted'] = (new DrupalDateTime())->format('m/d/y \a\t h:i:s A');
