@@ -54,7 +54,7 @@
 
 					{% set allthumb = thumbDetails %}
 
-					<div id="carouselA" class="carousel slide carouselBoth carousel-fade" data-bs-ride="carousel" data-bs-interval="false">
+					<div id="carouselA" class="carouselBoth carousel-fade">
 						<div class="carousel-inner" role="listbox">
 							{% for i, thumb in allthumb %}
 								{% set altText = thumb.attachment_description is not empty ? thumb.attachment_description : 'Image description is not available' %}
@@ -110,14 +110,14 @@
 
 					{% if thumbDetails|length > 1 %}
 						<div class="row mt-4" style="justify-content: center;">
-							<div class="prev-part col-md-1 my-auto">
+							<div class="prev-part col-1 my-auto">
 								<a class="carousel-control-prev" href="#carouselA" data-bs-slide="prev">
 									<span class="carousel-control-prev-icon">
 										<i class="bi bi-chevron-left"></i>
 									</span>
 								</a>
 							</div>
-							<div id="carouselB" class="carousel slide carouselBoth carousel-fade col-md-10" data-bs-ride="carousel" data-bs-interval="false">
+							<div id="carouselB" class="carouselBoth carousel-fade col-10">
 								<div class="carousel-inner thumb-carousel row mx-0" role="listbox" style="background: rgb(240, 240, 240);">
 									{% set currentslide = 0 %}
 									{% for j in 0..(thumbDetails|length - 1) %}
@@ -145,7 +145,7 @@
 									{% endfor %}
 								</div>
 							</div>
-							<div class="next-part col-md-1 my-auto">
+							<div class="next-part col-1 my-auto">
 								<a class="carousel-control-next" href="#carouselA" data-bs-slide="next">
 									<span class="carousel-control-next-icon">
 										<i class="bi bi-chevron-right"></i>

@@ -122,4 +122,84 @@
 
     }
   };
+
+  function feature_cs_custom_carousel() {
+
+    let items = document.querySelectorAll('#carouselB .carousel-item')
+    items.forEach((el) => {
+      const minPerSlide = items.length > 4 ? 4 : items.length;
+      let next = el.nextElementSibling
+
+      for (var i=1; i<minPerSlide; i++) {
+        if (!next) {
+            // wrap carousel by using first child
+          next = items[0]
+        }
+        let cloneChild = next.cloneNode(true)
+        el.appendChild(cloneChild.children[0])
+        next = next.nextElementSibling
+      }
+    })
+    let carouselAItems = document.querySelectorAll('#carouselA .carousel-item')
+
+    const slideShowUrlsA =[];
+
+    for(var k=0;k<carouselAItems.length;k++)
+    {
+        if($(carouselAItems[k]).length > 0)
+        {
+            if($(carouselAItems[k]).find("a.carouselAToggle").length > 0)
+            {
+                slideShowUrlsA.push($(carouselAItems[k]).find("a.carouselAToggle").attr("data-big"));
+            }
+        }
+    }
+
+    // Handle the carousel thumbnails
+    $(document).on("click", ".thumb", function (e) {      
+      // remove 'selected' class from all thumbnails
+      $('#carouselB').find('.thumb').removeClass('selected');
+      if($(this).addClass('selected').closest('div').length > 0)
+      {
+        var selectorIdx = $(this).attr('data-slide-to');
+        // Update Carousel A
+        $('#carouselA .carousel-item').removeClass('active');
+        $('#carouselA .carousel-item').eq(selectorIdx).addClass('active');
+      }
+    });
+
+    // Handles the carousel next and previous buttons
+    $(document).on("click", ".carousel-control-next, .carousel-control-prev", function (ev) {
+        ev.preventDefault();
+
+        var $carouselB = $('#carouselB');
+        var $activeItem = $carouselB.find('.carousel-item.active');  
+        var $nextItem;
+
+        if ($(this).hasClass('carousel-control-next')) {
+            // Next button clicked
+            $nextItem = $activeItem.next('.carousel-item');
+            if (!$nextItem.length) {
+                $nextItem = $carouselB.find('.carousel-item').first();
+            }
+        } else {
+            // Prev button clicked
+            $nextItem = $activeItem.prev('.carousel-item');
+            if (!$nextItem.length) {
+                $nextItem = $carouselB.find('.carousel-item').last();
+            }
+        }
+
+        // Update carouselB
+        $activeItem.removeClass('active');
+        $nextItem.addClass('active');
+
+        // Sync carouselA
+        var $carouselA = $('#carouselA');
+        $carouselA.find('.carousel-item').removeClass('active');
+        $carouselA.find('.carousel-item').eq($nextItem.index()).addClass('active');
+    });
+  }
+  
+  feature_cs_custom_carousel();
 })(jQuery, Drupal);
