@@ -3,6 +3,6 @@ type: module
 description: 'Collectory Systems Module to integrate with the Collector Systems API.'
 core_version_requirement: ^9 || ^10
 package: Collector Systems
-version: '1.0.2'
+version: '1.0.3'
 config:
   - collector_systems.settings
