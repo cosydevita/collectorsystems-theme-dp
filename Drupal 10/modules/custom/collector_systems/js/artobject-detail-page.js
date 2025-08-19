@@ -126,6 +126,13 @@
   function feature_cs_custom_carousel() {
 
     let items = document.querySelectorAll('#carouselB .carousel-item')
+
+    // If there are less than 4 items, hide the next and previous buttons
+    if( items.length < 4) {
+      $('.carousel-control-next').hide();
+      $('.carousel-control-prev').hide();
+    }
+
     items.forEach((el) => {
       const minPerSlide = items.length > 4 ? 4 : items.length;
       let next = el.nextElementSibling
@@ -193,6 +200,9 @@
         // Update carouselB
         $activeItem.removeClass('active');
         $nextItem.addClass('active');
+
+        $('#carouselB').find('.thumb').removeClass('selected');
+        $nextItem.find('.thumb').first().addClass('selected');
 
         // Sync carouselA
         var $carouselA = $('#carouselA');
