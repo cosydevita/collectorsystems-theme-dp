@@ -393,12 +393,20 @@ class DataSyncManager {
             break;
 
           case csconstants::AdditionalArtists:
-            if (!empty($value['AdditionalArtists'])) {
-              $combinedObjectValues[$field_name] = $this->implodeChildArrayProperty($value['AdditionalArtists'], "Artist", "ArtistId", "ArtistName");
-            } else {
-              $combinedObjectValues[$field_name] = "";
+            if (isset($value['AdditionalArtists']) && is_array($value['AdditionalArtists']) && count($value['AdditionalArtists']) > 0) {
+              $combinedObjectValues[$field_name] = json_encode($value[$field_name]);
+            }else{
+                $combinedObjectValues[$field_name] =  json_encode([]);
             }
+            
             break;
+          case csconstants::AdditionalArtistMakers:
+              if (isset($value['AdditionalArtistMakers']) && is_array($value['AdditionalArtistMakers']) && count($value['AdditionalArtistMakers']) > 0) {
+                $combinedObjectValues[$field_name] = json_encode($value[$field_name]);
+              }else{
+                  $combinedObjectValues[$field_name] =  json_encode([]);
+              }
+              break;
 
           case csconstants::Maker:
             if (!empty($value['Maker'])) {

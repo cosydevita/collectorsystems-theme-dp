@@ -152,9 +152,18 @@ class CustomTwig extends AbstractExtension {
           break;
   
       case csconstants::AdditionalArtists:
-      if(!empty($value['AdditionalArtists'])){ ?>
-          <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo implodeChildArrayProperty($value['AdditionalArtists'],"Artist","ArtistId","ArtistName");  ?></small></h6>
-        <?php }    
+        if(!empty($value['AdditionalArtists'])){ 
+            $AdditionalArtists = json_decode($value['AdditionalArtists'], true);
+          if(!empty($AdditionalArtists)){ ?>
+            
+            <h6 class="font-normal cs-theme-card-title">
+              <small class="flex-fill">
+                <?php echo $this->implodeChildArrayProperty($AdditionalArtists,"Artist","ArtistId","ArtistName");  ?>
+              </small>
+            </h6>
+
+          <?php } 
+        }    
         break;
   
       case csconstants::ArtistMakerName:
@@ -170,8 +179,10 @@ class CustomTwig extends AbstractExtension {
           break;
   
       case csconstants::AdditionalArtistMakers:
-      if(!empty($value['AdditionalArtistMakers'])){ ?>
-          <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo implodeChildArrayProperty($value['AdditionalArtistMakers'],"ArtistMaker","ArtistMakerId","ArtistMakerName");  ?></small></h6>
+      if(!empty($value['AdditionalArtistMakers'])){ 
+        $AdditionalArtistMakers = json_decode($value['AdditionalArtistMakers'], true);
+        ?>
+          <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo $this->implodeChildArrayProperty($AdditionalArtistMakers,"ArtistMaker","ArtistMakerId","ArtistMakerName");  ?></small></h6>
         <?php }    
         break;
         
@@ -378,6 +389,32 @@ class CustomTwig extends AbstractExtension {
                   <?php }
 
                 break;
+              case csconstants::AdditionalArtists:
+                if(!empty($artObjData['AdditionalArtists'])){ 
+                    $AdditionalArtists = json_decode($artObjData['AdditionalArtists'], true);
+                  if(!empty($AdditionalArtists)){ ?>
+                    
+                    <h6 class="font-normal cs-theme-card-title">
+                      <small class="flex-fill">
+                        <?php echo $this->implodeChildArrayProperty($AdditionalArtists,"Artist","ArtistId","ArtistName");  ?>
+                      </small>
+                    </h6>
+        
+                  <?php } 
+                }    
+                break;
+              case csconstants::AdditionalArtistMakers:
+                if(!empty($artObjData['AdditionalArtistMakers'])){ 
+                  $AdditionalArtistMakers = json_decode($artObjData['AdditionalArtistMakers'], true);
+                  ?>
+                    <h6 class="font-normal cs-theme-card-title">
+                      <small class="flex-fill">
+                        <?php echo $this->implodeChildArrayProperty($AdditionalArtistMakers,"ArtistMaker","ArtistMakerId","ArtistMakerName");  ?>
+                      </small>
+                    </h6>
+                    
+                  <?php }    
+                  break;
               //richtext fields
               case csconstants::DimensionMemo:
               case csconstants::InventoryMemo:
@@ -694,5 +731,26 @@ class CustomTwig extends AbstractExtension {
 
   }
 
+  
+  /**
+   * Implode child array property with link for 'AdditonalArtists'  and 'AdditionalArtistMakers'.
+   */
+  public function implodeChildArrayProperty($additionalArrayObject,$additionalArray,$additionalPropertyId,$additionalProperty) {    
+    $site_url = \Drupal::request()->getSchemeAndHttpHost();
+    
+    $commaSeperatedItem = "";  
+
+    
+    if(!is_array($additionalArrayObject) || count($additionalArrayObject) == 0){
+      return $commaSeperatedItem;
+    }
+  
+    foreach ($additionalArrayObject as $additionalItem) {        
+      $artistId = $additionalItem[$additionalArray][$additionalPropertyId]; 
+      $commaSeperatedItem != "" && $commaSeperatedItem .= ", ";
+      $commaSeperatedItem .= '<a href="'.$site_url.'/artist-detail?dataId='.$artistId.'">'.$additionalItem[$additionalArray][$additionalProperty].'</a>';    
+    } 
+    return $commaSeperatedItem;     
+  }
 
 }
