@@ -110,7 +110,7 @@ class AjaxRequestsController extends ControllerBase
           ob_start();
 
           // Call the function. Its output will be captured by the output buffer
-          call_user_func($function, $object_details, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
+          call_user_func($function, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
 
           // Get the contents of the output buffer (i.e., the output of your function)
           $functionOutput = ob_get_clean();
@@ -172,7 +172,7 @@ class AjaxRequestsController extends ControllerBase
           }
 
           // Get the function from the Twig environment and call it.
-          $function = $this->twig->getFunction('getExhibitionObjectsListHtml')->getCallable();
+          $function = $this->twig->getFunction('getObjectslistHtml')->getCallable();
 
           // Start output buffering
           ob_start();
@@ -246,7 +246,7 @@ class AjaxRequestsController extends ControllerBase
           }
 
           // Get the function from the Twig environment and call it.
-          $function = $this->twig->getFunction('getGroupObjectsListHtml')->getCallable();
+          $function = $this->twig->getFunction('getObjectslistHtml')->getCallable();
 
           // Start output buffering
           ob_start();
@@ -367,7 +367,7 @@ class AjaxRequestsController extends ControllerBase
           ob_start();
 
           // Call the function. Its output will be captured by the output buffer
-          call_user_func($function, $object_details, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
+          call_user_func($function, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
 
           // Get the contents of the output buffer (i.e., the output of your function)
           $functionOutput = ob_get_clean();

@@ -19,11 +19,6 @@ class CustomTwig extends AbstractExtension {
       new TwigFunction('base64_encode', [$this, 'base64_encode']),
       new TwigFunction('GetCustomizedObjectDetailsForTheme', [$this, 'GetCustomizedObjectDetailsForTheme']),
       new TwigFunction('customPaginationForGroupLevelObjects', [$this, 'customPaginationForGroupLevelObjects']),
-      new TwigFunction('getExhibitionObjectsListHtml', [$this, 'getExhibitionObjectsListHtml']),
-      new TwigFunction('getGroupObjectsListHtml', [$this, 'getGroupObjectsListHtml']),
-
-
-
     ];
   }
 
@@ -32,7 +27,7 @@ class CustomTwig extends AbstractExtension {
     return base64_encode($data);
   }
 
-  public function getObjectslistHtml($objItemList,$value=[], $dataOrderBy, $datapageNo, $dataSearch,$delaytm, $default_image_url=NULL){
+  public function getObjectslistHtml($value=[], $dataOrderBy, $datapageNo, $dataSearch,$delaytm, $default_image_url=NULL){
 
     if (is_object($value)) {
         $value = get_object_vars($value);
@@ -539,180 +534,24 @@ class CustomTwig extends AbstractExtension {
         $pages = 1;
     }
 
-  if(1 != $pages)
-  {
-      if($requested_page != 1) echo "<a href='javascript:;' onclick=pagingForGroupLevelObjects('".$ajaxpage."',".$listPageSize.",".($requested_page - 1).")><i class='fas fa-chevron-left'></i></a>";
+    if(1 != $pages)
+    {
+        if($requested_page != 1) echo "<a href='javascript:;' onclick=pagingForGroupLevelObjects('".$ajaxpage."',".$listPageSize.",".($requested_page - 1).")><i class='fas fa-chevron-left'></i></a>";
 
-      for ($i=1; $i <= $pages; $i++)
-      {
-          if (1 != $pages &&( !($i >= $requested_page+$showitems+1 || $i <= $requested_page-$showitems-1) || $pages <= $showitems ))
-          {
-              echo ($requested_page == $i)? "<span class='current'>".$i."</span>":"<a href='javascript:;' onclick=pagingForGroupLevelObjects('".$ajaxpage."',".$listPageSize.",".($i).") class='inactive' >".$i."</a>";
-          }
-      }
-
-      if ($requested_page != $pages) echo "<a href='javascript:;' onclick=pagingForGroupLevelObjects('".$ajaxpage."',".$listPageSize.",".($requested_page + 1).")><i class='fas fa-chevron-right'></i></a>";
-
-      echo "\n";
-  }
-  }
-
-  public function getExhibitionObjectsListHtml($value, $dataOrderBy, $datapageNo, $dataSearch,$delaytm, $default_image_url){
-
-    $customized_fields = $this->getCommaSeparatedFieldsForListPage();
-
-    if (is_array($value) || is_object($value)) {
-      $value = is_object($value) ? get_object_vars($value) : $value;
-    }
-
-
-
-  $customized_fields_array = explode(',', $customized_fields);
-  $site_url = \Drupal::request()->getSchemeAndHttpHost();
-  $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
-  $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
-    ?>
-   <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
-                  <div class="card-body d-flex flex-column">
-                    <div class="image-wrapper">
-                      <a href="<?php echo $object_detail_link; ?> "  class="image-wrapper-link">
-                              <?php
-                               $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
-                              $server_path = $value['main_image_path'];
-                              if($server_path){
-                                $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
-                              }
-                              else{
-                                $relative_path = '';
-                              }
-
-                              $image_url = $site_url. "/". $relative_path;
-                              if(empty($object_img) && empty($server_path)){
-                              ?>
-                                  <img class="img-fluid" src="<?php echo $default_image_url; ?>" alt=""/>
-                                  <?php } else {
-                                  if (empty($server_path)) {
-                                  ?>
-                                  <img class="img-fluid" src="<?php echo $object_img; ?>" alt=""/>
-                                  <?php
-                                  } else {
-                                  ?>
-                                  <img class="img-fluid" src="<?php echo $image_url; ?>" alt=""/>
-                                  <?php
-                                  }
-                                  }
-                                  ?>
-
-                      </a>
-                    </div>
-                  </div>
-                  <div class="card-footer text-muted">
-                      <?php
-
-          /*get first 3 array fields*/
-          //$customized_fields_array = array_slice($customized_fields_array, 0, 3);
-          foreach($customized_fields_array as $object_field)
-          {
-          //echo "field:" .$object_field;
-
-          switch($object_field)
-          {
-            case '':
-              break;
-            default:
-            ?>
-            <?php if (isset($value['ArtistName'])) { ?>
-              <h6 class="font-normal" title="<?php echo $value['ArtistName']; ?>" >
-            <?php } ?>
-              <small class="flex-fill">
-                <a href="<?php echo $object_detail_link; ?>" ><?php echo $value[$object_field]  ?></a>
-              </small>
-              </h6>
-            <?php
-            break;
-          }
-        } ?>
-        </div>
-      </div>
-    <?php
-  }
-
-  public function getGroupObjectsListHtml($value, $dataOrderBy, $datapageNo,$dataSearch,$delaytm, $default_image_url){
-
-    $customized_fields = $this->getCommaSeparatedFieldsForListPage();
-    $customized_fields_array = explode(',', $customized_fields);
-
-
-    if (is_array($value) || is_object($value)) {
-      $value = is_object($value) ? get_object_vars($value) : $value;
-    }
-
-
-
-    $site_url = \Drupal::request()->getSchemeAndHttpHost();
-
-    $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."pageNo=".$datapageNo;
-    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
-
-    ?>
-    <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
-                  <div class="card-body d-flex flex-column">
-                    <div class="image-wrapper">
-                      <a href="<?php echo $object_detail_link; ?>" class="image-wrapper-link" >
-                              <?php
-                              $object_img = !empty($value['main_image_attachment']) ? 'data:image/jpeg;base64,' . base64_encode($value['main_image_attachment']) : "";
-                              $server_path = $value['main_image_path'];
-                              if ($server_path !== null) {
-                                $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $server_path);
-                              }else{
-                                $relative_path = '';
-                              }
-                              $image_url = $site_url . "/" . $relative_path;
-                              if(empty($object_img) && empty($server_path)){
-                              ?>
-                                  <img class="img-fluid" src="<?php echo $default_image_url; ?>" alt=""/>
-                                  <?php } else {
-                                  if (empty($server_path)) {
-                                  ?>
-                                  <img class="img-fluid" src="<?php echo $object_img; ?>" alt=""/>
-                                  <?php
-                                  } else {
-                                  ?>
-                                  <img class="img-fluid" src="<?php echo $image_url; ?>" alt=""/>
-                                  <?php
-                                  }
-                                  }
-                                  ?>
-
-                      </a>
-                    </div>
-                  </div>
-                  <div class="card-footer text-muted">
-                      <?php
-
-          /*get first 3 array fields*/
-          //$customized_fields_array = array_slice($customized_fields_array, 0, 3);
-          foreach($customized_fields_array as $object_field)
-          {
-            switch($object_field)
+        for ($i=1; $i <= $pages; $i++)
+        {
+            if (1 != $pages &&( !($i >= $requested_page+$showitems+1 || $i <= $requested_page-$showitems-1) || $pages <= $showitems ))
             {
-              case '':
-                break;
-              default:
-              ?>
-                <h6 class="font-normal" title="<?php echo $value['ArtistName'] ?? ''; ?>" >
-                <small class="flex-fill">
-                  <a href="<?php echo $object_detail_link; ?>" ><?php echo $value[$object_field]  ?></a>
-                </small>
-                </h6>
-              <?php
-              break;
+                echo ($requested_page == $i)? "<span class='current'>".$i."</span>":"<a href='javascript:;' onclick=pagingForGroupLevelObjects('".$ajaxpage."',".$listPageSize.",".($i).") class='inactive' >".$i."</a>";
             }
-        } ?>
-        </div>
-      </div>
-    <?php
+        }
+
+        if ($requested_page != $pages) echo "<a href='javascript:;' onclick=pagingForGroupLevelObjects('".$ajaxpage."',".$listPageSize.",".($requested_page + 1).")><i class='fas fa-chevron-right'></i></a>";
+
+        echo "\n";
+    }
   }
+
   public function getCommaSeparatedFieldsForListPage(){
     $db = \Drupal::database();
 

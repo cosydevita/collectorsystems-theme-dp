@@ -90,7 +90,7 @@
       <div class="card-group row g-5 artist-objects-container mt-5" id="groupLevelObjectsData">
         {% for value in object_details %}
           {% set delaytm = (loadsec == 1) ? '0.01s' : ((loadsec == 2) ? '0.03s' : '0.05s') %}
-          {{ getObjectslistHtml(object_details, value, groupLevelOrderBy, groupLevelPageNo, qSearch, delaytm, "https://cdn.collectorsystems.com/images/noimage300.png") }}
+          {{ getObjectslistHtml(value, groupLevelOrderBy, groupLevelPageNo, qSearch, delaytm, "https://cdn.collectorsystems.com/images/noimage300.png") }}
         {% endfor %}
       </div>
 

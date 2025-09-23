@@ -40,7 +40,7 @@
 			<div class="card-group row g-4 postList objects-container mt-3" id="fetchfilterdata">
 				{% for value in object_details %}
 					{% set delaytm = (loadsec == 1) ? '0.01s' : ((loadsec == 2) ? '0.03s' : '0.05s') %}
-					{{ getObjectslistHtml(object_details, value, dataorderby, requested_pageNo, qSearch, delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png') }}
+					{{ getObjectslistHtml(value, dataorderby, requested_pageNo, qSearch, delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png') }}
 					{% set loadsec = (loadsec + 1) %}
 					{% if loadsec == 4 %}
 						{% set loadsec = 1 %}
