@@ -1765,18 +1765,20 @@ class CollectorSystemsGetApiData{
     }
     else if($image_type == 'artists_images'){
         $wordforsearch="Artists";
-        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and ArtistPhotoAttachmentId ne null&$select=ArtistId';
+        $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20ArtistPhotoAttachmentId%20ne%20null&$select=ArtistId';
     } else if($image_type == 'collections_images'){
         $wordforsearch="Collections";
-        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and CollectionImageAttachmentId ne null&$select=CollectionId';
+        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20CollectionImageAttachmentId%20ne%20null&$select=CollectionId';
     } else if($image_type == 'exhibitions_images'){
         $wordforsearch="Exhibitions";
-        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and ExhibitionImageAttachmentId ne null&$select=ExhibitionId';
+        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20ExhibitionImageAttachmentId%20ne%20null&$select=ExhibitionId';
     }else if($image_type == 'groups_images'){
         $wordforsearch="Groups";
-        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and GroupImageAttachmentId ne null&$select=GroupId';
+        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20GroupImageAttachmentId%20ne%20null&$select=GroupId';
     }
     
+    // Replace spaces with %20 for URL encoding
+    $url = str_replace(" ", "%20", $url);
 
     if($url){
         $curl = curl_init($url);
