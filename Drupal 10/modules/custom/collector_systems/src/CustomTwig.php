@@ -576,18 +576,19 @@ class CustomTwig extends AbstractExtension {
    */
   public function implodeChildArrayProperty($additionalArrayObject,$additionalArray,$additionalPropertyId,$additionalProperty) {    
     $site_url = \Drupal::request()->getSchemeAndHttpHost();
-    
     $commaSeperatedItem = "";  
-
     
     if(!is_array($additionalArrayObject) || count($additionalArrayObject) == 0){
       return $commaSeperatedItem;
     }
   
     foreach ($additionalArrayObject as $additionalItem) {        
-      $artistId = $additionalItem[$additionalArray][$additionalPropertyId]; 
-      $commaSeperatedItem != "" && $commaSeperatedItem .= ", ";
-      $commaSeperatedItem .= '<a href="'.$site_url.'/artist-detail?dataId='.$artistId.'">'.$additionalItem[$additionalArray][$additionalProperty].'</a>';    
+      $artistId = isset($additionalItem[$additionalArray][$additionalPropertyId]) ? $additionalItem[$additionalArray][$additionalPropertyId] : '';
+      if(!empty($artistId)){
+        $commaSeperatedItem != "" && $commaSeperatedItem .= ", ";
+        $commaSeperatedItem .= '<a href="'.$site_url.'/artist-detail?dataId='.$artistId.'">'.$additionalItem[$additionalArray][$additionalProperty].'</a>';   
+      }
+     
     } 
     return $commaSeperatedItem;     
   }
