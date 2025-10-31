@@ -25,6 +25,7 @@ class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
         // First Multiple Select List
         $form['select_field1'] = array(
           '#type' => 'select',
+          '#chosen' => FALSE,
           '#title' => $this->t('Available fields'),
           '#multiple' => TRUE,
           '#options' => $this->get_select_field1_options(),
@@ -58,6 +59,7 @@ class CustomizeObjectDetailFieldsSettingsForm extends ConfigFormBase {
         // Second Multiple Select List
         $form['select_field2'] = array(
           '#type' => 'select',
+          '#chosen' => FALSE,
           '#title' => $this->t('Selected field for Display'),
           '#multiple' => TRUE,
           '#options' => $this->get_select_field2_options(),
