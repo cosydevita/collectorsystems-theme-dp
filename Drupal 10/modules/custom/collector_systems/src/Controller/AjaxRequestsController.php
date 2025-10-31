@@ -54,31 +54,49 @@ class AjaxRequestsController extends ControllerBase
     $groupLevelPageNo = $_POST['groupLevelPageNoValue'] ?? 1;
 
     $loadsec = 1;
-    $customized_fields = $this->getCommaSeperatedFieldsForListPageObject();
+    $customized_fields = $this->getCommaSeparatedFieldsForSearch();
     $qSearch = $groupLevelSearch;
 
     $customized_fields_array = explode(',', $customized_fields);
+    $connection = Database::getConnection();
+
+    // Table names
+    $object_table = $connection->prefixTables('collector_systems_objects');
+    $collection_table = 'collector_systems_collections';
+    $artist_table = 'collector_systems_artists';
 
     if ($Spage == "artist-detail") {
       $artistId = $groupTypeId;
       // Fetch artist details from the database
-      $connection = Database::getConnection();
-
-      // Construct the WHERE clause for LIKE condition on multiple fields
-      $where_conditions = new Condition('OR');
-      foreach ($customized_fields_array as $field) {
-        $where_conditions->condition($field, '%' . $qSearch . '%', 'LIKE');
-      }
 
       // Fetch objects where ArtistId
-      $object_table = $connection->prefixTables('collector_systems_objects');
-
       $query = $connection->select($object_table, 'o')
         ->fields('o') // Specify the fields you want to select
         ->condition('o.ArtistId', $artistId);
 
+      // search filter
       if ($qSearch !== NULL && count($customized_fields_array) > 0) {
-        $query->condition($where_conditions);
+        // Apply search conditions if needed.
+        if (!empty($customized_fields_array) && !empty($qSearch)) {
+          $escaped_search = '%' . $connection->escapeLike($qSearch) . '%';
+          $or_condition_group = $query->orConditionGroup();
+
+          // Get the column names for objects table
+          $object_columns = $this->cs_get_table_columns($object_table);
+          // we only need to search objects table columns field because selected fields data are from objects table only.
+          foreach ($customized_fields_array as $field) {
+            if (in_array($field, $object_columns, true)) {
+              $or_condition_group->condition("o.$field", $escaped_search, 'LIKE');
+            }
+            else {
+              // Optional: Log or ignore unknown fields
+              \Drupal::logger('collector_systems')->warning("Unknown search field: @field", ['@field' => $field]);
+            }
+          }
+
+          $query->condition($or_condition_group);
+        }
+        
       }
 
       $query->range($groupLevelSkipCount, $groupLevelTopCount);
@@ -128,25 +146,43 @@ class AjaxRequestsController extends ControllerBase
       $connection = Database::getConnection();
       $database = \Drupal::database();
 
-      // Construct the WHERE clause for LIKE condition on multiple fields
-      $where_conditions = new Condition('OR');
-      foreach ($customized_fields_array as $field) {
-        $where_conditions->condition($field, '%' . $qSearch . '%', 'LIKE');
-      }
-
       //Fetch Objects Where ExhibitionId
       $exhibitionObj_table = 'collector_systems_exhibition_objects';
       $object_table = 'collector_systems_objects';
 
       $query = \Drupal::database()->select($exhibitionObj_table, 'eo');
       $query->fields('eo');
-      $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
-      $query->fields('co');
+      $query->join($object_table, 'o', 'eo.ObjectId = o.ObjectId');
+      $query->fields('o');
       $query->condition('eo.ExhibitionId', $exhibitionID);
 
+
+      // search filter
       if ($qSearch !== NULL && count($customized_fields_array) > 0) {
-        $query->condition($where_conditions);
+        // Apply search conditions if needed.
+        if (!empty($customized_fields_array) && !empty($qSearch)) {
+          $escaped_search = '%' . $connection->escapeLike($qSearch) . '%';
+          $or_condition_group = $query->orConditionGroup();
+
+          // Get the column names for objects table
+          $object_columns = $this->cs_get_table_columns($object_table);
+          // we only need to search objects table columns field because selected fields data are from objects table only.
+          foreach ($customized_fields_array as $field) {
+            if (in_array($field, $object_columns, true)) {
+              $or_condition_group->condition("o.$field", $escaped_search, 'LIKE');
+            }
+            else {
+              // Optional: Log or ignore unknown fields
+              \Drupal::logger('collector_systems')->warning("Unknown search field: @field", ['@field' => $field]);
+            }
+          }
+
+          $query->condition($or_condition_group);
+        }
+        
       }
+
+
       $query->range($groupLevelSkipCount, $groupLevelTopCount);
 
       //sorting
@@ -196,12 +232,6 @@ class AjaxRequestsController extends ControllerBase
       $connection = Database::getConnection();
       $database = \Drupal::database();
 
-      // Construct the WHERE clause for LIKE condition on multiple fields
-      $where_conditions = new Condition('OR');
-      foreach ($customized_fields_array as $field) {
-        $where_conditions->condition($field, '%' . $qSearch . '%', 'LIKE');
-      }
-
       //Fetch Objects Where GroupId
       $groupObj_table = "collector_systems_group_objects";
       $query = $database->select($groupObj_table, 'go')
@@ -214,11 +244,32 @@ class AjaxRequestsController extends ControllerBase
       $query = $database->select($groupObj_table, 'eo');
       $query->fields('eo');
       $query->condition('eo.GroupId', $groupID);
-      $query->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
-      $query->fields('co');
+      $query->join($object_table, 'o', 'eo.ObjectId = o.ObjectId');
+      $query->fields('o');
 
+      // search filter
       if ($qSearch !== NULL && count($customized_fields_array) > 0) {
-        $query->condition($where_conditions);
+        // Apply search conditions if needed.
+        if (!empty($customized_fields_array) && !empty($qSearch)) {
+          $escaped_search = '%' . $connection->escapeLike($qSearch) . '%';
+          $or_condition_group = $query->orConditionGroup();
+
+          // Get the column names for objects table
+          $object_columns = $this->cs_get_table_columns($object_table);
+          // we only need to search objects table columns field because selected fields data are from objects table only.
+          foreach ($customized_fields_array as $field) {
+            if (in_array($field, $object_columns, true)) {
+              $or_condition_group->condition("o.$field", $escaped_search, 'LIKE');
+            }
+            else {
+              // Optional: Log or ignore unknown fields
+              \Drupal::logger('collector_systems')->warning("Unknown search field: @field", ['@field' => $field]);
+            }
+          }
+
+          $query->condition($or_condition_group);
+        }
+        
       }
 
       $query->range($groupLevelSkipCount, $groupLevelTopCount);
@@ -293,13 +344,29 @@ class AjaxRequestsController extends ControllerBase
       $query->fields('o');
       $query->fields('c');
 
+      // search filter
       if ($qSearch !== NULL && count($customized_fields_array) > 0) {
-        // Construct the WHERE clause for LIKE condition on multiple fields
-        $where_conditions = new Condition('OR');
-        foreach ($customized_fields_array as $field) {
-          $where_conditions->condition('o.'.$field, '%' . $qSearch . '%', 'LIKE');
+        // Apply search conditions if needed.
+        if (!empty($customized_fields_array) && !empty($qSearch)) {
+          $escaped_search = '%' . $connection->escapeLike($qSearch) . '%';
+          $or_condition_group = $query->orConditionGroup();
+
+          // Get the column names for objects table
+          $object_columns = $this->cs_get_table_columns($object_table);
+          // we only need to search objects table columns field because selected fields data are from objects table only.
+          foreach ($customized_fields_array as $field) {
+            if (in_array($field, $object_columns, true)) {
+              $or_condition_group->condition("o.$field", $escaped_search, 'LIKE');
+            }
+            else {
+              // Optional: Log or ignore unknown fields
+              \Drupal::logger('collector_systems')->warning("Unknown search field: @field", ['@field' => $field]);
+            }
+          }
+
+          $query->condition($or_condition_group);
         }
-        $query->condition($where_conditions);
+        
       }
 
       $count_query = $query->countQuery();
@@ -902,6 +969,55 @@ class AjaxRequestsController extends ControllerBase
       \Drupal::logger('collector_systems')->error('Database query error: @message', ['@message' => $e->getMessage()]);
       // If an exception is thrown (e.g., table not found), return 0.
       return 0;
+    }
+  }
+
+  /**
+  * Get comma separated field names for search.
+  * @return string
+  */
+  public function getCommaSeparatedFieldsForSearch(){
+    $db = \Drupal::database();
+
+    $tblnm = "collector_systems_clsobjects_fields";
+    $settblnm = $tblnm;
+
+    $query = $db->select($settblnm, 'c')
+      ->fields('c', ['fieldname']);
+      // ->condition('fieldtype', 'ObjectList');
+    $result = $query->execute()->fetchAllAssoc('fieldname');
+
+    $values = implode(',', array_keys($result));
+
+    return $values;
+
+  }
+
+  /**
+  * Get column names for a given database table (prefix-aware, Drupal 10+).
+  *
+  * @param string $table_name
+  *   The base table name (without prefix), e.g. 'collector_systems_objects'.
+  *
+  * @return array
+  *   A simple array of column names.
+  */
+  function cs_get_table_columns($table_name) {
+    $connection = \Drupal::database();
+    $prefix = $connection->getPrefix();
+    $prefixed_table = $prefix . $table_name;
+
+    try {
+      // Use SHOW COLUMNS — faster and no INFORMATION_SCHEMA permission issues.
+      $result = $connection->query("SHOW COLUMNS FROM `$prefixed_table`")->fetchAll();
+      return array_map(static fn($row) => $row->Field, $result);
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('collector_systems')->error(
+        'Error fetching columns for table @table: @message',
+        ['@table' => $prefixed_table, '@message' => $e->getMessage()]
+      );
+      return [];
     }
   }
 

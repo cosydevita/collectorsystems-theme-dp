@@ -59,6 +59,7 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
    * {@inheritdoc}
    */
   public function build() {
+    $connection = \Drupal::database();
     if(!$this->is_CS_tables_exists()){
       $build = [
         '#theme' => 'objects-list-page',
@@ -83,27 +84,62 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
     $nxshskip = $shskip;
     $loadsec = 1;
 
-    $customized_fields = $this->getCommaSeparatedFieldsForListPage();
+    $customized_fields = $this->getCommaSeparatedFieldsForSearch();
+    $customized_fields_array = [];
     if($customized_fields){
       $customized_fields_array = explode(',', $customized_fields);
+      
     }
+    // print_r($customized_fields_array);
 
     // Count Total Objects
     $object_table = 'collector_systems_objects';
 
     // Collection Table
     $collection_table = 'collector_systems_collections';
+    $artist_table = 'collector_systems_artists';
 
-    // Fetch object details from the database
-    $query = Database::getConnection()->select($object_table, 'o');
-    if($customized_fields){
+   // Fetch object details from the database.
+    $connection = \Drupal::database();
+    $query = $connection->select($object_table, 'o');
+
+    // Join related tables
+    $query->leftJoin($collection_table, 'c', 'o.CollectionId = c.CollectionId');
+    $query->leftJoin($artist_table, 'a', 'a.ArtistId = o.ArtistId');
+
+    // Select the desired fields.
+    $query->fields('o');
+    $query->fields('c');
+    $query->fields('a');
+
+    // Apply search conditions if needed.
+    if (!empty($customized_fields_array) && !empty($qSearch)) {
+      $escaped_search = '%' . $connection->escapeLike($qSearch) . '%';
       $or_condition_group = $query->orConditionGroup();
 
-      foreach($customized_fields_array as $customized_field){
-        $or_condition_group->condition($customized_field, '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
-      }
-      $query->condition($or_condition_group);
+      // Get the column names for each table
 
+      $object_columns = $this->cs_get_table_columns($object_table);
+      $collection_columns = $this->cs_get_table_columns($collection_table);
+      $artist_columns = $this->cs_get_table_columns($artist_table);
+
+      foreach ($customized_fields_array as $field) {
+        if (in_array($field, $collection_columns, true)) {
+          $or_condition_group->condition("c.$field", $escaped_search, 'LIKE');
+        }
+        elseif (in_array($field, $artist_columns, true)) {
+          $or_condition_group->condition("a.$field", $escaped_search, 'LIKE');
+        }
+        elseif (in_array($field, $object_columns, true)) {
+          $or_condition_group->condition("o.$field", $escaped_search, 'LIKE');
+        }
+        else {
+          // Optional: Log or ignore unknown fields
+          \Drupal::logger('collector_systems')->warning("Unknown search field: @field", ['@field' => $field]);
+        }
+      }
+
+      $query->condition($or_condition_group);
     }
 
 
@@ -286,21 +322,52 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
   }
 
 
-  public function getCommaSeparatedFieldsForListPage(){
+  /**
+  * Get comma separated field names for search.
+  * @return string
+  */
+  public function getCommaSeparatedFieldsForSearch(){
     $db = \Drupal::database();
 
     $tblnm = "collector_systems_clsobjects_fields";
     $settblnm = $tblnm;
 
     $query = $db->select($settblnm, 'c')
-      ->fields('c', ['fieldname'])
-      ->condition('fieldtype', 'ObjectList');
-
+      ->fields('c', ['fieldname']);
+      // ->condition('fieldtype', 'ObjectList');
     $result = $query->execute()->fetchAllAssoc('fieldname');
 
     $values = implode(',', array_keys($result));
 
     return $values;
 
+  }
+
+  /**
+ * Get column names for a given database table (prefix-aware, Drupal 10+).
+ *
+ * @param string $table_name
+ *   The base table name (without prefix), e.g. 'collector_systems_objects'.
+ *
+ * @return array
+ *   A simple array of column names.
+ */
+  function cs_get_table_columns($table_name) {
+    $connection = \Drupal::database();
+    $prefix = $connection->getPrefix();
+    $prefixed_table = $prefix . $table_name;
+  
+    try {
+      // Use SHOW COLUMNS — faster and no INFORMATION_SCHEMA permission issues.
+      $result = $connection->query("SHOW COLUMNS FROM `$prefixed_table`")->fetchAll();
+      return array_map(static fn($row) => $row->Field, $result);
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('collector_systems')->error(
+        'Error fetching columns for table @table: @message',
+        ['@table' => $prefixed_table, '@message' => $e->getMessage()]
+      );
+      return [];
+    }
   }
 }
