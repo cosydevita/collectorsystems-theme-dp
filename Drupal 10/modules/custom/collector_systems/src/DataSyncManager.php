@@ -3492,23 +3492,36 @@ class DataSyncManager {
             ->fetchAssoc();
 
           if ($record_exists) {
+            try {
             // Update the existing record if the ModificationDate has changed
             $database->update($table_name4)
               ->fields($data)
               ->condition('ExhibitionId', $exhibitionId)
               ->condition('ModificationDate', $ModificationDate, '<>')
               ->execute();
+
+            } catch (\Exception $e) {
+              \Drupal::logger('collector_systems')->error('Error updating ExhibitionId ' . $exhibitionId . ': ' . $e->getMessage());
+            }
           } else {
-            // Handle if record doesn't exist
-            // Insert data into the table.
+            try {
+              // Handle if record doesn't exist
+              // Insert data into the table.
+              $database->insert($table_name4)
+                ->fields($data)
+                ->execute();
+            } catch (\Exception $e) {
+              \Drupal::logger('collector_systems')->error('Error inserting ExhibitionId ' . $exhibitionId . ': ' . $e->getMessage());
+            }
+          }
+        } else {
+          try {
             $database->insert($table_name4)
               ->fields($data)
               ->execute();
+          } catch (\Exception $e) {
+            \Drupal::logger('collector_systems')->error('Error inserting ExhibitionId ' . $exhibitionId . ': ' . $e->getMessage());
           }
-        } else {
-          $database->insert($table_name4)
-            ->fields($data)
-            ->execute();
         }
       }
     } //End Exhibitions
