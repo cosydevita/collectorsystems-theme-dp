@@ -3452,6 +3452,11 @@ class DataSyncManager {
         $exhibitionLocation = $exhibition['ExhibitionLocation'];
       }
       $exhibitionDate = $exhibition['ExhibitionDate'];
+      
+      // Normalize the actual DB fields because the ExhibitionStartDate and ExhibitionEndDate are datetime fields in DB but coming in API as different format. We need to normalize them before inserting into DB otherwise it will give error.
+      $ExhibitionStartDate = $this->normalizeDatetime($exhibition['ExhibitionStartDate']);
+      $ExhibitionEndDate   = $this->normalizeDatetime($exhibition['ExhibitionEndDate']);
+
       $exhibitionMemo = NULL;
       if (isset($exhibition['ExhibitionMemo']) && $exhibition['ExhibitionMemo'] !== NULL) {
         $exhibitionMemo = $exhibition['ExhibitionMemo'];
@@ -3472,6 +3477,8 @@ class DataSyncManager {
           'ExhibitionSubject' => $exhibitionSubject,
           'ExhibitionLocation' => $exhibitionLocation,
           'ExhibitionDate' => $exhibitionDate,
+          'ExhibitionStartDate' => $ExhibitionStartDate,
+          'ExhibitionEndDate' => $ExhibitionEndDate,
           'ExhibitionMemo' => $exhibitionMemo,
           'ModificationDate' => $ModificationDate,
         );
@@ -4039,5 +4046,14 @@ class DataSyncManager {
 
 
     $this->processSyncData($Detaildata, $current_batch_number, $import_type, $btn_action);
+  }
+
+  protected function normalizeDatetime($value) {
+    if (empty($value)) {
+      return NULL;
+    }
+  
+    $timestamp = strtotime($value);
+    return date('Y-m-d H:i:s', $timestamp);
   }
 }

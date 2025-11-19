@@ -237,6 +237,16 @@ function collector_systems_schema() {
         'type' => 'varchar',
         'length' => 500,
       ],
+      'ExhibitionStartDate' => [
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'not null' => FALSE,
+      ],
+      'ExhibitionEndDate' => [
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'not null' => FALSE,
+      ],
       'ExhibitionMemo' => [
         'type' => 'text',
         'size' => 'big'
@@ -423,7 +433,7 @@ function collector_systems_schema() {
 }
 
 /**
- * Adds new columns to the CSSynced table:
+ * Adds new columns to the collector_systems_cssynced table:
  * - SyncStarted (varchar 255)
  * - SyncCompleted (varchar 255)
  * - SyncType (varchar 255)
@@ -435,42 +445,70 @@ function collector_systems_schema() {
 function collector_systems_update_9000() {
   $schema = \Drupal::database()->schema();
 
-  if (!$schema->fieldExists('CSSynced', 'SyncStarted')) {
-    $schema->addField('CSSynced', 'SyncStarted', [
+  if (!$schema->fieldExists('collector_systems_cssynced', 'SyncStarted')) {
+    $schema->addField('collector_systems_cssynced', 'SyncStarted', [
         'type' => 'varchar',
         'length' => 255,
         'not null' => FALSE,
     ]);
   }
 
-  if (!$schema->fieldExists('CSSynced', 'SyncCompleted')) {
-    $schema->addField('CSSynced', 'SyncCompleted', [
+  if (!$schema->fieldExists('collector_systems_cssynced', 'SyncCompleted')) {
+    $schema->addField('collector_systems_cssynced', 'SyncCompleted', [
         'type' => 'varchar',
         'length' => 255,
         'not null' => FALSE,
     ]);
   }
 
-  if (!$schema->fieldExists('CSSynced', 'SyncType')) {
-    $schema->addField('CSSynced', 'SyncType', [
+  if (!$schema->fieldExists('collector_systems_cssynced', 'SyncType')) {
+    $schema->addField('collector_systems_cssynced', 'SyncType', [
         'type' => 'varchar',
         'length' => 255,
         'not null' => FALSE,
     ]);
   }
 
-  if (!$schema->fieldExists('CSSynced', 'SyncTrigger')) {
-    $schema->addField('CSSynced', 'SyncTrigger', [
+  if (!$schema->fieldExists('collector_systems_cssynced', 'SyncTrigger')) {
+    $schema->addField('collector_systems_cssynced', 'SyncTrigger', [
         'type' => 'varchar',
         'length' => 255,
         'not null' => FALSE,
     ]);
   }
 
-  if (!$schema->fieldExists('CSSynced', 'SyncCompletionTime')) {
-    $schema->addField('CSSynced', 'SyncCompletionTime', [
+  if (!$schema->fieldExists('collector_systems_cssynced', 'SyncCompletionTime')) {
+    $schema->addField('collector_systems_cssynced', 'SyncCompletionTime', [
         'type' => 'varchar',
         'length' => 255,
+        'not null' => FALSE,
+    ]);
+  }
+
+}
+
+/**
+ * Adds new columns to the collector_systems_exhibitions table:
+ * - ExhibitionStartDate (varchar datetime)
+ * - ExhibitionEndDate (varchar datetime)
+ *
+ * @return void
+ */
+function collector_systems_update_9001() {
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->fieldExists('collector_systems_exhibitions', 'ExhibitionStartDate')) {
+    $schema->addField('collector_systems_exhibitions', 'ExhibitionStartDate', [
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'not null' => FALSE,
+    ]);
+  }
+
+  if (!$schema->fieldExists('collector_systems_exhibitions', 'ExhibitionEndDate')) {
+    $schema->addField('collector_systems_exhibitions', 'ExhibitionEndDate', [
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
         'not null' => FALSE,
     ]);
   }

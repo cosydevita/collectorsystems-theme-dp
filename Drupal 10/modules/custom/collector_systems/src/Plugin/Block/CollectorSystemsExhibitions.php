@@ -39,7 +39,7 @@ class CollectorSystemsExhibitions extends BlockBase {
     $shskip =   0;
     $ajaxfor=   "listexhibition";
     $current_page=   "exhibitions";
-    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "ExhibitionSubject%20asc";
+    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "ExhibitionStartDate%20desc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
 
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
@@ -62,9 +62,19 @@ class CollectorSystemsExhibitions extends BlockBase {
     $query->fields('et');
 
 
-    // Use an alternative method to specify the sorting order.
-    $query->orderBy('ExhibitionSubject', ($dataorderby === 'ExhibitionSubject%20desc') ? 'DESC' : 'ASC');
-    $query->orderBy('ExhibitionDate', ($dataorderby === 'ExhibitionStartDate%20desc' || $dataorderby === 'ExhibitionEndDate%20desc') ? 'DESC' : 'ASC');
+    if($dataorderby === 'ExhibitionStartDate%20desc') {
+      $query->orderBy('ExhibitionStartDate', 'DESC');
+    } elseif($dataorderby === 'ExhibitionStartDate%20asc') {
+      $query->orderBy('ExhibitionStartDate', 'ASC');
+    } elseif($dataorderby === 'ExhibitionEndDate%20desc') {
+      $query->orderBy('ExhibitionEndDate', 'DESC');
+    } elseif($dataorderby === 'ExhibitionEndDate%20asc') {
+      $query->orderBy('ExhibitionEndDate', 'ASC');
+    } elseif($dataorderby === 'ExhibitionSubject%20desc') {
+      $query->orderBy('ExhibitionSubject', 'DESC');
+    } elseif($dataorderby === 'ExhibitionSubject%20asc') {
+      $query->orderBy('ExhibitionSubject', 'ASC');
+    }   
 
     // Additional steps as needed for your specific use case.
     $query->range(0, $showrec);
