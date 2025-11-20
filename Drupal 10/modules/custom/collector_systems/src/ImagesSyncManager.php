@@ -987,69 +987,22 @@ class ImagesSyncManager {
 
     \Drupal::logger('collector_systems')->debug('Images Import to Directory: importing @import_type', ['@import_type' => $import_type]);
 
-    if ($current_batch_number == 0 && $import_type == 'ArtistsImages') {
-      //This will run only once at the first batch
+    if($import_type == 'ArtistsImages'){
 
+      if($current_batch_number == 0){
+        // On first batch run only.
+        // Place null in the ImagePath for Artists.
+        $database->update($artist_table)
+        ->fields(['ImagePath' => null, 'ArtistPhotoAttachment' => null])
+        ->execute();
+      }
 
-      //Create Artist Directory
+      //Create Artist Directory if not exists
       if (!file_exists($artistDirectory))
       {
           mkdir($artistDirectory, 0755, true);
       }
 
-      //Create Group Directory
-      if (!file_exists($groupDirectory))
-      {
-          mkdir($groupDirectory, 0755, true);
-      }
-
-      //Create Collection Directory
-      if (!file_exists($collectionDirectory))
-      {
-          mkdir($collectionDirectory, 0755, true);
-      }
-
-      //Create Exhibition Directory
-      if (!file_exists($exhibitionDirectory))
-      {
-          mkdir($exhibitionDirectory, 0755, true);
-      }
-
-      //Create GroupObjects Directory
-
-      if (!file_exists($groupObjDirectory))
-      {
-          mkdir($groupObjDirectory, 0755, true);
-      }
-
-      //Create ExhibitionObjects Directory
-      if (!file_exists($exhibitionObjDirectory))
-      {
-          mkdir($exhibitionObjDirectory, 0755, true);
-      }
-
-      // Place null in the ImagePath for Artists.
-      $database->update($artist_table)
-        ->fields(['ImagePath' => null, 'ArtistPhotoAttachment' => null])
-        ->execute();
-
-      // Place null in the ImagePath and CollectionImageAttachment for Collections.
-      $database->update($collection_table)
-        ->fields(['ImagePath' => null, 'CollectionImageAttachment' => null])
-        ->execute();
-
-      // Place null in the ImagePath and GroupImageAttachment for Groups.
-      $database->update($group_table)
-        ->fields(['ImagePath' => null, 'GroupImageAttachment' => null])
-        ->execute();
-
-      // Place null in the ImagePath and ExhibitionImageAttachment for Exhibitions.
-      $database->update($exhibition_table)
-        ->fields(['ImagePath' => null, 'ExhibitionImageAttachment' => null])
-        ->execute();
-    }
-
-    if($import_type == 'ArtistsImages'){
       $ArtistPhoto = $Detaildata;
       //Save Artist Images in the Artists Directory
       foreach($ArtistPhoto['value'] as $photo)
@@ -1086,6 +1039,21 @@ class ImagesSyncManager {
 
       }
     }elseif($import_type == 'CollectionsImages'){
+      if($current_batch_number == 0){
+        // On first batch run only.
+        // Place null in the ImagePath and CollectionImageAttachment for Collections.
+        $database->update($collection_table)
+          ->fields(['ImagePath' => null, 'CollectionImageAttachment' => null])
+          ->execute();
+      }
+
+      //Create Collection Directory if not exists
+      if (!file_exists($collectionDirectory))
+      {
+          mkdir($collectionDirectory, 0755, true);
+      }
+
+
       $CollectionPhoto = $Detaildata;
       //Save Collection Images in the Collections Directory
       foreach($CollectionPhoto['value'] as $photo)
@@ -1120,6 +1088,20 @@ class ImagesSyncManager {
         }
       }
     }elseif($import_type == 'GroupsImages'){
+      if($current_batch_number == 0){
+        // On first batch run only.
+        // Place null in the ImagePath and GroupImageAttachment for Groups.
+        $database->update($group_table)
+        ->fields(['ImagePath' => null, 'GroupImageAttachment' => null])
+        ->execute();
+      }
+       
+      //Create Group Directory if not exists
+      if (!file_exists($groupDirectory))
+      {
+          mkdir($groupDirectory, 0755, true);
+      }
+
       $GroupImages = $Detaildata;
       //Save Group Images in the Groups Directory
       foreach($GroupImages['value'] as $photo)
@@ -1154,6 +1136,21 @@ class ImagesSyncManager {
         }
       }
     }elseif($import_type == 'ExhibitionsImages'){
+
+      if($current_batch_number == 0){
+        // On first batch run only.
+        // Place null in the ImagePath and ExhibitionImageAttachment for Exhibitions.
+        $database->update($exhibition_table)
+        ->fields(['ImagePath' => null, 'ExhibitionImageAttachment' => null])
+        ->execute();
+      }
+
+      //Create Exhibition Directory
+      if (!file_exists($exhibitionDirectory))
+      {
+          mkdir($exhibitionDirectory, 0755, true);
+      }
+
       $ExhibitionPhoto = $Detaildata;
       //Save Exhibition Images in the Exhibitions Directory
       foreach($ExhibitionPhoto['value'] as $photo)
@@ -1189,6 +1186,13 @@ class ImagesSyncManager {
       }
 
     }elseif($import_type == 'GroupsObjectsImages'){
+      
+      //Create GroupObjects Directory if not exists
+      if (!file_exists($groupObjDirectory))
+      {
+          mkdir($groupObjDirectory, 0755, true);
+      }
+
       $GroupObjects = $Detaildata;
       //Start GroupObjects
       foreach($GroupObjects['value'] as $obj)
@@ -1223,6 +1227,12 @@ class ImagesSyncManager {
       }//End GroupObjects
 
     }elseif($import_type == 'ExhibitionsObjectsImages'){
+      //Create ExhibitionObjects Directory if not exists
+      if (!file_exists($exhibitionObjDirectory))
+      {
+          mkdir($exhibitionObjDirectory, 0755, true);
+      }
+
       $ExhibitionObjects = $Detaildata;
       //Start ExhibitionObjects
       foreach($ExhibitionObjects['value'] as $obj)
