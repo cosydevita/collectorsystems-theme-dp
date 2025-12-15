@@ -128,6 +128,7 @@ function collector_systems_schema() {
       ],
       'ArtistBio' => [
         'type' => 'text',
+        'size' => 'big',
       ],
       'ArtistPhotoAttachment' => [
         'type' => 'blob',

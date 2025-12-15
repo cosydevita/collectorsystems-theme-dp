@@ -3858,8 +3858,70 @@ class DataSyncManager {
   function create_table_collector_systems_objects(){
     // Create the new table
     $table_name = 'collector_systems_objects';
-    // $selected_fields = ['ArtistName', 'InventoryNumber', 'ArtistCompany']; //temp test
-    $selected_fields = $this->get_field_names(); //temp test
+    $selected_fields = $this->get_field_names(); 
+
+    // List of rich text fields for objects
+    $rich_text_fields = [
+      'AddressInventoryMemo',
+      'AssociatedSpecies',
+      'CastAndCrew',
+      'CompletenessNote',
+      'Drainage',
+      'FieldCollectionMemo',
+      'HabitatMemo',
+      'History',
+      'Inscriptions',
+      'InventoryMemo',
+      'KeyDescriptor',
+      'Labels',
+      'LocationAccessMemo',
+      'LocationConditionMemo',
+      'LocationSecurityMemo',
+      'MaterialComponentMemo',
+      'MovementMemo',
+      'ObjectDescription',
+      'ObjectNameNote',
+      'ObjectProductionMemo',
+      'ObjectUse',
+      'ObjectUseMemo',
+      'Provenance',
+      'ReferenceNotes',
+      'RegistrationNotes',
+      'RelatedCollections',
+      'RepairsMade',
+      'ResearchNotes',
+      'Signatures',
+      'StaffNotes',
+      'StartingInstructions',
+      'StratigraphicUnitMemo',
+      'SubspeciesDescriptiveName',
+      'Synopsis',
+      'TaxonomicNotes',
+      'Term',
+      'TitleStatusNotes',
+      'Transcription',
+      'TypeStatus',
+      'UserDefinedRichText1',
+      'UserDefinedRichText2',
+      'UserDefinedRichText3',
+      'UserDefinedRichText4',
+      'UserDefinedRichText5',
+      'UserDefinedRichText6',
+      'UserDefinedRichText7',
+      'UserDefinedRichText8',
+      'UserDefinedRichText9',
+      'UserDefinedRichText10',
+      'UserDefinedRichText11',
+      'UserDefinedRichText12',
+      'UserDefinedRichText13',
+      'UserDefinedRichText14',
+      'UserDefinedRichText15',
+      'UserDefinedRichText16',
+      'UserDefinedRichText17',
+      'UserDefinedRichText18',
+      'Waterbody',
+      'WithinSiteProveniance',
+    ];
 
     $schema = [
       'fields' => [
@@ -3956,18 +4018,17 @@ class DataSyncManager {
     if($selected_fields){
       // Add dynamic fields if available
       foreach ($selected_fields as $field) {
-        switch($field){
-          case "ObjectDescription":
-            $schema['fields'][$field] = [
-                'type' => 'text',
-                'size' => 'big'
-            ];
-            break;
-          default:
-            $schema['fields'][$field] = [
-                'type' => 'text',
-            ];
-            break;
+        if (in_array($field, $rich_text_fields, TRUE)) {
+          // Rich text → size - big
+          $schema['fields'][$field] = [
+            'type' => 'text',
+            'size' => 'big',
+          ];
+        } else {
+          // Plain text → TEXT
+          $schema['fields'][$field] = [
+            'type' => 'text',
+          ];
         }
 
       }
