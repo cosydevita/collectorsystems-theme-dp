@@ -97,6 +97,60 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Enter a hex color code or CSS color name.'),
     ];
 
+
+
+    $form['ui_customizations']['body_font_size'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Body Font Size'),
+      '#options' => [
+        '8px' => '8 px',
+        '9px' => '9 px',
+        '10px' => '10 px',
+        '11px' => '11 px',
+        '12px' => '12 px',
+        '13px' => '13 px',
+        '14px' => '14 px',
+        '16px' => '16 px',
+        '18px' => '18 px',
+        '20px' => '20 px',
+        '22px' => '22 px',
+        '24px' => '24 px',
+        '26px' => '26 px',
+        '28px' => '28 px',
+        '32px' => '32 px',
+        '36px' => '36 px',
+        '48px' => '48 px',
+        '72px' => '72 px',
+      ],
+      '#default_value' => $config->get('body_font_size') ?? '16px'
+    ];
+
+    $form['ui_customizations']['object_detail_page_title_font_size'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Object Detail Page Title Font Size'),
+      '#options' => [
+        '8px' => '8 px',
+        '9px' => '9 px',
+        '10px' => '10 px',
+        '11px' => '11 px',
+        '12px' => '12 px',
+        '13px' => '13 px',
+        '14px' => '14 px',
+        '16px' => '16 px',
+        '18px' => '18 px',
+        '20px' => '20 px',
+        '22px' => '22 px',
+        '24px' => '24 px',
+        '26px' => '26 px',
+        '28px' => '28 px',
+        '32px' => '32 px',
+        '36px' => '36 px',
+        '48px' => '48 px',
+        '72px' => '72 px',
+      ],
+      '#default_value' => $config->get('object_detail_page_title_font_size') ?? '16px'
+    ];
+
     $form['ui_customizations']['bold_customized_field_labels'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Make Customized field labels more bold'),
@@ -193,6 +247,8 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       ->set('enable_transition', $form_state->getValue('enable_transition'))
       ->set('center_align_images', $form_state->getValue('center_align_images'))
       ->set('image_bg_color', $form_state->getValue('image_bg_color'))
+      ->set('body_font_size', $form_state->getValue('body_font_size'))
+      ->set('object_detail_page_title_font_size', $form_state->getValue('object_detail_page_title_font_size'))
       ->set('bold_customized_field_labels', $form_state->getValue('bold_customized_field_labels'))
       ->set('underline_all_hyperlinks', $form_state->getValue('underline_all_hyperlinks'))
       ->set('enable_zoom', $form_state->getValue('enable_zoom'))

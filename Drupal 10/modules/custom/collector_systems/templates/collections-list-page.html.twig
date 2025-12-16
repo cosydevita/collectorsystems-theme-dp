@@ -29,7 +29,7 @@
 				</div>
 			</div>
 
-			<div class="card-group row g-4 postList objects-container mt-3" id="fetchfilterdata">
+			<div class="card-group row g-4 postList collections-container mt-3" id="fetchfilterdata">
 				{% for collect in all_collections %}
 					{# switch case logic in Twig is achieved using a map #}
 					{% set delaytm = {1: '0.01s', 2: '0.03s', 3: '0.05s', 4: '0.07s'}[loadsec] %}

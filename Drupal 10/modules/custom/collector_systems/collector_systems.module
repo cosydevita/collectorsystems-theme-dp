@@ -415,6 +415,8 @@ function collector_systems_preprocess_html(array &$variables) {
   $bold_customized_field_labels = $config_cs->get('bold_customized_field_labels');
   $enable_transition = $config_cs->get('enable_transition');
   $image_bg_color = $config_cs->get('image_bg_color');
+  $body_font_size = $config_cs->get('body_font_size') ?? '16px';
+  $object_detail_page_title_font_size = $config_cs->get('object_detail_page_title_font_size') ?? '24px';
 
   if($underline_all_hyperlinks){
     $variables['attributes']['class'][] = 'cs-underline-all-hyperlinks';
@@ -437,6 +439,14 @@ function collector_systems_preprocess_html(array &$variables) {
 
   if($image_bg_color){
     $variables['attributes']['data-cs-image-bg'][] = $image_bg_color;
+  }
+
+  if($body_font_size){
+    $variables['attributes']['data-cs-body-font-size'][] = $body_font_size;
+  }
+  
+  if($object_detail_page_title_font_size){
+    $variables['attributes']['data-cs-object-detail-page-title-font-size'][] = $object_detail_page_title_font_size;
   }
 
 }
