@@ -20,12 +20,12 @@
 						<span class="sort-by-title me-3">Sort By:
 						</span>
 						<select name="seldataorderby" id="seldataorderby" class="form-select" onchange="return applySorting('{{ current_page }}')">
-							<option value="ExhibitionSubject%20desc" {{ dataorderby == "ExhibitionSubject%20desc" ? 'selected' : '' }}>Exhibition Desc</option>
-							<option value="ExhibitionSubject%20asc" {{ dataorderby == "ExhibitionSubject%20asc" ? 'selected' : '' }}>Exhibition Asc</option>
-							<option value="ExhibitionStartDate%20desc" {{ dataorderby == "ExhibitionStartDate%20desc" ? 'selected' : '' }}>Start Date Desc</option>
-							<option value="ExhibitionStartDate%20asc" {{ dataorderby == "ExhibitionStartDate%20asc" ? 'selected' : '' }}>Start Date Asc</option>
-							<option value="ExhibitionEndDate%20desc" {{ dataorderby == "ExhibitionEndDate%20desc" ? 'selected' : '' }}>End Date Desc</option>
-							<option value="ExhibitionEndDate%20asc" {{ dataorderby == "ExhibitionEndDate%20asc" ? 'selected' : '' }}>End Date Asc</option>
+							<option value="ExhibitionSubject%20desc" {{ dataorderby == "ExhibitionSubject%20desc" ? 'selected' : '' }}>Exhibition (z-a)</option>
+							<option value="ExhibitionSubject%20asc" {{ dataorderby == "ExhibitionSubject%20asc" ? 'selected' : '' }}>Exhibition (a-z)</option>
+							<option value="ExhibitionStartDate%20desc" {{ dataorderby == "ExhibitionStartDate%20desc" ? 'selected' : '' }}>Start Date (oldest-newest)</option>
+							<option value="ExhibitionStartDate%20asc" {{ dataorderby == "ExhibitionStartDate%20asc" ? 'selected' : '' }}>Start Date (newest-oldest)</option>
+							<option value="ExhibitionEndDate%20desc" {{ dataorderby == "ExhibitionEndDate%20desc" ? 'selected' : '' }}>End Date (oldest-newest)</option>
+							<option value="ExhibitionEndDate%20asc" {{ dataorderby == "ExhibitionEndDate%20asc" ? 'selected' : '' }}>End Date (newest-oldest)</option>
 						</select>
             {% include '@collector_systems/templates/search-form.html.twig' %}
 					</div>

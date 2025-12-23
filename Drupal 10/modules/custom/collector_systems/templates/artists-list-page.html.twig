@@ -21,8 +21,8 @@
 						<span class="sort-by-title me-3">Sort By:
 						</span>
 						<select name="seldataorderby" id="seldataorderby" class="form-select" onchange="return applySorting('{{ current_page }}')">
-							<option value="ArtistName%20desc" {{ "ArtistName%20desc" == dataorderby ? 'selected' }}>Artist Name Desc</option>
-							<option value="ArtistName%20asc" {{ "ArtistName%20asc" == dataorderby ? 'selected' }}>Artist Name Asc</option>
+							<option value="ArtistName%20desc" {{ "ArtistName%20desc" == dataorderby ? 'selected' }}>Artist (z-a)</option>
+							<option value="ArtistName%20asc" {{ "ArtistName%20asc" == dataorderby ? 'selected' }}>Artist (a-z)</option>
 						</select>
 					</div>
 					{% include '@collector_systems/templates/search-form.html.twig' %}

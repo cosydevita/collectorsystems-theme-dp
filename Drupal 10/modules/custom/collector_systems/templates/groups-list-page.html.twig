@@ -20,8 +20,8 @@
 						<span class="sort-by-title me-3">Sort By:
 						</span>
 						<select name="seldataorderby" id="seldataorderby" class="form-select" onchange="return applySorting('{{ current_page }}')">
-							<option value="GroupDescription%20desc" {{ dataorderby == 'GroupDescription%20desc' ? 'selected' : '' }}>Description Desc</option>
-							<option value="GroupDescription%20asc" {{ dataorderby == 'GroupDescription%20asc' ? 'selected' : '' }}>Description Asc</option>
+							<option value="GroupDescription%20desc" {{ dataorderby == 'GroupDescription%20desc' ? 'selected' : '' }}>Z - A</option>
+							<option value="GroupDescription%20asc" {{ dataorderby == 'GroupDescription%20asc' ? 'selected' : '' }}>A - Z</option>
 						</select>
 					</div>
           {% include '@collector_systems/templates/search-form.html.twig' %}
