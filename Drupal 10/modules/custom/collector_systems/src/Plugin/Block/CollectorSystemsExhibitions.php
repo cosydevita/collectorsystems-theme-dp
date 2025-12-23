@@ -95,7 +95,7 @@ class CollectorSystemsExhibitions extends BlockBase {
       $all_exhibitions = $result->fetchAll(\PDO::FETCH_OBJ);
 
 
-    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
+    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_exhibitions');
     $build = [
       '#theme' => 'exhibitions-list-page',
       '#all_exhibitions' => $all_exhibitions,

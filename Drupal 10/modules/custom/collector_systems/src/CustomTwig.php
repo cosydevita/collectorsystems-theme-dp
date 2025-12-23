@@ -39,10 +39,11 @@ class CustomTwig extends AbstractExtension {
     //echo "field:" .$customized_fields;
     $customized_fields_array = explode(',', $customized_fields);
     $object_detail_link = "/artobject-detail?dataId=". $value['ObjectId']."&sortBy=".$dataOrderBy."&pageNo=".$datapageNo;
-    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
+    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_objects');
     ?>
 
     <div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 cs-object-list wow fadeInDown" data-wow-delay="<?php echo $delaytm; ?>">
+      <?php if($showImagesOnListPages){ ?>    
                     <div class="card-body d-flex flex-column">
                         <div class="image-wrapper">
                             <a href="<?php echo $object_detail_link; ?>" class="image-wrapper-link">
@@ -78,6 +79,7 @@ class CustomTwig extends AbstractExtension {
                             </a>
                           </div>
                     </div>
+          <?php } ?>
                     <div class="card-footer text-muted">
                     <?php
 

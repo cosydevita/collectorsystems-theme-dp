@@ -75,7 +75,7 @@ class CollectorSystemsArtists extends BlockBase {
 
     $loadsec = 1;
     $collector_systems_module_path = \Drupal::service('extension.path.resolver')->getPath('module', 'collector_systems');
-    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
+    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_artists');
     $build = [
       '#theme' => 'artists-list-page',
       '#AllArtists' => $AllArtists,

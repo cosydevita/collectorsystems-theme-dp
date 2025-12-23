@@ -88,7 +88,7 @@ class CollectorSystemsCollections extends BlockBase {
       $all_collections = $result->fetchAll();
 
       $base_url_with_scheme = \Drupal::request()->getSchemeAndHttpHost();
-      $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_on_list_pages');
+      $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_collections');
 
     $build = [
       '#theme' => 'collections-list-page',

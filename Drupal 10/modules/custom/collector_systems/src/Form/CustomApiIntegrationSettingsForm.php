@@ -67,10 +67,24 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
     ];
 
     $form['ui_customizations']['show_images_on_list_pages'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Show Images on List Pages'),
-      '#default_value' => $config->get('show_images_on_list_pages'),
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Show Images on Lists Page'),
+      '#options' => [
+        'objects' => $this->t('Objects'),
+        'groups' => $this->t('Groups'),
+        'collections' => $this->t('Collections'),
+        'exhibitions' => $this->t('Exhibitions'),
+        'artists' => $this->t('Artists'),
+      ],
+      '#default_value' => array_filter([
+        $config->get('show_images_objects') ? 'objects' : NULL,
+        $config->get('show_images_groups') ? 'groups' : NULL,
+        $config->get('show_images_collections') ? 'collections' : NULL,
+        $config->get('show_images_exhibitions') ? 'exhibitions' : NULL,
+        $config->get('show_images_artists') ? 'artists' : NULL,
+      ]),
     ];
+    
 
     $form['ui_customizations']['enable_maps'] = [
       '#type' => 'checkbox',
@@ -236,13 +250,15 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $values_show_images_on_list_pages = $form_state->getValue('show_images_on_list_pages') ?? [];
+    $values_show_images_on_list_pages = array_filter($values_show_images_on_list_pages);
+
     $this->config('collector_systems.settings')
       ->set('subscription_key', $form_state->getValue('subscription_key'))
       ->set('account_guid', $form_state->getValue('account_guid'))
       ->set('subscription_id', $form_state->getValue('subscription_id'))
       ->set('azure_map_subscription_key', $form_state->getValue('azure_map_subscription_key'))
       ->set('show_field_labels', $form_state->getValue('show_field_labels'))
-      ->set('show_images_on_list_pages', $form_state->getValue('show_images_on_list_pages'))
       ->set('enable_maps', $form_state->getValue('enable_maps'))
       ->set('enable_transition', $form_state->getValue('enable_transition'))
       ->set('center_align_images', $form_state->getValue('center_align_images'))
@@ -255,6 +271,12 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       ->set('filter_keywords', $form_state->getValue('filter_keywords'))
       ->set('items_per_page', $form_state->getValue('items_per_page'))
       ->set('homepage_image', $form_state->getValue('homepage_image'))
+      ->set('show_images_objects', in_array('objects', $values_show_images_on_list_pages, TRUE))
+      ->set('show_images_groups', in_array('groups', $values_show_images_on_list_pages, TRUE))
+      ->set('show_images_collections', in_array('collections', $values_show_images_on_list_pages, TRUE))
+      ->set('show_images_exhibitions', in_array('exhibitions', $values_show_images_on_list_pages, TRUE))
+      ->set('show_images_artists', in_array('artists', $values_show_images_on_list_pages, TRUE))
+
       ->save();
 
     parent::submitForm($form, $form_state);
