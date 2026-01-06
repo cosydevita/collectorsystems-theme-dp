@@ -18,6 +18,12 @@
             {{ collection_details.FullCollectionName | default("") }}
           {% endif %}
         </h1>
+          {% set collection_memo = collection_details['CollectionMemo'] %}
+          {% if collection_memo %}
+            <p class="collection-memo mb-4">
+              {{ collection_memo|raw }}
+            </p>
+          {% endif %}
       </div>
     </div>
 

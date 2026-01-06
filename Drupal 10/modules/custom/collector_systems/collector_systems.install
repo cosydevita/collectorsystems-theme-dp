@@ -181,7 +181,12 @@ function collector_systems_schema() {
       'ModificationDate' => [
         'type' => 'varchar',
         'length' => 500,
-      ]
+      ],
+      'CollectionMemo' => [
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+      ],
     ],
     'primary key' => ['CollectionId'],
   ];
@@ -515,3 +520,21 @@ function collector_systems_update_9001() {
   }
 
 }
+
+/**
+ * Adds CollectionMemo column to collector_systems_collections table.
+ *
+ * @return void
+ */
+function collector_systems_update_9002() {
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->fieldExists('collector_systems_collections', 'CollectionMemo')) {
+    $schema->addField('collector_systems_collections', 'CollectionMemo', [
+      'type' => 'text',
+      'size' => 'big',
+      'not null' => FALSE,
+    ]);
+  }
+}
+

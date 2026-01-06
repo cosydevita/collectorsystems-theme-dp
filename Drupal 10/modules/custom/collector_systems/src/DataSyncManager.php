@@ -3376,6 +3376,10 @@ class DataSyncManager {
       $collectionFullName = $collection['FullCollectionName'];
       $collectionLeftExtent = isset($collection['LeftExtent']) ? $collection['LeftExtent'] : null;
       $collectionRightExtent = isset($collection['RightExtent']) ? $collection['RightExtent'] : null;
+      $collectionMemo = NULL;
+      if (isset($collection['CollectionMemo']) && $collection['CollectionMemo'] !== NULL) {
+        $collectionMemo = $collection['CollectionMemo'];
+      }
 
       if (isset($collection['ModificationDate']) && $collection['ModificationDate'] !== NULL) {
         $ModificationDate = $collection['ModificationDate'];
@@ -3393,7 +3397,8 @@ class DataSyncManager {
           'FullCollectionName' => $collectionFullName,
           'ModificationDate' => $ModificationDate,
           'LeftExtent' => $collectionLeftExtent,
-          'RightExtent' => $collectionRightExtent
+          'RightExtent' => $collectionRightExtent,
+          'CollectionMemo' => $collectionMemo
         ];
 
         if ($btn_action == 'update_dataset') {

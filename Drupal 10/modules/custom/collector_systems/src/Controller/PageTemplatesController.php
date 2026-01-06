@@ -745,7 +745,7 @@ class PageTemplatesController extends ControllerBase
     $database = \Drupal::database();
     $collection_table = 'collector_systems_collections';
     $query = $database->select($collection_table, 'c')
-    ->fields('c', ['CollectionId', 'FullCollectionName'])
+    ->fields('c', ['CollectionId', 'FullCollectionName','CollectionMemo'])
     ->condition('c.CollectionId', $collectionID)
     ->range(0, 1); // Assuming you only expect one result.
     $collection_details = $query->execute()->fetchAssoc();
