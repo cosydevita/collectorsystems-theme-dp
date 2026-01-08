@@ -310,11 +310,6 @@ function collector_systems_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ],
-      'ThumbURL' => [
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-      ],
       'ObjectId' => [
         'type' => 'int',
         'unsigned' => TRUE,
@@ -361,10 +356,7 @@ function collector_systems_schema() {
       ]
 
     ],
-    'primary key' => ['ID'],
-    'unique keys' => [
-      'ThumbURL' => ['ThumbURL'],
-    ],
+    'primary key' => ['ID']
   ];
 
   $schema['collector_systems_cssynced'] = [
@@ -535,6 +527,19 @@ function collector_systems_update_9002() {
       'size' => 'big',
       'not null' => FALSE,
     ]);
+  }
+}
+
+/**
+ * Removes unused ThumbURL column from collector_systems_thumb_images table.
+ *
+ * @return void
+ */
+function collector_systems_update_9004() {
+  $schema = \Drupal::database()->schema();
+
+  if ($schema->fieldExists('collector_systems_thumb_images', 'ThumbURL')) {
+    $schema->dropField('collector_systems_thumb_images', 'ThumbURL');
   }
 }
 

@@ -207,7 +207,6 @@ class ImagesSyncManager {
                          // AttachmentId exists, update the record.
                          $updateThumbImageQuery = $database->update($thumbImage_table)
                            ->fields([
-                             'ThumbURL' => $fileName1,
                              'ObjectId' => $id1,
                              'thumb_size_URL' => $thumbImageData,
                              'slide_show_attachment' => $slideShowImageData,
@@ -224,7 +223,6 @@ class ImagesSyncManager {
                          // Insert into $thumbImage_table.
                          $insertThumbImageQuery = $database->insert($thumbImage_table)
                          ->fields([
-                           'ThumbURL' => $fileName1,
                            'ObjectId' => $id1,
                            'thumb_size_URL' => $thumbImageData,
                            'slide_show_attachment' => $slideShowImageData,
@@ -481,7 +479,6 @@ class ImagesSyncManager {
     // Insert data into the ThumbImages table.
     $insert_thumb_image_data = $connection->insert($thumbImage_table)
     ->fields([
-      'ThumbURL' => $fileName1,
       'ObjectId' => $id1,
       'thumb_size_URL_path' => $thumb_image_path,
       'slide_show_URL_path' => $slideshow_image_path,
