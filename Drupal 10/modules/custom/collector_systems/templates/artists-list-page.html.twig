@@ -46,7 +46,25 @@
                   {# {% set relative_path = server_path|replace({'^' ~ server['DOCUMENT_ROOT']: ''}) %} #}
                   {% set relative_path = '/' ~ artist.ImagePath %}
 
-                  {% set image_url =  relative_path %}
+					{% set image_url = '' %}
+					
+					{# 	 IMPORTANT NOTE for URL ENCODING:
+						- Encode each segment of the path separately to handle special characters in image file names or directories 
+						and construct the full URL correctly.
+						- If not encoded then special characters in image names (like & , # etc.,) will break the image URL or path 
+						and images won't load properly.
+					#}
+					{% if relative_path is not empty %}
+						{% set segments = relative_path|split('/') %}
+						{% set encoded_segments = [] %}
+
+						{% for segment in segments %}
+							{% set encoded_segments = encoded_segments|merge([segment|url_encode]) %}
+						{% endfor %}
+
+						{% set image_url = encoded_segments|join('/') %}
+					{% endif %}
+
 
                   {% set altText = artist.ArtistName is not empty ? artist.ArtistName : 'Image description is not available' %}
 

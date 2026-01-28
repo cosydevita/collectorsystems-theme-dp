@@ -6,6 +6,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Drupal\collector_systems\Csconstants;
+use Drupal\Component\Utility\UrlHelper;
 
 
 /**
@@ -60,7 +61,16 @@ class CustomTwig extends AbstractExtension {
                                 else{
                                   $relative_path = '';
                                 }
-                                $image_url = \Drupal::request()->getSchemeAndHttpHost() . "/" .  $relative_path;
+
+                                $image_url = '';
+                                if (!empty($relative_path)) {
+                                  $encoded_path = UrlHelper::encodePath($relative_path);
+                                  $image_url = \Drupal::request()->getSchemeAndHttpHost() . '/' . ltrim($encoded_path, '/');
+                                } else {
+                                  $image_url = '';
+                                }
+
+
                                 if(empty($object_img) && empty($server_path)){
                                 ?>
                                     <img class="img-fluid" src="<?php echo $default_image_url; ?>" alt="<?php echo $main_image_attachment_description ?>"/>

@@ -41,10 +41,32 @@
                                               <img class="img-fluid" src="{{ group_img }}" alt=""/>
                                           </a> #}
                 <a href="javascript:;" onclick="return getmoredetailsForGroup('{{ site_url }}', {{ groupdata.GroupId }})" class="image-wrapper-link">
-                  {% set group_img = groupdata.GroupImageAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(groupdata.GroupImageAttachment) : groupdata.ImagePath ? "/" ~ groupdata.ImagePath : 'https://cdn.collectorsystems.com/images/noimage300.png' %}
+				
+					{% if groupdata.GroupImageAttachment %}
+						{% set group_img = 'data:image/jpeg;base64,' ~ base64_encode(groupdata.GroupImageAttachment) %}
 
-                  {% set altText = groupdata.GroupDescription is not empty ? groupdata.GroupDescription : 'Image description is not available' %}
-                  <img class="img-fluid" src="{{ group_img }}" alt="{{ altText }}"/>
+					{% elseif groupdata.ImagePath %}
+						{# 	 IMPORTANT NOTE for URL ENCODING: 
+						- Encode each segment of the path separately to handle special characters in image file names or directories  
+						and construct the full URL correctly. 
+						- If not encoded then special characters in image names (like & , # etc.,) will break the image URL or path  
+						and images won't load properly. 
+						#}
+						{% set segments = groupdata.ImagePath|split('/') %}
+						{% set encoded_segments = [] %}
+
+						{% for segment in segments %}
+						{% set encoded_segments = encoded_segments|merge([segment|url_encode]) %}
+						{% endfor %}
+
+						{% set group_img = '/' ~ encoded_segments|join('/') %}
+
+					{% else %}
+						{% set group_img = 'https://cdn.collectorsystems.com/images/noimage300.png' %}
+					{% endif %}
+
+					{% set altText = groupdata.GroupDescription is not empty ? groupdata.GroupDescription : 'Image description is not available' %}
+					<img class="img-fluid" src="{{ group_img }}" alt="{{ altText }}"/>
                 </a>
               </div>
 

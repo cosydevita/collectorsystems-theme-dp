@@ -47,7 +47,24 @@
 
                                   %}
                     {% set relative_path = exhibi.ImagePath ? "/" ~ exhibi.ImagePath : '' %}
-                    {% set image_url = relative_path ? relative_path : '' %}
+                    {% set image_url = '' %}
+					
+					{% if relative_path is not empty %}
+					  {# 	 IMPORTANT NOTE for URL ENCODING:  #}
+					  {# 		- Encode each segment of the path separately to handle special characters in image file names or directories   #}
+					  {# 		and construct the full URL correctly.  #}
+					  {# 		- If not encoded then special characters in image names (like & , # etc.,) will break the image URL or path   #}
+					  {# 		and images won't load properly.  #}
+					  {% set segments = relative_path|split('/') %}
+					  {% set encoded_segments = [] %}
+					  {% for segment in segments %}
+					  	{% set encoded_segments = encoded_segments|merge([segment|url_encode]) %}
+					  {% endfor %}
+					  {% set encoded_path = encoded_segments|join('/') %}
+					  {% set image_url = encoded_path %}
+					{% endif %}
+
+
                     {% set altText = exhibi.ExhibitionSubject is not empty ? exhibi.ExhibitionSubject : 'Image description is not available' %}
                     {% if not exbi_img and not relative_path %}
                       <img class="img-fluid" src="https://cdn.collectorsystems.com/images/noimage300.png" alt="{{ altText }}"/>
