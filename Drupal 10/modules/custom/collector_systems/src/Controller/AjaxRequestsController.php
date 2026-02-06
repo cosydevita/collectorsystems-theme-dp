@@ -722,6 +722,7 @@ class AjaxRequestsController extends ControllerBase
     "Accept: application/json",
     "Ocp-Apim-Subscription-Key:$subsKey ",
     "Cache-Control:no-cache",
+    'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
     //for debug only!
@@ -777,6 +778,7 @@ class AjaxRequestsController extends ControllerBase
       "Accept: application/json",
       "Ocp-Apim-Subscription-Key:$subsKey ",
       "Cache-Control:no-cache",
+      'User-Agent: cosydrupal',
       );
       curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
       //for debug only!
@@ -833,6 +835,7 @@ class AjaxRequestsController extends ControllerBase
       "Accept: application/json",
       "Ocp-Apim-Subscription-Key:$subsKey ",
       "Cache-Control:no-cache",
+      'User-Agent: cosydrupal',
       );
       curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
       //for debug only!
@@ -887,6 +890,7 @@ class AjaxRequestsController extends ControllerBase
       "Accept: application/json",
       "Ocp-Apim-Subscription-Key:$subsKey ",
       "Cache-Control:no-cache",
+      'User-Agent: cosydrupal',
       );
       curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
       //for debug only!
@@ -937,6 +941,7 @@ class AjaxRequestsController extends ControllerBase
       "Accept: application/json",
       "Ocp-Apim-Subscription-Key:$subsKey ",
       "Cache-Control:no-cache",
+      'User-Agent: cosydrupal',
       );
       curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
       //for debug only!

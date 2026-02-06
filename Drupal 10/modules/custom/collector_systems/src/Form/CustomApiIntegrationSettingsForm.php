@@ -299,6 +299,7 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
     "Accept: application/json",
     "Ocp-Apim-Subscription-Key:$subsKey ",
     "Cache-Control:no-cache",
+    'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
