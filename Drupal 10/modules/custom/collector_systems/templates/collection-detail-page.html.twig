@@ -52,30 +52,18 @@
               Sort By:
             </span>
             <select name="dlGroupLevelObjectsOrderBy" id="dlGroupLevelObjectsOrderBy" class="form-select" onchange="return sortingForGroupLevelObjects('{{ ajaxfor }}',{{ listPageSize }});">
-              <option value="Title%20asc">
-                Title Asc
-              </option>
-              <option value="Title%20desc">
-                Title Desc
-              </option>
-              <option value="InventoryNumber%20desc">
-                Inventory Number Desc
-              </option>
-              <option value="InventoryNumber%20asc">
-                Inventory Number Asc
-              </option>
-              <option value="Collection/CollectionName%20desc">
-                Collection Name Desc
-              </option>
-              <option value="Collection/CollectionName%20asc">
-                Collection Name Asc
-              </option>
-              <option value="ObjectDate%20desc">
-                Object Date Desc
-              </option>
-              <option value="ObjectDate%20asc">
-                Object Date Asc
-              </option>
+              {% for field, label in objects_list_sortable_fields %}
+                {% set desc_value = field ~ '%20desc' %}
+                {% set asc_value = field ~ '%20asc' %}
+                <option value="{{ asc_value }}"
+                  {% if dataorderby == asc_value %} selected {% endif %}>
+                  {{ label }} Asc
+                </option>
+                <option value="{{ desc_value }}"
+                  {% if dataorderby == desc_value %} selected {% endif %}>
+                  {{ label }} Desc
+                </option>
+              {% endfor %}
             </select>
           </div>
           {% include '@collector_systems/templates/search-form.html.twig' %}

@@ -75,6 +75,10 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
     $ajaxfor = "artobjects";
     $current_page = "objects";
     $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20asc";
+    
+    // Get sorting parameters based on dataorderby value
+    list($sortParam, $sortOrder) = $this->cs_get_sorting_params_for_objects_list($dataorderby);
+
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
 
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
@@ -142,51 +146,7 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
       $query->condition($or_condition_group);
     }
 
-
-    if ($dataorderby === "Title%20desc" && $qSearch !== NULL) {
-
-      $query->orderBy('Title', 'DESC');
-    }
-    else if($dataorderby === "Title%20asc" && $qSearch !== NULL)
-    {
-
-      $query->orderBy('Title', 'ASC');
-    }
-    else if($dataorderby === "InventoryNumber%20asc" && $qSearch !== NULL)
-    {
-        $query->orderBy('InventoryNumber', 'ASC');
-    }
-    else if($dataorderby === "InventoryNumber%20desc" && $qSearch !== NULL)
-    {
-
-      $query->orderBy('InventoryNumber', 'DESC');
-    }
-    else if($dataorderby === "ObjectDate%20desc" && $qSearch !== NULL)
-    {
-
-      $query->orderBy('ObjectDate', 'DESC');
-    }
-    else if($dataorderby === "ObjectDate%20asc" && $qSearch !== NULL)
-    {
-
-      $query->orderBy('ObjectDate', 'ASC');
-    }
-    else if($dataorderby === "Collection/CollectionName%20asc" && $qSearch !== NULL){
-      $query->fields('o')
-      ->fields('c', ['CollectionName'])
-      ->join($collection_table, 'c', 'o.CollectionId = c.CollectionId');
-
-      $query->orderBy('c.CollectionName', 'ASC');
-
-    }
-    else if($dataorderby === "Collection/CollectionName%20desc" && $qSearch !== NULL){
-      $query->fields('o')
-      ->fields('c', ['CollectionName'])
-      ->join($collection_table, 'c', 'o.CollectionId = c.CollectionId');
-
-      $query->orderBy('c.CollectionName', 'DESC');
-
-    }
+    $query->orderBy($sortParam, $sortOrder);
     // Add other conditions for different order by options and search criteria
 
     // Ensure the SELECT clause includes all necessary columns
@@ -268,6 +228,8 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
       //end azure map
     }
 
+    $objects_service = \Drupal::service('collector_systems.objects_service');
+    $object_list_sortable_fields = $objects_service->getObjectListSortableFields();
 
     $build = [
       '#theme' => 'objects-list-page',
@@ -281,6 +243,7 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
       '#qSearch' => $qSearch,
       '#module_path' => $module_path,
       '#enable_maps' => $enable_maps,
+      '#objects_list_sortable_fields' => $object_list_sortable_fields,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -369,5 +332,88 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
       );
       return [];
     }
+  }
+
+
+  /**
+   * Get SQL ORDER BY clause based on frontend dataorderby param.
+   *
+   * @param string $dataorderby
+   * @return array [sort_column, sort_order]
+   */
+  public function cs_get_sorting_params_for_objects_list($dataorderby) {
+  
+      $sortParam = "Title";
+      $sortOrder = "DESC";
+  
+      // Define sorting logic
+      switch ($dataorderby) {
+          case "Title%20asc":
+              $sortParam = "Title";
+              $sortOrder = "ASC";
+              break;
+          case "InventoryNumber%20asc":
+              $sortParam = "InventoryNumber";
+              $sortOrder = "ASC";
+              break;
+          case "InventoryNumber%20desc":
+              $sortParam = "InventoryNumber";
+              $sortOrder = "DESC";
+              break;
+          case "ObjectDate%20asc":
+              $sortParam = "ObjectDate";
+              $sortOrder = "ASC";
+              break;
+          case "ObjectDate%20desc":
+              $sortParam = "ObjectDate";
+              $sortOrder = "DESC";
+              break;
+          case "FullCollectionName%20asc":
+              $sortParam = "c.CollectionName";
+              $sortOrder = "ASC";
+              break;
+          case "FullCollectionName%20desc":
+              $sortParam = "c.CollectionName";
+              $sortOrder = "DESC";
+              break;
+          case "ArtistName%20asc":
+              // use alias 'a' for Artists table
+              $sortParam = "a.ArtistName";
+              $sortOrder = "ASC";
+              break;
+          case "ArtistName%20desc":
+              // use alias 'a' for Artists table
+              $sortParam = "a.ArtistName";
+              $sortOrder = "DESC";
+              break;
+          case "AdditionalArtists%20asc":
+              // For additional artists, we use the AdditionalArtistsText field which is a concatenated string of all additional artists for sorting purposes
+              $sortParam = "AdditionalArtistsText";
+              $sortOrder = "ASC";
+              break;
+          case "AdditionalArtists%20desc":
+                 // For additional artists, we use the AdditionalArtistsText field which is a concatenated string of all additional artists for sorting purposes
+              $sortParam = "AdditionalArtistsText";
+              $sortOrder = "DESC";
+              break;
+          case "AdditionalArtistMaker%20asc":
+              // For additional artist makers, we use the AdditionalArtistMakersText field which is a concatenated string of all additional artist makers for sorting purposes
+              $sortParam = "AdditionalArtistMakersText";
+              $sortOrder = "ASC";
+              break;
+          case "AdditionalArtistMaker%20desc":
+              // For additional artist makers, we use the AdditionalArtistMakersText field which is a concatenated string of all additional artist makers for sorting purposes
+              $sortParam = "AdditionalArtistMakersText";
+              $sortOrder = "DESC";
+              break;
+          default:
+              $decoded = rawurldecode($dataorderby);
+              [$field, $order] = explode(' ', $decoded, 2);
+              $sortOrder = (strtoupper($order) === 'ASC') ? 'ASC' : 'DESC';
+              // Assume field exists on objects table
+              $sortParam = 'o.' . $field;
+      }
+  
+    return [$sortParam, $sortOrder];
   }
 }

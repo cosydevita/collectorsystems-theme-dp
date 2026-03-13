@@ -387,6 +387,9 @@ class PageTemplatesController extends ControllerBase
       //end azure map
     }
 
+    $objects_service = \Drupal::service('collector_systems.objects_service');
+    $object_list_sortable_fields = $objects_service->getObjectListSortableFields();
+    
     $build = [
       '#theme' => 'artist-detail-page',
       '#nxshowrec' => $nxshowrec,
@@ -404,6 +407,7 @@ class PageTemplatesController extends ControllerBase
       '#collector_systems_module_path' => $collector_systems_module_path,
       '#module_path' => $module_path,
       '#enable_maps' => $enable_maps,
+      '#objects_list_sortable_fields' => $object_list_sortable_fields,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -536,6 +540,9 @@ class PageTemplatesController extends ControllerBase
       //end azure map
     }
 
+    $objects_service = \Drupal::service('collector_systems.objects_service');
+    $object_list_sortable_fields = $objects_service->getObjectListSortableFields();
+
 
     $build = [
       '#theme' => 'exhibition-detail-page',
@@ -553,6 +560,7 @@ class PageTemplatesController extends ControllerBase
       '#listPageSize' => $listPageSize,
       '#module_path' => $module_path,
       '#enable_maps' => $enable_maps,
+      '#objects_list_sortable_fields' => $object_list_sortable_fields,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -683,6 +691,9 @@ class PageTemplatesController extends ControllerBase
       //end azure map
     }
 
+    $objects_service = \Drupal::service('collector_systems.objects_service');
+    $object_list_sortable_fields = $objects_service->getObjectListSortableFields();
+
 
     $build = [
       '#theme' => 'group-detail-page',
@@ -701,6 +712,7 @@ class PageTemplatesController extends ControllerBase
       '#groupID' => $groupID,
       '#module_path' => $module_path,
       '#enable_maps' => $enable_maps,
+      '#objects_list_sortable_fields' => $object_list_sortable_fields,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -843,6 +855,8 @@ class PageTemplatesController extends ControllerBase
       //end azure map
     }
 
+    $objects_service = \Drupal::service('collector_systems.objects_service');
+    $object_list_sortable_fields = $objects_service->getObjectListSortableFields();
 
     $build = [
       '#theme' => 'collection-detail-page',
@@ -860,6 +874,7 @@ class PageTemplatesController extends ControllerBase
       '#listPageSize' => $listPageSize,
       '#module_path' => $module_path,
       '#enable_maps' => $enable_maps,
+      '#objects_list_sortable_fields' => $object_list_sortable_fields,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
     ];
     $build['#attached']['library'][] = 'collector_systems/collector-systems';

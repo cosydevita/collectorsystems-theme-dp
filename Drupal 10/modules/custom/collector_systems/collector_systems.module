@@ -30,7 +30,8 @@ function collector_systems_theme() {
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
         'module_path' => NULL,
-        'enable_maps' => NULL
+        'enable_maps' => NULL,
+        'objects_list_sortable_fields' => NULL
       ],
     ],
     'artists-list-page' => [
@@ -132,7 +133,8 @@ function collector_systems_theme() {
         'ajaxfor' => NULL,
         'collector_systems_module_path' => NULL,
         'module_path' => NULL,
-        'enable_maps' => NULL
+        'enable_maps' => NULL,
+        'objects_list_sortable_fields' => NULL
       ],
     ],
     'exhibition-detail-page' => [
@@ -150,7 +152,8 @@ function collector_systems_theme() {
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
         'module_path' => NULL,
-        'enable_maps' => NULL
+        'enable_maps' => NULL,
+        'objects_list_sortable_fields' => NULL
       ],
     ],
     'group-detail-page' => [
@@ -169,7 +172,8 @@ function collector_systems_theme() {
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
         'module_path' => NULL,
-        'enable_maps' => NULL
+        'enable_maps' => NULL,
+        'objects_list_sortable_fields' => NULL
       ],
     ],
     'collection-detail-page' => [
@@ -187,7 +191,9 @@ function collector_systems_theme() {
         'listPageSize' => NULL,
         'ajaxfor' => NULL,
         'module_path' => NULL,
-        'enable_maps' => NULL
+        'enable_maps' => NULL,
+        'objects_list_sortable_fields' => NULL
+
       ],
     ],
     'custom_api_integration_response' => [
@@ -584,3 +590,4 @@ function collector_systems_uninstall() {
     \Drupal::service('file_system')->deleteRecursive($directory);
   }
 }
+

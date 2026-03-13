@@ -24,14 +24,19 @@
 						<span class="sort-by-title me-3">Sort By:
 						</span>
 						<select name="seldataorderby" id="seldataorderby" class="form-select" onchange="return applySorting('{{ current_page }}')">
-							<option value="Title%20desc" {% if dataorderby == "Title%20desc" %} selected {% endif %}>Title Desc</option>
-							<option value="Title%20asc" {% if dataorderby == "Title%20asc" %} selected {% endif %}>Title Asc</option>
-							<option value="InventoryNumber%20desc" {% if dataorderby == "InventoryNumber%20desc" %} selected {% endif %}>Inventory Number Desc</option>
-							<option value="InventoryNumber%20asc" {% if dataorderby == "InventoryNumber%20asc" %} selected {% endif %}>Inventory Number Asc</option>
-							<option value="Collection/CollectionName%20desc" {% if dataorderby == "Collection/CollectionName%20desc" %} selected {% endif %}>Collection Name Desc</option>
-							<option value="Collection/CollectionName%20asc" {% if dataorderby == "Collection/CollectionName%20asc" %} selected {% endif %}>Collection Name Asc</option>
-							<option value="ObjectDate%20desc" {% if dataorderby == "ObjectDate%20desc" %} selected {% endif %}>Object Date Desc</option>
-							<option value="ObjectDate%20asc" {% if dataorderby == "ObjectDate%20asc" %} selected {% endif %}>Object Date Asc</option>
+							{% for field, label in objects_list_sortable_fields %}
+								{% set desc_value = field ~ '%20desc' %}
+								{% set asc_value = field ~ '%20asc' %}
+								<option value="{{ asc_value }}"
+								{% if dataorderby == asc_value %} selected {% endif %}>
+								{{ label }} Asc
+								</option>
+								<option value="{{ desc_value }}"
+								{% if dataorderby == desc_value %} selected {% endif %}>
+								{{ label }} Desc
+								</option>
+							{% endfor %}
+							
 						</select>
 					</div>
 					{% include '@collector_systems/templates/search-form.html.twig' %}

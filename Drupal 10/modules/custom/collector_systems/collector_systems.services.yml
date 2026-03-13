@@ -18,4 +18,6 @@ services:
   collector_systems.images_sync_manager:
     class: Drupal\collector_systems\ImagesSyncManager
     arguments: ['@file_system', '@collector_systems.collector_systemsts_get_api_data']
-
+  collector_systems.objects_service:
+    class: Drupal\collector_systems\ObjectsService
+    arguments: ['@database']
