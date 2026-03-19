@@ -7,6 +7,7 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 use Drupal\collector_systems\Csconstants;
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Component\Utility\Html;
 
 
 /**
@@ -464,12 +465,15 @@ class CustomTwig extends AbstractExtension {
 
                       $ObjectFieldsService = \Drupal::service('customize_object_detail_fields.object_fields_service');
                       $fieldLabel = $ObjectFieldsService->getObjectFieldLabelFromDatabase($object_field);
+                      $value = $artObjData[$object_field];
+                      $value = strip_tags($value);
+                      $value = Html::decodeEntities($value);
                     ?>
 
                   <span class="object_detail_fieldlabel"><?php echo $fieldLabel ?>:</span>
 
                   <?php } ?>
-                    <span class="mb-2 cstheme-show-more-richtext"><?php echo $artObjData[$object_field]  ?></span>
+                    <span class="mb-2 cstheme-show-more-richtext"><?php echo $value;?></span>
                   </p>
                   <?php }
                 break;
@@ -497,12 +501,16 @@ class CustomTwig extends AbstractExtension {
 
                       $ObjectFieldsService = \Drupal::service('customize_object_detail_fields.object_fields_service');
                       $fieldLabel = $ObjectFieldsService->getObjectFieldLabelFromDatabase($object_field);
+                      $value = $artObjData[$object_field];
+                      $value = strip_tags($value);
+                      $value = Html::decodeEntities($value);
+
                     ?>
 
                   <span class="object_detail_fieldlabel"><?php echo $fieldLabel ?>:</span>
 
                   <?php } ?>
-                    <span class="mb-2 cstheme-show-more-richtext"><?php echo $artObjData[$object_field]  ?></span>
+                    <span class="mb-2 cstheme-show-more-richtext"><?php echo $value;?></span>
                   </p>
                   <?php }
                 break;
@@ -514,12 +522,15 @@ class CustomTwig extends AbstractExtension {
 
                         $ObjectFieldsService = \Drupal::service('customize_object_detail_fields.object_fields_service');
                         $fieldLabel = $ObjectFieldsService->getObjectFieldLabelFromDatabase($object_field);
+                        $value = $artObjData[$object_field];
+                        $value = strip_tags($value);
+                        $value = Html::decodeEntities($value);
                       ?>
 
                     <span class="object_detail_fieldlabel"><?php echo $fieldLabel ?>:</span>
 
                     <?php } ?>
-                      <?php echo $artObjData[$object_field]  ?>
+                      <?php echo $value;  ?>
                     </p>
                     <?php }
                 break;
