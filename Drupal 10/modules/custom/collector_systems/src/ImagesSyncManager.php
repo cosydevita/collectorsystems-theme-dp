@@ -51,39 +51,6 @@ class ImagesSyncManager {
     
     \Drupal::logger('collector_systems')->debug('Images Import to Database:  Importing Object Images');
 
-    // // Truncate the ThumbImages table.
-    // $truncate_query = $database->truncate($thumbImage_table);
-    // $truncate_query->execute();
-
-    if ($current_batch_number == 0) {
-      //This will run only once at the first batch
-      $allImagesDirectory = PublicStream::basePath() . '/collector_systems/images' . '/Objects';
-      if(file_exists( $allImagesDirectory ))
-      {
-        $this->fileSystem->deleteRecursive($allImagesDirectory);
-          
-      }
-
-      \Drupal::logger('collector_systems')->debug('Removing object images directory data from database.');
-
-      $remove_directory_data = $database->update($thumbImage_table)
-      ->fields([
-        'thumb_size_URL_path' => NULL,
-        'object_image_path' => NULL,
-        'slide_show_URL_path' => NULL
-      ])
-      ->execute();
-
-      $remove_object_directory_data = $database->update($object_table)
-      ->fields([
-        'main_image_path' => NULL,
-        'thumb_size_URL_path' => NULL,
-        'slide_show_URL_path' => NULL,
-        'object_image_path' => NULL,
-      ])
-      ->execute();
-    }
-
 
      //to store ObjectImageAttachments AttachmentIds
      $AttachmentIds_API = [];
@@ -214,7 +181,10 @@ class ImagesSyncManager {
                              'keywords' => $keywords_serialized,
                              'MainImageAttachmentId' => $mainId,
                              'ModificationDate' => $ModificationDate_API,
-                             'attachment_description' => $attachment_description
+                             'attachment_description' => $attachment_description,
+                             'thumb_size_URL_path' => null,
+                              'slide_show_URL_path' => null,
+                              'object_image_path' => null,
                            ])
                            ->condition('AttachmentId', $AttachmentId)
                            ->execute();
@@ -245,77 +215,51 @@ class ImagesSyncManager {
   }
 
   public function processImportToDirectoryObjectImages($Detaildata, $current_batch_number){
+    \Drupal::logger('collector_systems')->debug('Images Import to Directory:  Importing Object Images');
+    if ($current_batch_number == 0) {
 
-      $connection = Database::getConnection();
-      $object_table = $connection->prefixTables('collector_systems_objects');
-      $thumbImage_table = $connection->prefixTables('collector_systems_thumb_images');
-
-      \Drupal::logger('collector_systems')->debug('Images Import to Directory:  Importing Object Images');
-
-      if ($current_batch_number == 0) {
-        //This will run only once at the first batch
+      //Create object's mainImageAttachment Directory
+      // $objectDirectory = __DIR__ . '/collector_systems/images' . '/Objects' . '/MainImageAttachments';
+      $objectDirectory = ( PublicStream::basePath().'/collector_systems/images/Objects/MainImageAttachments');
   
-        $trunc_thumb_table = $connection->truncate($thumbImage_table);
-        $trunc_thumb_table->execute();
-  
-        // Update data in the collector_systems_objects table.
-        $update_object_data = $connection->update($object_table)
-        ->fields([
-          'main_image_attachment' => null,
-          'object_image_attachment' => null,
-          'slide_show_attachment' => null,
-          'thumb_size_URL' => null,
-        ]);
-        $update_object_data->execute();
-  
-        $allImagesDirectory = PublicStream::basePath() . '/collector_systems/images' . '/Objects';
-        if(file_exists( $allImagesDirectory ))
-        {
-          $this->fileSystem->deleteRecursive($allImagesDirectory);
-        }
-
-        //Create object's mainImageAttachment Directory
-        // $objectDirectory = __DIR__ . '/collector_systems/images' . '/Objects' . '/MainImageAttachments';
-        $objectDirectory = ( PublicStream::basePath().'/collector_systems/images/Objects/MainImageAttachments');
-    
-        if (!file_exists($objectDirectory))
-        {
-            mkdir($objectDirectory, 0755, true);
-        }
-    
-        //Create object's SlideShowImages Directory
-        $SlideShowImagesDirectory = ( PublicStream::basePath().'/collector_systems/images/Objects/SlideShowImages');
-    
-        if (!file_exists($SlideShowImagesDirectory))
-        {
-            mkdir($SlideShowImagesDirectory, 0755, true);
-        }
-    
-        //Create object's objectImageAttachment Directory
-        // $objectDirectory1 = __DIR__ . '/collector_systems/images' . '/Objects' . '/ObjectImageAttachments'; //WP
-        $objectDirectory1 =  PublicStream::basePath().'/collector_systems/images/Objects/ObjectImageAttachments';
-    
-        if (!file_exists($objectDirectory1))
-        {
-            mkdir($objectDirectory1, 0755, true);
-        }
-    
-        //Create object's ThumbSizeURL Directory
-        // $objectDirectory2 = __DIR__ . '/collector_systems/images' . '/Objects' . '/ThumbSizeImages'; //WP
-        $objectDirectory2 =  PublicStream::basePath().'/collector_systems/images/Objects/ThumbSizeImages';
-    
-        if (!file_exists($objectDirectory2))
-        {
-            mkdir($objectDirectory2, 0755, true);
-        }
-      }
-  
-      //Save Object Images
-      foreach($Detaildata['value'] as $image)
+      if (!file_exists($objectDirectory))
       {
-        $ObjectImageAttachments = $image['ObjectImageAttachments'] ?? null;
-        $this->processImportObjectAttachmentsToDirectory($image, $ObjectImageAttachments);
+          mkdir($objectDirectory, 0755, true);
       }
+  
+      //Create object's SlideShowImages Directory
+      $SlideShowImagesDirectory = ( PublicStream::basePath().'/collector_systems/images/Objects/SlideShowImages');
+  
+      if (!file_exists($SlideShowImagesDirectory))
+      {
+          mkdir($SlideShowImagesDirectory, 0755, true);
+      }
+  
+      //Create object's objectImageAttachment Directory
+      // $objectDirectory1 = __DIR__ . '/collector_systems/images' . '/Objects' . '/ObjectImageAttachments'; //WP
+      $objectDirectory1 =  PublicStream::basePath().'/collector_systems/images/Objects/ObjectImageAttachments';
+  
+      if (!file_exists($objectDirectory1))
+      {
+          mkdir($objectDirectory1, 0755, true);
+      }
+  
+      //Create object's ThumbSizeURL Directory
+      // $objectDirectory2 = __DIR__ . '/collector_systems/images' . '/Objects' . '/ThumbSizeImages'; //WP
+      $objectDirectory2 =  PublicStream::basePath().'/collector_systems/images/Objects/ThumbSizeImages';
+  
+      if (!file_exists($objectDirectory2))
+      {
+          mkdir($objectDirectory2, 0755, true);
+      }
+    }
+
+    //Save Object Images
+    foreach($Detaildata['value'] as $image)
+    {
+      $ObjectImageAttachments = $image['ObjectImageAttachments'] ?? null;
+      $this->processImportObjectAttachmentsToDirectory($image, $ObjectImageAttachments);
+    }
   
   }
 
@@ -328,6 +272,18 @@ class ImagesSyncManager {
         $this->processImportSingleObjectAttachmentToDirectory($image, $objectImage);
       }
     }
+
+    if (!empty($image['ObjectId']) && isset($image['ObjectId'])) {
+      // Remove the unrequired AttachmentIds from the database which does not exist in the API response
+      $AttachmentIds_API = [];
+      foreach ($objectImages as $objectImage) {
+        $AttachmentIds_API[] = $objectImage['Attachment']['AttachmentId'];
+      }
+      
+      // Remove the deleted object attachments from the database which are not exist in the API response anymore.
+      $this->remove_deleted_object_attachments_from_db($image['ObjectId'], $AttachmentIds_API);
+    }
+  
   }
 
   public function processImportSingleObjectAttachmentToDirectory($image, $objectImage){
@@ -475,28 +431,50 @@ class ImagesSyncManager {
       ->condition('ObjectId', $object_id);
       $update_object_data->execute();
     }
-    
-    // Insert data into the ThumbImages table.
-    $insert_thumb_image_data = $connection->insert($thumbImage_table)
-    ->fields([
-      'ObjectId' => $id1,
-      'thumb_size_URL_path' => $thumb_image_path,
-      'slide_show_URL_path' => $slideshow_image_path,
-      'object_image_path' => $object_image_path,
-      'AttachmentId' => $AttachmentId,
-      'keywords' => $keywords_serialized,
-      'ModificationDate' => $ModificationDate_API,
-      'attachment_description' => $attachment_description
-    ]);
-    $insert_thumb_image_data->execute();
 
-    // Update MainImageAttachmentId in the ThumbImages table.
-    $update_main_id_data = $connection->update($thumbImage_table)
-    ->fields([
-      'MainImageAttachmentId' => $mainId,
-    ])
-    ->condition('ObjectId', $id1);
-    $update_main_id_data->execute();
+    // Check if the AttachmentId already exists in the database.
+    $query = $database->select($thumbImage_table)
+    ->fields($thumbImage_table, ['AttachmentId'])
+    ->condition('AttachmentId', $AttachmentId)
+    ->range(0, 1); // Optimize by limiting the result to 1 row.
+    $result = $query->execute();
+
+    if (!empty($result->fetch())) {
+      // AttachmentId exists, update the record.
+      $update_thumb_image_data = $connection->update($thumbImage_table)
+        ->fields([
+          'ObjectId' => $id1,
+          'thumb_size_URL_path' => $thumb_image_path,
+          'slide_show_URL_path' => $slideshow_image_path,
+          'object_image_path' => $object_image_path,
+          'keywords' => $keywords_serialized,
+          'ModificationDate' => $ModificationDate_API,
+          'attachment_description' => $attachment_description,
+          'MainImageAttachmentId' => $mainId,
+          'thumb_size_URL' => null,
+          'slide_show_attachment' => null,
+          'object_image_attachment' => null,
+        ])
+        ->condition('AttachmentId', $AttachmentId)
+        ->execute();
+    } else {
+      // AttachmentId does not exist, insert the record.
+      $insert_thumb_image_data = $connection->insert($thumbImage_table)
+      ->fields([
+        'ObjectId' => $id1,
+        'thumb_size_URL_path' => $thumb_image_path,
+        'slide_show_URL_path' => $slideshow_image_path,
+        'object_image_path' => $object_image_path,
+        'AttachmentId' => $AttachmentId,
+        'keywords' => $keywords_serialized,
+        'ModificationDate' => $ModificationDate_API,
+        'attachment_description' => $attachment_description,
+        'MainImageAttachmentId' => $mainId
+
+      ]);
+      $insert_thumb_image_data->execute();
+    }
+    
   }
 
   /*
@@ -599,27 +577,39 @@ class ImagesSyncManager {
   }
 
   /**
-   * Remove the unrequired rows from the 'collector_systems_thumb_images' table which does not exist in the API response
+   * Remove the deleted object attachments from the database which are not exist in the API response anymore.
+   * @param int $object_id
+   * @param array $AttachmentIds_API
+   * 
+   * @return void
    */
-  public function remove_unrequired_AttachmentIds_from_Database($AttachmentIds_API){
+  public function remove_deleted_object_attachments_from_db($object_id, $AttachmentIds_API){
     $database = Database::getConnection();
     $table_name = 'collector_systems_thumb_images';
 
     // Get all AttachmentIds from the database
     $dbAttachmentIds = $database->select($table_name, 't')
         ->fields('t', ['AttachmentId'])
+        ->condition('ObjectId', $object_id)
         ->execute()
         ->fetchCol();
 
     // Find AttachmentIds in the database that are not in the API response
-    $unrequiredAttachmentIds = array_diff($dbAttachmentIds, $AttachmentIds_API);
+    $deletedAttachmentIds = array_diff($dbAttachmentIds, $AttachmentIds_API);
 
-    if (!empty($unrequiredAttachmentIds)) {
-        // Remove rows with unrequired AttachmentIds from the database
-        $database->delete($table_name)
-            ->condition('AttachmentId', $unrequiredAttachmentIds, 'IN')
-            ->execute();
+    if (!empty($deletedAttachmentIds && is_array($deletedAttachmentIds))) {
+      // Remove rows with unrequired AttachmentIds from the database
+      $database->delete($table_name)
+          ->condition('AttachmentId', $deletedAttachmentIds, 'IN')
+          ->condition('ObjectId', $object_id)
+          ->execute();
+      // Log the removed AttachmentIds for object for debugging purposes.
+      \Drupal::logger('collector_systems')->debug('Removed deleted AttachmentIds from database for ObjectId: ' . $object_id . '. Deleted AttachmentIds: ' . implode(', ', $deletedAttachmentIds));
     }
+
+
+
+    return;
 
   }
 
@@ -986,14 +976,6 @@ class ImagesSyncManager {
 
     if($import_type == 'ArtistsImages'){
 
-      if($current_batch_number == 0){
-        // On first batch run only.
-        // Place null in the ImagePath for Artists.
-        $database->update($artist_table)
-        ->fields(['ImagePath' => null, 'ArtistPhotoAttachment' => null])
-        ->execute();
-      }
-
       //Create Artist Directory if not exists
       if (!file_exists($artistDirectory))
       {
@@ -1024,8 +1006,6 @@ class ImagesSyncManager {
 
           if ($attachment !== null)
           {
-              // $add_directory_path = $wpdb->prepare("UPDATE $artist_table SET ImagePath = %s WHERE ArtistId = %d", $artist_image_path, $id);
-              // $wpdb->query($add_directory_path);
               $add_directory_path = $database->update($artist_table)
               ->fields(['ImagePath' => $artist_image_path])
               ->condition('ArtistId', $id)
@@ -1036,13 +1016,6 @@ class ImagesSyncManager {
 
       }
     }elseif($import_type == 'CollectionsImages'){
-      if($current_batch_number == 0){
-        // On first batch run only.
-        // Place null in the ImagePath and CollectionImageAttachment for Collections.
-        $database->update($collection_table)
-          ->fields(['ImagePath' => null, 'CollectionImageAttachment' => null])
-          ->execute();
-      }
 
       //Create Collection Directory if not exists
       if (!file_exists($collectionDirectory))
@@ -1072,8 +1045,6 @@ class ImagesSyncManager {
             $id = $photo['CollectionId'];
             if($attachment!==null)
             {
-                // $add_directory_path = $wpdb->prepare("UPDATE $collection_table SET ImagePath = %s WHERE CollectionId = %d", $collection_image_path, $id);
-                // $wpdb->query($add_directory_path);
                 $add_directory_path = $database->update($collection_table)
                 ->fields(['ImagePath' => $collection_image_path])
                 ->condition('CollectionId', $id)
@@ -1085,13 +1056,6 @@ class ImagesSyncManager {
         }
       }
     }elseif($import_type == 'GroupsImages'){
-      if($current_batch_number == 0){
-        // On first batch run only.
-        // Place null in the ImagePath and GroupImageAttachment for Groups.
-        $database->update($group_table)
-        ->fields(['ImagePath' => null, 'GroupImageAttachment' => null])
-        ->execute();
-      }
        
       //Create Group Directory if not exists
       if (!file_exists($groupDirectory))
@@ -1121,8 +1085,6 @@ class ImagesSyncManager {
             $id = $photo['GroupId'];
             if($attachment!==null)
             {
-                // $add_directory_path = $wpdb->prepare("UPDATE $group_table SET ImagePath = %s WHERE GroupId = %d", $group_image_path, $id);
-                // $wpdb->query($add_directory_path);
                 $add_directory_path = $database->update($group_table)
                 ->fields(['ImagePath' => $group_image_path])
                 ->condition('GroupId', $id)
@@ -1133,14 +1095,6 @@ class ImagesSyncManager {
         }
       }
     }elseif($import_type == 'ExhibitionsImages'){
-
-      if($current_batch_number == 0){
-        // On first batch run only.
-        // Place null in the ImagePath and ExhibitionImageAttachment for Exhibitions.
-        $database->update($exhibition_table)
-        ->fields(['ImagePath' => null, 'ExhibitionImageAttachment' => null])
-        ->execute();
-      }
 
       //Create Exhibition Directory
       if (!file_exists($exhibitionDirectory))
