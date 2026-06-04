@@ -290,7 +290,7 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
     $subsId = $config->get('subscription_id');
 
 
-    $url = csconstants::Public_API_URL.$subAcntId.'/AttachmentKeywords?$apply=groupby((AttachmentKeywordString))';
+    $url = Csconstants::Public_API_URL.$subAcntId.'/AttachmentKeywords?$apply=groupby((AttachmentKeywordString))';
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

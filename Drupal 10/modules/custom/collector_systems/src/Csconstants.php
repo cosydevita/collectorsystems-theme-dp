@@ -8,7 +8,7 @@ namespace Drupal\collector_systems;
  */
 
  // Defining constants
- class csconstants {
+ class Csconstants {
 
   public const Public_API_URL = "https://apis.collectorsystems.com/public/v2/";
   public const Public_API_URL_ForObjectFields = "https://apis.collectorsystems.com/public/v2/";

@@ -438,8 +438,8 @@ class PageTemplatesController extends ControllerBase
 
     $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
-    $requested_pageNo = isset($_REQUEST['pageNo']) ? absint($_REQUEST['pageNo']) : 1;
-    $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? absint($_REQUEST['groupLevelPageNo']) : 1;
+    $requested_pageNo = isset($_REQUEST['pageNo']) ? abs((int) $_REQUEST['pageNo']) : 1;
+    $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? abs((int) $_REQUEST['groupLevelPageNo']) : 1;
     $groupLevelSkipCount = ($groupLevelPageNo - 1) * $groupLevelTopCount;
 
 

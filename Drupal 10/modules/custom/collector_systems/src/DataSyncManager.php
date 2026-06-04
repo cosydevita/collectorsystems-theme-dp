@@ -3,7 +3,6 @@
 namespace Drupal\collector_systems;
 use Drupal\Core\Database\Database;
 use Drupal\collector_systems\Csconstants;
-use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\collector_systems\CollectorSystemsGetApiData;
 
@@ -226,7 +225,7 @@ class DataSyncManager {
 
       foreach ($field_names as $field_name) {
         switch ($field_name) {
-          case csconstants::InventoryNumber:
+          case Csconstants::InventoryNumber:
             if (!empty($value['InventoryNumber'])) {
               $combinedObjectValues[$field_name] = $value['InventoryNumber'];
             } else {
@@ -234,7 +233,7 @@ class DataSyncManager {
             }
             break;
 
-            // case csconstants::ArtistName:
+            // case Csconstants::ArtistName:
             //     if (!empty($value['ArtistName'])) {
             //         $combinedObjectValues[$field_name] = $value['ArtistName'];
             //     }
@@ -246,7 +245,7 @@ class DataSyncManager {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::ArtistFirst:
+          case Csconstants::ArtistFirst:
             if (!empty($value['ArtistFirst'])) {
               $combinedObjectValues[$field_name] = $value['ArtistFirst'];
             } else {
@@ -254,7 +253,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ArtistLast:
+          case Csconstants::ArtistLast:
             if (!empty($value['ArtistLast'])) {
               $combinedObjectValues[$field_name] = $value['ArtistLast'];
             } else {
@@ -262,7 +261,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ArtistYears:
+          case Csconstants::ArtistYears:
             if (!empty($value['ArtistYears'])) {
               $combinedObjectValues[$field_name] = $value['ArtistYears'];
             } else {
@@ -270,7 +269,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ArtistLocale:
+          case Csconstants::ArtistLocale:
             if (!empty($value['ArtistLocale'])) {
               $combinedObjectValues[$field_name] = $value['ArtistLocale'];
             } else {
@@ -278,7 +277,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ArtistBio:
+          case Csconstants::ArtistBio:
             if (!empty($value['ArtistBio'])) {
               $combinedObjectValues[$field_name] = $value['ArtistBio'];
             } else {
@@ -286,7 +285,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CollectionName:
+          case Csconstants::CollectionName:
             if (!empty($value['Collection'])) {
               $combinedObjectValues[$field_name] = $value['Collection']['CollectionName'];
             } else {
@@ -294,7 +293,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FullCollectionName:
+          case Csconstants::FullCollectionName:
             if (!empty($value['Collection'])) {
               $combinedObjectValues[$field_name] = $value['Collection']['FullCollectionName'];
             } else {
@@ -302,7 +301,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::NomenclatureObjectName:
+          case Csconstants::NomenclatureObjectName:
             if (!empty($value['NomenclatureObjectName'])) {
               $combinedObjectValues[$field_name] = $value['NomenclatureObjectName'];
             } else {
@@ -310,7 +309,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ObjectStatus:
+          case Csconstants::ObjectStatus:
             if (!empty($value['ObjectStatus'])) {
               $combinedObjectValues[$field_name] = $value['ObjectStatus'];
             } else {
@@ -318,7 +317,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ObjectType:
+          case Csconstants::ObjectType:
             if (!empty($value['ObjectType']['ObjectTypeName'])) {
               $combinedObjectValues[$field_name] = $value['ObjectType']['ObjectTypeName'];
             } else {
@@ -326,7 +325,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::LocationName:
+          case Csconstants::LocationName:
             if (!empty($value['Location']['LocationName'])) {
               $combinedObjectValues[$field_name] = $value['Location']['LocationName'];
             } else {
@@ -334,7 +333,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FullLocationName:
+          case Csconstants::FullLocationName:
             if (!empty($value['Location']['FullLocationName'])) {
               $combinedObjectValues[$field_name] = $value['Location']['FullLocationName'];
             } else {
@@ -342,7 +341,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PermanentLocationName:
+          case Csconstants::PermanentLocationName:
             if (!empty($value['PermanentLocation']['LocationName'])) {
               $combinedObjectValues[$field_name] = $value['PermanentLocation']['LocationName'];
             } else {
@@ -350,7 +349,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PermanentFullLocationName:
+          case Csconstants::PermanentFullLocationName:
             if (!empty($value['PermanentLocation']['FullLocationName'])) {
               $combinedObjectValues[$field_name] = $value['PermanentLocation']['FullLocationName'];
             } else {
@@ -358,7 +357,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CollectionName:
+          case Csconstants::CollectionName:
             if (!empty($value['Collection']['CollectionName'])) {
               $combinedObjectValues[$field_name] = $value['Collection']['CollectionName'];
             } else {
@@ -366,7 +365,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FullCollectionName:
+          case Csconstants::FullCollectionName:
             if (!empty($value['Collection']['FullCollectionName'])) {
               $combinedObjectValues[$field_name] = $value['Collection']['FullCollectionName'];
             } else {
@@ -374,7 +373,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CreditLine:
+          case Csconstants::CreditLine:
             if (!empty($value['CreditLine'])) {
               $combinedObjectValues[$field_name] = $value['CreditLine'];
             } else {
@@ -382,7 +381,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ArtistName:
+          case Csconstants::ArtistName:
             if (!empty($value['Artist']) && isset($value['Artist'])) {
               if (!empty($value['Artist']['ArtistName'])) {
                 $combinedObjectValues[$field_name] = $value['Artist']['ArtistName'];
@@ -392,7 +391,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::AdditionalArtists:
+          case Csconstants::AdditionalArtists:
             if (isset($value['AdditionalArtists']) && is_array($value['AdditionalArtists']) && count($value['AdditionalArtists']) > 0) {
               $combinedObjectValues[$field_name] = json_encode($value[$field_name]);
             }else{
@@ -400,7 +399,7 @@ class DataSyncManager {
             }
             
             break;
-          case csconstants::AdditionalArtistMakers:
+          case Csconstants::AdditionalArtistMakers:
               if (isset($value['AdditionalArtistMakers']) && is_array($value['AdditionalArtistMakers']) && count($value['AdditionalArtistMakers']) > 0) {
                 $combinedObjectValues[$field_name] = json_encode($value[$field_name]);
               }else{
@@ -408,7 +407,7 @@ class DataSyncManager {
               }
               break;
 
-          case csconstants::Maker:
+          case Csconstants::Maker:
             if (!empty($value['Maker'])) {
               $combinedObjectValues[$field_name] = $value['Maker'];
             } else {
@@ -416,7 +415,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Title:
+          case Csconstants::Title:
             if (!empty($value['Title'])) {
               $combinedObjectValues[$field_name] = $value['Title'];
             } else {
@@ -424,7 +423,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::AlternateTitle:
+          case Csconstants::AlternateTitle:
             if (!empty($value['AlternateTitle'])) {
               $combinedObjectValues[$field_name] = $value['AlternateTitle'];
             } else {
@@ -432,7 +431,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ObjectDate:
+          case Csconstants::ObjectDate:
             if (!empty($value['ObjectDate'])) {
               $combinedObjectValues[$field_name] = $value['ObjectDate'];
             } else {
@@ -440,7 +439,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Medium:
+          case Csconstants::Medium:
             if (!empty($value['Medium'])) {
               $combinedObjectValues[$field_name] = $value['Medium'];
             } else {
@@ -448,7 +447,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::LocationStatus:
+          case Csconstants::LocationStatus:
             if (!empty($value['LocationStatus']['Term'])) {
               $combinedObjectValues[$field_name] = $value['LocationStatus']['Term'];
             } else {
@@ -456,7 +455,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::InventoryDate:
+          case Csconstants::InventoryDate:
             if (!empty($value['InventoryDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['InventoryDate']));
             } else {
@@ -464,7 +463,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::InventoryContactName:
+          case Csconstants::InventoryContactName:
             if (!empty($value['InventoryContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['InventoryContact']['ContactName'];
             } else {
@@ -472,7 +471,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Form:
+          case Csconstants::Form:
             if (!empty($value['Form'])) {
               $combinedObjectValues[$field_name] = $value['Form'];
             } else {
@@ -480,7 +479,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Subject:
+          case Csconstants::Subject:
             if (!empty($value['Subject'])) {
               $combinedObjectValues[$field_name] = $value['Subject'];
             } else {
@@ -488,7 +487,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CategoryStyle:
+          case Csconstants::CategoryStyle:
             if (!empty($value['CategoryStyle'])) {
               $combinedObjectValues[$field_name] = $value['CategoryStyle'];
             } else {
@@ -496,7 +495,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CountryOrigin:
+          case Csconstants::CountryOrigin:
             if (!empty($value['CountryOrigin'])) {
               $combinedObjectValues[$field_name] = $value['CountryOrigin'];
             } else {
@@ -504,7 +503,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Edition:
+          case Csconstants::Edition:
             if (!empty($value['Edition'])) {
               $combinedObjectValues[$field_name] = $value['Edition'];
             } else {
@@ -512,14 +511,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SuitePortfolio:
+          case Csconstants::SuitePortfolio:
             if (!empty($value['SuitePortfolio'])) {
               $combinedObjectValues[$field_name] = $value['SuitePortfolio'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::CatalogRaisonne:
+          case Csconstants::CatalogRaisonne:
             if (!empty($value['CatalogRaisonne'])) {
               $combinedObjectValues[$field_name] = $value['CatalogRaisonne'];
             } else {
@@ -527,7 +526,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::RFIDTagNumber:
+          case Csconstants::RFIDTagNumber:
             if (!empty($value['RFIDTagNumber'])) {
               $combinedObjectValues[$field_name] = $value['RFIDTagNumber'];
             } else {
@@ -535,7 +534,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Term:
+          case Csconstants::Term:
             if (!empty($value['Term'])) {
               $combinedObjectValues[$field_name] = $value['Term'];
             } else {
@@ -543,7 +542,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CatalogNumber:
+          case Csconstants::CatalogNumber:
             if (!empty($value['CatalogNumber'])) {
               $combinedObjectValues[$field_name] = $value['CatalogNumber'];
             } else {
@@ -551,7 +550,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::OtherNumbers:
+          case Csconstants::OtherNumbers:
             if (!empty($value['OtherNumbers'])) {
               $combinedObjectValues[$field_name] = $value['OtherNumbers'];
             } else {
@@ -559,7 +558,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ItemCount:
+          case Csconstants::ItemCount:
             if (!empty($value['ItemCount'])) {
               $combinedObjectValues[$field_name] = $value['ItemCount'];
             } else {
@@ -567,7 +566,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CatalogerContactName:
+          case Csconstants::CatalogerContactName:
             if (!empty($value['CatalogerContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['CatalogerContact']['ContactName'];
             } else {
@@ -575,7 +574,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CatalogDate:
+          case Csconstants::CatalogDate:
             if (!empty($value['CatalogDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['CatalogDate']));
             } else {
@@ -583,7 +582,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CollectionTitle:
+          case Csconstants::CollectionTitle:
             if (!empty($value['CollectionTitle'])) {
               $combinedObjectValues[$field_name] = $value['CollectionTitle'];
             } else {
@@ -591,7 +590,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CollectionNumber:
+          case Csconstants::CollectionNumber:
             if (!empty($value['CollectionNumber'])) {
               $combinedObjectValues[$field_name] = $value['CollectionNumber'];
             } else {
@@ -599,7 +598,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Material:
+          case Csconstants::Material:
             if (!empty($value['Material'])) {
               $combinedObjectValues[$field_name] = $value['Material'];
             } else {
@@ -607,7 +606,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Technique:
+          case Csconstants::Technique:
             if (!empty($value['Technique']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Technique']['Term'];
             } else {
@@ -615,7 +614,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Color:
+          case Csconstants::Color:
             if (!empty($value['Color']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Color']['Term'];
             } else {
@@ -623,7 +622,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StateOfOrigin:
+          case Csconstants::StateOfOrigin:
             if (!empty($value['StateOfOrigin'])) {
               $combinedObjectValues[$field_name] = $value['StateOfOrigin'];
             } else {
@@ -631,7 +630,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CountyOfOrigin:
+          case Csconstants::CountyOfOrigin:
             if (!empty($value['CountyOfOrigin'])) {
               $combinedObjectValues[$field_name] = $value['CountyOfOrigin'];
             } else {
@@ -639,7 +638,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CityOfOrigin:
+          case Csconstants::CityOfOrigin:
             if (!empty($value['CityOfOrigin'])) {
               $combinedObjectValues[$field_name] = $value['CityOfOrigin'];
             } else {
@@ -647,7 +646,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::State:
+          case Csconstants::State:
             if (!empty($value['State'])) {
               $combinedObjectValues[$field_name] = $value['State'];
             } else {
@@ -655,7 +654,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Duration:
+          case Csconstants::Duration:
             if (!empty($value['Duration'])) {
               $combinedObjectValues[$field_name] = $value['Duration'];
             } else {
@@ -663,7 +662,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::RevisedNomenclature:
+          case Csconstants::RevisedNomenclature:
             if (!empty($value['RevisedNomenclature'])) {
               $combinedObjectValues[$field_name] = $value['RevisedNomenclature'];
             } else {
@@ -671,7 +670,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PreviousCatalogNumber:
+          case Csconstants::PreviousCatalogNumber:
             if (!empty($value['PreviousCatalogNumber'])) {
               $combinedObjectValues[$field_name] = $value['PreviousCatalogNumber'];
             } else {
@@ -679,7 +678,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FieldSpecimenNumber:
+          case Csconstants::FieldSpecimenNumber:
             if (!empty($value['FieldSpecimenNumber'])) {
               $combinedObjectValues[$field_name] = $value['FieldSpecimenNumber'];
             } else {
@@ -687,7 +686,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StatusDate:
+          case Csconstants::StatusDate:
             if (!empty($value['StatusDate'])) {
               $combinedObjectValues[$field_name] = $value['StatusDate'];
             } else {
@@ -695,14 +694,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StorageUnit:
+          case Csconstants::StorageUnit:
             if (!empty($value['StorageUnit']['Term'])) {
               $combinedObjectValues[$field_name] = $value['StorageUnit']['Term'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::CollectionDate:
+          case Csconstants::CollectionDate:
             if (!empty($value['CollectionDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['CollectionDate']));
             } else {
@@ -710,7 +709,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CollectorContactName:
+          case Csconstants::CollectorContactName:
             if (!empty($value['CollectorContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['CollectorContact']['ContactName'];
             } else {
@@ -718,7 +717,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CollectorPlace:
+          case Csconstants::CollectorPlace:
             if (!empty($value['CollectorPlace'])) {
               $combinedObjectValues[$field_name] = $value['CollectorPlace'];
             } else {
@@ -726,7 +725,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CatalogFolder:
+          case Csconstants::CatalogFolder:
             if (!empty($value['CatalogFolder'])) {
               $combinedObjectValues[$field_name] = $value['CatalogFolder'] == true ? 'Yes' : 'No';
             } else {
@@ -734,7 +733,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::IdentifiedByContactName:
+          case Csconstants::IdentifiedByContactName:
             if (!empty($value['IdentifiedByContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['IdentifiedByContact']['ContactName'];
             } else {
@@ -742,7 +741,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::IdentifiedDate:
+          case Csconstants::IdentifiedDate:
             if (!empty($value['IdentifiedDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['IdentifiedDate']));
             } else {
@@ -750,7 +749,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::EminentFigureContactName:
+          case Csconstants::EminentFigureContactName:
             if (!empty($value['EminentFigureContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['EminentFigureContact']['ContactName'];
             } else {
@@ -758,7 +757,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::EminentOrganizationContactName:
+          case Csconstants::EminentOrganizationContactName:
             if (!empty($value['EminentOrganizationContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['EminentOrganizationContact']['ContactName'];
             } else {
@@ -766,7 +765,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ControlledProperty:
+          case Csconstants::ControlledProperty:
             if (!empty($value['ControlledProperty'])) {
               $combinedObjectValues[$field_name] = $value['ControlledProperty'] == true ? 'Yes' : 'No';
             } else {
@@ -774,21 +773,21 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ArtistMakerName:
+          case Csconstants::ArtistMakerName:
             if (!empty($value["ArtistMaker"]['ArtistName'])) {
               $combinedObjectValues[$field_name] = $value["ArtistMaker"]['ArtistName'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::ArtistMakerFirst:
+          case Csconstants::ArtistMakerFirst:
             if (!empty($value["ArtistMaker"]['ArtistMakerFirst'])) {
               $combinedObjectValues[$field_name] = $value["ArtistMaker"]['ArtistMakerFirst'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::ArtistMakerLast:
+          case Csconstants::ArtistMakerLast:
             if (!empty($value["ArtistMaker"]['ArtistMakerLast'])) {
               $combinedObjectValues[$field_name] = $value["ArtistMaker"]['ArtistMakerLast'];
             } else {
@@ -796,7 +795,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TaxonomicSerialNumber:
+          case Csconstants::TaxonomicSerialNumber:
             if (!empty($value['TaxonomicSerialNumber'])) {
               $combinedObjectValues[$field_name] = $value['TaxonomicSerialNumber'];
             } else {
@@ -804,7 +803,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Kingdom:
+          case Csconstants::Kingdom:
             if (!empty($value['Kingdom'])) {
               $combinedObjectValues[$field_name] = $value['Kingdom'];
             } else {
@@ -812,7 +811,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PhylumDivision:
+          case Csconstants::PhylumDivision:
             if (!empty($value['PhylumDivision'])) {
               $combinedObjectValues[$field_name] = $value['PhylumDivision'];
             } else {
@@ -820,7 +819,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CSClass:
+          case Csconstants::CSClass:
             if (!empty($value['Class'])) {
               $combinedObjectValues[$field_name] = $value['Class'];
             } else {
@@ -828,7 +827,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Order:
+          case Csconstants::Order:
             if (!empty($value['Order'])) {
               $combinedObjectValues[$field_name] = $value['Order'];
             } else {
@@ -836,14 +835,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Family:
+          case Csconstants::Family:
             if (!empty($value['Family'])) {
               $combinedObjectValues[$field_name] = $value['Family'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::SubFamily:
+          case Csconstants::SubFamily:
             if (!empty($value['SubFamily'])) {
               $combinedObjectValues[$field_name] = $value['SubFamily'];
             } else {
@@ -851,7 +850,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ScientificName:
+          case Csconstants::ScientificName:
             if (!empty($value['ScientificName'])) {
               $combinedObjectValues[$field_name] = $value['ScientificName'];
             } else {
@@ -859,7 +858,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CommonName:
+          case Csconstants::CommonName:
             if (!empty($value['CommonName'])) {
               $combinedObjectValues[$field_name] = $value['CommonName'];
             } else {
@@ -867,7 +866,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Species:
+          case Csconstants::Species:
             if (!empty($value['Species'])) {
               $combinedObjectValues[$field_name] = $value['Species'];
             } else {
@@ -875,7 +874,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SpeciesAuthorName:
+          case Csconstants::SpeciesAuthorName:
             if (!empty($value['SpeciesAuthor']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['SpeciesAuthor']['ContactName'];
             } else {
@@ -883,7 +882,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SpeciesAuthorDate:
+          case Csconstants::SpeciesAuthorDate:
             if (!empty($value['SpeciesAuthorDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['SpeciesAuthorDate']));
             } else {
@@ -891,7 +890,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Subspecies:
+          case Csconstants::Subspecies:
             if (!empty($value['Subspecies'])) {
               $combinedObjectValues[$field_name] = $value['Subspecies'];
             } else {
@@ -899,7 +898,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SubspeciesAuthorityContactName:
+          case Csconstants::SubspeciesAuthorityContactName:
             if (!empty($value['SubspeciesAuthorityContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['SubspeciesAuthorityContact']['ContactName'];
             } else {
@@ -907,7 +906,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SubspeciesAuthorName:
+          case Csconstants::SubspeciesAuthorName:
             if (!empty($value['SubspeciesAuthor']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['SubspeciesAuthor']['ContactName'];
             } else {
@@ -915,7 +914,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SubspeciesAuthorDate:
+          case Csconstants::SubspeciesAuthorDate:
             if (!empty($value['SubspeciesAuthorDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['SubspeciesAuthorDate']));
             } else {
@@ -923,7 +922,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SubspeciesYear:
+          case Csconstants::SubspeciesYear:
             if (!empty($value['SubspeciesYear'])) {
               $combinedObjectValues[$field_name] = $value['SubspeciesYear'];
             } else {
@@ -931,7 +930,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SubspeciesVariety:
+          case Csconstants::SubspeciesVariety:
             if (!empty($value['SubspeciesVariety'])) {
               $combinedObjectValues[$field_name] = $value['SubspeciesVariety'];
             } else {
@@ -939,7 +938,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SubspeciesVarietyAuthorityContactName:
+          case Csconstants::SubspeciesVarietyAuthorityContactName:
             if (!empty($value['SubspeciesVarietyAuthorityContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['SubspeciesVarietyAuthorityContact']['ContactName'];
             } else {
@@ -947,7 +946,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SubspeciesVarietyYear:
+          case Csconstants::SubspeciesVarietyYear:
             if (!empty($value['SubspeciesVarietyYear'])) {
               $combinedObjectValues[$field_name] = $value['SubspeciesVarietyYear'];
             } else {
@@ -955,7 +954,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SubspeciesForma:
+          case Csconstants::SubspeciesForma:
             if (!empty($value['SubspeciesForma'])) {
               $combinedObjectValues[$field_name] = $value['SubspeciesForma'];
             } else {
@@ -963,7 +962,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SubspeciesFormaAuthorityContactName:
+          case Csconstants::SubspeciesFormaAuthorityContactName:
             if (!empty($value['SubspeciesFormaAuthorityContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['SubspeciesFormaAuthorityContact']['ContactName'];
             } else {
@@ -971,7 +970,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SubspeciesFormaYear:
+          case Csconstants::SubspeciesFormaYear:
             if (!empty($value['SubspeciesFormaYear'])) {
               $combinedObjectValues[$field_name] = $value['SubspeciesFormaYear'];
             } else {
@@ -979,7 +978,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StudyNumber:
+          case Csconstants::StudyNumber:
             if (!empty($value['StudyNumber'])) {
               $combinedObjectValues[$field_name] = $value['StudyNumber'];
             } else {
@@ -987,7 +986,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::AlternateName:
+          case Csconstants::AlternateName:
             if (!empty($value['AlternateName'])) {
               $combinedObjectValues[$field_name] = $value['AlternateName'];
             } else {
@@ -995,7 +994,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CulturalID:
+          case Csconstants::CulturalID:
             if (!empty($value['CulturalID'])) {
               $combinedObjectValues[$field_name] = $value['CulturalID'];
             } else {
@@ -1003,7 +1002,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CultureOfUse:
+          case Csconstants::CultureOfUse:
             if (!empty($value['CultureOfUse']['Term'])) {
               $combinedObjectValues[$field_name] = $value['CultureOfUse']['Term'];
             } else {
@@ -1011,7 +1010,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ManufactureDate:
+          case Csconstants::ManufactureDate:
             if (!empty($value['ManufactureDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['ManufactureDate']));
             } else {
@@ -1019,14 +1018,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UseDate:
+          case Csconstants::UseDate:
             if (!empty($value['UseDate'])) {
               $combinedObjectValues[$field_name] = $value['UseDate'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::TimePeriod:
+          case Csconstants::TimePeriod:
             if (!empty($value['TimePeriod'])) {
               $combinedObjectValues[$field_name] = $value['TimePeriod'];
             } else {
@@ -1034,7 +1033,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::HistoricCulturalPeriod:
+          case Csconstants::HistoricCulturalPeriod:
             if (!empty($value['HistoricCulturalPeriod']['Term'])) {
               $combinedObjectValues[$field_name] = $value['HistoricCulturalPeriod']['Term'];
             } else {
@@ -1042,7 +1041,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ManufacturingTechnique:
+          case Csconstants::ManufacturingTechnique:
             if (!empty($value['ManufacturingTechnique']['Term'])) {
               $combinedObjectValues[$field_name] = $value['ManufacturingTechnique']['Term'];
             } else {
@@ -1050,7 +1049,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Material:
+          case Csconstants::Material:
             if (!empty($value['Material'])) {
               $combinedObjectValues[$field_name] = $value['Material'];
             } else {
@@ -1058,7 +1057,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::BroadClassOfMaterial:
+          case Csconstants::BroadClassOfMaterial:
             if (!empty($value['BroadClassOfMaterial']['Term'])) {
               $combinedObjectValues[$field_name] = $value['BroadClassOfMaterial']['Term'];
             } else {
@@ -1066,7 +1065,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SpecificClassOfMaterial:
+          case Csconstants::SpecificClassOfMaterial:
             if (!empty($value['SpecificClassOfMaterial']['Term'])) {
               $combinedObjectValues[$field_name] = $value['SpecificClassOfMaterial']['Term'];
             } else {
@@ -1074,7 +1073,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Quantity:
+          case Csconstants::Quantity:
             if (!empty($value['Quantity'])) {
               $combinedObjectValues[$field_name] = $value['Quantity'];
             } else {
@@ -1082,7 +1081,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PlaceOfManufactureCountry:
+          case Csconstants::PlaceOfManufactureCountry:
             if (!empty($value['PlaceOfManufactureCountry'])) {
               $combinedObjectValues[$field_name] = $value['PlaceOfManufactureCountry'];
             } else {
@@ -1090,7 +1089,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PlaceOfManufactureState:
+          case Csconstants::PlaceOfManufactureState:
             if (!empty($value['PlaceOfManufactureState'])) {
               $combinedObjectValues[$field_name] = $value['PlaceOfManufactureState'];
             } else {
@@ -1098,7 +1097,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PlaceOfManufactureCounty:
+          case Csconstants::PlaceOfManufactureCounty:
             if (!empty($value['PlaceOfManufactureCounty'])) {
               $combinedObjectValues[$field_name] = $value['PlaceOfManufactureCounty'];
             } else {
@@ -1106,7 +1105,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PlaceOfManufactureCity:
+          case Csconstants::PlaceOfManufactureCity:
             if (!empty($value['PlaceOfManufactureCity'])) {
               $combinedObjectValues[$field_name] = $value['PlaceOfManufactureCity'];
             } else {
@@ -1114,7 +1113,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::OtherManufacturingSite:
+          case Csconstants::OtherManufacturingSite:
             if (!empty($value['OtherManufacturingSite'])) {
               $combinedObjectValues[$field_name] = $value['OtherManufacturingSite'];
             } else {
@@ -1122,7 +1121,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Latitude:
+          case Csconstants::Latitude:
             if (!empty($value['Latitude'])) {
               $combinedObjectValues[$field_name] = $value['Latitude'];
             } else {
@@ -1130,7 +1129,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Longitude:
+          case Csconstants::Longitude:
             if (!empty($value['Longitude'])) {
               $combinedObjectValues[$field_name] = $value['Longitude'];
             } else {
@@ -1138,7 +1137,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UTMCoordinates:
+          case Csconstants::UTMCoordinates:
             if (!empty($value['UTMCoordinates'])) {
               $combinedObjectValues[$field_name] = $value['UTMCoordinates'];
             } else {
@@ -1146,7 +1145,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TownshipRangeSection:
+          case Csconstants::TownshipRangeSection:
             if (!empty($value['TownshipRangeSection'])) {
               $combinedObjectValues[$field_name] = $value['TownshipRangeSection'];
             } else {
@@ -1154,7 +1153,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FieldSiteNumber:
+          case Csconstants::FieldSiteNumber:
             if (!empty($value['FieldSiteNumber'])) {
               $combinedObjectValues[$field_name] = $value['FieldSiteNumber'];
             } else {
@@ -1162,7 +1161,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StateSiteNumber:
+          case Csconstants::StateSiteNumber:
             if (!empty($value['StateSiteNumber'])) {
               $combinedObjectValues[$field_name] = $value['StateSiteNumber'];
             } else {
@@ -1170,14 +1169,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SiteName:
+          case Csconstants::SiteName:
             if (!empty($value['SiteName'])) {
               $combinedObjectValues[$field_name] = $value['SiteName'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::SiteNumber:
+          case Csconstants::SiteNumber:
             if (!empty($value['SiteNumber'])) {
               $combinedObjectValues[$field_name] = $value['SiteNumber'];
             } else {
@@ -1185,7 +1184,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DecorativeMotif:
+          case Csconstants::DecorativeMotif:
             if (!empty($value['DecorativeMotif'])) {
               $combinedObjectValues[$field_name] = $value['DecorativeMotif'];
             } else {
@@ -1193,7 +1192,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DecorativeTechnique:
+          case Csconstants::DecorativeTechnique:
             if (!empty($value['DecorativeTechnique']['Term'])) {
               $combinedObjectValues[$field_name] = $value['DecorativeTechnique']['Term'];
             } else {
@@ -1201,7 +1200,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Reproduction:
+          case Csconstants::Reproduction:
             if (!empty($value['Reproduction'])) {
               $combinedObjectValues[$field_name] = $value['Reproduction'];
             } else {
@@ -1209,7 +1208,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ObjectForm:
+          case Csconstants::ObjectForm:
             if (!empty($value['ObjectForm']['Term'])) {
               $combinedObjectValues[$field_name] = $value['ObjectForm']['Term'];
             } else {
@@ -1217,7 +1216,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ObjectPart:
+          case Csconstants::ObjectPart:
             if (!empty($value['ObjectPart']['Term'])) {
               $combinedObjectValues[$field_name] = $value['ObjectPart']['Term'];
             } else {
@@ -1225,7 +1224,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ComponentPart:
+          case Csconstants::ComponentPart:
             if (!empty($value['ComponentPart'])) {
               $combinedObjectValues[$field_name] = $value['ComponentPart'];
             } else {
@@ -1233,7 +1232,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Temper:
+          case Csconstants::Temper:
             if (!empty($value['Temper']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Temper']['Term'];
             } else {
@@ -1241,7 +1240,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TypeName:
+          case Csconstants::TypeName:
             if (!empty($value['TypeName']['Term'])) {
               $combinedObjectValues[$field_name] = $value['TypeName']['Term'];
             } else {
@@ -1249,7 +1248,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SlideNumber:
+          case Csconstants::SlideNumber:
             if (!empty($value['SlideNumber'])) {
               $combinedObjectValues[$field_name] = $value['SlideNumber'];
             } else {
@@ -1257,7 +1256,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::BagNumber:
+          case Csconstants::BagNumber:
             if (!empty($value['BagNumber'])) {
               $combinedObjectValues[$field_name] = $value['BagNumber'];
             } else {
@@ -1265,7 +1264,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TotalBags:
+          case Csconstants::TotalBags:
             if (!empty($value['TotalBags'])) {
               $combinedObjectValues[$field_name] = $value['TotalBags'];
             } else {
@@ -1273,7 +1272,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::BoxNumber:
+          case Csconstants::BoxNumber:
             if (!empty($value['BoxNumber'])) {
               $combinedObjectValues[$field_name] = $value['BoxNumber'];
             } else {
@@ -1281,7 +1280,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TotalBoxes:
+          case Csconstants::TotalBoxes:
             if (!empty($value['TotalBoxes'])) {
               $combinedObjectValues[$field_name] = $value['TotalBoxes'];
             } else {
@@ -1289,7 +1288,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::MakersMark:
+          case Csconstants::MakersMark:
             if (!empty($value['MakersMark'])) {
               $combinedObjectValues[$field_name] = $value['MakersMark'];
             } else {
@@ -1297,7 +1296,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::NAGPRA:
+          case Csconstants::NAGPRA:
             if (!empty($value['NAGPRA']['Term'])) {
               $combinedObjectValues[$field_name] = $value['NAGPRA']['Term'];
             } else {
@@ -1305,7 +1304,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::OldNumber:
+          case Csconstants::OldNumber:
             if (!empty($value['OldNumber'])) {
               $combinedObjectValues[$field_name] = $value['OldNumber'];
             } else {
@@ -1313,7 +1312,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::AdditionalAccessionNumber:
+          case Csconstants::AdditionalAccessionNumber:
             if (!empty($value['AdditionalAccessionNumber'])) {
               $combinedObjectValues[$field_name] = $value['AdditionalAccessionNumber'];
             } else {
@@ -1321,14 +1320,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CatalogLevel:
+          case Csconstants::CatalogLevel:
             if (!empty($value['CatalogLevel']['Term'])) {
               $combinedObjectValues[$field_name] = $value['CatalogLevel']['Term'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::LevelOfControl:
+          case Csconstants::LevelOfControl:
             if (!empty($value['LevelOfControl'])) {
               $combinedObjectValues[$field_name] = $value['LevelOfControl'];
             } else {
@@ -1336,7 +1335,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::AlternateName:
+          case Csconstants::AlternateName:
             if (!empty($value['AlternateName'])) {
               $combinedObjectValues[$field_name] = $value['AlternateName'];
             } else {
@@ -1344,7 +1343,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::AuthorName:
+          case Csconstants::AuthorName:
             if (!empty($value['Author']['AuthorName'])) {
               $combinedObjectValues[$field_name] = $value['Author']['AuthorName'];
             } else {
@@ -1352,7 +1351,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CreatorContactName:
+          case Csconstants::CreatorContactName:
             if (!empty($value['CreatorContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['CreatorContact']['ContactName'];
             } else {
@@ -1360,7 +1359,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ComposerContactName:
+          case Csconstants::ComposerContactName:
             if (!empty($value['ComposerContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['ComposerContact']['ContactName'];
             } else {
@@ -1368,7 +1367,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::NarratorContactName:
+          case Csconstants::NarratorContactName:
             if (!empty($value['NarratorContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['NarratorContact']['ContactName'];
             } else {
@@ -1376,7 +1375,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::EditorContactName:
+          case Csconstants::EditorContactName:
             if (!empty($value['EditorContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['EditorContact']['ContactName'];
             } else {
@@ -1384,7 +1383,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PublisherContactName:
+          case Csconstants::PublisherContactName:
             if (!empty($value['PublisherContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['PublisherContact']['ContactName'];
             } else {
@@ -1392,7 +1391,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::IllustratorContactName:
+          case Csconstants::IllustratorContactName:
             if (!empty($value['IllustratorContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['IllustratorContact']['ContactName'];
             } else {
@@ -1400,7 +1399,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ContributorContactName:
+          case Csconstants::ContributorContactName:
             if (!empty($value['ContributorContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['ContributorContact']['ContactName'];
             } else {
@@ -1408,7 +1407,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StudioContactName:
+          case Csconstants::StudioContactName:
             if (!empty($value['StudioContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['StudioContact']['ContactName'];
             } else {
@@ -1416,7 +1415,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DirectorContactName:
+          case Csconstants::DirectorContactName:
             if (!empty($value['DirectorContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['DirectorContact']['ContactName'];
             } else {
@@ -1424,7 +1423,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ArtDirectorContactName:
+          case Csconstants::ArtDirectorContactName:
             if (!empty($value['ArtDirectorContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['ArtDirectorContact']['ContactName'];
             } else {
@@ -1432,7 +1431,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ProducerContactName:
+          case Csconstants::ProducerContactName:
             if (!empty($value['ProducerContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['ProducerContact']['ContactName'];
             } else {
@@ -1440,7 +1439,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ProductionDesignerContactName:
+          case Csconstants::ProductionDesignerContactName:
             if (!empty($value['ProductionDesignerContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['ProductionDesignerContact']['ContactName'];
             } else {
@@ -1448,7 +1447,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ProductionCompanyContactName:
+          case Csconstants::ProductionCompanyContactName:
             if (!empty($value['ProductionCompanyContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['ProductionCompanyContact']['ContactName'];
             } else {
@@ -1456,14 +1455,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DistributionCompany:
+          case Csconstants::DistributionCompany:
             if (!empty($value['DistributionCompany']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['DistributionCompany']['ContactName'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::WriterContactName:
+          case Csconstants::WriterContactName:
             if (!empty($value['WriterContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['WriterContact']['ContactName'];
             } else {
@@ -1471,7 +1470,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CinematographerContactName:
+          case Csconstants::CinematographerContactName:
             if (!empty($value['CinematographerContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['CinematographerContact']['ContactName'];
             } else {
@@ -1479,7 +1478,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PhotographyContactName:
+          case Csconstants::PhotographyContactName:
             if (!empty($value['PhotographyContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['PhotographyContact']['ContactName'];
             } else {
@@ -1487,7 +1486,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PublisherLocation:
+          case Csconstants::PublisherLocation:
             if (!empty($value['PublisherLocation'])) {
               $combinedObjectValues[$field_name] = $value['PublisherLocation'];
             } else {
@@ -1495,7 +1494,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Event:
+          case Csconstants::Event:
             if (!empty($value['Event']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Event']['Term'];
             } else {
@@ -1503,7 +1502,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PeopleContent:
+          case Csconstants::PeopleContent:
             if (!empty($value['PeopleContent'])) {
               $combinedObjectValues[$field_name] = $value['PeopleContent'];
             } else {
@@ -1511,7 +1510,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PlaceContent:
+          case Csconstants::PlaceContent:
             if (!empty($value['PlaceContent'])) {
               $combinedObjectValues[$field_name] = $value['PlaceContent'];
             } else {
@@ -1519,7 +1518,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TownshipRangeSection:
+          case Csconstants::TownshipRangeSection:
             if (!empty($value['TownshipRangeSection'])) {
               $combinedObjectValues[$field_name] = $value['TownshipRangeSection'];
             } else {
@@ -1527,7 +1526,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ISBN:
+          case Csconstants::ISBN:
             if (!empty($value['ISBN'])) {
               $combinedObjectValues[$field_name] = $value['ISBN'];
             } else {
@@ -1535,7 +1534,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ISSN:
+          case Csconstants::ISSN:
             if (!empty($value['ISSN'])) {
               $combinedObjectValues[$field_name] = $value['ISSN'];
             } else {
@@ -1543,7 +1542,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CallNumber:
+          case Csconstants::CallNumber:
             if (!empty($value['CallNumber'])) {
               $combinedObjectValues[$field_name] = $value['CallNumber'];
             } else {
@@ -1551,7 +1550,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CoverType:
+          case Csconstants::CoverType:
             if (!empty($value['CoverType'])) {
               $combinedObjectValues[$field_name] = $value['CoverType'];
             } else {
@@ -1559,7 +1558,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TypeOfBinding:
+          case Csconstants::TypeOfBinding:
             if (!empty($value['TypeOfBinding'])) {
               $combinedObjectValues[$field_name] = $value['TypeOfBinding'];
             } else {
@@ -1567,7 +1566,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Language:
+          case Csconstants::Language:
             if (!empty($value['Language'])) {
               $combinedObjectValues[$field_name] = $value['Language'];
             } else {
@@ -1575,7 +1574,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::NumberOfPages:
+          case Csconstants::NumberOfPages:
             if (!empty($value['NumberOfPages'])) {
               $combinedObjectValues[$field_name] = $value['NumberOfPages'];
             } else {
@@ -1583,7 +1582,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::NegativeNumber:
+          case Csconstants::NegativeNumber:
             if (!empty($value['NegativeNumber'])) {
               $combinedObjectValues[$field_name] = $value['NegativeNumber'];
             } else {
@@ -1591,7 +1590,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FilmSize:
+          case Csconstants::FilmSize:
             if (!empty($value['FilmSize'])) {
               $combinedObjectValues[$field_name] = $value['FilmSize'];
             } else {
@@ -1599,7 +1598,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Process:
+          case Csconstants::Process:
             if (!empty($value['Process'])) {
               $combinedObjectValues[$field_name] = $value['Process'];
             } else {
@@ -1607,7 +1606,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ImageNumber:
+          case Csconstants::ImageNumber:
             if (!empty($value['ImageNumber'])) {
               $combinedObjectValues[$field_name] = $value['ImageNumber'];
             } else {
@@ -1615,7 +1614,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ImageRights:
+          case Csconstants::ImageRights:
             if (!empty($value['ImageRights'])) {
               $combinedObjectValues[$field_name] = $value['ImageRights'];
             } else {
@@ -1623,7 +1622,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Copyrights:
+          case Csconstants::Copyrights:
             if (!empty($value['Copyrights'])) {
               $combinedObjectValues[$field_name] = $value['Copyrights'];
             } else {
@@ -1631,7 +1630,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FindingAids:
+          case Csconstants::FindingAids:
             if (!empty($value['FindingAids'])) {
               $combinedObjectValues[$field_name] = $value['FindingAids'];
             } else {
@@ -1639,7 +1638,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::VolumeNumber:
+          case Csconstants::VolumeNumber:
             if (!empty($value['VolumeNumber'])) {
               $combinedObjectValues[$field_name] = $value['VolumeNumber'];
             } else {
@@ -1647,7 +1646,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CompletionYear:
+          case Csconstants::CompletionYear:
             if (!empty($value['CompletionYear'])) {
               $combinedObjectValues[$field_name] = $value['CompletionYear'];
             } else {
@@ -1655,14 +1654,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Format:
+          case Csconstants::Format:
             if (!empty($value['Format']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Format']['Term'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::Genre:
+          case Csconstants::Genre:
             if (!empty($value['Genre']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Genre']['Term'];
             } else {
@@ -1670,7 +1669,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Subgenre:
+          case Csconstants::Subgenre:
             if (!empty($value['Subgenre']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Subgenre']['Term'];
             } else {
@@ -1678,7 +1677,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ReleaseDate:
+          case Csconstants::ReleaseDate:
             if (!empty($value['ReleaseDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['ReleaseDate']));
             } else {
@@ -1686,7 +1685,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ProductionDate:
+          case Csconstants::ProductionDate:
             if (!empty($value['ProductionDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['ProductionDate']));
             } else {
@@ -1694,7 +1693,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Genus:
+          case Csconstants::Genus:
             if (!empty($value['Genus'])) {
               $combinedObjectValues[$field_name] = $value['Genus'];
             } else {
@@ -1702,7 +1701,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Stage:
+          case Csconstants::Stage:
             if (!empty($value['Stage'])) {
               $combinedObjectValues[$field_name] = $value['Stage'];
             } else {
@@ -1710,7 +1709,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Section:
+          case Csconstants::Section:
             if (!empty($value['Section'])) {
               $combinedObjectValues[$field_name] = $value['Section'];
             } else {
@@ -1718,7 +1717,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::QuarterSection:
+          case Csconstants::QuarterSection:
             if (!empty($value['QuarterSection'])) {
               $combinedObjectValues[$field_name] = $value['QuarterSection'];
             } else {
@@ -1726,7 +1725,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Age:
+          case Csconstants::Age:
             if (!empty($value['Age'])) {
               $combinedObjectValues[$field_name] = $value['Age'];
             } else {
@@ -1734,7 +1733,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Locality:
+          case Csconstants::Locality:
             if (!empty($value['Locality'])) {
               $combinedObjectValues[$field_name] = $value['Locality'];
             } else {
@@ -1742,7 +1741,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::HabitatCommunity:
+          case Csconstants::HabitatCommunity:
             if (!empty($value['HabitatCommunity']['Term'])) {
               $combinedObjectValues[$field_name] = $value['HabitatCommunity']['Term'];
             } else {
@@ -1750,7 +1749,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TypeSpecimen:
+          case Csconstants::TypeSpecimen:
             if (!empty($value['TypeSpecimen']['Term'])) {
               $combinedObjectValues[$field_name] = $value['TypeSpecimen']['Term'];
             } else {
@@ -1758,14 +1757,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Sex:
+          case Csconstants::Sex:
             if (!empty($value['Sex']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Sex']['Term'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::ExoticNative:
+          case Csconstants::ExoticNative:
             if (!empty($value['ExoticNative']['Term'])) {
               $combinedObjectValues[$field_name] = $value['ExoticNative']['Term'];
             } else {
@@ -1773,7 +1772,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TaxonomicNotes:
+          case Csconstants::TaxonomicNotes:
             if (!empty($value['TaxonomicNotes'])) {
               $combinedObjectValues[$field_name] = $value['TaxonomicNotes'];
             } else {
@@ -1781,7 +1780,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Rare:
+          case Csconstants::Rare:
             if (!empty($value['Rare'])) {
               $combinedObjectValues[$field_name] = $value['Rare'];
             } else {
@@ -1789,7 +1788,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ThreatenedEndangeredDate:
+          case Csconstants::ThreatenedEndangeredDate:
             if (!empty($value['ThreatenedEndangeredDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['ThreatenedEndangeredDate']));
             } else {
@@ -1797,7 +1796,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ThreatenedEndangeredSpeciesSynonym:
+          case Csconstants::ThreatenedEndangeredSpeciesSynonym:
             if (!empty($value['ThreatenedEndangeredSpeciesSynonym'])) {
               $combinedObjectValues[$field_name] = $value['ThreatenedEndangeredSpeciesSynonym'] == true ? 'Yes' : 'No';
             } else {
@@ -1805,7 +1804,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ThreatenedEndangeredSpeciesSynonymName:
+          case Csconstants::ThreatenedEndangeredSpeciesSynonymName:
             if (!empty($value['ThreatenedEndangeredSpeciesSynonymName'])) {
               $combinedObjectValues[$field_name] = $value['ThreatenedEndangeredSpeciesSynonymName'];
             } else {
@@ -1813,7 +1812,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ThreatenedEndangeredSpeciesStatus:
+          case Csconstants::ThreatenedEndangeredSpeciesStatus:
             if (!empty($value['ThreatenedEndangeredSpeciesStatus']['Term'])) {
               $combinedObjectValues[$field_name] = $value['ThreatenedEndangeredSpeciesStatus']['Term'];
             } else {
@@ -1821,7 +1820,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SubspeciesSynonym:
+          case Csconstants::SubspeciesSynonym:
             if (!empty($value['SubspeciesSynonym'])) {
               $combinedObjectValues[$field_name] = $value['SubspeciesSynonym'];
             } else {
@@ -1829,7 +1828,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ContinentWorldRegion:
+          case Csconstants::ContinentWorldRegion:
             if (!empty($value['ContinentWorldRegion'])) {
               $combinedObjectValues[$field_name] = $value['ContinentWorldRegion'];
             } else {
@@ -1837,7 +1836,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ReproductionMethod:
+          case Csconstants::ReproductionMethod:
             if (!empty($value['ReproductionMethod'])) {
               $combinedObjectValues[$field_name] = $value['ReproductionMethod'];
             } else {
@@ -1845,7 +1844,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ReferenceDatum:
+          case Csconstants::ReferenceDatum:
             if (!empty($value['ReferenceDatum'])) {
               $combinedObjectValues[$field_name] = $value['ReferenceDatum'];
             } else {
@@ -1853,7 +1852,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Aspect:
+          case Csconstants::Aspect:
             if (!empty($value['Aspect'])) {
               $combinedObjectValues[$field_name] = $value['Aspect'];
             } else {
@@ -1861,7 +1860,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FormationPeriodSubstrate:
+          case Csconstants::FormationPeriodSubstrate:
             if (!empty($value['FormationPeriodSubstrate']['Term'])) {
               $combinedObjectValues[$field_name] = $value['FormationPeriodSubstrate']['Term'];
             } else {
@@ -1869,7 +1868,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SoilType:
+          case Csconstants::SoilType:
             if (!empty($value['SoilType'])) {
               $combinedObjectValues[$field_name] = $value['SoilType'];
             } else {
@@ -1877,7 +1876,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Slope:
+          case Csconstants::Slope:
             if (!empty($value['Slope'])) {
               $combinedObjectValues[$field_name] = $value['Slope'];
             } else {
@@ -1885,14 +1884,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Unit:
+          case Csconstants::Unit:
             if (!empty($value['Unit']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Unit']['Term'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::DepthInMeters:
+          case Csconstants::DepthInMeters:
             if (!empty($value['DepthInMeters'])) {
               $combinedObjectValues[$field_name] = $value['DepthInMeters'];
             } else {
@@ -1900,7 +1899,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ElevationInMeters:
+          case Csconstants::ElevationInMeters:
             if (!empty($value['ElevationInMeters'])) {
               $combinedObjectValues[$field_name] = $value['ElevationInMeters'];
             } else {
@@ -1908,7 +1907,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::EthnologyCulture:
+          case Csconstants::EthnologyCulture:
             if (!empty($value['EthnologyCulture'])) {
               $combinedObjectValues[$field_name] = $value['EthnologyCulture'];
             } else {
@@ -1916,7 +1915,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Alternate1EthnologyCulture:
+          case Csconstants::Alternate1EthnologyCulture:
             if (!empty($value['Alternate1EthnologyCulture'])) {
               $combinedObjectValues[$field_name] = $value['Alternate1EthnologyCulture'];
             } else {
@@ -1924,7 +1923,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Alternate2EthnologyCulture:
+          case Csconstants::Alternate2EthnologyCulture:
             if (!empty($value['Alternate2EthnologyCulture'])) {
               $combinedObjectValues[$field_name] = $value['Alternate2EthnologyCulture'];
             } else {
@@ -1932,7 +1931,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::AboriginalName:
+          case Csconstants::AboriginalName:
             if (!empty($value['AboriginalName']['Term'])) {
               $combinedObjectValues[$field_name] = $value['AboriginalName']['Term'];
             } else {
@@ -1940,7 +1939,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::AdditionalArea:
+          case Csconstants::AdditionalArea:
             if (!empty($value['AdditionalArea']['Term'])) {
               $combinedObjectValues[$field_name] = $value['AdditionalArea']['Term'];
             } else {
@@ -1948,7 +1947,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::AdditionalGroup:
+          case Csconstants::AdditionalGroup:
             if (!empty($value['AdditionalGroup'])) {
               $combinedObjectValues[$field_name] = $value['AdditionalGroup'];
             } else {
@@ -1956,7 +1955,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DescriptiveName:
+          case Csconstants::DescriptiveName:
             if (!empty($value['DescriptiveName'])) {
               $combinedObjectValues[$field_name] = $value['DescriptiveName'];
             } else {
@@ -1964,7 +1963,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PeriodSystem:
+          case Csconstants::PeriodSystem:
             if (!empty($value['PeriodSystem']['Term'])) {
               $combinedObjectValues[$field_name] = $value['PeriodSystem']['Term'];
             } else {
@@ -1972,7 +1971,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::EpochSeries:
+          case Csconstants::EpochSeries:
             if (!empty($value['EpochSeries']['Term'])) {
               $combinedObjectValues[$field_name] = $value['EpochSeries']['Term'];
             } else {
@@ -1980,7 +1979,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::AgeStage:
+          case Csconstants::AgeStage:
             if (!empty($value['AgeStage']['Term'])) {
               $combinedObjectValues[$field_name] = $value['AgeStage']['Term'];
             } else {
@@ -1988,7 +1987,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Composition:
+          case Csconstants::Composition:
             if (!empty($value['Composition'])) {
               $combinedObjectValues[$field_name] = $value['Composition'];
             } else {
@@ -1996,7 +1995,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StrunzClass:
+          case Csconstants::StrunzClass:
             if (!empty($value['StrunzClass'])) {
               $combinedObjectValues[$field_name] = $value['StrunzClass'];
             } else {
@@ -2004,7 +2003,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StrunzDivision:
+          case Csconstants::StrunzDivision:
             if (!empty($value['StrunzDivision'])) {
               $combinedObjectValues[$field_name] = $value['StrunzDivision'];
             } else {
@@ -2012,7 +2011,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StrunzID:
+          case Csconstants::StrunzID:
             if (!empty($value['StrunzID'])) {
               $combinedObjectValues[$field_name] = $value['StrunzID'];
             } else {
@@ -2020,7 +2019,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::LithologyPedotype:
+          case Csconstants::LithologyPedotype:
             if (!empty($value['LithologyPedotype'])) {
               $combinedObjectValues[$field_name] = $value['LithologyPedotype'];
             } else {
@@ -2028,14 +2027,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Formation:
+          case Csconstants::Formation:
             if (!empty($value['Formation'])) {
               $combinedObjectValues[$field_name] = $value['Formation'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::VerticalDatum:
+          case Csconstants::VerticalDatum:
             if (!empty($value['VerticalDatum'])) {
               $combinedObjectValues[$field_name] = $value['VerticalDatum'];
             } else {
@@ -2043,7 +2042,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Datum:
+          case Csconstants::Datum:
             if (!empty($value['Datum'])) {
               $combinedObjectValues[$field_name] = $value['Datum'];
             } else {
@@ -2051,7 +2050,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DepositionalEnvironment:
+          case Csconstants::DepositionalEnvironment:
             if (!empty($value['DepositionalEnvironment'])) {
               $combinedObjectValues[$field_name] = $value['DepositionalEnvironment'];
             } else {
@@ -2059,7 +2058,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Member:
+          case Csconstants::Member:
             if (!empty($value['Member']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Member']['Term'];
             } else {
@@ -2067,7 +2066,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::GeoUnit:
+          case Csconstants::GeoUnit:
             if (!empty($value['GeoUnit']['Term'])) {
               $combinedObjectValues[$field_name] = $value['GeoUnit']['Term'];
             } else {
@@ -2075,7 +2074,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ThinSection:
+          case Csconstants::ThinSection:
             if (!empty($value['ThinSection'])) {
               $combinedObjectValues[$field_name] = $value['ThinSection'] == true ? 'Yes' : 'No';
             } else {
@@ -2083,7 +2082,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PatentDate:
+          case Csconstants::PatentDate:
             if (!empty($value['PatentDate'])) {
               $combinedObjectValues[$field_name] = $value['PatentDate'];
             } else {
@@ -2091,7 +2090,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Copyright:
+          case Csconstants::Copyright:
             if (!empty($value['Copyright'])) {
               $combinedObjectValues[$field_name] = $value['Copyright'];
             } else {
@@ -2099,7 +2098,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::School:
+          case Csconstants::School:
             if (!empty($value['School'])) {
               $combinedObjectValues[$field_name] = $value['School'];
             } else {
@@ -2107,7 +2106,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Lithology:
+          case Csconstants::Lithology:
             if (!empty($value['Lithology'])) {
               $combinedObjectValues[$field_name] = $value['Lithology'];
             } else {
@@ -2115,7 +2114,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Horizon:
+          case Csconstants::Horizon:
             if (!empty($value['Horizon']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Horizon']['Term'];
             } else {
@@ -2123,7 +2122,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::InsituFloat:
+          case Csconstants::InsituFloat:
             if (!empty($value['InsituFloat']['Term'])) {
               $combinedObjectValues[$field_name] = $value['InsituFloat']['Term'];
             } else {
@@ -2131,7 +2130,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Taphonomy:
+          case Csconstants::Taphonomy:
             if (!empty($value['Taphonomy'])) {
               $combinedObjectValues[$field_name] = $value['Taphonomy'];
             } else {
@@ -2139,7 +2138,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Model:
+          case Csconstants::Model:
             if (!empty($value['Model'])) {
               $combinedObjectValues[$field_name] = $value['Model'];
             } else {
@@ -2147,7 +2146,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Stones:
+          case Csconstants::Stones:
             if (!empty($value['Stones'])) {
               $combinedObjectValues[$field_name] = $value['Stones'];
             } else {
@@ -2155,7 +2154,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Karats:
+          case Csconstants::Karats:
             if (!empty($value['Karats'])) {
               $combinedObjectValues[$field_name] = $value['Karats'];
             } else {
@@ -2163,7 +2162,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Carats:
+          case Csconstants::Carats:
             if (!empty($value['Carats'])) {
               $combinedObjectValues[$field_name] = $value['Carats'];
             } else {
@@ -2171,7 +2170,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Cut:
+          case Csconstants::Cut:
             if (!empty($value['Cut'])) {
               $combinedObjectValues[$field_name] = $value['Cut'];
             } else {
@@ -2179,7 +2178,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Clarity:
+          case Csconstants::Clarity:
             if (!empty($value['Clarity'])) {
               $combinedObjectValues[$field_name] = $value['Clarity'];
             } else {
@@ -2187,7 +2186,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TypeOfGemstone:
+          case Csconstants::TypeOfGemstone:
             if (!empty($value['TypeOfGemstone'])) {
               $combinedObjectValues[$field_name] = $value['TypeOfGemstone'];
             } else {
@@ -2195,7 +2194,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Size:
+          case Csconstants::Size:
             if (!empty($value['Size']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Size']['Term'];
             } else {
@@ -2203,7 +2202,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::MetalType:
+          case Csconstants::MetalType:
             if (!empty($value['MetalType'])) {
               $combinedObjectValues[$field_name] = $value['MetalType'];
             } else {
@@ -2211,7 +2210,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DrivenBy:
+          case Csconstants::DrivenBy:
             if (!empty($value['DrivenBy'])) {
               $combinedObjectValues[$field_name] = $value['DrivenBy'];
             } else {
@@ -2219,7 +2218,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::VIN:
+          case Csconstants::VIN:
             if (!empty($value['VIN'])) {
               $combinedObjectValues[$field_name] = $value['VIN'];
             } else {
@@ -2227,7 +2226,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ChassisNumber:
+          case Csconstants::ChassisNumber:
             if (!empty($value['ChassisNumber'])) {
               $combinedObjectValues[$field_name] = $value['ChassisNumber'];
             } else {
@@ -2235,7 +2234,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Mileage:
+          case Csconstants::Mileage:
             if (!empty($value['Mileage'])) {
               $combinedObjectValues[$field_name] = $value['Mileage'];
             } else {
@@ -2243,14 +2242,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Power:
+          case Csconstants::Power:
             if (!empty($value['Power'])) {
               $combinedObjectValues[$field_name] = $value['Power'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::EngineType:
+          case Csconstants::EngineType:
             if (!empty($value['EngineType'])) {
               $combinedObjectValues[$field_name] = $value['EngineType'];
             } else {
@@ -2258,7 +2257,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::EnginePosition:
+          case Csconstants::EnginePosition:
             if (!empty($value['EnginePosition'])) {
               $combinedObjectValues[$field_name] = $value['EnginePosition'];
             } else {
@@ -2266,7 +2265,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Transmission:
+          case Csconstants::Transmission:
             if (!empty($value['Transmission']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Transmission']['Term'];
             } else {
@@ -2274,7 +2273,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Passengers:
+          case Csconstants::Passengers:
             if (!empty($value['Passengers'])) {
               $combinedObjectValues[$field_name] = $value['Passengers'];
             } else {
@@ -2282,7 +2281,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FuelHighway:
+          case Csconstants::FuelHighway:
             if (!empty($value['FuelHighway'])) {
               $combinedObjectValues[$field_name] = $value['FuelHighway'];
             } else {
@@ -2290,7 +2289,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Acceleration:
+          case Csconstants::Acceleration:
             if (!empty($value['Acceleration'])) {
               $combinedObjectValues[$field_name] = $value['Acceleration'];
             } else {
@@ -2298,7 +2297,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TopSpeed:
+          case Csconstants::TopSpeed:
             if (!empty($value['TopSpeed'])) {
               $combinedObjectValues[$field_name] = $value['TopSpeed'];
             } else {
@@ -2306,7 +2305,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::EngineNumber:
+          case Csconstants::EngineNumber:
             if (!empty($value['EngineNumber'])) {
               $combinedObjectValues[$field_name] = $value['EngineNumber'];
             } else {
@@ -2314,7 +2313,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::LicensePlateNumber:
+          case Csconstants::LicensePlateNumber:
             if (!empty($value['LicensePlateNumber'])) {
               $combinedObjectValues[$field_name] = $value['LicensePlateNumber'];
             } else {
@@ -2322,7 +2321,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TransmissionFluid:
+          case Csconstants::TransmissionFluid:
             if (!empty($value['TransmissionFluid'])) {
               $combinedObjectValues[$field_name] = $value['TransmissionFluid'];
             } else {
@@ -2330,7 +2329,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::BrakeFluid:
+          case Csconstants::BrakeFluid:
             if (!empty($value['BrakeFluid'])) {
               $combinedObjectValues[$field_name] = $value['BrakeFluid'];
             } else {
@@ -2338,7 +2337,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::OilType:
+          case Csconstants::OilType:
             if (!empty($value['OilType'])) {
               $combinedObjectValues[$field_name] = $value['OilType'];
             } else {
@@ -2346,7 +2345,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FuelType:
+          case Csconstants::FuelType:
             if (!empty($value['FuelType'])) {
               $combinedObjectValues[$field_name] = $value['FuelType'];
             } else {
@@ -2354,7 +2353,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::RegistrationStatus:
+          case Csconstants::RegistrationStatus:
             if (!empty($value['RegistrationStatus']['Term'])) {
               $combinedObjectValues[$field_name] = $value['RegistrationStatus']['Term'];
             } else {
@@ -2362,7 +2361,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TitleStatus:
+          case Csconstants::TitleStatus:
             if (!empty($value['TitleStatus']['Term'])) {
               $combinedObjectValues[$field_name] = $value['TitleStatus']['Term'];
             } else {
@@ -2370,14 +2369,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Paint:
+          case Csconstants::Paint:
             if (!empty($value['Paint'])) {
               $combinedObjectValues[$field_name] = $value['Paint'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::Battery:
+          case Csconstants::Battery:
             if (!empty($value['Battery'])) {
               $combinedObjectValues[$field_name] = $value['Battery'];
             } else {
@@ -2385,7 +2384,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ShiftPattern:
+          case Csconstants::ShiftPattern:
             if (!empty($value['ShiftPattern'])) {
               $combinedObjectValues[$field_name] = $value['ShiftPattern'];
             } else {
@@ -2393,7 +2392,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DashLayout:
+          case Csconstants::DashLayout:
             if (!empty($value['DashLayout'])) {
               $combinedObjectValues[$field_name] = $value['DashLayout'];
             } else {
@@ -2401,7 +2400,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::TypeOfWine:
+          case Csconstants::TypeOfWine:
             if (!empty($value['TypeOfWine'])) {
               $combinedObjectValues[$field_name] = $value['TypeOfWine'];
             } else {
@@ -2409,7 +2408,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Maturity:
+          case Csconstants::Maturity:
             if (!empty($value['Maturity'])) {
               $combinedObjectValues[$field_name] = $value['Maturity'];
             } else {
@@ -2417,7 +2416,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Grape:
+          case Csconstants::Grape:
             if (!empty($value['Grape'])) {
               $combinedObjectValues[$field_name] = $value['Grape'];
             } else {
@@ -2425,7 +2424,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Region:
+          case Csconstants::Region:
             if (!empty($value['Region'])) {
               $combinedObjectValues[$field_name] = $value['Region'];
             } else {
@@ -2433,7 +2432,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::BottleSize:
+          case Csconstants::BottleSize:
             if (!empty($value['BottleSize'])) {
               $combinedObjectValues[$field_name] = $value['BottleSize'];
             } else {
@@ -2441,7 +2440,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FermentationPeriod:
+          case Csconstants::FermentationPeriod:
             if (!empty($value['FermentationPeriod'])) {
               $combinedObjectValues[$field_name] = $value['FermentationPeriod'];
             } else {
@@ -2449,7 +2448,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DesignerName:
+          case Csconstants::DesignerName:
             if (!empty($value['Designer']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['Designer']['ContactName'];
             } else {
@@ -2457,7 +2456,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Brand:
+          case Csconstants::Brand:
             if (!empty($value['Brand'])) {
               $combinedObjectValues[$field_name] = $value['Brand'];
             } else {
@@ -2465,7 +2464,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FabricMaterial:
+          case Csconstants::FabricMaterial:
             if (!empty($value['FabricMaterial'])) {
               $combinedObjectValues[$field_name] = $value['FabricMaterial'];
             } else {
@@ -2473,7 +2472,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SKU:
+          case Csconstants::SKU:
             if (!empty($value['SKU'])) {
               $combinedObjectValues[$field_name] = $value['SKU'];
             } else {
@@ -2482,7 +2481,7 @@ class DataSyncManager {
             break;
 
             /*dimension fields */
-          case csconstants::HeightMetric:
+          case Csconstants::HeightMetric:
             if (!empty($value['MainDimension']['HeightMetric'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['HeightMetric'];
             } else {
@@ -2490,7 +2489,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::WidthMetric:
+          case Csconstants::WidthMetric:
             if (!empty($value['MainDimension']['WidthMetric'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['WidthMetric'];
             } else {
@@ -2498,7 +2497,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DepthMetric:
+          case Csconstants::DepthMetric:
             if (!empty($value['MainDimension']['DepthMetric'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['DepthMetric'];
             } else {
@@ -2506,7 +2505,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DiameterMetric:
+          case Csconstants::DiameterMetric:
             if (!empty($value['MainDimension']['DiameterMetric'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['DiameterMetric'];
             } else {
@@ -2514,7 +2513,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::WeightMetric:
+          case Csconstants::WeightMetric:
             if (!empty($value['MainDimension']['WeightMetric'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['WeightMetric'];
             } else {
@@ -2522,7 +2521,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::WeightImperial:
+          case Csconstants::WeightImperial:
             if (!empty($value['MainDimension']['WeightImperial'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['WeightImperial'];
             } else {
@@ -2530,7 +2529,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::HeightImperial:
+          case Csconstants::HeightImperial:
             if (!empty($value['MainDimension']['HeightImperial'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['HeightImperial'];
             } else {
@@ -2538,7 +2537,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::WidthImperial:
+          case Csconstants::WidthImperial:
             if (!empty($value['MainDimension']['WidthImperial'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['WidthImperial'];
             } else {
@@ -2546,7 +2545,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DepthImperial:
+          case Csconstants::DepthImperial:
             if (!empty($value['MainDimension']['DepthImperial'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['DepthImperial'];
             } else {
@@ -2554,7 +2553,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DiameterImperial:
+          case Csconstants::DiameterImperial:
             if (!empty($value['MainDimension']['DiameterImperial'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['DiameterImperial'];
             } else {
@@ -2562,7 +2561,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SquareMeters:
+          case Csconstants::SquareMeters:
             if (!empty($value['MainDimension']['SquareMeters'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['SquareMeters'];
             } else {
@@ -2570,14 +2569,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::SquareFeet:
+          case Csconstants::SquareFeet:
             if (!empty($value['MainDimension']['SquareFeet'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['SquareFeet'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::ImperialDims:
+          case Csconstants::ImperialDims:
             if (!empty($value['MainDimension']['ImperialDims'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['ImperialDims'];
             } else {
@@ -2585,7 +2584,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::MetricDims:
+          case Csconstants::MetricDims:
             if (!empty($value['MainDimension']['MetricDims'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['MetricDims'];
             } else {
@@ -2593,7 +2592,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::DimensionDescription:
+          case Csconstants::DimensionDescription:
             if (!empty($value['MainDimension']['DimensionDescription']['Term'])) {
               $combinedObjectValues[$field_name] = $value['MainDimension']['DimensionDescription']['Term'];
             } else {
@@ -2605,7 +2604,7 @@ class DataSyncManager {
 
             /*spectrumobject fields*/
 
-          case csconstants::OtherNumberType:
+          case Csconstants::OtherNumberType:
             if (!empty($value['OtherNumberType']['Term'])) {
               $combinedObjectValues[$field_name] = $value['OtherNumberType']['Term'];
             } else {
@@ -2613,7 +2612,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ResponsibleDepartment:
+          case Csconstants::ResponsibleDepartment:
             if (!empty($value['ResponsibleDepartment']['Term'])) {
               $combinedObjectValues[$field_name] = $value['ResponsibleDepartment']['Term'];
             } else {
@@ -2621,7 +2620,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Completeness:
+          case Csconstants::Completeness:
             if (!empty($value['Completeness']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Completeness']['Term'];
             } else {
@@ -2629,7 +2628,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CompletenessDate:
+          case Csconstants::CompletenessDate:
             if (!empty($value['CompletenessDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['CompletenessDate']));
             } else {
@@ -2637,7 +2636,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::CompletenessNote:
+          case Csconstants::CompletenessNote:
             if (!empty($value['CompletenessNote'])) {
               $combinedObjectValues[$field_name] = $value['CompletenessNote'];
             } else {
@@ -2645,7 +2644,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::MovementReferenceNumber:
+          case Csconstants::MovementReferenceNumber:
             if (!empty($value['MovementReferenceNumber'])) {
               $combinedObjectValues[$field_name] = $value['MovementReferenceNumber'];
             } else {
@@ -2653,7 +2652,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::MovementAuthorizerContactName:
+          case Csconstants::MovementAuthorizerContactName:
             if (!empty($value['MovementAuthorizer']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['MovementAuthorizer']['ContactName'];
             } else {
@@ -2661,7 +2660,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::MovementAuthorizationDate:
+          case Csconstants::MovementAuthorizationDate:
             if (!empty($value['MovementAuthorizationDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['MovementAuthorizationDate']));
             } else {
@@ -2669,7 +2668,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::MovementContactName:
+          case Csconstants::MovementContactName:
             if (!empty($value['MovementContact']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['MovementContact']['ContactName'];
             } else {
@@ -2677,7 +2676,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::MovementMethod:
+          case Csconstants::MovementMethod:
             if (!empty($value['MovementMethod']['Term'])) {
               $combinedObjectValues[$field_name] = $value['MovementMethod']['Term'];
             } else {
@@ -2685,7 +2684,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::MovementMemo:
+          case Csconstants::MovementMemo:
             if (!empty($value['MovementMemo'])) {
               $combinedObjectValues[$field_name] = $value['MovementMemo'];
             } else {
@@ -2693,7 +2692,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::MovementReason:
+          case Csconstants::MovementReason:
             if (!empty($value['MovementReason']['Term'])) {
               $combinedObjectValues[$field_name] = $value['MovementReason']['Term'];
             } else {
@@ -2701,7 +2700,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::PlannedRemoval:
+          case Csconstants::PlannedRemoval:
             if (!empty($value['PlannedRemoval'])) {
               $combinedObjectValues[$field_name] = $value['PlannedRemoval'];
             } else {
@@ -2709,7 +2708,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::LocationReferenceNameNumber:
+          case Csconstants::LocationReferenceNameNumber:
             if (!empty($value['LocationReferenceNameNumber'])) {
               $combinedObjectValues[$field_name] = $value['LocationReferenceNameNumber'];
             } else {
@@ -2717,14 +2716,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::LocationType:
+          case Csconstants::LocationType:
             if (!empty($value['LocationType']['Term'])) {
               $combinedObjectValues[$field_name] = $value['LocationType']['Term'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::LocationAccessMemo:
+          case Csconstants::LocationAccessMemo:
             if (!empty($value['LocationAccessMemo'])) {
               $combinedObjectValues[$field_name] = $value['LocationAccessMemo'];
             } else {
@@ -2732,7 +2731,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::LocationConditionMemo:
+          case Csconstants::LocationConditionMemo:
             if (!empty($value['LocationConditionMemo'])) {
               $combinedObjectValues[$field_name] = $value['LocationConditionMemo'];
             } else {
@@ -2740,7 +2739,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::LocationConditionDate:
+          case Csconstants::LocationConditionDate:
             if (!empty($value['LocationConditionDate'])) {
               $combinedObjectValues[$field_name] = date('m/d/Y', strtotime($value['LocationConditionDate']));
             } else {
@@ -2748,7 +2747,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::LocationSecurityMemo:
+          case Csconstants::LocationSecurityMemo:
             if (!empty($value['LocationSecurityMemo'])) {
               $combinedObjectValues[$field_name] = $value['LocationSecurityMemo'];
             } else {
@@ -2756,7 +2755,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ObjectNameCurrency:
+          case Csconstants::ObjectNameCurrency:
             if (!empty($value['ObjectNameCurrency']['Term'])) {
               $combinedObjectValues[$field_name] = $value['ObjectNameCurrency']['Term'];
             } else {
@@ -2764,7 +2763,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ObjectNameLevel:
+          case Csconstants::ObjectNameLevel:
             if (!empty($value['ObjectNameLevel']['Term'])) {
               $combinedObjectValues[$field_name] = $value['ObjectNameLevel']['Term'];
             } else {
@@ -2772,7 +2771,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ObjectNameNote:
+          case Csconstants::ObjectNameNote:
             if (!empty($value['ObjectNameNote'])) {
               $combinedObjectValues[$field_name] = $value['ObjectNameNote'];
             } else {
@@ -2780,7 +2779,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ObjectNameSystem:
+          case Csconstants::ObjectNameSystem:
             if (!empty($value['ObjectNameSystem']['Term'])) {
               $combinedObjectValues[$field_name] = $value['ObjectNameSystem']['Term'];
             } else {
@@ -2788,7 +2787,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ObjectNameType:
+          case Csconstants::ObjectNameType:
             if (!empty($value['ObjectNameType']['Term'])) {
               $combinedObjectValues[$field_name] = $value['ObjectNameType']['Term'];
             } else {
@@ -2796,7 +2795,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::ObjectNameTitleLanguage:
+          case Csconstants::ObjectNameTitleLanguage:
             if (!empty($value['ObjectNameTitleLanguage']['Term'])) {
               $combinedObjectValues[$field_name] = $value['ObjectNameTitleLanguage']['Term'];
             } else {
@@ -2804,7 +2803,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FieldCollectionMethod:
+          case Csconstants::FieldCollectionMethod:
             if (!empty($value['FieldCollectionMethod']['Term'])) {
               $combinedObjectValues[$field_name] = $value['FieldCollectionMethod']['Term'];
             } else {
@@ -2812,7 +2811,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FieldCollectionPlace:
+          case Csconstants::FieldCollectionPlace:
             if (!empty($value['FieldCollectionPlace'])) {
               $combinedObjectValues[$field_name] = $value['FieldCollectionPlace'];
             } else {
@@ -2820,7 +2819,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FieldCollectionSourceContactName:
+          case Csconstants::FieldCollectionSourceContactName:
             if (!empty($value['FieldCollectionSource']['ContactName'])) {
               $combinedObjectValues[$field_name] = $value['FieldCollectionSource']['ContactName'];
             } else {
@@ -2828,7 +2827,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::FieldCollectionMemo:
+          case Csconstants::FieldCollectionMemo:
             if (!empty($value['FieldCollectionMemo'])) {
               $combinedObjectValues[$field_name] = $value['FieldCollectionMemo'];
             } else {
@@ -2836,7 +2835,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::GeologicalComplexName:
+          case Csconstants::GeologicalComplexName:
             if (!empty($value['GeologicalComplexName']['Term'])) {
               $combinedObjectValues[$field_name] = $value['GeologicalComplexName']['Term'];
             } else {
@@ -2844,7 +2843,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::Habitat:
+          case Csconstants::Habitat:
             if (!empty($value['Habitat']['Term'])) {
               $combinedObjectValues[$field_name] = $value['Habitat']['Term'];
             } else {
@@ -2852,7 +2851,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::HabitatMemo:
+          case Csconstants::HabitatMemo:
             if (!empty($value['HabitatMemo'])) {
               $combinedObjectValues[$field_name] = $value['HabitatMemo'];
             } else {
@@ -2860,7 +2859,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StratigraphicUnitName:
+          case Csconstants::StratigraphicUnitName:
             if (!empty($value['StratigraphicUnitName']['Term'])) {
               $combinedObjectValues[$field_name] = $value['StratigraphicUnitName']['Term'];
             } else {
@@ -2868,7 +2867,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StratigraphicUnitType:
+          case Csconstants::StratigraphicUnitType:
             if (!empty($value['StratigraphicUnitType']['Term'])) {
               $combinedObjectValues[$field_name] = $value['StratigraphicUnitType']['Term'];
             } else {
@@ -2876,7 +2875,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::StratigraphicUnitMemo:
+          case Csconstants::StratigraphicUnitMemo:
             if (!empty($value['StratigraphicUnitMemo'])) {
               $combinedObjectValues[$field_name] = $value['StratigraphicUnitMemo'];
             } else {
@@ -2884,7 +2883,7 @@ class DataSyncManager {
             }
             break;
             /*udf fields*/
-          case csconstants::UserDefined1:
+          case Csconstants::UserDefined1:
             if (!empty($value['UserDefined1'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined1'];
             } else {
@@ -2892,7 +2891,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined2:
+          case Csconstants::UserDefined2:
             if (!empty($value['UserDefined2'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined2'];
             } else {
@@ -2900,7 +2899,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined3:
+          case Csconstants::UserDefined3:
             if (!empty($value['UserDefined3'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined3'];
             } else {
@@ -2908,7 +2907,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined4:
+          case Csconstants::UserDefined4:
             if (!empty($value['UserDefined4'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined4'];
             } else {
@@ -2916,7 +2915,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined5:
+          case Csconstants::UserDefined5:
             if (!empty($value['UserDefined5'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined5'];
             } else {
@@ -2924,7 +2923,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined6:
+          case Csconstants::UserDefined6:
             if (!empty($value['UserDefined6'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined6'];
             } else {
@@ -2932,7 +2931,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined7:
+          case Csconstants::UserDefined7:
             if (!empty($value['UserDefined7'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined7'];
             } else {
@@ -2940,7 +2939,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined8:
+          case Csconstants::UserDefined8:
             if (!empty($value['UserDefined8'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined8'];
             } else {
@@ -2948,7 +2947,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined9:
+          case Csconstants::UserDefined9:
             if (!empty($value['UserDefined9'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined9'];
             } else {
@@ -2956,7 +2955,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined10:
+          case Csconstants::UserDefined10:
             if (!empty($value['UserDefined10'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined10'];
             } else {
@@ -2964,7 +2963,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined11:
+          case Csconstants::UserDefined11:
             if (!empty($value['UserDefined11'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined11'];
             } else {
@@ -2972,7 +2971,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined12:
+          case Csconstants::UserDefined12:
             if (!empty($value['UserDefined12'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined12'];
             } else {
@@ -2980,7 +2979,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined13:
+          case Csconstants::UserDefined13:
             if (!empty($value['UserDefined13'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined13'];
             } else {
@@ -2988,7 +2987,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined14:
+          case Csconstants::UserDefined14:
             if (!empty($value['UserDefined14'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined14'];
             } else {
@@ -2996,7 +2995,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined15:
+          case Csconstants::UserDefined15:
             if (!empty($value['UserDefined15'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined15'];
             } else {
@@ -3004,7 +3003,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined16:
+          case Csconstants::UserDefined16:
             if (!empty($value['UserDefined16'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined16'];
             } else {
@@ -3012,7 +3011,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined17:
+          case Csconstants::UserDefined17:
             if (!empty($value['UserDefined17'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined17'];
             } else {
@@ -3020,7 +3019,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined18:
+          case Csconstants::UserDefined18:
             if (!empty($value['UserDefined18'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined18'];
             } else {
@@ -3028,7 +3027,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined19:
+          case Csconstants::UserDefined19:
             if (!empty($value['UserDefined19'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined19'];
             } else {
@@ -3036,7 +3035,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined20:
+          case Csconstants::UserDefined20:
             if (!empty($value['UserDefined20'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined20'];
             } else {
@@ -3044,7 +3043,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined21:
+          case Csconstants::UserDefined21:
             if (!empty($value['UserDefined21'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined21'];
             } else {
@@ -3052,7 +3051,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined22:
+          case Csconstants::UserDefined22:
             if (!empty($value['UserDefined22'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined22'];
             } else {
@@ -3060,7 +3059,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined23:
+          case Csconstants::UserDefined23:
             if (!empty($value['UserDefined23'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined23'];
             } else {
@@ -3068,7 +3067,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined24:
+          case Csconstants::UserDefined24:
             if (!empty($value['UserDefined24'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined24'];
             } else {
@@ -3076,14 +3075,14 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined25:
+          case Csconstants::UserDefined25:
             if (!empty($value['UserDefined25'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined25'];
             } else {
               $combinedObjectValues[$field_name] = "";
             }
             break;
-          case csconstants::UserDefined26:
+          case Csconstants::UserDefined26:
             if (!empty($value['UserDefined26'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined26'];
             } else {
@@ -3091,7 +3090,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined27:
+          case Csconstants::UserDefined27:
             if (!empty($value['UserDefined27'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined27'];
             } else {
@@ -3099,7 +3098,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined28:
+          case Csconstants::UserDefined28:
             if (!empty($value['UserDefined28'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined28'];
             } else {
@@ -3107,7 +3106,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined29:
+          case Csconstants::UserDefined29:
             if (!empty($value['UserDefined29'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined29'];
             } else {
@@ -3115,7 +3114,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined30:
+          case Csconstants::UserDefined30:
             if (!empty($value['UserDefined30'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined30'];
             } else {
@@ -3123,7 +3122,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined31:
+          case Csconstants::UserDefined31:
             if (!empty($value['UserDefined31'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined31'];
             } else {
@@ -3131,7 +3130,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined32:
+          case Csconstants::UserDefined32:
             if (!empty($value['UserDefined32'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined32'];
             } else {
@@ -3139,7 +3138,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined33:
+          case Csconstants::UserDefined33:
             if (!empty($value['UserDefined33'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined33'];
             } else {
@@ -3147,7 +3146,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined34:
+          case Csconstants::UserDefined34:
             if (!empty($value['UserDefined34'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined34'];
             } else {
@@ -3155,7 +3154,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined35:
+          case Csconstants::UserDefined35:
             if (!empty($value['UserDefined35'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined35'];
             } else {
@@ -3163,7 +3162,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined36:
+          case Csconstants::UserDefined36:
             if (!empty($value['UserDefined36'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined36'];
             } else {
@@ -3171,7 +3170,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined37:
+          case Csconstants::UserDefined37:
             if (!empty($value['UserDefined37'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined37'];
             } else {
@@ -3179,7 +3178,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined38:
+          case Csconstants::UserDefined38:
             if (!empty($value['UserDefined38'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined38'];
             } else {
@@ -3187,7 +3186,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined39:
+          case Csconstants::UserDefined39:
             if (!empty($value['UserDefined39'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined39'];
             } else {
@@ -3195,7 +3194,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefined40:
+          case Csconstants::UserDefined40:
             if (!empty($value['UserDefined40'])) {
               $combinedObjectValues[$field_name] = $value['UserDefined40'];
             } else {
@@ -3203,7 +3202,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefinedDate1:
+          case Csconstants::UserDefinedDate1:
             if (!empty($value['UserDefinedDate1'])) {
               $combinedObjectValues[$field_name] = $value['UserDefinedDate1'];
             } else {
@@ -3211,7 +3210,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefinedDate2:
+          case Csconstants::UserDefinedDate2:
             if (!empty($value['UserDefinedDate2'])) {
               $combinedObjectValues[$field_name] = $value['UserDefinedDate2'];
             } else {
@@ -3219,7 +3218,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefinedNumber1:
+          case Csconstants::UserDefinedNumber1:
             if (!empty($value['UserDefinedNumber1'])) {
               $combinedObjectValues[$field_name] = $value['UserDefinedNumber1'];
             } else {
@@ -3227,7 +3226,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefinedNumber2:
+          case Csconstants::UserDefinedNumber2:
             if (!empty($value['UserDefinedNumber2'])) {
               $combinedObjectValues[$field_name] = $value['UserDefinedNumber2'];
             } else {
@@ -3235,7 +3234,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefinedCurrency1:
+          case Csconstants::UserDefinedCurrency1:
             if (!empty($value['UserDefinedCurrency1'])) {
               $combinedObjectValues[$field_name] = $value['UserDefinedCurrency1'];
             } else {
@@ -3243,7 +3242,7 @@ class DataSyncManager {
             }
             break;
 
-          case csconstants::UserDefinedCurrency2:
+          case Csconstants::UserDefinedCurrency2:
             if (!empty($value['UserDefinedCurrency2'])) {
               $combinedObjectValues[$field_name] = $value['UserDefinedCurrency2'];
             } else {
@@ -4054,7 +4053,7 @@ class DataSyncManager {
       if($btn_action == 'reset_and_create_dataset'){
 
         //drop images directory
-        $allImagesDirectory = PublicStream::basePath() . '/collector_systems/images';
+        $allImagesDirectory = \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath() . '/collector_systems/images';
         if(file_exists( $allImagesDirectory ))
         {
           $this->fileSystem->deleteRecursive($allImagesDirectory);

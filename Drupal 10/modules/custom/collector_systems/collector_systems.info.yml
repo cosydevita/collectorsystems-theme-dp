@@ -1,7 +1,7 @@
 name: 'Collector Systems'
 type: module
 description: 'Collectory Systems Module to integrate with the Collector Systems API.'
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^9 || ^10 || ^11
 package: Collector Systems
 version: '1.0.9'
 config:

@@ -56,7 +56,7 @@ class CollectorSystemsGetApiData{
 
     //Fetch Object Images
     //expanded to include the attachmentkeywords
-    $url =csconstants::Public_API_URL.$subAcntId.'/Objects?$expand=MainImageAttachment($select=AttachmentId,Description,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL,SlideShowURL),ObjectImageAttachments($expand=Attachment($select=AttachmentId,SubscriptionId,FileName,Description,ContentType,CreationDate,FileURL,ThumbSizeURL,MidSizeURL,DetailURL,DetailLargeURL,DetailXLargeURL,iphoneURL,SlideShowURL;$expand=AttachmentKeywords($select=AttachmentKeywordString))),&$select=InventoryNumber,Title,InventoryNumber,ObjectId,MainImageAttachmentId,ModificationDate,CreationDate&$filter=SubscriptionId%20eq%20'.$subsId.'%20And%20Deleted%20eq%20false&$top='.$top.'&$skip='. $skip;
+    $url =Csconstants::Public_API_URL.$subAcntId.'/Objects?$expand=MainImageAttachment($select=AttachmentId,Description,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL,SlideShowURL),ObjectImageAttachments($expand=Attachment($select=AttachmentId,SubscriptionId,FileName,Description,ContentType,CreationDate,FileURL,ThumbSizeURL,MidSizeURL,DetailURL,DetailLargeURL,DetailXLargeURL,iphoneURL,SlideShowURL;$expand=AttachmentKeywords($select=AttachmentKeywordString))),&$select=InventoryNumber,Title,InventoryNumber,ObjectId,MainImageAttachmentId,ModificationDate,CreationDate&$filter=SubscriptionId%20eq%20'.$subsId.'%20And%20Deleted%20eq%20false&$top='.$top.'&$skip='. $skip;
 
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -121,7 +121,7 @@ class CollectorSystemsGetApiData{
     $subsId = $this->subsId;
 
      //Fetch Artist Images
-    $url = csconstants::Public_API_URL.$subAcntId . '/Artists?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=ArtistPhotoAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL)&$top='.$top.'&$skip='.$skip;
+    $url = Csconstants::Public_API_URL.$subAcntId . '/Artists?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=ArtistPhotoAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL)&$top='.$top.'&$skip='.$skip;
 
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -185,7 +185,7 @@ class CollectorSystemsGetApiData{
 
      //Fetch Collection Images
     //  global $wpdb , $subAcntId , $subsId , $subsKey;
-    $url = csconstants::Public_API_URL.$subAcntId . '/Collections?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=CollectionImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL)&$top='.$top.'&$skip='.$skip;
+    $url = Csconstants::Public_API_URL.$subAcntId . '/Collections?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=CollectionImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL)&$top='.$top.'&$skip='.$skip;
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -249,7 +249,7 @@ class CollectorSystemsGetApiData{
 
     //Fetch Groups Images
     //  global $wpdb , $subAcntId , $subsId , $subsKey;
-    $url = csconstants::Public_API_URL. $subAcntId . '/Groups?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=GroupImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL)&$top='.$top.'&$skip='.$skip;
+    $url = Csconstants::Public_API_URL. $subAcntId . '/Groups?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=GroupImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL)&$top='.$top.'&$skip='.$skip;
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -311,7 +311,7 @@ class CollectorSystemsGetApiData{
 
     //Fetch Exhibitions Images
     //  global $wpdb , $subAcntId , $subsId , $subsKey;
-    $url = csconstants::Public_API_URL.$subAcntId . '/Exhibitions?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=ExhibitionImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL)&$top='.$top.'&$skip='.$skip;
+    $url = Csconstants::Public_API_URL.$subAcntId . '/Exhibitions?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=ExhibitionImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL)&$top='.$top.'&$skip='.$skip;
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -373,7 +373,7 @@ class CollectorSystemsGetApiData{
     $subsId = $this->subsId;
 
     //Fetch GroupObjects
-    $url=csconstants::Public_API_URL.$subAcntId.'/GroupObjects?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=group,object($expand=MainImageattachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL))&$top='.$top.'&$skip='.$skip;
+    $url=Csconstants::Public_API_URL.$subAcntId.'/GroupObjects?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=group,object($expand=MainImageattachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL))&$top='.$top.'&$skip='.$skip;
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -434,7 +434,7 @@ class CollectorSystemsGetApiData{
     $subsId = $this->subsId;
 
     //Fetch ExhibitionObjects
-    $url=csconstants::Public_API_URL.$subAcntId.'/ExhibitionObjects?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=exhibition,object($expand=Mainimageattachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL)),';
+    $url=Csconstants::Public_API_URL.$subAcntId.'/ExhibitionObjects?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=exhibition,object($expand=Mainimageattachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL)),';
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -462,7 +462,7 @@ class CollectorSystemsGetApiData{
     $subsId = $this->subsId;
 
      //Fetch Artists Data
-    $url = csconstants::Public_API_URL.$subAcntId . '/Artists?$filter=SubscriptionId%20eq%20' . $subsId. '&$top='.$top.'&$skip='.$skip;
+    $url = Csconstants::Public_API_URL.$subAcntId . '/Artists?$filter=SubscriptionId%20eq%20' . $subsId. '&$top='.$top.'&$skip='.$skip;
 
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -494,7 +494,7 @@ class CollectorSystemsGetApiData{
     $wordforsearch = "Objects";
       if ($field_names != null && $field_names != "") {
         $customized_fields = $this->getCommaSeperatedUniqueFieldsForSearch($field_names);
-        $baseurl = csconstants::Public_API_URL.$subAcntId . '/Objects?$expand=MainImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL),Address($select=AddressId,AddressName,Latitude,Longitude),';
+        $baseurl = Csconstants::Public_API_URL.$subAcntId . '/Objects?$expand=MainImageAttachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL),Address($select=AddressId,AddressName,Latitude,Longitude),';
         $qSearch= '';
         $apiCallFor = '';
 
@@ -503,7 +503,7 @@ class CollectorSystemsGetApiData{
 
       }
       else{
-    	$url = csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch . '?$filter=SubscriptionId%20eq%20' . $subsId. '?$top='.$top.'&$skip='.$skip;
+    	$url = Csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch . '?$filter=SubscriptionId%20eq%20' . $subsId. '?$top='.$top.'&$skip='.$skip;
       }
 
       // \Drupal::logger('collector_systems')->debug('Sync Objects API: %url', ['%url' => $url]);
@@ -1593,7 +1593,7 @@ class CollectorSystemsGetApiData{
 
     //Fetching Collection's API Data
     $wordforsearch = "Collections";
-    $url = csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$filter=SubscriptionId%20eq%20' . $subsId . '&$top='.$top.'&$skip='.$skip;
+    $url = Csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$filter=SubscriptionId%20eq%20' . $subsId . '&$top='.$top.'&$skip='.$skip;
 
       $curl = curl_init($url);
       curl_setopt($curl, CURLOPT_URL, $url);
@@ -1629,7 +1629,7 @@ class CollectorSystemsGetApiData{
 
     //Fetching Group's API Data
     $wordforsearch = "Groups";
-    $url = csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$filter=SubscriptionId%20eq%20' . $subsId . '&$top='.$top.'&$skip='.$skip;
+    $url = Csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$filter=SubscriptionId%20eq%20' . $subsId . '&$top='.$top.'&$skip='.$skip;
 
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -1665,7 +1665,7 @@ class CollectorSystemsGetApiData{
 
     //Fetching Exhibition's API Data
     $wordforsearch = "Exhibitions";
-    $url = csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$filter=SubscriptionId%20eq%20' . $subsId . '&$top='.$top.'&$skip='.$skip;
+    $url = Csconstants::Public_API_URL . $subAcntId . '/' . $wordforsearch. '?$filter=SubscriptionId%20eq%20' . $subsId . '&$top='.$top.'&$skip='.$skip;
 
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
@@ -1699,7 +1699,7 @@ class CollectorSystemsGetApiData{
 
 
    //Fetch GroupObjects
-   $url=csconstants::Public_API_URL.$subAcntId.'/GroupObjects?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=group,object($expand=MainImageattachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL))'.'&$top='.$top.'&$skip='.$skip;
+   $url=Csconstants::Public_API_URL.$subAcntId.'/GroupObjects?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=group,object($expand=MainImageattachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL))'.'&$top='.$top.'&$skip='.$skip;
    $curl = curl_init($url);
    curl_setopt($curl, CURLOPT_URL, $url);
    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -1733,7 +1733,7 @@ class CollectorSystemsGetApiData{
 
 
     //Fetch ExhibitionObjects
-    $url=csconstants::Public_API_URL.$subAcntId.'/ExhibitionObjects?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=exhibition,object($expand=Mainimageattachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL))'.'&$top='.$top.'&$skip='.$skip;
+    $url=Csconstants::Public_API_URL.$subAcntId.'/ExhibitionObjects?$filter=SubscriptionId%20eq%20' . $subsId. '&$expand=exhibition,object($expand=Mainimageattachment($select=AttachmentId,SubscriptionId,FileName,DetailLargeURL,DetailXLargeURL))'.'&$top='.$top.'&$skip='.$skip;
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -1782,20 +1782,20 @@ class CollectorSystemsGetApiData{
 
     if($image_type == 'objects_images'){
         $wordforsearch="ObjectImageAttachments";
-        $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=AttachmentId,ObjectId';
+        $url = Csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'&$select=AttachmentId,ObjectId';
     }
     else if($image_type == 'artists_images'){
         $wordforsearch="Artists";
-        $url = csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20ArtistPhotoAttachmentId%20ne%20null&$select=ArtistId';
+        $url = Csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20ArtistPhotoAttachmentId%20ne%20null&$select=ArtistId';
     } else if($image_type == 'collections_images'){
         $wordforsearch="Collections";
-        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20CollectionImageAttachmentId%20ne%20null&$select=CollectionId';
+        $url =  Csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20CollectionImageAttachmentId%20ne%20null&$select=CollectionId';
     } else if($image_type == 'exhibitions_images'){
         $wordforsearch="Exhibitions";
-        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20ExhibitionImageAttachmentId%20ne%20null&$select=ExhibitionId';
+        $url =  Csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20ExhibitionImageAttachmentId%20ne%20null&$select=ExhibitionId';
     }else if($image_type == 'groups_images'){
         $wordforsearch="Groups";
-        $url =  csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20GroupImageAttachmentId%20ne%20null&$select=GroupId';
+        $url =  Csconstants::Public_API_URL.$subAcntId.'/'.$wordforsearch.'?$count=true&$filter=SubscriptionId%20eq%20'.$subsId.'and%20GroupImageAttachmentId%20ne%20null&$select=GroupId';
     }
     
     // Replace spaces with %20 for URL encoding

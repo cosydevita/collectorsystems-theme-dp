@@ -2,7 +2,6 @@
 
 namespace Drupal\collector_systems;
 use Drupal\Core\Database\Database;
-use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\collector_systems\CollectorSystemsGetApiData;
 
@@ -220,7 +219,7 @@ class ImagesSyncManager {
 
       //Create object's mainImageAttachment Directory
       // $objectDirectory = __DIR__ . '/collector_systems/images' . '/Objects' . '/MainImageAttachments';
-      $objectDirectory = ( PublicStream::basePath().'/collector_systems/images/Objects/MainImageAttachments');
+      $objectDirectory = ( \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Objects/MainImageAttachments');
   
       if (!file_exists($objectDirectory))
       {
@@ -228,7 +227,7 @@ class ImagesSyncManager {
       }
   
       //Create object's SlideShowImages Directory
-      $SlideShowImagesDirectory = ( PublicStream::basePath().'/collector_systems/images/Objects/SlideShowImages');
+      $SlideShowImagesDirectory = ( \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Objects/SlideShowImages');
   
       if (!file_exists($SlideShowImagesDirectory))
       {
@@ -237,7 +236,7 @@ class ImagesSyncManager {
   
       //Create object's objectImageAttachment Directory
       // $objectDirectory1 = __DIR__ . '/collector_systems/images' . '/Objects' . '/ObjectImageAttachments'; //WP
-      $objectDirectory1 =  PublicStream::basePath().'/collector_systems/images/Objects/ObjectImageAttachments';
+      $objectDirectory1 =  \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Objects/ObjectImageAttachments';
   
       if (!file_exists($objectDirectory1))
       {
@@ -246,7 +245,7 @@ class ImagesSyncManager {
   
       //Create object's ThumbSizeURL Directory
       // $objectDirectory2 = __DIR__ . '/collector_systems/images' . '/Objects' . '/ThumbSizeImages'; //WP
-      $objectDirectory2 =  PublicStream::basePath().'/collector_systems/images/Objects/ThumbSizeImages';
+      $objectDirectory2 =  \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Objects/ThumbSizeImages';
   
       if (!file_exists($objectDirectory2))
       {
@@ -289,9 +288,9 @@ class ImagesSyncManager {
   public function processImportSingleObjectAttachmentToDirectory($image, $objectImage){
     $database = Database::getConnection();
     $connection = Database::getConnection();
-    $objectDirectory1 =  PublicStream::basePath().'/collector_systems/images/Objects/ObjectImageAttachments';
-    $objectDirectory2 =  PublicStream::basePath().'/collector_systems/images/Objects/ThumbSizeImages';
-    $SlideShowImagesDirectory = ( PublicStream::basePath().'/collector_systems/images/Objects/SlideShowImages');
+    $objectDirectory1 =  \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Objects/ObjectImageAttachments';
+    $objectDirectory2 =  \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Objects/ThumbSizeImages';
+    $SlideShowImagesDirectory = ( \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Objects/SlideShowImages');
     $object_table = $database->prefixTables('collector_systems_objects');
     $thumbImage_table = $database->prefixTables('collector_systems_thumb_images');
 
@@ -367,7 +366,7 @@ class ImagesSyncManager {
 
     $object_main_image_path = '';
     if($AttachmentId == $MainImageAttachmentId){
-      $objectDirectory = ( PublicStream::basePath().'/collector_systems/images/Objects/MainImageAttachments');
+      $objectDirectory = ( \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Objects/MainImageAttachments');
       if (
         isset($image['MainImageAttachment']) &&
         isset($image['MainImageAttachment']['FileName'])
@@ -796,7 +795,7 @@ class ImagesSyncManager {
 
       //Delete Directory
       //  $allImagesDirectory = __DIR__ . '/collector_systems/images';
-      $allImagesDirectory = PublicStream::basePath() . '/collector_systems/images';
+      $allImagesDirectory = \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath() . '/collector_systems/images';
 
 
       // Delete all contents inside "collector_systems/images"
@@ -965,12 +964,12 @@ class ImagesSyncManager {
     $exhibitionObj_table = 'collector_systems_exhibition_objects';
     $groupObj_table = 'collector_systems_group_objects';
 
-    $artistDirectory =  PublicStream::basePath().'/collector_systems/images/Artists';
-    $collectionDirectory =  PublicStream::basePath().'/collector_systems/images/Collections';
-    $exhibitionDirectory =  PublicStream::basePath().'/collector_systems/images/Exhibitions';
-    $groupDirectory =  PublicStream::basePath().'/collector_systems/images/Groups';
-    $groupObjDirectory =  PublicStream::basePath().'/collector_systems/images/GroupObjects';
-    $exhibitionObjDirectory = PublicStream::basePath().'/collector_systems/images/ExhibitionObjects';
+    $artistDirectory =  \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Artists';
+    $collectionDirectory =  \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Collections';
+    $exhibitionDirectory =  \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Exhibitions';
+    $groupDirectory =  \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/Groups';
+    $groupObjDirectory =  \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/GroupObjects';
+    $exhibitionObjDirectory = \Drupal::service('stream_wrapper_manager')->getViaUri('public://')->getDirectoryPath().'/collector_systems/images/ExhibitionObjects';
 
     \Drupal::logger('collector_systems')->debug('Images Import to Directory: importing @import_type', ['@import_type' => $import_type]);
 

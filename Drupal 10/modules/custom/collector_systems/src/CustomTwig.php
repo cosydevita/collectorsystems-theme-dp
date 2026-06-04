@@ -16,11 +16,11 @@ use Drupal\Component\Utility\Html;
 class CustomTwig extends AbstractExtension {
   public function getFunctions() {
     return [
-      new TwigFunction('getObjectslistHtml', [$this, 'getObjectslistHtml']),
-      new TwigFunction('customPaginationForTopLevelTabs', [$this, 'customPaginationForTopLevelTabs']),
+      new TwigFunction('getObjectslistHtml', [$this, 'getObjectslistHtml'], ['is_safe' => ['html']]),
+      new TwigFunction('customPaginationForTopLevelTabs', [$this, 'customPaginationForTopLevelTabs'], ['is_safe' => ['html']]),
       new TwigFunction('base64_encode', [$this, 'base64_encode']),
-      new TwigFunction('GetCustomizedObjectDetailsForTheme', [$this, 'GetCustomizedObjectDetailsForTheme']),
-      new TwigFunction('customPaginationForGroupLevelObjects', [$this, 'customPaginationForGroupLevelObjects']),
+      new TwigFunction('GetCustomizedObjectDetailsForTheme', [$this, 'GetCustomizedObjectDetailsForTheme'], ['is_safe' => ['html']]),
+      new TwigFunction('customPaginationForGroupLevelObjects', [$this, 'customPaginationForGroupLevelObjects'], ['is_safe' => ['html']]),
     ];
   }
 
@@ -29,7 +29,8 @@ class CustomTwig extends AbstractExtension {
     return base64_encode($data);
   }
 
-  public function getObjectslistHtml($value=[], $dataOrderBy, $datapageNo, $dataSearch,$delaytm, $default_image_url=NULL){
+  public function getObjectslistHtml($value, $dataOrderBy, $datapageNo, $dataSearch, $delaytm, $default_image_url=NULL){
+    ob_start();
 
     if (is_object($value)) {
         $value = get_object_vars($value);
@@ -97,11 +98,12 @@ class CustomTwig extends AbstractExtension {
                       /*get first 3 array fields*/
                       //$customized_fields_array = array_slice($customized_fields_array, 0, 3);
                       $this->fillObjectListHtml($customized_fields_array, $value, $dataOrderBy, $datapageNo,$dataSearch,$delaytm, $default_image_url);
-          
+
                     ?>
           </div>
         </div>
       <?php
+    return ob_get_clean();
     }
 
   public function fillObjectListHtml($customized_fields_array, $value, $dataOrderBy, $datapageNo,$dataSearch,$delaytm, $default_image_url)
@@ -113,7 +115,7 @@ class CustomTwig extends AbstractExtension {
     {
     switch($object_field)
     {   
-      case csconstants::InventoryNumber:
+      case Csconstants::InventoryNumber:
         if(!empty($value['InventoryNumber'])){ ?>            
           <h6 class="font-normal" title="<?php echo $value['InventoryNumber']; ?>" >
             <small class="flex-fill">
@@ -123,7 +125,7 @@ class CustomTwig extends AbstractExtension {
         <?php }    
         break;
   
-    case csconstants::Title:       
+    case Csconstants::Title:       
       if(!empty($value['Title'])){ ?>            
           <h6 class="font-normal cs-theme-label-withunderline">
             <small class="flex-fill">
@@ -133,7 +135,7 @@ class CustomTwig extends AbstractExtension {
         <?php }    
         break;
   
-    case  csconstants::FullCollectionName:
+    case  Csconstants::FullCollectionName:
         if(!empty($value['FullCollectionName'])){
           ?>            
         <h6 class="font-normal" title="<?php echo $value['FullCollectionName']; ?>" >
@@ -145,9 +147,9 @@ class CustomTwig extends AbstractExtension {
         }
         break;
   
-    case csconstants::ArtistName:
-    case csconstants::ArtistFirst:
-    case csconstants::ArtistLast:
+    case Csconstants::ArtistName:
+    case Csconstants::ArtistFirst:
+    case Csconstants::ArtistLast:
       if(!empty($value[$object_field])){
             ?>            
           <h6 class="font-normal" title="<?php echo $value[$object_field]; ?>" >
@@ -159,7 +161,7 @@ class CustomTwig extends AbstractExtension {
           }
           break;
   
-      case csconstants::AdditionalArtists:
+      case Csconstants::AdditionalArtists:
         if(!empty($value['AdditionalArtists'])){ 
             $AdditionalArtists = json_decode($value['AdditionalArtists'], true);
           if(!empty($AdditionalArtists)){ ?>
@@ -174,9 +176,9 @@ class CustomTwig extends AbstractExtension {
         }    
         break;
   
-      case csconstants::ArtistMakerName:
-      case csconstants::ArtistMakerFirst:
-      case csconstants::ArtistMakerLast:
+      case Csconstants::ArtistMakerName:
+      case Csconstants::ArtistMakerFirst:
+      case Csconstants::ArtistMakerLast:
         if(!empty($value[$object_field])){ ?>            
           <h6 class="font-normal" title="<?php echo $value[$object_field]; ?>" >
             <small class="flex-fill">
@@ -186,7 +188,7 @@ class CustomTwig extends AbstractExtension {
           <?php }
           break;
   
-      case csconstants::AdditionalArtistMakers:
+      case Csconstants::AdditionalArtistMakers:
       if(!empty($value['AdditionalArtistMakers'])){ 
         $AdditionalArtistMakers = json_decode($value['AdditionalArtistMakers'], true);
         ?>
@@ -196,29 +198,29 @@ class CustomTwig extends AbstractExtension {
         
   
       //date fields
-      case csconstants::InventoryDate:
-      case csconstants::CatalogDate:
-      case csconstants::CollectionDate:
-      case csconstants::IdentifiedDate:
-      case csconstants::SpeciesAuthorDate:
-      case csconstants::SubspeciesAuthorDate:
-      case csconstants::ManufactureDate: 
-      case csconstants::ReleaseDate:
-      case csconstants::ProductionDate:
-      case csconstants::ThreatenedEndangeredDate: 
-      case csconstants::CompletenessDate:
-      case csconstants::MovementAuthorizationDate: 
-      case csconstants::LocationConditionDate:
+      case Csconstants::InventoryDate:
+      case Csconstants::CatalogDate:
+      case Csconstants::CollectionDate:
+      case Csconstants::IdentifiedDate:
+      case Csconstants::SpeciesAuthorDate:
+      case Csconstants::SubspeciesAuthorDate:
+      case Csconstants::ManufactureDate: 
+      case Csconstants::ReleaseDate:
+      case Csconstants::ProductionDate:
+      case Csconstants::ThreatenedEndangeredDate: 
+      case Csconstants::CompletenessDate:
+      case Csconstants::MovementAuthorizationDate: 
+      case Csconstants::LocationConditionDate:
       if(!empty($value[$object_field])){ ?>
           <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo date('m/d/Y',strtotime($value[$object_field]))  ?></small></h6>
         <?php }
         break;
   
       //boolean fields
-      case csconstants::CatalogFolder:
-      case csconstants::ControlledProperty:
-      case csconstants::ThreatenedEndangeredSpeciesSynonym:
-      case csconstants::ThinSection:
+      case Csconstants::CatalogFolder:
+      case Csconstants::ControlledProperty:
+      case Csconstants::ThreatenedEndangeredSpeciesSynonym:
+      case Csconstants::ThinSection:
         if(!empty($value[$object_field])){ ?>
           <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo $value[$object_field] == true ? 'Yes' : 'No'  ?></small></h6>   
         <?php }
@@ -226,8 +228,8 @@ class CustomTwig extends AbstractExtension {
   
       /*udf fields*/
   
-      case csconstants::UserDefinedDate1:
-      case csconstants::UserDefinedDate2:
+      case Csconstants::UserDefinedDate1:
+      case Csconstants::UserDefinedDate2:
       if(!empty($value[$object_field])){ ?>
           <h6 class="font-normal cs-theme-card-title"><small class="flex-fill"><?php echo date('m/d/Y',strtotime($value[$object_field]))  ?></small></h6>
         <?php }    
@@ -247,6 +249,7 @@ class CustomTwig extends AbstractExtension {
 
   public function customPaginationForTopLevelTabs($requested_page,$total_records,$sortBy,$qSearch)
   {
+    ob_start();
     $sortBy = $sortBy ? rawurlencode($sortBy) : '';
 
     $request = \Drupal::request();
@@ -304,6 +307,7 @@ class CustomTwig extends AbstractExtension {
 
         echo "</div>\n";
     }
+    return ob_get_clean();
     }
 
     public function GetCustomizedObjectDetailsForTheme($object_field, $accountCustomizationData, $artObjData)
@@ -318,38 +322,38 @@ class CustomTwig extends AbstractExtension {
       }
       switch($object_field)
             {
-              case csconstants::Title:
+              case Csconstants::Title:
                 if(!empty($artObjData['Title'])){ ?>
                       <p class="my-2"><?php echo $artObjData['Title'];  ?></p>
                     <?php }
 
                     break;
-              case csconstants::CollectionName:
+              case Csconstants::CollectionName:
                   if (!empty($artObjData['CollectionName'])) { ?>
                     <p class="my-2">
                       <?php if ($showFieldLabelNames == 1) { ?>
-                        <span class="object_detail_fieldlabel"><?php echo csconstants::CollectionNameFieldLabel ?>:</span>
+                        <span class="object_detail_fieldlabel"><?php echo Csconstants::CollectionNameFieldLabel ?>:</span>
                       <?php } ?>
                       <a href="javascript:;" onclick="return getmoredetailsForCollection('<?php echo $site_url; ?>','<?php echo $artObjData['CollectionId']; ?>')"><?php echo $artObjData['CollectionName']  ?></a>
                     </p>
                   <?php }
 
                 break;
-              case csconstants::FullCollectionName:
+              case Csconstants::FullCollectionName:
                   if (!empty($artObjData['FullCollectionName'])) { ?>
                     <p class="my-2">
                       <?php if ($showFieldLabelNames == 1) { ?>
-                        <span class="object_detail_fieldlabel"><?php echo csconstants::FullCollectionNameFieldLabel ?>:</span>
+                        <span class="object_detail_fieldlabel"><?php echo Csconstants::FullCollectionNameFieldLabel ?>:</span>
                       <?php } ?>
                       <a href="javascript:;" onclick="return getmoredetailsForCollection('<?php echo $site_url ?>','<?php echo $artObjData['CollectionId']; ?>')"><?php echo $artObjData['FullCollectionName']  ?></a>
                     </p>
                   <?php }
                 break;
-              case csconstants::ArtistName:
+              case Csconstants::ArtistName:
                   if (!empty($artObjData['ArtistName'])) { ?>
                     <p class="my-2">
                       <?php if ($showFieldLabelNames == 1) { ?>
-                        <span class="object_detail_fieldlabel"><?php echo csconstants::ArtistNameFieldLabel ?>:</span>
+                        <span class="object_detail_fieldlabel"><?php echo Csconstants::ArtistNameFieldLabel ?>:</span>
                       <?php } ?>
                       <a href="<?php echo $site_url ?>/artist-detail?dataId=<?php echo $artObjData['ArtistId']; ?>">
                         <?php echo $artObjData['ArtistName'] ?>
@@ -358,11 +362,11 @@ class CustomTwig extends AbstractExtension {
                   <?php }
 
                 break;
-              case csconstants::ArtistLast:
+              case Csconstants::ArtistLast:
                   if (!empty($artObjDat[$object_field])) { ?>
                     <p class="my-2">
                       <?php if ($showFieldLabelNames == 1) { ?>
-                        <span class="object_detail_fieldlabel"><?php echo constant('csconstants::' . $object_field . 'FieldLabel') ?>:</span>
+                        <span class="object_detail_fieldlabel"><?php echo constant('Csconstants::' . $object_field . 'FieldLabel') ?>:</span>
                       <?php } ?>
                       <a href="<?php echo $site_url;?>/artist-detail?dataId=<?php echo $artObjData['ArtistId']; ?>">
                         <?php echo $artObjData[$object_field] ?>
@@ -371,11 +375,11 @@ class CustomTwig extends AbstractExtension {
                   <?php }
 
                 break;
-              case csconstants::ArtistMakerName:
+              case Csconstants::ArtistMakerName:
                   if (!empty($artObjData['ArtistName'])) { ?>
                     <p class="my-2">
                       <?php if ($showFieldLabelNames == 1) { ?>
-                        <span class="object_detail_fieldlabel"><?php echo csconstants::ArtistMakerNameFieldLabel ?>:</span>
+                        <span class="object_detail_fieldlabel"><?php echo Csconstants::ArtistMakerNameFieldLabel ?>:</span>
                       <?php } ?>
                       <a href="<?php echo $site_url;?>/artist-detail?dataId=<?php echo $artObjData['ArtistId']; ?>">
                         <?php echo $artObjData['ArtistName'] ?>
@@ -384,11 +388,11 @@ class CustomTwig extends AbstractExtension {
                   <?php }
 
                 break;
-              case csconstants::ArtistMakerLast:
+              case Csconstants::ArtistMakerLast:
                   if (!empty($artObjData[$object_field])) { ?>
                     <p class="my-2">
                       <?php if ($showFieldLabelNames == 1) { ?>
-                        <span class="object_detail_fieldlabel"><?php echo constant('csconstants::' . $object_field . 'FieldLabel') ?>:</span>
+                        <span class="object_detail_fieldlabel"><?php echo constant('Csconstants::' . $object_field . 'FieldLabel') ?>:</span>
                       <?php } ?>
                       <a href="<?php echo $site_url?>/artist-detail?dataId=<?php echo $artObjData['ArtistId']; ?>">
                         <?php echo $artObjData[$object_field] ?>
@@ -397,7 +401,7 @@ class CustomTwig extends AbstractExtension {
                   <?php }
 
                 break;
-              case csconstants::AdditionalArtists:
+              case Csconstants::AdditionalArtists:
                 if(!empty($artObjData['AdditionalArtists'])){ 
                     $AdditionalArtists = json_decode($artObjData['AdditionalArtists'], true);
                   if(!empty($AdditionalArtists)){ ?>
@@ -411,7 +415,7 @@ class CustomTwig extends AbstractExtension {
                   <?php } 
                 }    
                 break;
-              case csconstants::AdditionalArtistMakers:
+              case Csconstants::AdditionalArtistMakers:
                 if(!empty($artObjData['AdditionalArtistMakers'])){ 
                   $AdditionalArtistMakers = json_decode($artObjData['AdditionalArtistMakers'], true);
                   ?>
@@ -424,41 +428,41 @@ class CustomTwig extends AbstractExtension {
                   <?php }    
                   break;
               //richtext fields
-              case csconstants::DimensionMemo:
-              case csconstants::InventoryMemo:
-              case csconstants::ObjectDescription:
-              case csconstants::Signatures:
-              case csconstants::Inscriptions:
-              case csconstants::Labels:
-              case csconstants::Provenance:
-              case csconstants::ReferenceNotes:
-              case csconstants::ResearchNotes:
-              case csconstants::StaffNotes:
-              case csconstants::RelatedCollections:
-              case csconstants::KeyDescriptor:
-              case csconstants::WithinSiteProveniance:
-              case csconstants::SubspeciesDescriptiveName:
-              case csconstants::History:
-              case csconstants::Transcription:
-              case csconstants::CastAndCrew:
-              case csconstants::Synopsis:
-              case csconstants::Waterbody:
-              case csconstants::AssociatedSpecies:
-              case csconstants::Drainage:
-              case csconstants::ObjectUse:
-              case csconstants::StartingInstructions:
-              case csconstants::RegistrationNotes:
-              case csconstants::TitleStatusNotes:
-              case csconstants::RepairsMade:
-              case csconstants::CompletenessNote:
-              case csconstants::MovementMemo:
-              case csconstants::LocationAccessMemo:
-              case csconstants::LocationConditionMemo:
-              case csconstants::LocationSecurityMemo:
-              case csconstants::ObjectNameNote:
-              case csconstants::FieldCollectionMemo:
-              case csconstants::HabitatMemo:
-              case csconstants::StratigraphicUnitMemo:
+              case Csconstants::DimensionMemo:
+              case Csconstants::InventoryMemo:
+              case Csconstants::ObjectDescription:
+              case Csconstants::Signatures:
+              case Csconstants::Inscriptions:
+              case Csconstants::Labels:
+              case Csconstants::Provenance:
+              case Csconstants::ReferenceNotes:
+              case Csconstants::ResearchNotes:
+              case Csconstants::StaffNotes:
+              case Csconstants::RelatedCollections:
+              case Csconstants::KeyDescriptor:
+              case Csconstants::WithinSiteProveniance:
+              case Csconstants::SubspeciesDescriptiveName:
+              case Csconstants::History:
+              case Csconstants::Transcription:
+              case Csconstants::CastAndCrew:
+              case Csconstants::Synopsis:
+              case Csconstants::Waterbody:
+              case Csconstants::AssociatedSpecies:
+              case Csconstants::Drainage:
+              case Csconstants::ObjectUse:
+              case Csconstants::StartingInstructions:
+              case Csconstants::RegistrationNotes:
+              case Csconstants::TitleStatusNotes:
+              case Csconstants::RepairsMade:
+              case Csconstants::CompletenessNote:
+              case Csconstants::MovementMemo:
+              case Csconstants::LocationAccessMemo:
+              case Csconstants::LocationConditionMemo:
+              case Csconstants::LocationSecurityMemo:
+              case Csconstants::ObjectNameNote:
+              case Csconstants::FieldCollectionMemo:
+              case Csconstants::HabitatMemo:
+              case Csconstants::StratigraphicUnitMemo:
                 if(!empty($artObjData[$object_field])){ ?>
                   <p class="my-2">
                   <?php if($showFieldLabelNames==1){
@@ -477,24 +481,24 @@ class CustomTwig extends AbstractExtension {
                   </p>
                   <?php }
                 break;
-              case csconstants::UserDefinedRichText1:
-              case csconstants::UserDefinedRichText2:
-              case csconstants::UserDefinedRichText3:
-              case csconstants::UserDefinedRichText4:
-              case csconstants::UserDefinedRichText5:
-              case csconstants::UserDefinedRichText6:
-              case csconstants::UserDefinedRichText7:
-              case csconstants::UserDefinedRichText8:
-              case csconstants::UserDefinedRichText9:
-              case csconstants::UserDefinedRichText10:
-              case csconstants::UserDefinedRichText11:
-              case csconstants::UserDefinedRichText12:
-              case csconstants::UserDefinedRichText13:
-              case csconstants::UserDefinedRichText14:
-              case csconstants::UserDefinedRichText15:
-              case csconstants::UserDefinedRichText16:
-              case csconstants::UserDefinedRichText17:
-              case csconstants::UserDefinedRichText18:
+              case Csconstants::UserDefinedRichText1:
+              case Csconstants::UserDefinedRichText2:
+              case Csconstants::UserDefinedRichText3:
+              case Csconstants::UserDefinedRichText4:
+              case Csconstants::UserDefinedRichText5:
+              case Csconstants::UserDefinedRichText6:
+              case Csconstants::UserDefinedRichText7:
+              case Csconstants::UserDefinedRichText8:
+              case Csconstants::UserDefinedRichText9:
+              case Csconstants::UserDefinedRichText10:
+              case Csconstants::UserDefinedRichText11:
+              case Csconstants::UserDefinedRichText12:
+              case Csconstants::UserDefinedRichText13:
+              case Csconstants::UserDefinedRichText14:
+              case Csconstants::UserDefinedRichText15:
+              case Csconstants::UserDefinedRichText16:
+              case Csconstants::UserDefinedRichText17:
+              case Csconstants::UserDefinedRichText18:
                 if(!empty($artObjData[$object_field])){ ?>
                   <p class="my-2">
                   <?php if($showFieldLabelNames==1){
