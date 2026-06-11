@@ -74,7 +74,13 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
     $shskip = 0;
     $ajaxfor = "artobjects";
     $current_page = "objects";
-    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20asc";
+
+    $customized_fields_objects_list_array = $this->getCustomizedObjectListFields();
+    // Set default sorting to the first sortable field if available, otherwise default to 'Title asc'
+    // the first selected option in the customize object list field settings will be the default sorting field. 
+    $default_orderby = !empty($customized_fields_objects_list_array) ? rawurlencode($customized_fields_objects_list_array[0]. ' asc') : 'Title%20asc';
+    // if sortBy is set in the request, use it; otherwise, use the default sorting.
+    $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : $default_orderby;
     
     // Get sorting parameters based on dataorderby value
     list($sortParam, $sortOrder) = $this->cs_get_sorting_params_for_objects_list($dataorderby);
@@ -305,6 +311,26 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
     return $values;
 
   }
+
+  /**
+  * Get comma separated field names for search.
+  * @return array
+  */
+  public function getCustomizedObjectListFields(){
+    $db = \Drupal::database();
+
+    $tblnm = "collector_systems_clsobjects_fields";
+    $settblnm = $tblnm;
+
+    $query = $db->select($settblnm, 'c')
+      ->fields('c', ['fieldname'])
+      ->condition('fieldtype', 'ObjectList');
+    $result = $query->execute()->fetchAllAssoc('fieldname');
+
+    return array_keys($result);
+
+  }
+
 
   /**
  * Get column names for a given database table (prefix-aware, Drupal 10+).
