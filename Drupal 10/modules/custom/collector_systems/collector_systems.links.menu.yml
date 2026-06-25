@@ -28,4 +28,9 @@ customize_object_list_fields.settings_form:
   description: 'Customize which fields to show in the object list page'
   parent: collector_systems.menu
   weight: 4
-
+collector_systems.customize_artist_detail_fields:
+  title: 'Customize Artist Detail Fields Settings Form'
+  route_name: collector_systems.customize_artist_detail_fields
+  description: 'Customize which fields to show in the Artist detail page'
+  parent: collector_systems.menu
+  weight: 5

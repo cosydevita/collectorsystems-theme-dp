@@ -128,10 +128,11 @@ class AjaxRequestsController extends ControllerBase
           ob_start();
 
           // Call the function. Its output will be captured by the output buffer
-          call_user_func($function, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
+          $returnedHtml = call_user_func($function, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
 
           // Get the contents of the output buffer (i.e., the output of your function)
-          $functionOutput = ob_get_clean();
+          $echoedHtml = ob_get_clean();
+          $functionOutput = $echoedHtml . $returnedHtml;
 
           $groupLevelSearchHtml .= $functionOutput;
         }
@@ -214,10 +215,11 @@ class AjaxRequestsController extends ControllerBase
           ob_start();
 
           // Call the function. Its output will be captured by the output buffer
-          call_user_func($function, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
+          $returnedHtml = call_user_func($function, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
 
           // Get the contents of the output buffer (i.e., the output of your function)
-          $functionOutput = ob_get_clean();
+          $echoedHtml = ob_get_clean();
+          $functionOutput = $echoedHtml . $returnedHtml;
 
           $groupLevelSearchHtml .= $functionOutput;
         }
@@ -303,10 +305,11 @@ class AjaxRequestsController extends ControllerBase
           ob_start();
 
           // Call the function. Its output will be captured by the output buffer
-          call_user_func($function, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
+          $returnedHtml = call_user_func($function, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
 
           // Get the contents of the output buffer (i.e., the output of your function)
-          $functionOutput = ob_get_clean();
+          $echoedHtml = ob_get_clean();
+          $functionOutput = $echoedHtml . $returnedHtml;
 
           $groupLevelSearchHtml .= $functionOutput;
         }
@@ -434,10 +437,11 @@ class AjaxRequestsController extends ControllerBase
           ob_start();
 
           // Call the function. Its output will be captured by the output buffer
-          call_user_func($function, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
+          $returnedHtml = call_user_func($function, $value, $groupLevelOrderBy, $groupLevelPageNo, $qSearch, $delaytm, 'https://cdn.collectorsystems.com/images/noimage300.png');
 
           // Get the contents of the output buffer (i.e., the output of your function)
-          $functionOutput = ob_get_clean();
+          $echoedHtml = ob_get_clean();
+          $functionOutput = $echoedHtml . $returnedHtml;
 
           $groupLevelSearchHtml .= $functionOutput;
         }
@@ -1024,6 +1028,105 @@ class AjaxRequestsController extends ControllerBase
       );
       return [];
     }
+  }
+
+  public function artistsLoadMore() {
+    $request    = \Drupal::request();
+    $config     = \Drupal::config('collector_systems.settings');
+    $pageSize   = (int) ($config->get('items_per_page') ?? 9);
+    $showImages = $config->get('show_images_artists');
+    $modulePath = \Drupal::service('extension.path.resolver')->getPath('module', 'collector_systems');
+    $siteUrl    = $request->getSchemeAndHttpHost();
+
+    $pageNo  = max(1, (int) $request->query->get('pageNo', 1));
+    $sortBy  = $request->query->get('sortBy', 'ArtistName asc');
+    $char    = strtoupper(substr(trim($request->query->get('char', '')), 0, 1));
+    $qSearch = trim($request->query->get('qSearch', ''));
+    $shskip  = ($pageNo - 1) * $pageSize;
+
+    $sortDir = strpos(strtolower(urldecode($sortBy)), 'desc') !== FALSE ? 'DESC' : 'ASC';
+
+    $db    = Database::getConnection();
+    $table = 'collector_systems_artists';
+
+    $countQuery = $db->select($table, 'a');
+    $countQuery->addExpression('COUNT(*)');
+    if (!empty($char)) {
+      $countQuery->condition('ArtistName', $db->escapeLike($char) . '%', 'LIKE');
+    }
+    if (!empty($qSearch)) {
+      $countQuery->condition('ArtistName', '%' . $db->escapeLike($qSearch) . '%', 'LIKE');
+    }
+    $totalCount = (int) $countQuery->execute()->fetchField();
+
+    $query = $db->select($table, 'a');
+    $query->fields('a');
+    $query->range($shskip, $pageSize);
+    if (!empty($char)) {
+      $query->condition('ArtistName', $db->escapeLike($char) . '%', 'LIKE');
+    }
+    if (!empty($qSearch)) {
+      $query->condition('ArtistName', '%' . $db->escapeLike($qSearch) . '%', 'LIKE');
+    }
+    $query->orderBy('ArtistName', $sortDir);
+    $artists = $query->execute()->fetchAll();
+
+    // Group by first letter.
+    $grouped = [];
+    foreach ($artists as $artist) {
+      $letter = strtoupper(substr($artist->ArtistName, 0, 1));
+      $grouped[$letter][] = $artist;
+    }
+    ($sortDir === 'DESC') ? krsort($grouped) : ksort($grouped);
+
+    // Build HTML fragment — letter headers + card groups only.
+    $html = '';
+    foreach ($grouped as $letter => $letterArtists) {
+      $safeLetter = htmlspecialchars($letter, ENT_QUOTES, 'UTF-8');
+      $html .= '<h2 class="letter-header mb-3 mt-4" data-letter="' . $safeLetter . '">' . $safeLetter . '</h2>';
+      $html .= '<div class="card-group artists-container row g-4 mb-4" data-letter-group="' . $safeLetter . '">';
+      foreach ($letterArtists as $artist) {
+        $artistId   = (int) $artist->ArtistId;
+        $artistName = htmlspecialchars($artist->ArtistName ?? '', ENT_QUOTES, 'UTF-8');
+        $altText    = !empty($artistName) ? $artistName : 'Image description is not available';
+        $safeUrl    = htmlspecialchars($siteUrl, ENT_QUOTES, 'UTF-8');
+        $onclick    = 'return getmoredetailsForArtist(\'' . $safeUrl . '\',' . $artistId . ')';
+
+        // Resolve image source.
+        $imageSrc = '/' . $modulePath . '/assets/img/artist.png';
+        if ($showImages) {
+          $serverPath = $artist->ImagePath ?? '';
+          $b64data    = $artist->ArtistPhotoAttachment ?? '';
+          if (!empty($serverPath)) {
+            $segments = explode('/', '/' . $serverPath);
+            $imageSrc = implode('/', array_map('rawurlencode', $segments));
+          }
+          elseif (!empty($b64data)) {
+            $imageSrc = 'data:image/jpeg;base64,' . base64_encode($b64data);
+          }
+        }
+
+        $html .= '<div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3">';
+        if ($showImages) {
+          $safeImg  = htmlspecialchars($imageSrc, ENT_QUOTES, 'UTF-8');
+          $html .= '<div class="card-body d-flex flex-column"><div class="image-wrapper">';
+          $html .= '<a href="javascript:;" onclick="' . $onclick . '" class="image-wrapper-link">';
+          $html .= '<img class="img-fluid" src="' . $safeImg . '" alt="' . $altText . '"/>';
+          $html .= '</a></div></div>';
+        }
+        $html .= '<div class="card-footer text-muted">';
+        $html .= '<a href="javascript:;" onclick="' . $onclick . '">';
+        $html .= '<h5 class="card-title font-normal">' . $artistName . '</h5>';
+        $html .= '</a></div></div>';
+      }
+      $html .= '</div>';
+    }
+
+    return new JsonResponse([
+      'html'       => $html,
+      'hasMore'    => $totalCount > ($shskip + $pageSize),
+      'totalCount' => $totalCount,
+    ]);
   }
 
 }

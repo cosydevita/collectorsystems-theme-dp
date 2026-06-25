@@ -297,6 +297,110 @@ a:hover h4, a:hover h5, a:hover h6 {
    
 }
 
+.artists-container {
+    .letter-header {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: #333;
+		border-bottom: 2px solid #ddd;
+		padding-bottom: 0.5rem;
+	}
+	.searchByLetter .btn {
+		min-width: 40px;
+		font-weight: 500;
+	}
+}
+
+/**** This is for artists list page without images in the default template ****/
+.artists-container.list-default.without-images {
+    display: grid;
+    column-gap: 40px;
+    row-gap: 10px;
+  
+    // Tablet (768–1023px) → 3 columns
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media(max-width: 767px){
+        // Mobile (<768px) → 2 columns
+        grid-template-columns: repeat(2, 1fr);
+     
+    }
+  
+    // Desktop (≥1024px) → 4 columns
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .card-title{
+        font-size: 15px !important;
+        font-weight: 400;
+        line-height: 2.0;
+        color: #1A1A1A;
+        // clip to one line and add ellipsis
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @media(max-width: 767px){
+            font-size: 14px !important;
+        }
+    }
+
+    .card-footer {
+        padding: 0;
+    }
+}
+
+/** This is for artists list page without images in alphabetical layout. **/
+.artists-container.alphabetical-layout.without-images {
+    gap: 0;
+    .card-group.artists-container {
+        display: grid;
+        column-gap: 40px;
+        row-gap: 10px;
+      
+        // Tablet (768–1023px) → 3 columns
+        @media (min-width: 768px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+    
+        @media(max-width: 767px){
+            // Mobile (<768px) → 2 columns
+            grid-template-columns: repeat(2, 1fr);
+        }
+      
+        // Desktop (≥1024px) → 4 columns
+        @media (min-width: 1024px) {
+          grid-template-columns: repeat(5, 1fr);
+        }
+    }
+
+    .card-title{
+        font-size: 18px !important;
+        font-weight: 400;
+        line-height: 2.0;
+        color: #1A1A1A;
+        // clip to one line and add ellipsis
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @media(max-width: 767px){
+            font-size: 14px !important;
+        }
+    }
+
+    .card-footer {
+        padding: 0;
+    }
+}
+
 .artists-container > .card, .collections-container > .card, .exhibitions-container > .card, .objects-container > .card, .groups-container > .card,
  .artist-objects-container > .card, .collection-objects-container > .card, .exhibition-objects-container > .card, .group-objects-container > .card {
     flex: 1 0 auto;

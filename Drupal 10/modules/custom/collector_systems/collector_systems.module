@@ -48,7 +48,12 @@ function collector_systems_theme() {
         'requested_page' => NULL,
         'collector_systems_module_path' => NULL,
         'module_path' => NULL,
-        'showImagesOnListPages' => NULL
+        'showImagesOnListPages' => NULL,
+        'enableAlphabeticalArtists' => NULL,
+        'groupedArtists' => NULL,
+        'char' => NULL,
+        'hasMoreResults' => NULL,
+        'alphabetLetters' => NULL,
       ],
     ],
     'exhibitions-list-page' => [
@@ -126,6 +131,7 @@ function collector_systems_theme() {
         'groupLevelOrderBy' => NULL,
         'groupLevelPageNo' => NULL,
         'artist_details' => NULL,
+        'customized_artist_fields_array' => NULL,
         'qSearch' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
@@ -294,6 +300,12 @@ function collector_systems_form_alter(&$form, &$form_state, $form_id) {
   if ( $form_id === 'customize_object_list_fields_settings_form') {
     $form['#validate'][] = 'collector_systems_custom_validate_allowed_values';
     $form['#attached']['library'][] = 'collector_systems/customize_object_list_fields';
+  }
+
+  if($form_id == 'customize_artist_detail_fields_settings_form') {
+    $form['#validate'][] = 'collector_systems_custom_validate_allowed_values';
+    // Attach the JavaScript file.
+    $form['#attached']['library'][] = 'collector_systems/customize_artist_detail_fields';
   }
 }
 

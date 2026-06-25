@@ -84,6 +84,24 @@ customize_object_list_fields:
       "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css": {}
   dependencies:
     - core/jquery
+customize_artist_detail_fields:
+  version: 1.0
+  js:
+    js/customize_artist_detail_fields.js: {}
+  css:
+    theme:
+      css/customize_artist_detail_fields.css: {}
+      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css": {}
+  dependencies:
+    - core/jquery
+artists-alpha:
+  js:
+    js/artists-alpha.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+
 artobject_detail_page:
   js:
     js/artobject-detail-page.js: {}

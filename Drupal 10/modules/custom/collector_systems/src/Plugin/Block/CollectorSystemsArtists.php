@@ -33,54 +33,67 @@ class CollectorSystemsArtists extends BlockBase {
       return $build;
     }
 
-    $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
+    $config = \Drupal::config('collector_systems.settings');
+    $listPageSize = $config->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
-    $shskip = 0;
-    $ajaxfor = "artist";
     $current_page = "artists";
     $dataorderby = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "ArtistName%20asc";
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
-
     $requested_page = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
     $shskip = ($requested_page - 1) * $showrec;
 
+    $enableAlphabeticalArtists = $config->get('enable_alphabetical_artists');
+    $char = ($enableAlphabeticalArtists && isset($_REQUEST['char']))
+      ? strtoupper(substr(trim($_REQUEST['char']), 0, 1))
+      : '';
 
-    // Fetch Count From the Database
-    $artist_table = 'collector_systems_artists'; // Replace with your table name
-    $query = Database::getConnection()->select($artist_table, 'a');
-    $query->addExpression('COUNT(*)');
-    $count = $query->execute()->fetchField();
+    $artist_table = 'collector_systems_artists';
+    $db = Database::getConnection();
+    $sortDir = strpos(strtolower(urldecode($dataorderby)), 'desc') !== FALSE ? 'DESC' : 'ASC';
 
-    // Fetch Artists record from database
-    $query = Database::getConnection()->select($artist_table, 'a');
+    // Count query (applies to both modes; uses char + search filters in alpha mode).
+    $countQuery = $db->select($artist_table, 'a');
+    $countQuery->addExpression('COUNT(*)');
+    if (!empty($char)) {
+      $countQuery->condition('ArtistName', $db->escapeLike($char) . '%', 'LIKE');
+    }
+    if (!empty($qSearch)) {
+      $countQuery->condition('ArtistName', '%' . $db->escapeLike($qSearch) . '%', 'LIKE');
+    }
+    $count = $countQuery->execute()->fetchField();
+
+    // Data query with pagination.
+    $query = $db->select($artist_table, 'a');
     $query->fields('a');
     $query->range($shskip, $showrec);
-
-    if ($dataorderby === "ArtistName%20desc" && $qSearch === NULL) {
-        $query->orderBy('ArtistName', 'DESC');
-    } elseif ($dataorderby === "ArtistName%20desc" && $qSearch !== NULL) {
-        $query->condition('ArtistName', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
-        $query->orderBy('ArtistName', 'DESC');
-    } elseif ($dataorderby === "ArtistName%20asc" && $qSearch === NULL) {
-        $query->orderBy('ArtistName', 'ASC');
-    } elseif ($dataorderby === "ArtistName%20asc" && $qSearch !== NULL) {
-        $query->condition('ArtistName', '%' . Database::getConnection()->escapeLike($qSearch) . '%', 'LIKE');
-        $query->orderBy('ArtistName', 'ASC');
+    if (!empty($char)) {
+      $query->condition('ArtistName', $db->escapeLike($char) . '%', 'LIKE');
     }
-
+    if (!empty($qSearch)) {
+      $query->condition('ArtistName', '%' . $db->escapeLike($qSearch) . '%', 'LIKE');
+    }
+    $query->orderBy('ArtistName', $sortDir);
     $AllArtists = $query->execute()->fetchAll();
 
-    $nxshowrec = isset($listPageSize) ? $listPageSize : 9;
-    $nxshskip = $shskip;
+    // Group by first letter for alphabetical mode.
+    $groupedArtists = [];
+    if ($enableAlphabeticalArtists) {
+      foreach ($AllArtists as $artist) {
+        $firstLetter = strtoupper(substr($artist->ArtistName, 0, 1));
+        $groupedArtists[$firstLetter][] = $artist;
+      }
+      ($sortDir === 'DESC') ? krsort($groupedArtists) : ksort($groupedArtists);
+    }
 
     $loadsec = 1;
     $collector_systems_module_path = \Drupal::service('extension.path.resolver')->getPath('module', 'collector_systems');
-    $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_artists');
+    $showImagesOnListPages = $config->get('show_images_artists');
+
     $build = [
       '#theme' => 'artists-list-page',
       '#AllArtists' => $AllArtists,
-      '#nxshowrec' => $nxshowrec,
-      '#nxshskip' => $nxshskip,
+      '#nxshowrec' => $showrec,
+      '#nxshskip' => $shskip,
       '#count' => $count,
       '#dataorderby' => $dataorderby,
       '#current_page' => $current_page,
@@ -89,11 +102,25 @@ class CollectorSystemsArtists extends BlockBase {
       '#requested_page' => $requested_page,
       '#collector_systems_module_path' => $collector_systems_module_path,
       '#showImagesOnListPages' => $showImagesOnListPages,
-      '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
-
+      '#enableAlphabeticalArtists' => $enableAlphabeticalArtists,
+      '#groupedArtists' => $groupedArtists,
+      '#char' => $char,
+      '#hasMoreResults' => $count > ($shskip + $showrec),
+      '#alphabetLetters' => range('A', 'Z'),
+      '#cache' => ['max-age' => 0,],
     ];
 
     $build['#attached']['library'][] = 'collector_systems/collector-systems';
+
+    if ($enableAlphabeticalArtists) {
+      $build['#attached']['library'][] = 'collector_systems/artists-alpha';
+      $build['#attached']['drupalSettings']['collectorSystems']['artistsAlpha'] = [
+        'hasMore'     => $count > ($shskip + $showrec),
+        'currentPage' => $requested_page,
+        'char'        => $char,
+        'ajaxUrl'     => '/collector-systems/artists/load-more',
+      ];
+    }
 
     return $build;
   }

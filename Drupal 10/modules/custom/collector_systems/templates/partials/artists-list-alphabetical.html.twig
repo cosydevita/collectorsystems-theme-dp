@@ -1,0 +1,105 @@
+<div class="collector-systems-wrapper">
+
+	<div class="py-4"><div class="wow fadeInDown" data-wow-delay="0.1s">
+		<div class="row mb-3">
+			<div class="col d-inline-flex">
+				<h1 class="cs-page-title">Artists</h1>
+				{% if count > 0 %}
+					<h6 class="cs-page-total-count">({{ count }} results)</h6>
+				{% endif %}
+			</div>
+			<div class="col-auto text-end my-auto d-inline-flex">
+				<div class="sort-by-field" id="sortinghtml">
+					<span class="sort-by-title me-3">Sort By:</span>
+					<select name="seldataorderby" id="seldataorderby" class="form-select" onchange="return csApplySortingAlpha()">
+						<option value="ArtistName%20desc" {{ ('desc' in dataorderby) ? 'selected' }}>Artist (z-a)</option>
+						<option value="ArtistName%20asc" {{ ('desc' not in dataorderby) ? 'selected' }}>Artist (a-z)</option>
+					</select>
+				</div>
+				{% include '@collector_systems/templates/search-form.html.twig' %}
+			</div>
+		</div>
+
+		{# A–Z filter buttons #}
+		<div class="searchByLetter d-flex flex-wrap gap-2 mb-4">
+			{% for letter in alphabetLetters %}
+				<button class="btn {{ char == letter ? 'btn-dark' : 'btn-outline-secondary' }}"
+					onclick="csAlphaFilter('{{ letter }}')">{{ letter }}</button>
+			{% endfor %}
+			{% if char is not empty %}
+				<button class="btn btn-link" onclick="csClearAlphaFilter()">Clear Filter</button>
+			{% endif %}
+		</div>
+
+		{# Artists container — page 1 rendered server-side, further pages appended via AJAX #}
+		<div class="artists-container alphabetical-layout d-flex flex-column {{ showImagesOnListPages ? 'with-images mb-3' : 'without-images' }}"
+			id="cs-artists-alpha-container">
+			{% if groupedArtists is not empty %}
+				{% for letter, artists in groupedArtists %}
+					<h2 class="letter-header mb-3 mt-4" data-letter="{{ letter }}">{{ letter }}</h2>
+					<div class="card-group artists-container row g-4 mb-4" data-letter-group="{{ letter }}">
+						{% for artist in artists %}
+							<div class="card col-lg-4 col-md-6 col-sm-6 col-12 mb-3 wow fadeInDown" data-wow-delay="0.01s">
+								{% if showImagesOnListPages %}
+									<div class="card-body d-flex flex-column">
+										<div class="image-wrapper">
+											<a href="javascript:;" onclick="return getmoredetailsForArtist('{{ app.request.schemeAndHttpHost }}',{{ artist.ArtistId }})" class="image-wrapper-link">
+												{% set artist_img = artist.ArtistPhotoAttachment ? 'data:image/jpeg;base64,' ~ base64_encode(artist.ArtistPhotoAttachment) : '' %}
+												{% set server_path = artist.ImagePath %}
+												{% set relative_path = '/' ~ artist.ImagePath %}
+												{% set image_url = '' %}
+												{% if relative_path is not empty %}
+													{% set segments = relative_path|split('/') %}
+													{% set encoded_segments = [] %}
+													{% for segment in segments %}
+														{% set encoded_segments = encoded_segments|merge([segment|url_encode]) %}
+													{% endfor %}
+													{% set image_url = encoded_segments|join('/') %}
+												{% endif %}
+												{% set altText = artist.ArtistName is not empty ? artist.ArtistName : 'Image description is not available' %}
+												{% if artist_img is empty and server_path is empty %}
+													<img class="img-fluid" src="/{{ collector_systems_module_path }}/assets/img/artist.png" alt="{{ altText }}"/>
+												{% elseif server_path is empty %}
+													<img class="img-fluid" src="{{ artist_img }}" alt="{{ altText }}"/>
+												{% else %}
+													<img class="img-fluid" src="{{ image_url }}" alt="{{ altText }}"/>
+												{% endif %}
+											</a>
+										</div>
+									</div>
+								{% endif %}
+								<div class="card-footer text-muted">
+									<a href="javascript:;" onclick="return getmoredetailsForArtist('{{ app.request.schemeAndHttpHost }}',{{ artist.ArtistId }})">
+										<h5 class="card-title font-normal" title="{{ not showImagesOnListPages ?  artist.ArtistName}}">{{ artist.ArtistName }}</h5>
+									</a>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				{% endfor %}
+			{% else %}
+				{% if (qSearch is not empty and qSearch is not null and qSearch != 'undefined') or char is not empty %}
+					<div class="cs-theme-nodata">No results found. Please try another search.</div>
+				{% else %}
+					<div class="cs-theme-nodata">No data available.</div>
+				{% endif %}
+			{% endif %}
+		</div>
+
+		{# Sentinel observed by IntersectionObserver to trigger next page load #}
+		<div id="cs-artists-sentinel" style="height:1px;"></div>
+
+		<div id="cs-artists-loader" class="text-center py-4" style="display:none;">
+			<div class="spinner-border text-primary" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+			<p class="mt-2">Loading more artists...</p>
+		</div>
+
+		<div id="cs-artists-end" class="text-center py-4 text-muted" style="display:none;">
+			<p>You've reached the end of the list</p>
+		</div>
+
+	</div></div>
+</div>
+

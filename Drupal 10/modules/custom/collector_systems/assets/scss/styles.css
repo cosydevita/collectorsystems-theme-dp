@@ -1,84 +1,4 @@
 @charset "UTF-8";
-.collector-systems-wrapper {
-  /*!
-   * Bootstrap v5.0.0 (https://getbootstrap.com/)
-   * Copyright 2011-2021 The Bootstrap Authors
-   * Copyright 2011-2021 Twitter, Inc.
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   */
-  /********** Template CSS **********/
-  /*** Spinner ***/
-  /*** Button ***/
-  /*** Section Title ***/
-  /*** Service ***/
-  /* .cs-shadow i.bi-arrow-up {
-      transition: top ease 0.5s;
-      position: fixed;
-      right: 54px;
-      bottom: 96px;
-      z-index: 99;
-  }
-
-  .cs-shadow:hover i.bi-arrow-up {
-      bottom: 99px;
-  } */
-  /* .objects-container .card-img-top, .artist-objects-container .card-img-top {
-      width: auto;
-  } */
-  /* .card-body {
-      position: absolute;
-      bottom: -3vh;
-    } */
-  /*** Categories & Courses ***/
-  /*** Team ***/
-  /*** Testimonial ***/
-  /*** Footer ***/
-  /* .carousel-fade .active.carousel-item-left,
-  .carousel-fade  .active.carousel-item-right {
-   opacity: 0;
-  } */
-  /* medium and up screens */
-  /* @media (min-width: 768px) {
-
-    .thumb-carousel.carousel-inner .carousel-item-end.active,
-    .thumb-carousel.carousel-inner .carousel-item-next {
-      transform: translateX(25%);
-    }
-
-    .thumb-carousel.carousel-inner .carousel-item-start.active,
-    .thumb-carousel.carousel-inner .carousel-item-prev {
-      transform: translateX(-25%);
-    }
-  } */
-  /*** this will change first item's font size on object detail page ***/
-  /*** this will change first item's font size on object list page ***/
-  /*Small devices (landscape phones, 576px and up)*/
-  /*Medium devices (tablets, 768px and up)*/
-  /*Large devices (desktops, 992px and up)*/
-  /*X-Large devices (large desktops, 1200px and up)*/
-  /*XX-Large devices (larger desktops, 1400px and up)*/
-  /*Small devices*/
-  /*!
-   * Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com
-   * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
-   */
-  /*!
-   * animate.css -http://daneden.me/animate
-   * Version - 3.5.2
-   * Licensed under the MIT license - http://opensource.org/licenses/MIT
-   *
-   * Copyright (c) 2017 Daniel Eden
-   */
-  /* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
-  /* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
-  /* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
-  /* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
-  /*!
-   * Bootstrap Icons v1.11.3 (https://icons.getbootstrap.com/)
-   * Copyright 2019-2024 The Bootstrap Authors
-   * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
-   */
-}
 .collector-systems-wrapper .bootstrap-lightbox-overlay {
   position: absolute;
   top: 0;
@@ -86,8 +6,7 @@
   bottom: 0;
   left: 0;
   z-index: 999999;
-  -webkit-backdrop-filter: blur(2px);
-          backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   animation-duration: 0.35s;
 }
 .collector-systems-wrapper .bootstrap-lightbox-overlay--hidden {
@@ -240,6 +159,14 @@
 .collector-systems-wrapper .bootstrap-lightbox__top__controls .btn.btn-check:focus + .bootstrap-lightbox__top__controls .btn.btn, .collector-systems-wrapper .bootstrap-lightbox__top__controls .btn:focus,
 .collector-systems-wrapper .bootstrap-lightbox__bottom__zoom .btn:focus {
   box-shadow: none;
+}
+.collector-systems-wrapper {
+  /*!
+   * Bootstrap v5.0.0 (https://getbootstrap.com/)
+   * Copyright 2011-2021 The Bootstrap Authors
+   * Copyright 2011-2021 Twitter, Inc.
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   */
 }
 .collector-systems-wrapper :root {
   --bs-blue: #0d6efd;
@@ -2495,7 +2422,7 @@
 .collector-systems-wrapper .form-floating > .form-control::placeholder {
   color: transparent;
 }
-.collector-systems-wrapper .form-floating > .form-control:not(:-moz-placeholder-shown) {
+.collector-systems-wrapper .form-floating > .form-control:not(:-moz-placeholder) {
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }
@@ -2512,7 +2439,7 @@
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }
-.collector-systems-wrapper .form-floating > .form-control:not(:-moz-placeholder-shown) ~ label {
+.collector-systems-wrapper .form-floating > .form-control:not(:-moz-placeholder) ~ label {
   opacity: 0.65;
   transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
 }
@@ -10284,6 +10211,9 @@
   padding-left: 0;
   padding-right: 0;
 }
+.collector-systems-wrapper {
+  /********** Template CSS **********/
+}
 .collector-systems-wrapper :root {
   --primary: #06BBCC;
   --light: #F0FBFC;
@@ -10305,6 +10235,9 @@
   right: 45px;
   bottom: 45px;
   z-index: 99;
+}
+.collector-systems-wrapper {
+  /*** Spinner ***/
 }
 .collector-systems-wrapper #spinner {
   opacity: 0;
@@ -10330,6 +10263,9 @@
   -webkit-mask-composite: destination-in;
   mask-composite: intersect;
   animation: spinner-border 2s linear infinite;
+}
+.collector-systems-wrapper {
+  /*** Button ***/
 }
 .collector-systems-wrapper .btn {
   font-family: "Inter", sans-serif;
@@ -10374,6 +10310,9 @@
 .collector-systems-wrapper .breadcrumb-item + .breadcrumb-item::before {
   color: var(--light);
 }
+.collector-systems-wrapper {
+  /*** Section Title ***/
+}
 .collector-systems-wrapper .section-title {
   position: relative;
   display: inline-block;
@@ -10413,6 +10352,9 @@
 .collector-systems-wrapper .section-title.text-start::after {
   /* width: calc(100% + 60px);*/
   left: 0;
+}
+.collector-systems-wrapper {
+  /*** Service ***/
 }
 .collector-systems-wrapper .service-item {
   background: var(--light);
@@ -10464,6 +10406,19 @@
   border: none;
   background-color: transparent;
 }
+.collector-systems-wrapper {
+  /* .cs-shadow i.bi-arrow-up {
+      transition: top ease 0.5s;
+      position: fixed;
+      right: 54px;
+      bottom: 96px;
+      z-index: 99;
+  }
+
+  .cs-shadow:hover i.bi-arrow-up {
+      bottom: 99px;
+  } */
+}
 .collector-systems-wrapper .cs-shadow i.bi-arrow-up {
   transition: top ease 0.5s;
   position: relative;
@@ -10513,6 +10468,108 @@
   padding-left: 0;
   padding-right: 0;
 }
+.collector-systems-wrapper .artists-container .letter-header {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+.collector-systems-wrapper .artists-container .searchByLetter .btn {
+  min-width: 40px;
+  font-weight: 500;
+}
+.collector-systems-wrapper {
+  /**** This is for artists list page without images in the default template ****/
+}
+.collector-systems-wrapper .artists-container.list-default.without-images {
+  display: grid;
+  -moz-column-gap: 40px;
+       column-gap: 40px;
+  row-gap: 10px;
+}
+@media (min-width: 768px) {
+  .collector-systems-wrapper .artists-container.list-default.without-images {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .collector-systems-wrapper .artists-container.list-default.without-images {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .collector-systems-wrapper .artists-container.list-default.without-images {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+.collector-systems-wrapper .artists-container.list-default.without-images .card-title {
+  font-size: 15px !important;
+  font-weight: 400;
+  line-height: 2;
+  color: #1A1A1A;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 767px) {
+  .collector-systems-wrapper .artists-container.list-default.without-images .card-title {
+    font-size: 14px !important;
+  }
+}
+.collector-systems-wrapper .artists-container.list-default.without-images .card-footer {
+  padding: 0;
+}
+.collector-systems-wrapper {
+  /** This is for artists list page without images in alphabetical layout. **/
+}
+.collector-systems-wrapper .artists-container.alphabetical-layout.without-images {
+  gap: 0;
+}
+.collector-systems-wrapper .artists-container.alphabetical-layout.without-images .card-group.artists-container {
+  display: grid;
+  -moz-column-gap: 40px;
+       column-gap: 40px;
+  row-gap: 10px;
+}
+@media (min-width: 768px) {
+  .collector-systems-wrapper .artists-container.alphabetical-layout.without-images .card-group.artists-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .collector-systems-wrapper .artists-container.alphabetical-layout.without-images .card-group.artists-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .collector-systems-wrapper .artists-container.alphabetical-layout.without-images .card-group.artists-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+.collector-systems-wrapper .artists-container.alphabetical-layout.without-images .card-title {
+  font-size: 18px !important;
+  font-weight: 400;
+  line-height: 2;
+  color: #1A1A1A;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 767px) {
+  .collector-systems-wrapper .artists-container.alphabetical-layout.without-images .card-title {
+    font-size: 14px !important;
+  }
+}
+.collector-systems-wrapper .artists-container.alphabetical-layout.without-images .card-footer {
+  padding: 0;
+}
 .collector-systems-wrapper .artists-container > .card, .collector-systems-wrapper .collections-container > .card, .collector-systems-wrapper .exhibitions-container > .card, .collector-systems-wrapper .objects-container > .card, .collector-systems-wrapper .groups-container > .card,
 .collector-systems-wrapper .artist-objects-container > .card, .collector-systems-wrapper .collection-objects-container > .card, .collector-systems-wrapper .exhibition-objects-container > .card, .collector-systems-wrapper .group-objects-container > .card {
   flex: 1 0 auto;
@@ -10520,6 +10577,15 @@
 .collector-systems-wrapper .artists-container .card-body, .collector-systems-wrapper .collections-container .card-body, .collector-systems-wrapper .exhibitions-container .card-body, .collector-systems-wrapper .objects-container .card-body, .collector-systems-wrapper .groups-container > .card-body,
 .collector-systems-wrapper .artist-objects-container .card-body, .collector-systems-wrapper .collection-objects-container .card-body, .collector-systems-wrapper .exhibition-objects-container .card-body, .collector-systems-wrapper .group-objects-container .card-body {
   justify-content: flex-start;
+}
+.collector-systems-wrapper {
+  /* .objects-container .card-img-top, .artist-objects-container .card-img-top {
+      width: auto;
+  } */
+  /* .card-body {
+      position: absolute;
+      bottom: -3vh;
+    } */
 }
 .collector-systems-wrapper .card {
   border: none;
@@ -10557,6 +10623,9 @@
 .collector-systems-wrapper .card-footer h6.cs-theme-card-title:hover {
   text-decoration: none;
 }
+.collector-systems-wrapper {
+  /*** Categories & Courses ***/
+}
 .collector-systems-wrapper .category img,
 .collector-systems-wrapper .course-item img {
   transition: 0.5s;
@@ -10565,11 +10634,17 @@
 .collector-systems-wrapper .course-item:hover img {
   transform: scale(1.1);
 }
+.collector-systems-wrapper {
+  /*** Team ***/
+}
 .collector-systems-wrapper .team-item img {
   transition: 0.5s;
 }
 .collector-systems-wrapper .team-item:hover img {
   transform: scale(1.1);
+}
+.collector-systems-wrapper {
+  /*** Testimonial ***/
 }
 .collector-systems-wrapper .testimonial-carousel::before {
   position: absolute;
@@ -10631,6 +10706,9 @@
 .collector-systems-wrapper .testimonial-carousel .owl-dot.active {
   background: var(--primary);
   border-color: var(--primary);
+}
+.collector-systems-wrapper {
+  /*** Footer ***/
 }
 .collector-systems-wrapper .footer {
   position: relative;
@@ -10760,6 +10838,12 @@
 .collector-systems-wrapper .carousel-fade .carousel-item-prev.carousel-item-right {
   opacity: 1;
 }
+.collector-systems-wrapper {
+  /* .carousel-fade .active.carousel-item-left,
+  .carousel-fade  .active.carousel-item-right {
+   opacity: 0;
+  } */
+}
 @media (prefers-reduced-motion: reduce) {
   .collector-systems-wrapper .carousel-item {
     transition: none;
@@ -10777,6 +10861,21 @@
 .collector-systems-wrapper .thumb-carousel.carousel-inner .carousel-item-next,
 .collector-systems-wrapper .thumb-carousel.carousel-inner .carousel-item-prev {
   display: flex;
+}
+.collector-systems-wrapper {
+  /* medium and up screens */
+  /* @media (min-width: 768px) {
+
+    .thumb-carousel.carousel-inner .carousel-item-end.active,
+    .thumb-carousel.carousel-inner .carousel-item-next {
+      transform: translateX(25%);
+    }
+
+    .thumb-carousel.carousel-inner .carousel-item-start.active,
+    .thumb-carousel.carousel-inner .carousel-item-prev {
+      transform: translateX(-25%);
+    }
+  } */
 }
 .collector-systems-wrapper .thumb-carousel.carousel-inner .carousel-item-end,
 .collector-systems-wrapper .thumb-carousel.carousel-inner .carousel-item-start {
@@ -10848,7 +10947,7 @@
 .collector-systems-wrapper .search-form .expand-search:not(:focus) + .clear-search {
   opacity: 0;
 }
-.collector-systems-wrapper .search-form .expand-search:-moz-placeholder-shown + .clear-search {
+.collector-systems-wrapper .search-form .expand-search:-moz-placeholder + .clear-search {
   opacity: 0;
   pointer-events: none;
 }
@@ -10988,9 +11087,15 @@
 .collector-systems-wrapper .btn-share i, .collector-systems-wrapper .btn-expand i {
   font-size: 1.2em;
 }
+.collector-systems-wrapper {
+  /*** this will change first item's font size on object detail page ***/
+}
 .collector-systems-wrapper .cs-object-details p:first-child {
   font-size: 2em;
   margin-bottom: 1rem !important;
+}
+.collector-systems-wrapper {
+  /*** this will change first item's font size on object list page ***/
 }
 .collector-systems-wrapper .cs-object-list > .card-footer h6:first-child small {
   font-size: 1rem;
@@ -11062,15 +11167,24 @@
 .collector-systems-wrapper .card-body .image-wrapper {
   height: 350px;
 }
+.collector-systems-wrapper {
+  /*Small devices (landscape phones, 576px and up)*/
+}
 @media (min-width: 576px) {
   .collector-systems-wrapper .card.col-sm-6 {
     max-width: 100%;
   }
 }
+.collector-systems-wrapper {
+  /*Medium devices (tablets, 768px and up)*/
+}
 @media (min-width: 768px) {
   .collector-systems-wrapper .card.col-md-6 {
     max-width: 100%;
   }
+}
+.collector-systems-wrapper {
+  /*Large devices (desktops, 992px and up)*/
 }
 @media (min-width: 992px) {
   .collector-systems-wrapper .card.col-lg-3 {
@@ -11079,6 +11193,15 @@
   .collector-systems-wrapper .card.col-lg-4 {
     max-width: 33.33333%;
   }
+}
+.collector-systems-wrapper {
+  /*X-Large devices (large desktops, 1200px and up)*/
+}
+.collector-systems-wrapper {
+  /*XX-Large devices (larger desktops, 1400px and up)*/
+}
+.collector-systems-wrapper {
+  /*Small devices*/
 }
 @media (max-width: 991.98px) {
   .collector-systems-wrapper .cs-grouplevel-total-count {
@@ -11307,6 +11430,12 @@
     flex-direction: column;
     align-items: flex-start;
   }
+}
+.collector-systems-wrapper {
+  /*!
+   * Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com
+   * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+   */
 }
 .collector-systems-wrapper .fa, .collector-systems-wrapper .fab, .collector-systems-wrapper .fad, .collector-systems-wrapper .fal, .collector-systems-wrapper .far, .collector-systems-wrapper .fas {
   -moz-osx-font-smoothing: grayscale;
@@ -15887,6 +16016,15 @@
 .collector-systems-wrapper .fa, .collector-systems-wrapper .fas {
   font-weight: 900;
 }
+.collector-systems-wrapper {
+  /*!
+   * animate.css -http://daneden.me/animate
+   * Version - 3.5.2
+   * Licensed under the MIT license - http://opensource.org/licenses/MIT
+   *
+   * Copyright (c) 2017 Daniel Eden
+   */
+}
 .collector-systems-wrapper .animated {
   animation-duration: 1s;
   animation-fill-mode: both;
@@ -15934,6 +16072,9 @@
 }
 .collector-systems-wrapper .flash {
   animation-name: flash;
+}
+.collector-systems-wrapper {
+  /* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
 }
 @keyframes pulse {
   from {
@@ -16053,6 +16194,9 @@
 }
 .collector-systems-wrapper .tada {
   animation-name: tada;
+}
+.collector-systems-wrapper {
+  /* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
 }
 @keyframes wobble {
   from {
@@ -16869,6 +17013,9 @@
 .collector-systems-wrapper .jackInTheBox {
   animation-name: jackInTheBox;
 }
+.collector-systems-wrapper {
+  /* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
+}
 @keyframes rollIn {
   from {
     opacity: 0;
@@ -16881,6 +17028,9 @@
 }
 .collector-systems-wrapper .rollIn {
   animation-name: rollIn;
+}
+.collector-systems-wrapper {
+  /* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
 }
 @keyframes rollOut {
   from {
@@ -17136,6 +17286,13 @@
 }
 .collector-systems-wrapper .slideOutUp {
   animation-name: slideOutUp;
+}
+.collector-systems-wrapper {
+  /*!
+   * Bootstrap Icons v1.11.3 (https://icons.getbootstrap.com/)
+   * Copyright 2019-2024 The Bootstrap Authors
+   * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
+   */
 }
 @font-face {
   font-display: block;
@@ -23347,9 +23504,6 @@ body.cs-center-align-images .collector-systems-wrapper .card-body a.image-wrappe
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 999999;
   overflow: hidden;
-  /* .zoom-buttons button:hover {
-      background-color: #eee;
-  } */
 }
 #cs-lightbox-custom-draggable #lightbox-content {
   position: relative;
@@ -23393,6 +23547,11 @@ body.cs-center-align-images .collector-systems-wrapper .card-body a.image-wrappe
   justify-content: center;
   align-items: center;
   border-radius: 100%;
+}
+#cs-lightbox-custom-draggable {
+  /* .zoom-buttons button:hover {
+      background-color: #eee;
+  } */
 }
 #cs-lightbox-custom-draggable #lightbox-close {
   position: fixed;

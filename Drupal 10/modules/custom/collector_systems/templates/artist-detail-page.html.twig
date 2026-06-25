@@ -11,23 +11,46 @@
     <div class="row g-5">
       <div class="col-lg-12 wow">
         {% if artist_details|length > 0 %}
-          <h1 class="font-normal">
-            {{ artist_details['ArtistFirst'] ?? '' }}
-            {{ artist_details['ArtistLast'] ?? '' }}
-          </h6>
+          {% if customized_artist_fields_array|length > 0 %}
+            {# Always show artist name as heading even if not selected in customized fields. #}
+            <h1 class="font-normal">
+              {{ artist_details['ArtistFirst'] ?? '' }}
+              {{ artist_details['ArtistLast'] ?? '' }}
+            </h1>
+            {% for artist_field in customized_artist_fields_array %}
+              {% set field_name = artist_field.fieldname %}
+              {% set field_value = artist_details[field_name] ?? '' %}
+              {% if field_value %}
+                <p class="mb-4">
+                  <span class="object_detail_fieldlabel">{{ artist_field.fieldvalue }}: </span>
+                  {% if field_name == 'ArtistLink' %}
+                    <a href="{{ field_value }}" target="_blank" rel="noopener noreferrer">{{ field_value }}</a>
+                  {% else %}
+                    {{ field_value|raw }}
+                  {% endif %}
+                </p>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            {# Default fields when no customized fields are selected. #}
+            <h1 class="font-normal">
+              {{ artist_details['ArtistFirst'] ?? '' }}
+              {{ artist_details['ArtistLast'] ?? '' }}
+            </h1>
 
-          <p class="mb-4">
-            <span>
-              {{ artist_details['ArtistYears'] ?? '' }}
-            </span>
-          </p>
-          <p class="mb-4">
-            {{ artist_details['ArtistNationality'] ?? '' }}
-            {{ artist_details['ArtistLocale'] ? '(' ~ artist_details['ArtistLocale'] ~ ')' : '' }}
-          </p>
-          <p class="mb-4">
-            {{ artist_details['ArtistBio']|raw }}
-          </p>
+            <p class="mb-4">
+              <span>
+                {{ artist_details['ArtistYears'] ?? '' }}
+              </span>
+            </p>
+            <p class="mb-4">
+              {{ artist_details['ArtistNationality'] ?? '' }}
+              {{ artist_details['ArtistLocale'] ? '(' ~ artist_details['ArtistLocale'] ~ ')' : '' }}
+            </p>
+            <p class="mb-4">
+              {{ artist_details['ArtistBio']|raw }}
+            </p>
+          {% endif %}
         {% endif %}
       </div>
     </div>

@@ -21,3 +21,6 @@ services:
   collector_systems.objects_service:
     class: Drupal\collector_systems\ObjectsService
     arguments: ['@database']
+  collector_systems.artist_fields_service:
+      class: Drupal\collector_systems\ArtistFieldsService
+      arguments: ['@config.factory']

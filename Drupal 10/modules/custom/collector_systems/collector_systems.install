@@ -427,6 +427,33 @@ function collector_systems_schema() {
     'primary key' => ['id'],
   ];
 
+  $schema['collector_systems_artists_selected_fields'] = [
+    'description' => 'Table to store selected fields for artists',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique identifier for the record.',
+      ],
+      'fieldname' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Field name',
+      ],
+      'fieldvalue' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Field value',
+      ],
+      'fieldtype' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'Field type',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
   return $schema;
 }
 
@@ -540,6 +567,42 @@ function collector_systems_update_9004() {
 
   if ($schema->fieldExists('collector_systems_thumb_images', 'ThumbURL')) {
     $schema->dropField('collector_systems_thumb_images', 'ThumbURL');
+  }
+}
+
+/**
+ * Creates the collector_systems_artists_selected_fields table.
+ */
+function collector_systems_update_9005() {
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->tableExists('collector_systems_artists_selected_fields')) {
+    $schema->createTable('collector_systems_artists_selected_fields', [
+      'description' => 'Table to store selected fields for artists',
+      'fields' => [
+        'id' => [
+          'type' => 'serial',
+          'not null' => TRUE,
+          'description' => 'Primary Key: Unique identifier for the record.',
+        ],
+        'fieldname' => [
+          'type' => 'text',
+          'not null' => TRUE,
+          'description' => 'Field name',
+        ],
+        'fieldvalue' => [
+          'type' => 'text',
+          'not null' => TRUE,
+          'description' => 'Field value',
+        ],
+        'fieldtype' => [
+          'type' => 'text',
+          'not null' => TRUE,
+          'description' => 'Field type',
+        ],
+      ],
+      'primary key' => ['id'],
+    ]);
   }
 }
 

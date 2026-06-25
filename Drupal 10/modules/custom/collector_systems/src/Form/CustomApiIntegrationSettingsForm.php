@@ -86,6 +86,12 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
     ];
     
 
+    $form['ui_customizations']['enable_alphabetical_artists'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Alphabetical Artist List'),
+      '#default_value' => $config->get('enable_alphabetical_artists'),
+    ];
+
     $form['ui_customizations']['enable_maps'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable Maps'),
@@ -259,6 +265,7 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       ->set('subscription_id', $form_state->getValue('subscription_id'))
       ->set('azure_map_subscription_key', $form_state->getValue('azure_map_subscription_key'))
       ->set('show_field_labels', $form_state->getValue('show_field_labels'))
+      ->set('enable_alphabetical_artists', $form_state->getValue('enable_alphabetical_artists'))
       ->set('enable_maps', $form_state->getValue('enable_maps'))
       ->set('enable_transition', $form_state->getValue('enable_transition'))
       ->set('center_align_images', $form_state->getValue('center_align_images'))

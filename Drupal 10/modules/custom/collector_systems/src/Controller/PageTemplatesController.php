@@ -285,7 +285,14 @@ class PageTemplatesController extends ControllerBase
     $ajaxfor=   "artist-detail";
     $current_page=   "artist-detail";
 
-    $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
+    $customized_fields_objects_list_array = $this->getCustomizedObjectListFields();
+    // Set default sorting to the first sortable field if available, otherwise default to 'Title asc'
+    // the first selected option in the customize object list field settings will be the default sorting field. 
+    $default_orderby = !empty($customized_fields_objects_list_array) ? rawurlencode($customized_fields_objects_list_array[0]. ' asc') : 'Title%20asc';
+    // if sortBy is set in the request, use it; otherwise, use the default sorting.
+    $groupLevelOrderBy = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : $default_orderby;
+
+
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
     $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? intval($_REQUEST['groupLevelPageNo']) : 1;
@@ -302,11 +309,14 @@ class PageTemplatesController extends ControllerBase
       $customized_fields_array = [];
     }
 
+    // Fetch selected artist detail fields (with labels) for customized display.
+    $customized_artist_fields_array = $this->getSelectedFieldsForArtistDetailPage();
+
     // Fetch artist details from the database
     $connection = Database::getConnection();
     $artist_table = $connection->prefixTables('collector_systems_artists');
     $fetch_artist_details = $connection->select($artist_table, 'a')
-      ->fields('a', ['ArtistId', 'ArtistName', 'ArtistFirst', 'ArtistLast', 'ArtistYears', 'ArtistNationality', 'ArtistLocale', 'ArtistBio'])
+      ->fields('a')
       ->condition('ArtistId', $artistId)
       ->execute()
       ->fetchAssoc();
@@ -322,7 +332,9 @@ class PageTemplatesController extends ControllerBase
     $query_object_details = $connection->select($object_table, 'o')
       ->fields('o') // Specify the fields you want to select
       ->condition('o.ArtistId', $artistId);
-    $query_object_details->orderBy('Title', 'ASC');
+    
+    // Order by the first selected field in customize object list settings.
+    $query_object_details->orderBy($customized_fields_objects_list_array[0], 'ASC');
 
 
     if ($qSearch !== NULL && count($customized_fields_array)>0) {
@@ -399,6 +411,7 @@ class PageTemplatesController extends ControllerBase
       '#groupLevelOrderBy' => $groupLevelOrderBy,
       '#groupLevelPageNo' => $groupLevelPageNo,
       '#artist_details' => $artist_details,
+      '#customized_artist_fields_array' => $customized_artist_fields_array,
       '#qSearch' => $qSearch,
       '#loadsec' => $loadsec,
       '#object_details' => $object_details,
@@ -436,7 +449,13 @@ class PageTemplatesController extends ControllerBase
     $ajaxfor=   "exhibition-detail";
     $current_page=   "exhibition-detail";
 
-    $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
+    $customized_fields_objects_list_array = $this->getCustomizedObjectListFields();
+    // Set default sorting to the first sortable field if available, otherwise default to 'Title asc'
+    // the first selected option in the customize object list field settings will be the default sorting field. 
+    $default_orderby = !empty($customized_fields_objects_list_array) ? rawurlencode($customized_fields_objects_list_array[0]. ' asc') : 'Title%20asc';
+    // if sortBy is set in the request, use it; otherwise, use the default sorting.
+    $groupLevelOrderBy = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : $default_orderby;
+    
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
     $requested_pageNo = isset($_REQUEST['pageNo']) ? abs((int) $_REQUEST['pageNo']) : 1;
     $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? abs((int) $_REQUEST['groupLevelPageNo']) : 1;
@@ -473,7 +492,9 @@ class PageTemplatesController extends ControllerBase
     $query_exhibition_objects->fields('co');
     $query_exhibition_objects->condition('eo.ExhibitionId', $exhibitionID);
     $query_exhibition_objects->range($nxshskip, $nxshowrec);
-    $query_exhibition_objects->orderBy('Title', 'ASC');
+    // Order by the first selected field in customize object list settings.
+    $query_exhibition_objects->orderBy($customized_fields_objects_list_array[0], 'ASC');
+
 
     $result = $query_exhibition_objects->execute();
 
@@ -589,7 +610,12 @@ class PageTemplatesController extends ControllerBase
     $ajaxfor=   "group-detail";
     $current_page=   "group-detail";
 
-    $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Object/Title%20desc";
+    $customized_fields_objects_list_array = $this->getCustomizedObjectListFields();
+    // Set default sorting to the first sortable field if available, otherwise default to 'Title asc'
+    // the first selected option in the customize object list field settings will be the default sorting field. 
+    $default_orderby = !empty($customized_fields_objects_list_array) ? rawurlencode($customized_fields_objects_list_array[0]. ' asc') : 'Title%20asc';
+    // if sortBy is set in the request, use it; otherwise, use the default sorting.
+    $groupLevelOrderBy = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : $default_orderby;
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
     $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? intval($_REQUEST['groupLevelPageNo']) : 1;
@@ -629,7 +655,8 @@ class PageTemplatesController extends ControllerBase
     $query_group_objects->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
     $query_group_objects->fields('co');
     $query_group_objects->range($nxshskip, $nxshowrec);
-    $query_group_objects->orderBy('Title', 'ASC');
+    // Order by the first selected field in customize object list settings.
+    $query_group_objects->orderBy($customized_fields_objects_list_array[0], 'ASC');
     $group_object_details = $query_group_objects->execute()->fetchAllAssoc('ObjectId');
 
     $query_count = $database->select($groupObj_table, 'go')
@@ -743,7 +770,12 @@ class PageTemplatesController extends ControllerBase
     $ajaxfor=   "collection-detail";
     $current_page=   "collection-detail";
 
-    $groupLevelOrderBy=   isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : "Title%20desc";
+    $customized_fields_objects_list_array = $this->getCustomizedObjectListFields();
+    // Set default sorting to the first sortable field if available, otherwise default to 'Title asc'
+    // the first selected option in the customize object list field settings will be the default sorting field. 
+    $default_orderby = !empty($customized_fields_objects_list_array) ? rawurlencode($customized_fields_objects_list_array[0]. ' asc') : 'Title%20asc';
+    // if sortBy is set in the request, use it; otherwise, use the default sorting.
+    $groupLevelOrderBy = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : $default_orderby;
     $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
     $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? intval($_REQUEST['groupLevelPageNo']) : 1;
@@ -791,7 +823,8 @@ class PageTemplatesController extends ControllerBase
 
     // Add limits.
     $query_collection_objects->range($shskip, $showrec);
-    $query_collection_objects->orderBy('Title', 'ASC');
+    // Order by the first selected field in customize object list settings.
+    $query_collection_objects->orderBy($customized_fields_objects_list_array[0], 'ASC');
 
     $object_details = $query_collection_objects->execute()->fetchAllAssoc('ObjectId');
     
@@ -986,5 +1019,32 @@ class PageTemplatesController extends ControllerBase
         unset($array[$index]);
         array_unshift($array, $element);
     }
+  }
+
+  /**
+  * Get array of selected object list fields.
+  * @return array
+  */
+  public function getCustomizedObjectListFields(){
+    $db = \Drupal::database();
+
+    $tblnm = "collector_systems_clsobjects_fields";
+    $settblnm = $tblnm;
+
+    $query = $db->select($settblnm, 'c')
+      ->fields('c', ['fieldname'])
+      ->condition('fieldtype', 'ObjectList');
+    $result = $query->execute()->fetchAllAssoc('fieldname');
+
+    return array_keys($result);
+
+  }
+
+  public function getSelectedFieldsForArtistDetailPage() {
+    $db = \Drupal::database();
+    $query = $db->select('collector_systems_artists_selected_fields', 'c')
+      ->fields('c', ['fieldname', 'fieldvalue'])
+      ->condition('fieldtype', 'ArtistDetail');
+    return $query->execute()->fetchAll();
   }
 }

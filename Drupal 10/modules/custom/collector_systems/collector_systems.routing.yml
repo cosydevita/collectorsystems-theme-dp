@@ -76,6 +76,13 @@ customize_object_list_fields.settings_form:
     _title: 'Customize Object List Fields Settings'
   requirements:
     _permission: 'administer site configuration'
+collector_systems.customize_artist_detail_fields:
+  path: '/admin/collector-systems/customize_artist_detail_fields/settings'
+  defaults:
+    _form: '\Drupal\collector_systems\Form\CustomizeArtistDetailFieldsSettingsForm'
+    _title: 'Customize Artist Detail Fields Settings'
+  requirements:
+    _permission: 'administer site configuration'
 collector_systems.get_images_count_data:
   path: '/collector-systems/get-images-count-data'
   defaults:
@@ -83,6 +90,15 @@ collector_systems.get_images_count_data:
     _title: 'Get Images Count Data'
   requirements:
     _permission: 'administer site configuration'
+collector_systems.artists_load_more:
+  path: '/collector-systems/artists/load-more'
+  defaults:
+    _controller: '\Drupal\collector_systems\Controller\AjaxRequestsController::artistsLoadMore'
+    _title: 'Artists Load More'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: true
 collector_systems.sync_queue_process:
   path: '/collector-systems/sync-queue-process'
   defaults:
