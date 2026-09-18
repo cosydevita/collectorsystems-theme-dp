@@ -95,7 +95,10 @@
               {% endfor %}
             </select>
           </div>
-          {% include '@collector_systems/templates/search-form.html.twig' %}
+          <span class="cs-search-icons">
+            {% include '@collector_systems/templates/search-form.html.twig' %}
+            {% include '@collector_systems/templates/partials/advanced-search-panel.html.twig' %}
+          </span>
         </div>
       </div>
 

@@ -66,6 +66,13 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('show_field_labels'),
     ];
 
+    $form['ui_customizations']['consistent_first_field_on_detail'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Make First Field Consistent on Detail'),
+      '#description' => $this->t('By default the first field on the object detail page is shown larger and without its label. Enable this to style it the same as every other field (same size, label shown per the setting above).'),
+      '#default_value' => $config->get('consistent_first_field_on_detail'),
+    ];
+
     $form['ui_customizations']['show_images_on_list_pages'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Show Images on Lists Page'),
@@ -96,6 +103,13 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Enable Maps'),
       '#default_value' => $config->get('enable_maps'),
+    ];
+
+    $form['ui_customizations']['enable_advanced_search'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Advanced Search'),
+      '#description' => $this->t('Adds a per-field search panel next to the simple search box on the Objects, Artists, Groups, and Exhibitions list pages (and their nested object lists on entity detail pages). Off by default.'),
+      '#default_value' => $config->get('enable_advanced_search'),
     ];
 
     $form['ui_customizations']['enable_transition'] = [
@@ -265,8 +279,10 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
       ->set('subscription_id', $form_state->getValue('subscription_id'))
       ->set('azure_map_subscription_key', $form_state->getValue('azure_map_subscription_key'))
       ->set('show_field_labels', $form_state->getValue('show_field_labels'))
+      ->set('consistent_first_field_on_detail', $form_state->getValue('consistent_first_field_on_detail'))
       ->set('enable_alphabetical_artists', $form_state->getValue('enable_alphabetical_artists'))
       ->set('enable_maps', $form_state->getValue('enable_maps'))
+      ->set('enable_advanced_search', $form_state->getValue('enable_advanced_search'))
       ->set('enable_transition', $form_state->getValue('enable_transition'))
       ->set('center_align_images', $form_state->getValue('center_align_images'))
       ->set('image_bg_color', $form_state->getValue('image_bg_color'))
@@ -309,8 +325,8 @@ class CustomApiIntegrationSettingsForm extends ConfigFormBase {
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $Detaildata = curl_exec($curl);
     curl_close($curl);

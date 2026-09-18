@@ -27,7 +27,10 @@
 							<option value="ExhibitionEndDate%20desc" {{ dataorderby == "ExhibitionEndDate%20desc" ? 'selected' : '' }}>End Date (oldest-newest)</option>
 							<option value="ExhibitionEndDate%20asc" {{ dataorderby == "ExhibitionEndDate%20asc" ? 'selected' : '' }}>End Date (newest-oldest)</option>
 						</select>
-            {% include '@collector_systems/templates/search-form.html.twig' %}
+            <span class="cs-search-icons">
+              {% include '@collector_systems/templates/search-form.html.twig' %}
+              {% include '@collector_systems/templates/partials/advanced-search-panel.html.twig' %}
+            </span>
 					</div>
 				</div>
 			</div>

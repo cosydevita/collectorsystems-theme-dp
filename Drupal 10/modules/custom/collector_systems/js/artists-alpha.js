@@ -10,6 +10,21 @@
         var currentPage = artistSettings.currentPage;
         var ajaxUrl     = artistSettings.ajaxUrl;
 
+        // Advanced Search state lives in the current URL's query string
+        // (advSearch=1&adv_*=...); carry it through page/sort/letter
+        // navigation the same way qSearch already is, or it silently drops
+        // the moment the user scrolls, sorts, or picks a letter.
+        function csGetAdvSearchParams() {
+          var params = new URLSearchParams(window.location.search);
+          var out = [];
+          params.forEach(function (value, key) {
+            if (key === 'advSearch' || key.indexOf('adv_') === 0) {
+              out.push(key + '=' + encodeURIComponent(value));
+            }
+          });
+          return out;
+        }
+
         function csAjaxUrl(pageNo) {
           var sort     = document.getElementById('seldataorderby') ? document.getElementById('seldataorderby').value : 'ArtistName%20asc';
           var charVal  = artistSettings.char;
@@ -17,7 +32,12 @@
           var search   = searchEl ? searchEl.value : '';
           var parts    = ['pageNo=' + pageNo, 'sortBy=' + sort];
           if (charVal) parts.push('char=' + encodeURIComponent(charVal));
-          if (search)  parts.push('qSearch=' + encodeURIComponent(search));
+          var advParams = csGetAdvSearchParams();
+          if (advParams.length) {
+            parts = parts.concat(advParams);
+          } else if (search) {
+            parts.push('qSearch=' + encodeURIComponent(search));
+          }
           return ajaxUrl + '?' + parts.join('&');
         }
 
@@ -27,7 +47,12 @@
           var search  = overrides.search !== undefined ? overrides.search : '';
           var parts   = ['sortBy=' + sort];
           if (charVal) parts.push('char=' + encodeURIComponent(charVal));
-          if (search)  parts.push('qSearch=' + encodeURIComponent(search));
+          var advParams = csGetAdvSearchParams();
+          if (advParams.length) {
+            parts = parts.concat(advParams);
+          } else if (search) {
+            parts.push('qSearch=' + encodeURIComponent(search));
+          }
           return window.location.pathname + '?' + parts.join('&');
         }
 

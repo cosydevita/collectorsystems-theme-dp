@@ -27,6 +27,8 @@ namespace Drupal\collector_systems;
   public const AdditionalArtistMakers = "AdditionalArtistMakers";
 
   public const AdditionalAuthors = "AdditionalAuthors";
+  public const AdditionalCreators = "AdditionalCreators";
+  public const AdditionalPublishers = "AdditionalPublishers";
   public const AdditionalGroup = "AdditionalGroup";
   public const Age = "Age";
   public const AgeStage = "AgeStage";
@@ -422,6 +424,18 @@ namespace Drupal\collector_systems;
 
   public const UserDefinedRichText17 = "UserDefinedRichText17";
   public const UserDefinedRichText18 = "UserDefinedRichText18";
+
+  public const UserDefinedControlledVocab1 = "UserDefinedControlledVocab1";
+  public const UserDefinedControlledVocab2 = "UserDefinedControlledVocab2";
+  public const UserDefinedControlledVocab3 = "UserDefinedControlledVocab3";
+  public const UserDefinedControlledVocab4 = "UserDefinedControlledVocab4";
+  public const UserDefinedControlledVocab5 = "UserDefinedControlledVocab5";
+  public const UserDefinedControlledVocab6 = "UserDefinedControlledVocab6";
+  public const UserDefinedControlledVocab7 = "UserDefinedControlledVocab7";
+  public const UserDefinedControlledVocab8 = "UserDefinedControlledVocab8";
+  public const UserDefinedControlledVocab9 = "UserDefinedControlledVocab9";
+  public const UserDefinedControlledVocab10 = "UserDefinedControlledVocab10";
+
   public const UTMCoordinates = "UTMCoordinates";
   public const VerticalDatum = "VerticalDatum";
   public const VIN = "VIN";
@@ -650,6 +664,8 @@ namespace Drupal\collector_systems;
   public const AdditionalArtistMakersFieldLabel = "Additional Artist Makers";
 
   public const AdditionalAuthorsFieldLabel = "Additional Authors";
+  public const AdditionalCreatorsFieldLabel = "Additional Creators";
+  public const AdditionalPublishersFieldLabel = "Additional Publishers";
   public const AdditionalGroupFieldLabel = "Additional Group";
   public const AgeFieldLabel = "Age";
   public const AgeStageFieldLabel = "Age Stage";
@@ -1112,6 +1128,17 @@ namespace Drupal\collector_systems;
 
   public const UserDefinedRichText17FieldLabel = "User Defined RichText17";
   public const UserDefinedRichText18FieldLabel = "User Defined RichText18";
+
+  public const UserDefinedControlledVocab1FieldLabel = "User Defined ControlledVocab1";
+  public const UserDefinedControlledVocab2FieldLabel = "User Defined ControlledVocab2";
+  public const UserDefinedControlledVocab3FieldLabel = "User Defined ControlledVocab3";
+  public const UserDefinedControlledVocab4FieldLabel = "User Defined ControlledVocab4";
+  public const UserDefinedControlledVocab5FieldLabel = "User Defined ControlledVocab5";
+  public const UserDefinedControlledVocab6FieldLabel = "User Defined ControlledVocab6";
+  public const UserDefinedControlledVocab7FieldLabel = "User Defined ControlledVocab7";
+  public const UserDefinedControlledVocab8FieldLabel = "User Defined ControlledVocab8";
+  public const UserDefinedControlledVocab9FieldLabel = "User Defined ControlledVocab9";
+  public const UserDefinedControlledVocab10FieldLabel = "User Defined ControlledVocab10";
 
   public const UserDefinedDate1FieldLabel = "User Defined Date1";
 

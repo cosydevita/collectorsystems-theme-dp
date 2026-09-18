@@ -29,4 +29,31 @@ class ObjectsService {
     return $sortable;
   }
 
+  /**
+   * Returns the column names of a given table.
+   *
+   * @param string $table_name
+   *   The unprefixed table name.
+   *
+   * @return array
+   *   A simple array of column names.
+   */
+  public function cs_get_table_columns($table_name) {
+    $prefix = $this->database->getPrefix();
+    $prefixed_table = $prefix . $table_name;
+
+    try {
+      // Use SHOW COLUMNS — faster and no INFORMATION_SCHEMA permission issues.
+      $result = $this->database->query("SHOW COLUMNS FROM `$prefixed_table`")->fetchAll();
+      return array_map(static fn($row) => $row->Field, $result);
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('collector_systems')->error(
+        'Error fetching columns for table @table: @message',
+        ['@table' => $prefixed_table, '@message' => $e->getMessage()]
+      );
+      return [];
+    }
+  }
+
 }

@@ -24,3 +24,6 @@ services:
   collector_systems.artist_fields_service:
       class: Drupal\collector_systems\ArtistFieldsService
       arguments: ['@config.factory']
+  collector_systems.advanced_search_service:
+    class: Drupal\collector_systems\AdvancedSearchService
+    arguments: ['@config.factory', '@database', '@collector_systems.objects_service', '@string_translation']

@@ -9,6 +9,9 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Database\Query\Condition;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\collector_systems\ObjectsService;
+use Drupal\collector_systems\AdvancedSearchService;
+use Drupal\collector_systems\Csfieldresolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
@@ -30,6 +33,20 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
    */
   protected $configFactory;
 
+  /**
+   * The objects service.
+   *
+   * @var \Drupal\collector_systems\ObjectsService
+   */
+  protected $objectsService;
+
+  /**
+   * The advanced search service.
+   *
+   * @var \Drupal\collector_systems\AdvancedSearchService
+   */
+  protected $advancedSearch;
+
     /**
    * Constructs a new CollectorSystemsObjects object.
    *
@@ -37,10 +54,14 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
    * @param string $plugin_id
    * @param mixed $plugin_definition
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\collector_systems\ObjectsService $objects_service
+   * @param \Drupal\collector_systems\AdvancedSearchService $advanced_search
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, ObjectsService $objects_service, AdvancedSearchService $advanced_search) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
+    $this->objectsService = $objects_service;
+    $this->advancedSearch = $advanced_search;
   }
 
    /**
@@ -51,7 +72,9 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('collector_systems.objects_service'),
+      $container->get('collector_systems.advanced_search_service')
     );
   }
 
@@ -122,16 +145,25 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
     $query->fields('c');
     $query->fields('a');
 
+    // Advanced Search takes priority over the plain search box (matches the
+    // WP plugin's mutual-exclusivity rule): if this request submitted the
+    // advanced panel, ignore qSearch entirely.
+    if ($this->advancedSearch->isActiveRequest()) {
+      $advanced_condition = $this->advancedSearch->buildConditionGroup($query, 'objects');
+      if ($advanced_condition) {
+        $query->condition($advanced_condition);
+      }
+    }
     // Apply search conditions if needed.
-    if (!empty($customized_fields_array) && !empty($qSearch)) {
+    elseif (!empty($customized_fields_array) && !empty($qSearch)) {
       $escaped_search = '%' . $connection->escapeLike($qSearch) . '%';
       $or_condition_group = $query->orConditionGroup();
 
       // Get the column names for each table
 
-      $object_columns = $this->cs_get_table_columns($object_table);
-      $collection_columns = $this->cs_get_table_columns($collection_table);
-      $artist_columns = $this->cs_get_table_columns($artist_table);
+      $object_columns = $this->objectsService->cs_get_table_columns($object_table);
+      $collection_columns = $this->objectsService->cs_get_table_columns($collection_table);
+      $artist_columns = $this->objectsService->cs_get_table_columns($artist_table);
 
       foreach ($customized_fields_array as $field) {
         if (in_array($field, $collection_columns, true)) {
@@ -209,10 +241,15 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
         ];
         if($Latitude && $Longitude){
           if($customized_fields && !empty($customized_fields_array)){
+            // $object holds raw DB column values (e.g. AdditionalArtists is
+            // a JSON string, dates are unformatted, booleans are 0/1).
+            // Route every field through the same resolver the list/detail
+            // pages use so the popup gets fully-derived display values
+            // instead of raw column data.
+            $object_record = (array) $object;
             foreach($customized_fields_array as $customized_field){
-              if(isset($object->$customized_field)){
-                // Check if the field exists in the object
-                $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+              if(array_key_exists($customized_field, $object_record)){
+                $locations_data['data_selected_fields'][$customized_field] = Csfieldresolver::getValue($customized_field, $object_record);
               }
             }
           }
@@ -234,8 +271,21 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
       //end azure map
     }
 
-    $objects_service = \Drupal::service('collector_systems.objects_service');
-    $object_list_sortable_fields = $objects_service->getObjectListSortableFields();
+    $object_list_sortable_fields = $this->objectsService->getObjectListSortableFields();
+
+    $advanced_search_fields = $this->advancedSearch->getFields('objects');
+    $build_advanced_search = [
+      'fields' => $advanced_search_fields,
+      'active' => $this->advancedSearch->isActiveRequest(),
+      'values' => $this->advancedSearch->getSubmittedValues('objects'),
+      'sort_by' => $dataorderby,
+      'data_id' => NULL,
+      // Url::fromRoute('<current>') depends on Drupal's route-match object
+      // resolving correctly; in practice this rendered as /system/404
+      // instead of the actual page. Reading the request's own path directly
+      // has no such dependency -- it's always exactly the page being viewed.
+      'clear_url' => \Drupal::request()->getPathInfo(),
+    ];
 
     $build = [
       '#theme' => 'objects-list-page',
@@ -247,6 +297,7 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
       '#current_page' => $current_page,
       '#requested_pageNo' => $requested_pageNo,
       '#qSearch' => $qSearch,
+      '#advanced_search' => $build_advanced_search,
       '#module_path' => $module_path,
       '#enable_maps' => $enable_maps,
       '#objects_list_sortable_fields' => $object_list_sortable_fields,
@@ -329,35 +380,6 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
 
     return array_keys($result);
 
-  }
-
-
-  /**
- * Get column names for a given database table (prefix-aware, Drupal 10+).
- *
- * @param string $table_name
- *   The base table name (without prefix), e.g. 'collector_systems_objects'.
- *
- * @return array
- *   A simple array of column names.
- */
-  function cs_get_table_columns($table_name) {
-    $connection = \Drupal::database();
-    $prefix = $connection->getPrefix();
-    $prefixed_table = $prefix . $table_name;
-  
-    try {
-      // Use SHOW COLUMNS — faster and no INFORMATION_SCHEMA permission issues.
-      $result = $connection->query("SHOW COLUMNS FROM `$prefixed_table`")->fetchAll();
-      return array_map(static fn($row) => $row->Field, $result);
-    }
-    catch (\Exception $e) {
-      \Drupal::logger('collector_systems')->error(
-        'Error fetching columns for table @table: @message',
-        ['@table' => $prefixed_table, '@message' => $e->getMessage()]
-      );
-      return [];
-    }
   }
 
 

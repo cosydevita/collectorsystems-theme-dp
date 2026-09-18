@@ -813,20 +813,23 @@ padding-bottom: 1.2rem;
   margin-left: 20px;
 }
 .search-form .expand-search {
-    width: 25px;
-    height: 25px;
+    width: 28px;
+    height: 28px;
     box-sizing: border-box;
     border: none;
     background-repeat: no-repeat;
     -webkit-transition: width .5s ease;
     transition:width .5s ease;
-    background-image:url("https://cdn.collectorsystems.com/icons/search_black.svg");
+    // Same magnifying-glass icon as .cs-advanced-search-toggle-icon's inline
+    // SVG (circle + handle), just without the "+" lines, so the compact and
+    // advanced search icons line up visually.
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%231B1D1F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='10' cy='10' r='7'%3E%3C/circle%3E%3Cline x1='20' y1='20' x2='15.4' y2='15.4'%3E%3C/line%3E%3C/svg%3E");
     padding:5px;
     outline:none;
-    padding-left: 25px;
+    padding-left: 28px;
     padding-right: 0;
-    background-position: 0px 2px;
-    background-size: 18px;
+    background-position: 4px 2px;
+    background-size: 20px;
     cursor: pointer;
     box-shadow: none !important;
     background-position-y: center;
@@ -1022,7 +1025,10 @@ ul.objectdetail_sharetools li a.btn-media i {
 
 
 /*** this will change first item's font size on object detail page ***/
-.cs-object-details p:first-child {
+/*** skipped when the "Make First Field Consistent on Detail" setting is
+     enabled (adds .cs-consistent-first-field), so the first field renders
+     the same size as every other field, label included ***/
+.cs-object-details:not(.cs-consistent-first-field) p:first-child {
     font-size: 2em;
     margin-bottom: 1rem !important;
 }
@@ -1032,8 +1038,20 @@ ul.objectdetail_sharetools li a.btn-media i {
     font-size: 1rem;
 }
 
-.cs-object-details p:first-child span.object_detail_fieldlabel {
+.cs-object-details:not(.cs-consistent-first-field) p:first-child span.object_detail_fieldlabel {
     display: none;
+}
+
+/*** defensive reset for "Make First Field Consistent on Detail": forces the
+     first field back to plain body styling even if something else on the
+     page (e.g. a legacy/duplicated theme stylesheet) also targets
+     p:first-child directly ***/
+.cs-object-details.cs-consistent-first-field p:first-child {
+    font-size: inherit !important;
+    margin-bottom: 0.5rem !important;
+}
+.cs-object-details.cs-consistent-first-field p:first-child span.object_detail_fieldlabel {
+    display: inline !important;
 }
 
 .cs-theme-nodata {padding:10px;}

@@ -25,7 +25,9 @@
 							<option value="FullCollectionName%20asc" {{ dataorderby == "FullCollectionName%20asc" ? 'selected' : '' }}>A - Z</option>
 						</select>
 					</div>
-          {% include '@collector_systems/templates/search-form.html.twig' %}
+          <span class="cs-search-icons">
+            {% include '@collector_systems/templates/search-form.html.twig' %}
+          </span>
 				</div>
 			</div>
 

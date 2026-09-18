@@ -1,0 +1,227 @@
+// Advanced Search: a small icon-only toggle next to the compact search
+// input, opening a floating panel with one input per searchable field.
+// Ported from the equivalent WordPress plugin implementation, matching this
+// module's own cs- class prefix convention.
+
+.cs-search-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1rem;
+}
+
+.cs-advanced-search-toggle {
+    // Fallback containing block (see .cs-advanced-search-panel below): browsers
+    // without CSS anchor positioning size the panel against this 28px icon
+    // box directly, capped by max-width so it never runs away.
+    position: relative;
+}
+
+.cs-advanced-search-toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: #1B1D1F;
+    cursor: pointer;
+    list-style: none;
+    transition: background-color 0.15s ease;
+}
+
+.cs-advanced-search-toggle-icon::-webkit-details-marker {
+    display: none;
+}
+
+.cs-advanced-search-toggle-icon:hover {
+    background-color: #f1f3f5;
+}
+
+.cs-advanced-search-toggle[open] .cs-advanced-search-toggle-icon {
+    background-color: #e9ecef;
+}
+
+.cs-advanced-search-panel {
+    position: absolute;
+    // Fallback (no anchor positioning support): sized/positioned against the
+    // 28px toggle icon, the nearest positioned ancestor -- capped so it never
+    // exceeds the viewport, but it can still run past a narrow content
+    // column since it has no way to know that column's real width.
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 20;
+    width: fit-content;
+    max-width: min(640px, calc(100vw - 2rem));
+    max-height: 70vh;
+    overflow-y: auto;
+    // Reset text-align: the toggle sits inside Bootstrap's .text-end column
+    // (used to right-align the Sort By controls); since text-align inherits
+    // and position:absolute doesn't break that chain, it would otherwise
+    // leak into every label/input inside this popover.
+    text-align: left;
+}
+
+// CSS Anchor Positioning (Chrome/Edge 125+): decouples the panel's
+// containing block (used for width) from its anchor point (used for
+// position), so it can be sized against the real content column
+// (.collector-systems-wrapper) while still opening right under the small
+// toggle icon. Making the wrapper AND the toggle position:relative at the
+// same time -- the naive way to get `max-width: calc(100% - ...)` to read
+// against the wrapper -- collapses the panel to 0 width (confirmed live,
+// not a typo): the two nested positioned ancestors fight over which one is
+// the toggle's containing block. Anchor positioning sidesteps that
+// entirely: the toggle only needs an anchor-name, not position:relative, so
+// the wrapper stays the sole positioned ancestor. Browsers without support
+// keep the static fallback above.
+@supports (anchor-name: --cs-adv-toggle) {
+    .cs-advanced-search-toggle {
+        position: static;
+        anchor-name: --cs-adv-toggle;
+    }
+
+    // Sass parent-selector: since this partial is @import-ed inside
+    // `.collector-systems-wrapper { ... }` in styles.scss, `&` here compiles
+    // to `.collector-systems-wrapper`, making it the panel's containing
+    // block for width purposes.
+    & {
+        position: relative;
+    }
+
+    .cs-advanced-search-panel {
+        position-anchor: --cs-adv-toggle;
+        top: calc(anchor(bottom) + 10px);
+        right: anchor(right);
+        max-width: calc(100% - 2rem);
+    }
+}
+
+.cs-advanced-search-form {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.cs-advanced-search-fields {
+    // flex-wrap (not grid's auto-fill) so the panel's own `width: max-content`
+    // sizes to fit every field in one row up to `max-width`, then wraps --
+    // compact for a 2-field page like Groups, wide for a many-field page
+    // like Objects, with no per-page tuning needed.
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 1.5rem;
+}
+
+.cs-advanced-search-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 180px;
+    // Without a cap, a row with only one or two fields stretches each one
+    // to fill the panel's full width, which is what made them look
+    // oversized -- keep them a sensible input-sized width even when there's
+    // extra room.
+    max-width: 260px;
+}
+
+.cs-advanced-search-field--daterange {
+    flex-basis: 100%;
+    // Override the base field's 260px cap -- this one is meant to span the
+    // full row (it holds two date inputs side by side), not stay
+    // input-sized like the single-value fields.
+    max-width: none;
+}
+
+.cs-advanced-search-field label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #868e96;
+}
+
+.cs-advanced-search-field input[type="text"],
+.cs-advanced-search-field input[type="date"] {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.85rem;
+    // The theme's base styles give inputs a ~2x line-height, which is what
+    // was making these look oversized -- pin it to something sane instead
+    // of relying on the inherited default.
+    line-height: 1.4;
+    // A global base rule (`[type="text"], [type="date"], ... { min-height:
+    // var(--sp3) }`, ~54px) otherwise forces this height regardless of the
+    // padding/line-height above. auto let it shrink too far (~29px, felt
+    // tiny next to the page's other 54px controls like Sort By) -- the
+    // padding/line-height above now set a deliberate ~37px instead.
+    min-height: 0;
+    background-color: #fff;
+    transition: border-color 0.15s ease;
+}
+
+.cs-advanced-search-field input[type="text"]:hover,
+.cs-advanced-search-field input[type="date"]:hover {
+    border-color: #ced4da;
+}
+
+.cs-advanced-search-field input[type="text"]:focus,
+.cs-advanced-search-field input[type="date"]:focus {
+    outline: none;
+    border-color: #adb5bd;
+}
+
+.cs-advanced-search-daterange {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 480px;
+}
+
+.cs-advanced-search-daterange input {
+    flex: 1;
+    min-width: 0;
+}
+
+.cs-advanced-search-daterange-sep {
+    color: #6c757d;
+}
+
+.cs-advanced-search-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.85rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #eceff1;
+}
+
+.cs-advanced-search-submit {
+    background-color: #1B1D1F;
+    color: #fff;
+    border: 1px solid #1B1D1F;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cs-advanced-search-submit:hover {
+    opacity: 0.9;
+}
+
+.cs-advanced-search-clear {
+    background-color: #fff;
+    color: #1B1D1F;
+    border: 1px solid #ced4da;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.cs-advanced-search-clear:hover {
+    background-color: #f8f9fa;
+}

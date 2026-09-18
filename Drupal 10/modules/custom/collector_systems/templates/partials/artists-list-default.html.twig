@@ -25,7 +25,10 @@
 							<option value="ArtistName%20asc" {{ "ArtistName%20asc" == dataorderby ? 'selected' }}>Artist (a-z)</option>
 						</select>
 					</div>
-					{% include '@collector_systems/templates/search-form.html.twig' %}
+					<span class="cs-search-icons">
+						{% include '@collector_systems/templates/search-form.html.twig' %}
+						{% include '@collector_systems/templates/partials/advanced-search-panel.html.twig' %}
+					</span>
 				</div>
 			</div>
 			<div class="card-group row g-4 postList artists-container list-default mt-3 {{ showImagesOnListPages ? 'with-images' : 'without-images' }}" id="fetchfilterdata">

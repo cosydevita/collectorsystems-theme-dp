@@ -109,8 +109,10 @@
         // Apply object detail page title font size customization
         let cs_object_detail_page_title_font_size = $('body').data('cs-object-detail-page-title-font-size');
         if(cs_object_detail_page_title_font_size){
-            // Apply font size to Object Detail Page Title
-            $(".collector-systems-wrapper .cs-object-details > p:first-child").css("font-size", cs_object_detail_page_title_font_size);
+            // Apply font size to Object Detail Page Title -- skipped when "Make First
+            // Field Consistent on Detail" is on, since that setting means the first
+            // field should read as ordinary body text, not get this oversized override.
+            $(".collector-systems-wrapper .cs-object-details:not(.cs-consistent-first-field) > p:first-child").css("font-size", cs_object_detail_page_title_font_size);
         }
 
     }

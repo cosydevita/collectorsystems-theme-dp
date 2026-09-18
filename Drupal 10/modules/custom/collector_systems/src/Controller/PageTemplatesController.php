@@ -8,6 +8,8 @@ use Drupal\Core\Database\Query\Condition;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Component\Utility\Xss;
+use Drupal\collector_systems\AdvancedSearchService;
 
 
 class PageTemplatesController extends ControllerBase
@@ -24,9 +26,17 @@ class PageTemplatesController extends ControllerBase
    */
   protected $configFactory;
 
-  public function __construct(RequestStack $request_stack, ConfigFactoryInterface $config_factory) {
+  /**
+   * The advanced search service.
+   *
+   * @var \Drupal\collector_systems\AdvancedSearchService
+   */
+  protected $advancedSearch;
+
+  public function __construct(RequestStack $request_stack, ConfigFactoryInterface $config_factory, AdvancedSearchService $advanced_search) {
     $this->requestStack = $request_stack;
     $this->configFactory = $config_factory;
+    $this->advancedSearch = $advanced_search;
   }
 
   /**
@@ -35,15 +45,39 @@ class PageTemplatesController extends ControllerBase
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('request_stack'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('collector_systems.advanced_search_service')
     );
+  }
+
+  /**
+   * Runs every string value of a fetched detail row through Xss::filterAdmin().
+   *
+   * The detail templates (artist/exhibition/group/collection) render several
+   * of these DB-sourced fields (e.g. ArtistBio, ExhibitionMemo,
+   * GroupDescription/Memo, CollectionMemo, and the artist page's dynamic
+   * customized fields) with Twig's |raw filter so curator-entered
+   * formatting survives. Sanitizing here, before the row reaches the render
+   * array, means |raw is rendering already-safe markup instead of raw
+   * synced-in content.
+   */
+  private function sanitizeDetailFields($details) {
+    if (!is_array($details)) {
+      return $details;
+    }
+    foreach ($details as $key => $value) {
+      if (is_string($value)) {
+        $details[$key] = Xss::filterAdmin($value);
+      }
+    }
+    return $details;
   }
 
   public function ObjectDetailPage(){
     $request = $this->requestStack->getCurrentRequest();
-    $artObjID=$_REQUEST['dataId'];
+    $artObjID = $request->query->getInt('dataId');
     $sortBy = $request->query->get('sortBy', 'Title asc');
-    $qSearch=isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
+    $qSearch = $request->query->get('qSearch', '');
     $requested_pageNo=isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
 
     // Fetch Objects Data from database
@@ -207,6 +241,7 @@ class PageTemplatesController extends ControllerBase
     }
 
     $enable_zoom =  \Drupal::config('collector_systems.settings')->get('enable_zoom');
+    $consistent_first_field_on_detail = \Drupal::config('collector_systems.settings')->get('consistent_first_field_on_detail');
 
     $base_url_with_scheme = \Drupal::request()->getSchemeAndHttpHost();
     $build = [
@@ -227,6 +262,7 @@ class PageTemplatesController extends ControllerBase
       '#enable_maps' => $enable_maps,
       '#enable_zoom' => $enable_zoom,
       '#locations' => $locations,
+      '#consistent_first_field_on_detail' => $consistent_first_field_on_detail,
       '#cache' => ['max-age' => 0,],    //Set cache for 0 seconds.
 
     ];
@@ -278,7 +314,8 @@ class PageTemplatesController extends ControllerBase
   }
 
   public function ArtistDetailPage(){
-    $artistId=$_REQUEST['dataId'];
+    $request = $this->requestStack->getCurrentRequest();
+    $artistId = $request->query->getInt('dataId');
     $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
     $groupLevelSkipCount =   0;
@@ -287,13 +324,13 @@ class PageTemplatesController extends ControllerBase
 
     $customized_fields_objects_list_array = $this->getCustomizedObjectListFields();
     // Set default sorting to the first sortable field if available, otherwise default to 'Title asc'
-    // the first selected option in the customize object list field settings will be the default sorting field. 
+    // the first selected option in the customize object list field settings will be the default sorting field.
     $default_orderby = !empty($customized_fields_objects_list_array) ? rawurlencode($customized_fields_objects_list_array[0]. ' asc') : 'Title%20asc';
     // if sortBy is set in the request, use it; otherwise, use the default sorting.
-    $groupLevelOrderBy = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : $default_orderby;
+    $groupLevelOrderBy = $request->query->get('sortBy', $default_orderby);
 
 
-    $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
+    $qSearch = $request->query->get('qSearch', '');
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
     $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? intval($_REQUEST['groupLevelPageNo']) : 1;
     $groupLevelSkipCount = ($groupLevelPageNo - 1) * $groupLevelTopCount;
@@ -320,37 +357,43 @@ class PageTemplatesController extends ControllerBase
       ->condition('ArtistId', $artistId)
       ->execute()
       ->fetchAssoc();
-    $artist_details = $fetch_artist_details;
+    $artist_details = $this->sanitizeDetailFields($fetch_artist_details);
 
     // Construct the WHERE clause for LIKE condition on multiple fields
     $where_conditions = new Condition('OR');
+    $escaped_qsearch = $connection->escapeLike($qSearch);
     foreach ($customized_fields_array as $field) {
-      $where_conditions->condition($field, '%' . $qSearch . '%', 'LIKE');
+      $where_conditions->condition($field, '%' . $escaped_qsearch . '%', 'LIKE');
     }
     // Fetch objects where ArtistId
     $object_table = $connection->prefixTables('collector_systems_objects');
     $query_object_details = $connection->select($object_table, 'o')
       ->fields('o') // Specify the fields you want to select
       ->condition('o.ArtistId', $artistId);
-    
+
     // Order by the first selected field in customize object list settings.
     $query_object_details->orderBy($customized_fields_objects_list_array[0], 'ASC');
 
-
-    if ($qSearch !== NULL && count($customized_fields_array)>0) {
+    // Advanced Search takes priority over the plain search box (matches the
+    // WP plugin's mutual-exclusivity rule): if this request submitted the
+    // advanced panel, ignore qSearch entirely.
+    if ($this->advancedSearch->isActiveRequest()) {
+      $advanced_condition = $this->advancedSearch->buildConditionGroup($query_object_details, 'artist-detail');
+      if ($advanced_condition) {
+        $query_object_details->condition($advanced_condition);
+      }
+    }
+    elseif ($qSearch !== NULL && count($customized_fields_array)>0) {
       $query_object_details->condition($where_conditions);
     }
+
+    // Derive the count query from the same conditioned query (rather than a
+    // separately-built, unconditioned one) so the displayed total always
+    // matches what's actually filtered.
+    $obj_count = $query_object_details->countQuery()->execute()->fetchField();
+
     $query_object_details->range($groupLevelSkipCount, $nxshowrec);
     $object_details = $query_object_details->execute()->fetchAllAssoc('ObjectId');
-
-    // Count
-    $count_object = $connection->select($object_table, 'o')
-      ->condition('o.ArtistId', $artistId)
-      ->countQuery()
-      ->execute()
-      ->fetchField();
-
-    $obj_count = $count_object;
 
     $collector_systems_module_path = \Drupal::service('extension.path.resolver')->getPath('module', 'collector_systems');
 
@@ -401,7 +444,21 @@ class PageTemplatesController extends ControllerBase
 
     $objects_service = \Drupal::service('collector_systems.objects_service');
     $object_list_sortable_fields = $objects_service->getObjectListSortableFields();
-    
+
+    $advanced_search_fields = $this->advancedSearch->getFields('artist-detail');
+    $build_advanced_search = [
+      'fields' => $advanced_search_fields,
+      'active' => $this->advancedSearch->isActiveRequest(),
+      'values' => $this->advancedSearch->getSubmittedValues('artist-detail'),
+      'sort_by' => $groupLevelOrderBy,
+      'data_id' => $artistId,
+      // Url::fromRoute('<current>') depends on Drupal's route-match object
+      // resolving correctly; in practice this rendered as /system/404
+      // instead of the actual page. Reading the request's own path directly
+      // has no such dependency -- it's always exactly the page being viewed.
+      'clear_url' => $this->requestStack->getCurrentRequest()->getPathInfo() . '?dataId=' . rawurlencode($artistId),
+    ];
+
     $build = [
       '#theme' => 'artist-detail-page',
       '#nxshowrec' => $nxshowrec,
@@ -413,6 +470,7 @@ class PageTemplatesController extends ControllerBase
       '#artist_details' => $artist_details,
       '#customized_artist_fields_array' => $customized_artist_fields_array,
       '#qSearch' => $qSearch,
+      '#advanced_search' => $build_advanced_search,
       '#loadsec' => $loadsec,
       '#object_details' => $object_details,
       '#ajaxfor' => $ajaxfor,
@@ -442,7 +500,8 @@ class PageTemplatesController extends ControllerBase
   }
 
   public function ExhibitionDetailPage(){
-    $exhibitionID=$_REQUEST['dataId'];
+    $request = $this->requestStack->getCurrentRequest();
+    $exhibitionID = $request->query->getInt('dataId');
     $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
     $groupLevelSkipCount =   0;
@@ -451,12 +510,12 @@ class PageTemplatesController extends ControllerBase
 
     $customized_fields_objects_list_array = $this->getCustomizedObjectListFields();
     // Set default sorting to the first sortable field if available, otherwise default to 'Title asc'
-    // the first selected option in the customize object list field settings will be the default sorting field. 
+    // the first selected option in the customize object list field settings will be the default sorting field.
     $default_orderby = !empty($customized_fields_objects_list_array) ? rawurlencode($customized_fields_objects_list_array[0]. ' asc') : 'Title%20asc';
     // if sortBy is set in the request, use it; otherwise, use the default sorting.
-    $groupLevelOrderBy = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : $default_orderby;
-    
-    $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
+    $groupLevelOrderBy = $request->query->get('sortBy', $default_orderby);
+
+    $qSearch = $request->query->get('qSearch', '');
     $requested_pageNo = isset($_REQUEST['pageNo']) ? abs((int) $_REQUEST['pageNo']) : 1;
     $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? abs((int) $_REQUEST['groupLevelPageNo']) : 1;
     $groupLevelSkipCount = ($groupLevelPageNo - 1) * $groupLevelTopCount;
@@ -479,7 +538,7 @@ class PageTemplatesController extends ControllerBase
     $result = $query->execute();
 
     // Fetch the result as an associative array.
-    $exhibition_details = $result->fetchAssoc();
+    $exhibition_details = $this->sanitizeDetailFields($result->fetchAssoc());
 
 
     //Fetch Objects Where ExhibitionId
@@ -488,23 +547,37 @@ class PageTemplatesController extends ControllerBase
 
     $query_exhibition_objects = \Drupal::database()->select($exhibitionObj_table, 'eo');
     $query_exhibition_objects->fields('eo');
-    $query_exhibition_objects->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
-    $query_exhibition_objects->fields('co');
+    // Aliased 'o' (not 'co') to match the equivalent AJAX endpoint
+    // (AjaxRequestsController::groupLevelObjects_searching_page()) and
+    // every other objects-table query in this module, so
+    // AdvancedSearchService's Objects field set (which qualifies columns
+    // as o.*) works against both code paths without special-casing.
+    $query_exhibition_objects->join($object_table, 'o', 'eo.ObjectId = o.ObjectId');
+    $query_exhibition_objects->fields('o');
     $query_exhibition_objects->condition('eo.ExhibitionId', $exhibitionID);
-    $query_exhibition_objects->range($nxshskip, $nxshowrec);
     // Order by the first selected field in customize object list settings.
     $query_exhibition_objects->orderBy($customized_fields_objects_list_array[0], 'ASC');
 
+    // Advanced Search: if this request submitted the advanced panel, apply
+    // its AND-combined conditions. (There is no plain-search condition to
+    // stay mutually exclusive with here -- qSearch on this page is only
+    // applied via the AJAX search endpoint, not on this initial page load.)
+    if ($this->advancedSearch->isActiveRequest()) {
+      $advanced_condition = $this->advancedSearch->buildConditionGroup($query_exhibition_objects, 'exhibition-detail');
+      if ($advanced_condition) {
+        $query_exhibition_objects->condition($advanced_condition);
+      }
+    }
 
+    // Derive the count query from the same conditioned query (rather than a
+    // separately-built, unconditioned one) so the displayed total always
+    // matches what's actually filtered.
+    $obj_count = $query_exhibition_objects->countQuery()->execute()->fetchField();
+
+    $query_exhibition_objects->range($nxshskip, $nxshowrec);
     $result = $query_exhibition_objects->execute();
 
     $object_details = $result->fetchAllAssoc('ObjectId');
-
-    //Count
-    $count_object = $database->query("SELECT COUNT(*) FROM {" . $exhibitionObj_table . "} WHERE ExhibitionId = :exhibition_id", [
-      ':exhibition_id' => $exhibitionID,
-    ]);
-    $obj_count = $count_object->fetchField();
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
     $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
@@ -564,6 +637,15 @@ class PageTemplatesController extends ControllerBase
     $objects_service = \Drupal::service('collector_systems.objects_service');
     $object_list_sortable_fields = $objects_service->getObjectListSortableFields();
 
+    $advanced_search_fields = $this->advancedSearch->getFields('exhibition-detail');
+    $build_advanced_search = [
+      'fields' => $advanced_search_fields,
+      'active' => $this->advancedSearch->isActiveRequest(),
+      'values' => $this->advancedSearch->getSubmittedValues('exhibition-detail'),
+      'sort_by' => $groupLevelOrderBy,
+      'data_id' => $exhibitionID,
+      'clear_url' => $this->requestStack->getCurrentRequest()->getPathInfo() . '?dataId=' . rawurlencode($exhibitionID),
+    ];
 
     $build = [
       '#theme' => 'exhibition-detail-page',
@@ -573,6 +655,7 @@ class PageTemplatesController extends ControllerBase
       '#groupLevelOrderBy' => $groupLevelOrderBy,
       '#groupLevelPageNo' => $groupLevelPageNo,
       '#qSearch' => $qSearch,
+      '#advanced_search' => $build_advanced_search,
       '#loadsec' => $loadsec,
       '#object_details' => $object_details,
       '#exhibition_details' => $exhibition_details,
@@ -603,7 +686,8 @@ class PageTemplatesController extends ControllerBase
   }
 
   public function GroupDetailPage(){
-    $groupID=$_REQUEST['dataId'];
+    $request = $this->requestStack->getCurrentRequest();
+    $groupID = $request->query->getInt('dataId');
     $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $groupLevelTopCount = isset($listPageSize) ? $listPageSize : 9;
     $groupLevelSkipCount =   0;
@@ -612,11 +696,11 @@ class PageTemplatesController extends ControllerBase
 
     $customized_fields_objects_list_array = $this->getCustomizedObjectListFields();
     // Set default sorting to the first sortable field if available, otherwise default to 'Title asc'
-    // the first selected option in the customize object list field settings will be the default sorting field. 
+    // the first selected option in the customize object list field settings will be the default sorting field.
     $default_orderby = !empty($customized_fields_objects_list_array) ? rawurlencode($customized_fields_objects_list_array[0]. ' asc') : 'Title%20asc';
     // if sortBy is set in the request, use it; otherwise, use the default sorting.
-    $groupLevelOrderBy = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : $default_orderby;
-    $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
+    $groupLevelOrderBy = $request->query->get('sortBy', $default_orderby);
+    $qSearch = $request->query->get('qSearch', '');
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
     $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? intval($_REQUEST['groupLevelPageNo']) : 1;
     $groupLevelSkipCount = ($groupLevelPageNo - 1) * $groupLevelTopCount;
@@ -637,7 +721,7 @@ class PageTemplatesController extends ControllerBase
     ->fields('g', ['GroupId', 'GroupDescription', 'GroupMemo'])
     ->condition('GroupId', $groupID)
     ->range(0, 1); // Assuming you only expect one result.
-    $group_details = $query->execute()->fetchAssoc();
+    $group_details = $this->sanitizeDetailFields($query->execute()->fetchAssoc());
 
 
     //Fetch Objects Where GroupId
@@ -652,17 +736,34 @@ class PageTemplatesController extends ControllerBase
     $query_group_objects = $database->select($groupObj_table, 'eo');
     $query_group_objects->fields('eo');
     $query_group_objects->condition('eo.GroupId', $groupID);
-    $query_group_objects->join($object_table, 'co', 'eo.ObjectId = co.ObjectId');
-    $query_group_objects->fields('co');
-    $query_group_objects->range($nxshskip, $nxshowrec);
+    // Aliased 'o' (not 'co') to match the equivalent AJAX endpoint
+    // (AjaxRequestsController::groupLevelObjects_searching_page()) and
+    // every other objects-table query in this module, so
+    // AdvancedSearchService's Objects field set (which qualifies columns
+    // as o.*) works against both code paths without special-casing.
+    $query_group_objects->join($object_table, 'o', 'eo.ObjectId = o.ObjectId');
+    $query_group_objects->fields('o');
     // Order by the first selected field in customize object list settings.
     $query_group_objects->orderBy($customized_fields_objects_list_array[0], 'ASC');
-    $group_object_details = $query_group_objects->execute()->fetchAllAssoc('ObjectId');
 
-    $query_count = $database->select($groupObj_table, 'go')
-      ->condition('GroupId', $groupID)
-      ->countQuery();
-    $obj_count = $query_count->execute()->fetchField();
+    // Advanced Search: if this request submitted the advanced panel, apply
+    // its AND-combined conditions. (There is no plain-search condition to
+    // stay mutually exclusive with here -- qSearch on this page is only
+    // applied via the AJAX search endpoint, not on this initial page load.)
+    if ($this->advancedSearch->isActiveRequest()) {
+      $advanced_condition = $this->advancedSearch->buildConditionGroup($query_group_objects, 'group-detail');
+      if ($advanced_condition) {
+        $query_group_objects->condition($advanced_condition);
+      }
+    }
+
+    // Derive the count query from the same conditioned query (rather than a
+    // separately-built, unconditioned one) so the displayed total always
+    // matches what's actually filtered.
+    $obj_count = $query_group_objects->countQuery()->execute()->fetchField();
+
+    $query_group_objects->range($nxshskip, $nxshowrec);
+    $group_object_details = $query_group_objects->execute()->fetchAllAssoc('ObjectId');
 
     $module_path = \Drupal::service('extension.list.module')->getPath('collector_systems');
     $enable_maps = \Drupal::config('collector_systems.settings')->get('enable_maps');
@@ -721,6 +822,15 @@ class PageTemplatesController extends ControllerBase
     $objects_service = \Drupal::service('collector_systems.objects_service');
     $object_list_sortable_fields = $objects_service->getObjectListSortableFields();
 
+    $advanced_search_fields = $this->advancedSearch->getFields('group-detail');
+    $build_advanced_search = [
+      'fields' => $advanced_search_fields,
+      'active' => $this->advancedSearch->isActiveRequest(),
+      'values' => $this->advancedSearch->getSubmittedValues('group-detail'),
+      'sort_by' => $groupLevelOrderBy,
+      'data_id' => $groupID,
+      'clear_url' => $this->requestStack->getCurrentRequest()->getPathInfo() . '?dataId=' . rawurlencode($groupID),
+    ];
 
     $build = [
       '#theme' => 'group-detail-page',
@@ -730,6 +840,7 @@ class PageTemplatesController extends ControllerBase
       '#groupLevelOrderBy' => $groupLevelOrderBy,
       '#groupLevelPageNo' => $groupLevelPageNo,
       '#qSearch' => $qSearch,
+      '#advanced_search' => $build_advanced_search,
       '#loadsec' => $loadsec,
       '#ajaxfor' => $ajaxfor,
       '#object_details' => $object_details,
@@ -760,8 +871,9 @@ class PageTemplatesController extends ControllerBase
 
 
   public function CollectionDetailPage(){
+    $request = $this->requestStack->getCurrentRequest();
 
-    $collectionID=$_REQUEST['dataId'];
+    $collectionID = $request->query->getInt('dataId');
     $listPageSize =  \Drupal::config('collector_systems.settings')->get('items_per_page');
     $showrec = isset($listPageSize) ? $listPageSize : 9;
     $shskip =   0;
@@ -772,11 +884,11 @@ class PageTemplatesController extends ControllerBase
 
     $customized_fields_objects_list_array = $this->getCustomizedObjectListFields();
     // Set default sorting to the first sortable field if available, otherwise default to 'Title asc'
-    // the first selected option in the customize object list field settings will be the default sorting field. 
+    // the first selected option in the customize object list field settings will be the default sorting field.
     $default_orderby = !empty($customized_fields_objects_list_array) ? rawurlencode($customized_fields_objects_list_array[0]. ' asc') : 'Title%20asc';
     // if sortBy is set in the request, use it; otherwise, use the default sorting.
-    $groupLevelOrderBy = isset($_REQUEST['sortBy']) ? $_REQUEST['sortBy'] : $default_orderby;
-    $qSearch = isset($_REQUEST['qSearch']) ? $_REQUEST['qSearch'] : "";
+    $groupLevelOrderBy = $request->query->get('sortBy', $default_orderby);
+    $qSearch = $request->query->get('qSearch', '');
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
     $groupLevelPageNo = isset($_REQUEST['groupLevelPageNo']) ? intval($_REQUEST['groupLevelPageNo']) : 1;
     $groupLevelSkipCount = ($groupLevelPageNo - 1) * $groupLevelTopCount;
@@ -792,7 +904,7 @@ class PageTemplatesController extends ControllerBase
     ->fields('c', ['CollectionId', 'FullCollectionName','CollectionMemo'])
     ->condition('c.CollectionId', $collectionID)
     ->range(0, 1); // Assuming you only expect one result.
-    $collection_details = $query->execute()->fetchAssoc();
+    $collection_details = $this->sanitizeDetailFields($query->execute()->fetchAssoc());
 
     // collection object details.
     $object_table = 'collector_systems_objects';
@@ -818,6 +930,17 @@ class PageTemplatesController extends ControllerBase
 
     $query_collection_objects->fields('o');
     $query_collection_objects->fields('c');
+
+    // Advanced Search: if this request submitted the advanced panel, apply
+    // its AND-combined conditions. (There is no plain-search condition to
+    // stay mutually exclusive with here -- qSearch on this page is only
+    // applied via the AJAX search endpoint, not on this initial page load.)
+    if ($this->advancedSearch->isActiveRequest()) {
+      $advanced_condition = $this->advancedSearch->buildConditionGroup($query_collection_objects, 'collection-detail');
+      if ($advanced_condition) {
+        $query_collection_objects->condition($advanced_condition);
+      }
+    }
 
     $query_objects_total_count = $query_collection_objects->countQuery();
 
@@ -891,6 +1014,16 @@ class PageTemplatesController extends ControllerBase
     $objects_service = \Drupal::service('collector_systems.objects_service');
     $object_list_sortable_fields = $objects_service->getObjectListSortableFields();
 
+    $advanced_search_fields = $this->advancedSearch->getFields('collection-detail');
+    $build_advanced_search = [
+      'fields' => $advanced_search_fields,
+      'active' => $this->advancedSearch->isActiveRequest(),
+      'values' => $this->advancedSearch->getSubmittedValues('collection-detail'),
+      'sort_by' => $groupLevelOrderBy,
+      'data_id' => $collectionID,
+      'clear_url' => $this->requestStack->getCurrentRequest()->getPathInfo() . '?dataId=' . rawurlencode($collectionID),
+    ];
+
     $build = [
       '#theme' => 'collection-detail-page',
       '#nxshowrec' => $nxshowrec,
@@ -899,6 +1032,7 @@ class PageTemplatesController extends ControllerBase
       '#groupLevelOrderBy' => $groupLevelOrderBy,
       '#groupLevelPageNo' => $groupLevelPageNo,
       '#qSearch' => $qSearch,
+      '#advanced_search' => $build_advanced_search,
       '#ajaxfor' => $ajaxfor,
       '#loadsec' => $loadsec,
       '#object_details' => $object_details,

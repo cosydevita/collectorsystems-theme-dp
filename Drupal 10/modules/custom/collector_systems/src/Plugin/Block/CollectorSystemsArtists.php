@@ -8,6 +8,9 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Database\Query\Condition;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\collector_systems\AdvancedSearchService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a custom shortcode block.
@@ -18,8 +21,39 @@ use Drupal\Core\Database\Query\Condition;
  * )
  */
 
-class CollectorSystemsArtists extends BlockBase {
+class CollectorSystemsArtists extends BlockBase implements ContainerFactoryPluginInterface {
 
+  /**
+   * The advanced search service.
+   *
+   * @var \Drupal\collector_systems\AdvancedSearchService
+   */
+  protected $advancedSearch;
+
+  /**
+   * Constructs a new CollectorSystemsArtists object.
+   *
+   * @param array $configuration
+   * @param string $plugin_id
+   * @param mixed $plugin_definition
+   * @param \Drupal\collector_systems\AdvancedSearchService $advanced_search
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, AdvancedSearchService $advanced_search) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->advancedSearch = $advanced_search;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('collector_systems.advanced_search_service')
+    );
+  }
 
  /**
    * {@inheritdoc}
@@ -51,28 +85,37 @@ class CollectorSystemsArtists extends BlockBase {
     $db = Database::getConnection();
     $sortDir = strpos(strtolower(urldecode($dataorderby)), 'desc') !== FALSE ? 'DESC' : 'ASC';
 
-    // Count query (applies to both modes; uses char + search filters in alpha mode).
-    $countQuery = $db->select($artist_table, 'a');
-    $countQuery->addExpression('COUNT(*)');
-    if (!empty($char)) {
-      $countQuery->condition('ArtistName', $db->escapeLike($char) . '%', 'LIKE');
-    }
-    if (!empty($qSearch)) {
-      $countQuery->condition('ArtistName', '%' . $db->escapeLike($qSearch) . '%', 'LIKE');
-    }
-    $count = $countQuery->execute()->fetchField();
-
-    // Data query with pagination.
+    // Build one query with all conditions + ordering applied, then derive
+    // the count query from it, so the displayed total always matches what's
+    // actually filtered.
     $query = $db->select($artist_table, 'a');
     $query->fields('a');
-    $query->range($shskip, $showrec);
+
+    // The A-Z letter filter is a separate axis from search (which letter
+    // subset), so it stays combinable with either search mode.
     if (!empty($char)) {
       $query->condition('ArtistName', $db->escapeLike($char) . '%', 'LIKE');
     }
-    if (!empty($qSearch)) {
+
+    // Advanced Search takes priority over the plain search box (matches the
+    // WP plugin's mutual-exclusivity rule): if this request submitted the
+    // advanced panel, ignore qSearch entirely.
+    if ($this->advancedSearch->isActiveRequest()) {
+      $advanced_condition = $this->advancedSearch->buildConditionGroup($query, 'artists');
+      if ($advanced_condition) {
+        $query->condition($advanced_condition);
+      }
+    }
+    elseif (!empty($qSearch)) {
       $query->condition('ArtistName', '%' . $db->escapeLike($qSearch) . '%', 'LIKE');
     }
+
     $query->orderBy('ArtistName', $sortDir);
+
+    $count_query = $query->countQuery();
+    $count = $count_query->execute()->fetchField();
+
+    $query->range($shskip, $showrec);
     $AllArtists = $query->execute()->fetchAll();
 
     // Group by first letter for alphabetical mode.
@@ -89,6 +132,16 @@ class CollectorSystemsArtists extends BlockBase {
     $collector_systems_module_path = \Drupal::service('extension.path.resolver')->getPath('module', 'collector_systems');
     $showImagesOnListPages = $config->get('show_images_artists');
 
+    $advanced_search_fields = $this->advancedSearch->getFields('artists');
+    $build_advanced_search = [
+      'fields' => $advanced_search_fields,
+      'active' => $this->advancedSearch->isActiveRequest(),
+      'values' => $this->advancedSearch->getSubmittedValues('artists'),
+      'sort_by' => $dataorderby,
+      'data_id' => NULL,
+      'clear_url' => \Drupal::request()->getPathInfo(),
+    ];
+
     $build = [
       '#theme' => 'artists-list-page',
       '#AllArtists' => $AllArtists,
@@ -98,6 +151,7 @@ class CollectorSystemsArtists extends BlockBase {
       '#dataorderby' => $dataorderby,
       '#current_page' => $current_page,
       '#qSearch' => $qSearch,
+      '#advanced_search' => $build_advanced_search,
       '#loadsec' => $loadsec,
       '#requested_page' => $requested_page,
       '#collector_systems_module_path' => $collector_systems_module_path,

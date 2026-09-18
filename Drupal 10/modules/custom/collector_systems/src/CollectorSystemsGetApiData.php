@@ -35,8 +35,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $Detaildata = curl_exec($curl);
 
@@ -69,8 +69,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $Detaildata = curl_exec($curl);
     curl_close($curl);
@@ -100,8 +100,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $Detaildata = curl_exec($curl);
 
@@ -134,8 +134,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $ArtistPhoto = curl_exec($curl);
     curl_close($curl);
@@ -162,8 +162,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $Detaildata = curl_exec($curl);
 
@@ -197,8 +197,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $CollectionPhoto = curl_exec($curl);
     curl_close($curl);
@@ -226,8 +226,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $Detaildata = curl_exec($curl);
 
@@ -261,8 +261,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $GroupImages = curl_exec($curl);
     curl_close($curl);
@@ -289,8 +289,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $Detaildata = curl_exec($curl);
 
@@ -323,8 +323,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $ExhibitionPhoto = curl_exec($curl);
     curl_close($curl);
@@ -352,8 +352,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $Detaildata = curl_exec($curl);
 
@@ -385,8 +385,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $GroupObjects = curl_exec($curl);
     curl_close($curl);
@@ -413,8 +413,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $Detaildata = curl_exec($curl);
 
@@ -446,8 +446,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $ExhibitionObjects = curl_exec($curl);
     curl_close($curl);
@@ -475,8 +475,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $data = curl_exec($curl);
     curl_close($curl);
@@ -519,8 +519,8 @@ class CollectorSystemsGetApiData{
       'User-Agent: cosydrupal',
       );
       curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
       $data1 = curl_exec($curl);
       curl_close($curl);
@@ -683,6 +683,30 @@ class CollectorSystemsGetApiData{
                       $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist/'.$field.','."'$searchWord'".')';
                         break;
 
+                    case "ArtistBirthPlace":
+                    case "ArtistDeathPlace":
+                    case "TribalAffiliation":
+                    case "ArtistUserDefined1":
+                    case "ArtistUserDefined2":
+                    case "ArtistUserDefined3":
+                    case "ArtistUserDefined4":
+                    case "ArtistUserDefined5":
+                    case "ArtistUserDefined6":
+                    case "ArtistUserDefined7":
+                    case "ArtistUserDefined8":
+                    case "ArtistUserDefined9":
+                    case "ArtistUserDefined10":
+                    case "ArtistUserDefinedRichText1":
+                    case "ArtistUserDefinedRichText2":
+                        $dynamicurl.= 'PublicAPIV2.Models.Art/Artist($select='.$field.'),';
+                        $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist/'.$field.','."'$searchWord'".')';
+                        break;
+
+                    case "ArtistPronoun":
+                        $dynamicurl.= 'PublicAPIV2.Models.Art/Artist($select='.$field.'($select=ControlledVocabId,Term)),';
+                        $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist($select=ArtistId;$expand=ArtistPronoun($select=Term))),';
+                        break;
+
                     case "ArtistMakerAlias":
                         $dynamicurl.= 'ArtistMaker($select=ArtistAlias),';
                         $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist/ArtistAlias,'."'$searchWord'".')';
@@ -698,9 +722,19 @@ class CollectorSystemsGetApiData{
                         $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist/ArtistAliasLast,'."'$searchWord'".')';
                         break;
 
+                    case "ArtistMakerBio":
+                        $dynamicurl.= 'ArtistMaker($select=ArtistBio),';
+                        $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist/ArtistBio,'."'$searchWord'".')';
+                        break;
+
                     case "ArtistMakerCompany":
                         $dynamicurl.= 'ArtistMaker($select=ArtistCompany),';
                         $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist/ArtistCompany,'."'$searchWord'".')';
+                        break;
+
+                    case "ArtistMakerEthnicity":
+                        $dynamicurl.= 'ArtistMaker($select=ArtistEthnicity),';
+                        $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist/ArtistEthnicity,'."'$searchWord'".')';
                         break;
 
                     case "ArtistMakerFirst":
@@ -738,6 +772,16 @@ class CollectorSystemsGetApiData{
                         $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist/ArtistNationality,'."'$searchWord'".')';
                         break;
 
+                    case "ArtistMakerRace":
+                        $dynamicurl.= 'ArtistMaker($select=ArtistRace),';
+                        $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist/ArtistRace,'."'$searchWord'".')';
+                        break;
+
+                    case "ArtistMakerSchool":
+                        $dynamicurl.= 'ArtistMaker($select=ArtistSchool),';
+                        $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist/ArtistSchool,'."'$searchWord'".')';
+                        break;
+
                     case "ArtistMakerYears":
                         $dynamicurl.= 'ArtistMaker($select=ArtistYears),';
                         $srch_temp="contains".'(PublicAPIV2.Models.Art/Artist/ArtistYears,'."'$searchWord'".')';
@@ -754,8 +798,16 @@ class CollectorSystemsGetApiData{
                         break;
 
                     case "AdditionalAuthors":
-                        $dynamicurl.= 'PublicAPIV2.Models.Archive/AdditionalAuthors($expand=Author($select=AuthorId,AuthorName);$select=Author),';
+                        $dynamicurl.= 'PublicAPIV2.Models.Archive/AdditionalAuthors($select=AuthorId;$expand=Author($select=AuthorName)),';
                         //$srch_temp="contains".'(PublicAPIV2.Models.Archive/AdditionalAuthors/Author/AuthorName,'."'$searchWord'".')';
+                        break;
+
+                    case "AdditionalPublishers":
+                        $dynamicurl.= 'PublicAPIV2.Models.Archive/AdditionalPublishers($expand=Publisher($select=ContactId,ContactName);$select=Publisher),';
+                        break;
+
+                    case "AdditionalCreators":
+                        $dynamicurl.= 'AdditionalCreators($select=CreatorId;$expand=Creator($select=ContactName)),';
                         break;
 
                     case "Color":
@@ -793,6 +845,16 @@ class CollectorSystemsGetApiData{
                     case "Subgenre":
                     case "TypeSpecimen":
                     case "Unit":
+                    case "UserDefinedControlledVocab1":
+                    case "UserDefinedControlledVocab2":
+                    case "UserDefinedControlledVocab3":
+                    case "UserDefinedControlledVocab4":
+                    case "UserDefinedControlledVocab5":
+                    case "UserDefinedControlledVocab6":
+                    case "UserDefinedControlledVocab7":
+                    case "UserDefinedControlledVocab8":
+                    case "UserDefinedControlledVocab9":
+                    case "UserDefinedControlledVocab10":
                       $dynamicurl.= $field.'($select=ControlledVocabId,Term),';
                         $srch_temp="contains".'('.$field.'/Term,'."'$searchWord'".')';
                         break;
@@ -800,6 +862,17 @@ class CollectorSystemsGetApiData{
                     case "Technique":
                       $dynamicurl.= 'PublicAPIV2.Models.Art/Technique($select=ControlledVocabId,Term),';
                       $srch_temp="contains".'(PublicAPIV2.Models.Art/Technique/'.$field.','."'$searchWord'".')';
+                        break;
+
+                    case "DialColor":
+                    case "DialNumerals":
+                    case "WatchMovementType":
+                    case "ClaspType":
+                    case "CaseBack":
+                    case "BezelType":
+                    case "CrownType":
+                        $dynamicurl.= 'PublicAPIV2.Models.Jewelry/'.$field.'($select=ControlledVocabId,Term),';
+                        $srch_temp="contains".'(PublicAPIV2.Models.Jewelry/'.$field.'/'.$field.','."'$searchWord'".')';
                         break;
 
                     case "AdditionalArea":
@@ -1294,6 +1367,19 @@ class CollectorSystemsGetApiData{
                       case "MetalType":
                       case "Stones":
                       case "TypeOfGemstone":
+                      case "ItemReferenceNumber":
+                      case "Complication":
+                      case "Hands":
+                      case "CaseMaterial":
+                      case "CaseSize":
+                      case "BandMaterial":
+                      case "ClaspMaterial":
+                      case "CaseSerialNumber":
+                      case "MovementSerialNumber":
+                      case "BezelMaterial":
+                      case "EndLinkNumbers":
+                      case "WaterResistanceRating":
+                      case "Frequency":
 
                       //Car
                       case "Acceleration":
@@ -1491,6 +1577,19 @@ class CollectorSystemsGetApiData{
                         case "MetalType":
                         case "Stones":
                         case "TypeOfGemstone":
+                        case "ItemReferenceNumber":
+                        case "Complication":
+                        case "Hands":
+                        case "CaseMaterial":
+                        case "CaseSize":
+                        case "BandMaterial":
+                        case "ClaspMaterial":
+                        case "CaseSerialNumber":
+                        case "MovementSerialNumber":
+                        case "BezelMaterial":
+                        case "EndLinkNumbers":
+                        case "WaterResistanceRating":
+                        case "Frequency":
                           $non_expandable_fields[$i] = "PublicAPIV2.Models.Jewelry/" .$non_expandable_fields[$i];
                             $srch_temp="contains".'(PublicAPIV2.Models.Jewelry/'.$cs_non_expandable_field.','."'$searchWord'".')';
                             array_push($filterTermArray, $srch_temp);
@@ -1606,8 +1705,8 @@ class CollectorSystemsGetApiData{
       'User-Agent: cosydrupal',
       );
       curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
       $data2 = curl_exec($curl);
       curl_close($curl);
@@ -1642,8 +1741,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $data3 = curl_exec($curl);
     curl_close($curl);
@@ -1678,8 +1777,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $data4 = curl_exec($curl);
     curl_close($curl);
@@ -1711,8 +1810,8 @@ class CollectorSystemsGetApiData{
    'User-Agent: cosydrupal',
    );
    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-   curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-   curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+   curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+   curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
    $GroupObjects = curl_exec($curl);
    curl_close($curl);
@@ -1745,8 +1844,8 @@ class CollectorSystemsGetApiData{
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $ExhibitionObjects = curl_exec($curl);
     curl_close($curl);
@@ -1813,8 +1912,8 @@ class CollectorSystemsGetApiData{
         'User-Agent: cosydrupal',
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
     
         $Detaildata = curl_exec($curl);
     

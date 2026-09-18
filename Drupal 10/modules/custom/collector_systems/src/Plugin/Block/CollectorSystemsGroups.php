@@ -3,11 +3,13 @@
 namespace Drupal\collector_systems\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Database\Query\Condition;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\collector_systems\AdvancedSearchService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a custom shortcode block.
@@ -18,8 +20,39 @@ use Drupal\Core\Database\Query\Condition;
  * )
  */
 
-class CollectorSystemsGroups extends BlockBase {
+class CollectorSystemsGroups extends BlockBase implements ContainerFactoryPluginInterface {
 
+  /**
+   * The advanced search service.
+   *
+   * @var \Drupal\collector_systems\AdvancedSearchService
+   */
+  protected $advancedSearch;
+
+  /**
+   * Constructs a new CollectorSystemsGroups object.
+   *
+   * @param array $configuration
+   * @param string $plugin_id
+   * @param mixed $plugin_definition
+   * @param \Drupal\collector_systems\AdvancedSearchService $advanced_search
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, AdvancedSearchService $advanced_search) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->advancedSearch = $advanced_search;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('collector_systems.advanced_search_service')
+    );
+  }
 
  /**
    * {@inheritdoc}
@@ -45,9 +78,6 @@ class CollectorSystemsGroups extends BlockBase {
     $requested_pageNo = isset($_REQUEST['pageNo']) ? intval($_REQUEST['pageNo']) : 1;
     $shskip = ($requested_pageNo - 1) * $showrec;
 
-    // $groups=getallGroups($subsId,$subsKey,$subAcntId,$showrec,$shskip,$dataorderby,$qSearch);
-    // $tot=listGroupTotalRecords($subsId,$subsKey,$subAcntId,$qSearch);    //Total Records
-
     $nxshowrec=   isset($listPageSize) ? $listPageSize : 9;
     $nxshskip =   $shskip;
     $loadsec=1;
@@ -56,60 +86,47 @@ class CollectorSystemsGroups extends BlockBase {
     $group_table = "collector_systems_groups";
     $database = \Drupal::database();
 
-    $count = $database->select($group_table)
-    ->countQuery()
-    ->execute()
-    ->fetchField();
+    $sortOrder = ($dataorderby === "GroupDescription%20desc") ? 'DESC' : 'ASC';
 
-    if($dataorderby === "GroupDescription%20desc" && $qSearch === NULL)
-    {
-        // $fetch_groups_record = $wpdb->prepare("SELECT * FROM $group_table ORDER BY GroupDescription DESC LIMIT %d, %d", $shskip, $showrec);
-        $query = $database->select($group_table, 'g')
-          ->fields('g')
-          ->orderBy('GroupDescription', 'DESC')
-          ->range($shskip, $showrec);
+    // Build one query with all conditions + ordering applied, then derive
+    // the count query from it (rather than a separate, unconditioned count
+    // query) so the displayed total always matches what's actually filtered.
+    $query = $database->select($group_table, 'g')->fields('g');
 
-        $fetch_groups_record = $query->execute()->fetchAll();
+    // Advanced Search takes priority over the plain search box (matches the
+    // WP plugin's mutual-exclusivity rule): if this request submitted the
+    // advanced panel, ignore qSearch entirely.
+    if ($this->advancedSearch->isActiveRequest()) {
+      $advanced_condition = $this->advancedSearch->buildConditionGroup($query, 'groups');
+      if ($advanced_condition) {
+        $query->condition($advanced_condition);
+      }
     }
-    else if($dataorderby === "GroupDescription%20desc" && $qSearch !== NULL)
-    {
-        // $fetch_groups_record = $wpdb->prepare("SELECT * FROM $group_table WHERE GroupDescription LIKE %s ORDER BY GroupDescription DESC LIMIT %d, %d",'%' . $wpdb->esc_like($qSearch) . '%', $shskip, $showrec);
-        $query = $database->select($group_table, 'g')
-          ->fields('g')
-          ->condition('GroupDescription', '%' . $database->escapeLike($qSearch) . '%', 'LIKE')
-          ->orderBy('GroupDescription', 'DESC')
-          ->range($shskip, $showrec);
-
-        $fetch_groups_record = $query->execute()->fetchAll();
-    }
-    else if($dataorderby === "GroupDescription%20asc" && $qSearch === NULL)
-    {
-      $query = $database->select($group_table, 'g')
-      ->fields('g')
-      ->condition('GroupDescription', '%' . $database->escapeLike($qSearch) . '%', 'LIKE')
-      ->condition('GroupId', '%' . $database->escapeLike($qSearch) . '%', 'LIKE')
-      ->condition('GroupMemo', '%' . $database->escapeLike($qSearch) . '%', 'LIKE')
-      ->orderBy('GroupDescription', 'ASC')
-      ->range($shskip, $showrec);
-
-      $fetch_groups_record = $query->execute()->fetchAll();
-    }
-    else if($dataorderby === "GroupDescription%20asc" && $qSearch !== NULL)
-    {
-        // $fetch_groups_record = $wpdb->prepare("SELECT * FROM $group_table WHERE GroupDescription LIKE %s ORDER BY GroupDescription ASC LIMIT %d, %d",'%' . $wpdb->esc_like($qSearch) . '%', $shskip, $showrec);
-        $query = $database->select($group_table, 'g')
-          ->fields('g')
-          ->condition('GroupDescription', '%' . $database->escapeLike($qSearch) . '%', 'LIKE')
-          ->orderBy('GroupDescription', 'ASC')
-          ->range($shskip, $showrec);
-
-        $fetch_groups_record = $query->execute()->fetchAll();
-
+    elseif (!empty($qSearch)) {
+      $escaped_search = '%' . $database->escapeLike($qSearch) . '%';
+      $query->condition('GroupDescription', $escaped_search, 'LIKE');
     }
 
-    $all_groups = $fetch_groups_record;
+    $query->orderBy('GroupDescription', $sortOrder);
+
+    $count_query = $query->countQuery();
+    $count = $count_query->execute()->fetchField();
+
+    $query->range($shskip, $showrec);
+    $all_groups = $query->execute()->fetchAll();
 
     $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_groups');
+
+    $advanced_search_fields = $this->advancedSearch->getFields('groups');
+    $build_advanced_search = [
+      'fields' => $advanced_search_fields,
+      'active' => $this->advancedSearch->isActiveRequest(),
+      'values' => $this->advancedSearch->getSubmittedValues('groups'),
+      'sort_by' => $dataorderby,
+      'data_id' => NULL,
+      'clear_url' => \Drupal::request()->getPathInfo(),
+    ];
+
     $build = [
       '#theme' => 'groups-list-page',
       '#all_groups' => $all_groups,
@@ -119,6 +136,7 @@ class CollectorSystemsGroups extends BlockBase {
       '#dataorderby' => $dataorderby,
       '#current_page' => $current_page,
       '#qSearch' => $qSearch,
+      '#advanced_search' => $build_advanced_search,
       '#loadsec' => $loadsec,
       '#requested_pageNo' => $requested_pageNo,
       '#showImagesOnListPages' => $showImagesOnListPages,

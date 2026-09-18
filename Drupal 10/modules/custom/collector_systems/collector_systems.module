@@ -29,6 +29,7 @@ function collector_systems_theme() {
         'current_page' => NULL,
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
+        'advanced_search' => NULL,
         'module_path' => NULL,
         'enable_maps' => NULL,
         'objects_list_sortable_fields' => NULL
@@ -44,6 +45,7 @@ function collector_systems_theme() {
         'current_page' => NULL,
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
+        'advanced_search' => NULL,
         'loadsec' => NULL,
         'requested_page' => NULL,
         'collector_systems_module_path' => NULL,
@@ -66,6 +68,7 @@ function collector_systems_theme() {
         'current_page' => NULL,
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
+        'advanced_search' => NULL,
         'loadsec' => NULL,
         'module_path' => NULL,
         'showImagesOnListPages' => NULL
@@ -81,6 +84,7 @@ function collector_systems_theme() {
         'current_page' => NULL,
         'requested_pageNo' => NULL,
         'qSearch' => NULL,
+        'advanced_search' => NULL,
         'loadsec' => NULL,
         'module_path' => NULL,
         'showImagesOnListPages' => NULL
@@ -96,6 +100,7 @@ function collector_systems_theme() {
         'current_page' => NULL,
         'requested_page' => NULL,
         'qSearch' => NULL,
+        'advanced_search' => NULL,
         'loadsec' => NULL,
         'site_url' => NULL,
         'module_path' => NULL,
@@ -120,6 +125,7 @@ function collector_systems_theme() {
         'enable_zoom' => NULL,
         'locations' => NULL,
         'site_url' => NULL,
+        'consistent_first_field_on_detail' => NULL,
       ],
     ],
     'artist-detail-page' => [
@@ -133,6 +139,7 @@ function collector_systems_theme() {
         'artist_details' => NULL,
         'customized_artist_fields_array' => NULL,
         'qSearch' => NULL,
+        'advanced_search' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
         'listPageSize' => NULL,
@@ -151,6 +158,7 @@ function collector_systems_theme() {
         'groupLevelOrderBy' => NULL,
         'groupLevelPageNo' => NULL,
         'qSearch' => NULL,
+        'advanced_search' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
         'exhibitionID' => NULL,
@@ -170,6 +178,7 @@ function collector_systems_theme() {
         'groupLevelOrderBy' => NULL,
         'groupLevelPageNo' => NULL,
         'qSearch' => NULL,
+        'advanced_search' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
         'group_details' => NULL,
@@ -190,6 +199,7 @@ function collector_systems_theme() {
         'groupLevelOrderBy' => NULL,
         'groupLevelPageNo' => NULL,
         'qSearch' => NULL,
+        'advanced_search' => NULL,
         'loadsec' => NULL,
         'object_details' => NULL,
         'collectionID' => NULL,
@@ -408,7 +418,8 @@ function collector_systems_cron() {
   if($total_items_in_queue_for_sync > 0) {
     \Drupal::logger(channel: 'collector_systems')->debug('Processing queue items in parallel using curl.');
 
-    $url = Url::fromRoute('collector_systems.sync_queue_process', [], ['absolute' => TRUE])->toString();
+    $key = \Drupal\collector_systems\Controller\SyncQueueProcessController::getQueueProcessKey();
+    $url = Url::fromRoute('collector_systems.sync_queue_process', ['key' => $key], ['absolute' => TRUE])->toString();
     $total_parallel_queue_processes = 3;
     for ($i = 0; $i < $total_parallel_queue_processes; $i++) {
       $ch = curl_init($url);

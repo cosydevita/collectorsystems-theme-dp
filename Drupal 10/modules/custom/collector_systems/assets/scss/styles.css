@@ -10912,19 +10912,19 @@
   margin-left: 20px;
 }
 .collector-systems-wrapper .search-form .expand-search {
-  width: 25px;
-  height: 25px;
+  width: 28px;
+  height: 28px;
   box-sizing: border-box;
   border: none;
   background-repeat: no-repeat;
   transition: width 0.5s ease;
-  background-image: url("https://cdn.collectorsystems.com/icons/search_black.svg");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%231B1D1F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='10' cy='10' r='7'%3E%3C/circle%3E%3Cline x1='20' y1='20' x2='15.4' y2='15.4'%3E%3C/line%3E%3C/svg%3E");
   padding: 5px;
   outline: none;
-  padding-left: 25px;
+  padding-left: 28px;
   padding-right: 0;
-  background-position: 0px 2px;
-  background-size: 18px;
+  background-position: 4px 2px;
+  background-size: 20px;
   cursor: pointer;
   box-shadow: none !important;
   background-position-y: center;
@@ -11089,8 +11089,11 @@
 }
 .collector-systems-wrapper {
   /*** this will change first item's font size on object detail page ***/
+  /*** skipped when the "Make First Field Consistent on Detail" setting is
+       enabled (adds .cs-consistent-first-field), so the first field renders
+       the same size as every other field, label included ***/
 }
-.collector-systems-wrapper .cs-object-details p:first-child {
+.collector-systems-wrapper .cs-object-details:not(.cs-consistent-first-field) p:first-child {
   font-size: 2em;
   margin-bottom: 1rem !important;
 }
@@ -11100,8 +11103,21 @@
 .collector-systems-wrapper .cs-object-list > .card-footer h6:first-child small {
   font-size: 1rem;
 }
-.collector-systems-wrapper .cs-object-details p:first-child span.object_detail_fieldlabel {
+.collector-systems-wrapper .cs-object-details:not(.cs-consistent-first-field) p:first-child span.object_detail_fieldlabel {
   display: none;
+}
+.collector-systems-wrapper {
+  /*** defensive reset for "Make First Field Consistent on Detail": forces the
+       first field back to plain body styling even if something else on the
+       page (e.g. a legacy/duplicated theme stylesheet) also targets
+       p:first-child directly ***/
+}
+.collector-systems-wrapper .cs-object-details.cs-consistent-first-field p:first-child {
+  font-size: inherit !important;
+  margin-bottom: 0.5rem !important;
+}
+.collector-systems-wrapper .cs-object-details.cs-consistent-first-field p:first-child span.object_detail_fieldlabel {
+  display: inline !important;
 }
 .collector-systems-wrapper .cs-theme-nodata {
   padding: 10px;
@@ -11226,6 +11242,158 @@
 .collector-systems-wrapper .row-carousel-and-details .thumb-carousel img {
   -o-object-fit: contain;
      object-fit: contain;
+}
+.collector-systems-wrapper .cs-search-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+.collector-systems-wrapper .cs-advanced-search-toggle {
+  position: relative;
+}
+.collector-systems-wrapper .cs-advanced-search-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #1B1D1F;
+  cursor: pointer;
+  list-style: none;
+  transition: background-color 0.15s ease;
+}
+.collector-systems-wrapper .cs-advanced-search-toggle-icon::-webkit-details-marker {
+  display: none;
+}
+.collector-systems-wrapper .cs-advanced-search-toggle-icon:hover {
+  background-color: #f1f3f5;
+}
+.collector-systems-wrapper .cs-advanced-search-toggle[open] .cs-advanced-search-toggle-icon {
+  background-color: #e9ecef;
+}
+.collector-systems-wrapper .cs-advanced-search-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 20;
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: min(640px, 100vw - 2rem);
+  max-height: 70vh;
+  overflow-y: auto;
+  text-align: left;
+}
+@supports (anchor-name: --cs-adv-toggle) {
+  .collector-systems-wrapper .cs-advanced-search-toggle {
+    position: static;
+    anchor-name: --cs-adv-toggle;
+  }
+  .collector-systems-wrapper {
+    position: relative;
+  }
+  .collector-systems-wrapper .cs-advanced-search-panel {
+    position-anchor: --cs-adv-toggle;
+    top: calc(anchor(bottom) + 10px);
+    right: anchor(right);
+    max-width: calc(100% - 2rem);
+  }
+}
+.collector-systems-wrapper .cs-advanced-search-form {
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+.collector-systems-wrapper .cs-advanced-search-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 1.5rem;
+}
+.collector-systems-wrapper .cs-advanced-search-field {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 180px;
+  max-width: 260px;
+}
+.collector-systems-wrapper .cs-advanced-search-field--daterange {
+  flex-basis: 100%;
+  max-width: none;
+}
+.collector-systems-wrapper .cs-advanced-search-field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #868e96;
+}
+.collector-systems-wrapper .cs-advanced-search-field input[type=text],
+.collector-systems-wrapper .cs-advanced-search-field input[type=date] {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  min-height: 0;
+  background-color: #fff;
+  transition: border-color 0.15s ease;
+}
+.collector-systems-wrapper .cs-advanced-search-field input[type=text]:hover,
+.collector-systems-wrapper .cs-advanced-search-field input[type=date]:hover {
+  border-color: #ced4da;
+}
+.collector-systems-wrapper .cs-advanced-search-field input[type=text]:focus,
+.collector-systems-wrapper .cs-advanced-search-field input[type=date]:focus {
+  outline: none;
+  border-color: #adb5bd;
+}
+.collector-systems-wrapper .cs-advanced-search-daterange {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 480px;
+}
+.collector-systems-wrapper .cs-advanced-search-daterange input {
+  flex: 1;
+  min-width: 0;
+}
+.collector-systems-wrapper .cs-advanced-search-daterange-sep {
+  color: #6c757d;
+}
+.collector-systems-wrapper .cs-advanced-search-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #eceff1;
+}
+.collector-systems-wrapper .cs-advanced-search-submit {
+  background-color: #1B1D1F;
+  color: #fff;
+  border: 1px solid #1B1D1F;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.collector-systems-wrapper .cs-advanced-search-submit:hover {
+  opacity: 0.9;
+}
+.collector-systems-wrapper .cs-advanced-search-clear {
+  background-color: #fff;
+  color: #1B1D1F;
+  border: 1px solid #ced4da;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.collector-systems-wrapper .cs-advanced-search-clear:hover {
+  background-color: #f8f9fa;
 }
 @media (min-width: 981px) {
   .collector-systems-wrapper .mob-header {

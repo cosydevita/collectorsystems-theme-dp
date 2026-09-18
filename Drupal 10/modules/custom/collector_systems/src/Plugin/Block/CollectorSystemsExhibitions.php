@@ -8,6 +8,9 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Database\Query\Condition;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\collector_systems\AdvancedSearchService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a custom shortcode block.
@@ -18,8 +21,39 @@ use Drupal\Core\Database\Query\Condition;
  * )
  */
 
-class CollectorSystemsExhibitions extends BlockBase {
+class CollectorSystemsExhibitions extends BlockBase implements ContainerFactoryPluginInterface {
 
+  /**
+   * The advanced search service.
+   *
+   * @var \Drupal\collector_systems\AdvancedSearchService
+   */
+  protected $advancedSearch;
+
+  /**
+   * Constructs a new CollectorSystemsExhibitions object.
+   *
+   * @param array $configuration
+   * @param string $plugin_id
+   * @param mixed $plugin_definition
+   * @param \Drupal\collector_systems\AdvancedSearchService $advanced_search
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, AdvancedSearchService $advanced_search) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->advancedSearch = $advanced_search;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('collector_systems.advanced_search_service')
+    );
+  }
 
  /**
    * {@inheritdoc}
@@ -49,53 +83,75 @@ class CollectorSystemsExhibitions extends BlockBase {
     $loadsec=1;
 
     $exhibition_table = "collector_systems_exhibitions";
-
-    // Fetch Count From the Database
-    $query = Database::getConnection()->select($exhibition_table, 'a');
-    $query->addExpression('COUNT(*)');
-    $count = $query->execute()->fetchField();
-
     $database = Database::getConnection();
 
-    //Fetch Exhibition Data from Database
+    switch ($dataorderby) {
+      case 'ExhibitionStartDate%20asc':
+        $sortColumn = 'ExhibitionStartDate';
+        $sortOrder = 'ASC';
+        break;
+      case 'ExhibitionEndDate%20desc':
+        $sortColumn = 'ExhibitionEndDate';
+        $sortOrder = 'DESC';
+        break;
+      case 'ExhibitionEndDate%20asc':
+        $sortColumn = 'ExhibitionEndDate';
+        $sortOrder = 'ASC';
+        break;
+      case 'ExhibitionSubject%20desc':
+        $sortColumn = 'ExhibitionSubject';
+        $sortOrder = 'DESC';
+        break;
+      case 'ExhibitionSubject%20asc':
+        $sortColumn = 'ExhibitionSubject';
+        $sortOrder = 'ASC';
+        break;
+      case 'ExhibitionStartDate%20desc':
+      default:
+        $sortColumn = 'ExhibitionStartDate';
+        $sortOrder = 'DESC';
+        break;
+    }
+
+    // Build one query with all conditions + ordering applied, then derive
+    // the count query from it (rather than a separate, unconditioned count
+    // query) so the displayed total always matches what's actually filtered.
     $query = $database->select($exhibition_table, 'et');
     $query->fields('et');
 
-
-    if($dataorderby === 'ExhibitionStartDate%20desc') {
-      $query->orderBy('ExhibitionStartDate', 'DESC');
-    } elseif($dataorderby === 'ExhibitionStartDate%20asc') {
-      $query->orderBy('ExhibitionStartDate', 'ASC');
-    } elseif($dataorderby === 'ExhibitionEndDate%20desc') {
-      $query->orderBy('ExhibitionEndDate', 'DESC');
-    } elseif($dataorderby === 'ExhibitionEndDate%20asc') {
-      $query->orderBy('ExhibitionEndDate', 'ASC');
-    } elseif($dataorderby === 'ExhibitionSubject%20desc') {
-      $query->orderBy('ExhibitionSubject', 'DESC');
-    } elseif($dataorderby === 'ExhibitionSubject%20asc') {
-      $query->orderBy('ExhibitionSubject', 'ASC');
-    }   
-
-    // Additional steps as needed for your specific use case.
-    $query->range(0, $showrec);
-    // Execute the query.
-    $result = $query->execute();
-
-    // Use an alternative method to limit the number of records, e.g., range.
-
-      if ($qSearch !== NULL) {
-        $query->condition('ExhibitionSubject', '%' . $database->escapeLike($qSearch) . '%', 'LIKE');
+    // Advanced Search takes priority over the plain search box (matches the
+    // WP plugin's mutual-exclusivity rule): if this request submitted the
+    // advanced panel, ignore qSearch entirely.
+    if ($this->advancedSearch->isActiveRequest()) {
+      $advanced_condition = $this->advancedSearch->buildConditionGroup($query, 'exhibitions');
+      if ($advanced_condition) {
+        $query->condition($advanced_condition);
       }
+    }
+    elseif (!empty($qSearch)) {
+      $query->condition('ExhibitionSubject', '%' . $database->escapeLike($qSearch) . '%', 'LIKE');
+    }
 
-      $query->range($shskip, $showrec);
+    $query->orderBy($sortColumn, $sortOrder);
 
-      $result = $query->execute();
+    $count_query = $query->countQuery();
+    $count = $count_query->execute()->fetchField();
 
-      // Fetch the results as objects.
-      $all_exhibitions = $result->fetchAll(\PDO::FETCH_OBJ);
-
+    $query->range($shskip, $showrec);
+    $all_exhibitions = $query->execute()->fetchAll(\PDO::FETCH_OBJ);
 
     $showImagesOnListPages =  \Drupal::config('collector_systems.settings')->get('show_images_exhibitions');
+
+    $advanced_search_fields = $this->advancedSearch->getFields('exhibitions');
+    $build_advanced_search = [
+      'fields' => $advanced_search_fields,
+      'active' => $this->advancedSearch->isActiveRequest(),
+      'values' => $this->advancedSearch->getSubmittedValues('exhibitions'),
+      'sort_by' => $dataorderby,
+      'data_id' => NULL,
+      'clear_url' => \Drupal::request()->getPathInfo(),
+    ];
+
     $build = [
       '#theme' => 'exhibitions-list-page',
       '#all_exhibitions' => $all_exhibitions,
@@ -105,6 +161,7 @@ class CollectorSystemsExhibitions extends BlockBase {
       '#dataorderby' => $dataorderby,
       '#current_page' => $current_page,
       '#qSearch' => $qSearch,
+      '#advanced_search' => $build_advanced_search,
       '#loadsec' => $loadsec,
       '#requested_pageNo' => $requested_pageNo,
       '#showImagesOnListPages' => $showImagesOnListPages,

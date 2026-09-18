@@ -8,13 +8,34 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Database\Query\Condition;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig\Environment;
 use Drupal\collector_systems\Csconstants;
+use Drupal\collector_systems\ObjectsService;
+use Drupal\collector_systems\AdvancedSearchService;
 
 
 class AjaxRequestsController extends ControllerBase
 {
+
+  /**
+   * The allow-listed values for the object list "order by" parameter.
+   *
+   * Mirrors the literal comparisons in query_sort_objects_list() so invalid
+   * values are rejected at the request boundary, before they can reach the
+   * HTML/link-building code in CustomTwig.php.
+   */
+  const ALLOWED_ORDER_BY = [
+    'Title%20desc',
+    'Title%20asc',
+    'InventoryNumber%20asc',
+    'InventoryNumber%20desc',
+    'ObjectDate%20desc',
+    'ObjectDate%20asc',
+    'Collection/CollectionName%20asc',
+    'Collection/CollectionName%20desc',
+  ];
 
   /**
    * The Twig environment.
@@ -23,35 +44,63 @@ class AjaxRequestsController extends ControllerBase
    */
   protected $twig;
 
-  public function __construct(Environment $twig)
+  /**
+   * The objects service.
+   *
+   * @var \Drupal\collector_systems\ObjectsService
+   */
+  protected $objectsService;
+
+  /**
+   * The advanced search service.
+   *
+   * @var \Drupal\collector_systems\AdvancedSearchService
+   */
+  protected $advancedSearch;
+
+  /**
+   * A request stack symfony instance.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  public function __construct(Environment $twig, ObjectsService $objects_service, AdvancedSearchService $advanced_search, RequestStack $request_stack)
   {
     $this->twig = $twig;
+    $this->objectsService = $objects_service;
+    $this->advancedSearch = $advanced_search;
+    $this->requestStack = $request_stack;
   }
 
   public static function create(ContainerInterface $container)
   {
     return new static(
-      $container->get('twig')
+      $container->get('twig'),
+      $container->get('collector_systems.objects_service'),
+      $container->get('collector_systems.advanced_search_service'),
+      $container->get('request_stack')
     );
   }
 
 
   public function groupLevelObjects_searching_page()
   {
+    $request = $this->requestStack->getCurrentRequest();
 
     $groupLevelSearchHtml = "";
-    $Spage = strip_tags($_POST['pagename']);
+    $Spage = strip_tags(trim($request->request->get('pagename', '')));
 
-    $groupTypeId = $_POST['groupTypeId'];
-    $groupLevelTopCount = $_POST['groupLevelTopCount'];
-    $groupLevelSkipCount = $_POST['groupLevelSkipCount'] ?? 0;
-    $groupLevelOrderBy = $_POST['groupLevelOrderBy'];
-    $groupLevelSearch = trim($_POST['searchWord']);
+    $groupTypeId = $request->request->getInt('groupTypeId');
+    $groupLevelTopCount = $request->request->getInt('groupLevelTopCount');
+    $groupLevelSkipCount = $request->request->getInt('groupLevelSkipCount', 0);
+    $groupLevelOrderBy = $request->request->get('groupLevelOrderBy', '');
+    if (!in_array($groupLevelOrderBy, self::ALLOWED_ORDER_BY, TRUE)) {
+      $groupLevelOrderBy = '';
+    }
+    $groupLevelSearch = trim($request->request->get('searchWord', ''));
 
-    $collectionLeftExtent = $_POST['collectionLeftExtent'];
-    $collectionRightExtent = $_POST['collectionRightExtent'];
-
-    $groupLevelPageNo = $_POST['groupLevelPageNoValue'] ?? 1;
+    $groupLevelPageNo = max(1, $request->request->getInt('groupLevelPageNoValue', 1));
 
     $loadsec = 1;
     $customized_fields = $this->getCommaSeparatedFieldsForSearch();
@@ -74,15 +123,24 @@ class AjaxRequestsController extends ControllerBase
         ->fields('o') // Specify the fields you want to select
         ->condition('o.ArtistId', $artistId);
 
+      // Advanced Search takes priority over the plain search box (matches
+      // the WP plugin's mutual-exclusivity rule): if this request submitted
+      // the advanced panel, ignore the plain search word entirely.
+      if ($this->advancedSearch->isActiveRequest()) {
+        $advanced_condition = $this->advancedSearch->buildConditionGroup($query, 'artist-detail');
+        if ($advanced_condition) {
+          $query->condition($advanced_condition);
+        }
+      }
       // search filter
-      if ($qSearch !== NULL && count($customized_fields_array) > 0) {
+      elseif ($qSearch !== NULL && count($customized_fields_array) > 0) {
         // Apply search conditions if needed.
         if (!empty($customized_fields_array) && !empty($qSearch)) {
           $escaped_search = '%' . $connection->escapeLike($qSearch) . '%';
           $or_condition_group = $query->orConditionGroup();
 
           // Get the column names for objects table
-          $object_columns = $this->cs_get_table_columns($object_table);
+          $object_columns = $this->objectsService->cs_get_table_columns($object_table);
           // we only need to search objects table columns field because selected fields data are from objects table only.
           foreach ($customized_fields_array as $field) {
             if (in_array($field, $object_columns, true)) {
@@ -96,7 +154,7 @@ class AjaxRequestsController extends ControllerBase
 
           $query->condition($or_condition_group);
         }
-        
+
       }
 
       $query->range($groupLevelSkipCount, $groupLevelTopCount);
@@ -157,16 +215,24 @@ class AjaxRequestsController extends ControllerBase
       $query->fields('o');
       $query->condition('eo.ExhibitionId', $exhibitionID);
 
-
+      // Advanced Search takes priority over the plain search box (matches
+      // the WP plugin's mutual-exclusivity rule): if this request submitted
+      // the advanced panel, ignore the plain search word entirely.
+      if ($this->advancedSearch->isActiveRequest()) {
+        $advanced_condition = $this->advancedSearch->buildConditionGroup($query, 'exhibition-detail');
+        if ($advanced_condition) {
+          $query->condition($advanced_condition);
+        }
+      }
       // search filter
-      if ($qSearch !== NULL && count($customized_fields_array) > 0) {
+      elseif ($qSearch !== NULL && count($customized_fields_array) > 0) {
         // Apply search conditions if needed.
         if (!empty($customized_fields_array) && !empty($qSearch)) {
           $escaped_search = '%' . $connection->escapeLike($qSearch) . '%';
           $or_condition_group = $query->orConditionGroup();
 
           // Get the column names for objects table
-          $object_columns = $this->cs_get_table_columns($object_table);
+          $object_columns = $this->objectsService->cs_get_table_columns($object_table);
           // we only need to search objects table columns field because selected fields data are from objects table only.
           foreach ($customized_fields_array as $field) {
             if (in_array($field, $object_columns, true)) {
@@ -180,9 +246,8 @@ class AjaxRequestsController extends ControllerBase
 
           $query->condition($or_condition_group);
         }
-        
-      }
 
+      }
 
       $query->range($groupLevelSkipCount, $groupLevelTopCount);
 
@@ -249,15 +314,24 @@ class AjaxRequestsController extends ControllerBase
       $query->join($object_table, 'o', 'eo.ObjectId = o.ObjectId');
       $query->fields('o');
 
+      // Advanced Search takes priority over the plain search box (matches
+      // the WP plugin's mutual-exclusivity rule): if this request submitted
+      // the advanced panel, ignore the plain search word entirely.
+      if ($this->advancedSearch->isActiveRequest()) {
+        $advanced_condition = $this->advancedSearch->buildConditionGroup($query, 'group-detail');
+        if ($advanced_condition) {
+          $query->condition($advanced_condition);
+        }
+      }
       // search filter
-      if ($qSearch !== NULL && count($customized_fields_array) > 0) {
+      elseif ($qSearch !== NULL && count($customized_fields_array) > 0) {
         // Apply search conditions if needed.
         if (!empty($customized_fields_array) && !empty($qSearch)) {
           $escaped_search = '%' . $connection->escapeLike($qSearch) . '%';
           $or_condition_group = $query->orConditionGroup();
 
           // Get the column names for objects table
-          $object_columns = $this->cs_get_table_columns($object_table);
+          $object_columns = $this->objectsService->cs_get_table_columns($object_table);
           // we only need to search objects table columns field because selected fields data are from objects table only.
           foreach ($customized_fields_array as $field) {
             if (in_array($field, $object_columns, true)) {
@@ -271,7 +345,7 @@ class AjaxRequestsController extends ControllerBase
 
           $query->condition($or_condition_group);
         }
-        
+
       }
 
       $query->range($groupLevelSkipCount, $groupLevelTopCount);
@@ -347,15 +421,24 @@ class AjaxRequestsController extends ControllerBase
       $query->fields('o');
       $query->fields('c');
 
+      // Advanced Search takes priority over the plain search box (matches
+      // the WP plugin's mutual-exclusivity rule): if this request submitted
+      // the advanced panel, ignore the plain search word entirely.
+      if ($this->advancedSearch->isActiveRequest()) {
+        $advanced_condition = $this->advancedSearch->buildConditionGroup($query, 'collection-detail');
+        if ($advanced_condition) {
+          $query->condition($advanced_condition);
+        }
+      }
       // search filter
-      if ($qSearch !== NULL && count($customized_fields_array) > 0) {
+      elseif ($qSearch !== NULL && count($customized_fields_array) > 0) {
         // Apply search conditions if needed.
         if (!empty($customized_fields_array) && !empty($qSearch)) {
           $escaped_search = '%' . $connection->escapeLike($qSearch) . '%';
           $or_condition_group = $query->orConditionGroup();
 
           // Get the column names for objects table
-          $object_columns = $this->cs_get_table_columns($object_table);
+          $object_columns = $this->objectsService->cs_get_table_columns($object_table);
           // we only need to search objects table columns field because selected fields data are from objects table only.
           foreach ($customized_fields_array as $field) {
             if (in_array($field, $object_columns, true)) {
@@ -369,7 +452,7 @@ class AjaxRequestsController extends ControllerBase
 
           $query->condition($or_condition_group);
         }
-        
+
       }
 
       $count_query = $query->countQuery();
@@ -729,9 +812,8 @@ class AjaxRequestsController extends ControllerBase
     'User-Agent: cosydrupal',
     );
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    //for debug only!
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
     $data = curl_exec($curl);
     curl_close($curl);
@@ -785,9 +867,8 @@ class AjaxRequestsController extends ControllerBase
       'User-Agent: cosydrupal',
       );
       curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-      //for debug only!
-      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
       $data = curl_exec($curl);
       curl_close($curl);
@@ -842,9 +923,8 @@ class AjaxRequestsController extends ControllerBase
       'User-Agent: cosydrupal',
       );
       curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-      //for debug only!
-      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
       $data = curl_exec($curl);
       curl_close($curl);
@@ -897,9 +977,8 @@ class AjaxRequestsController extends ControllerBase
       'User-Agent: cosydrupal',
       );
       curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-      //for debug only!
-      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
       $data = curl_exec($curl);
       curl_close($curl);
@@ -948,9 +1027,8 @@ class AjaxRequestsController extends ControllerBase
       'User-Agent: cosydrupal',
       );
       curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-      //for debug only!
-      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
       $data = curl_exec($curl);
       curl_close($curl);
@@ -1002,34 +1080,6 @@ class AjaxRequestsController extends ControllerBase
 
   }
 
-  /**
-  * Get column names for a given database table (prefix-aware, Drupal 10+).
-  *
-  * @param string $table_name
-  *   The base table name (without prefix), e.g. 'collector_systems_objects'.
-  *
-  * @return array
-  *   A simple array of column names.
-  */
-  function cs_get_table_columns($table_name) {
-    $connection = \Drupal::database();
-    $prefix = $connection->getPrefix();
-    $prefixed_table = $prefix . $table_name;
-
-    try {
-      // Use SHOW COLUMNS — faster and no INFORMATION_SCHEMA permission issues.
-      $result = $connection->query("SHOW COLUMNS FROM `$prefixed_table`")->fetchAll();
-      return array_map(static fn($row) => $row->Field, $result);
-    }
-    catch (\Exception $e) {
-      \Drupal::logger('collector_systems')->error(
-        'Error fetching columns for table @table: @message',
-        ['@table' => $prefixed_table, '@message' => $e->getMessage()]
-      );
-      return [];
-    }
-  }
-
   public function artistsLoadMore() {
     $request    = \Drupal::request();
     $config     = \Drupal::config('collector_systems.settings');
@@ -1049,26 +1099,37 @@ class AjaxRequestsController extends ControllerBase
     $db    = Database::getConnection();
     $table = 'collector_systems_artists';
 
-    $countQuery = $db->select($table, 'a');
-    $countQuery->addExpression('COUNT(*)');
-    if (!empty($char)) {
-      $countQuery->condition('ArtistName', $db->escapeLike($char) . '%', 'LIKE');
-    }
-    if (!empty($qSearch)) {
-      $countQuery->condition('ArtistName', '%' . $db->escapeLike($qSearch) . '%', 'LIKE');
-    }
-    $totalCount = (int) $countQuery->execute()->fetchField();
-
+    // Build one query with all conditions + ordering applied, then derive
+    // the count query from it, so the displayed total always matches what's
+    // actually filtered.
     $query = $db->select($table, 'a');
     $query->fields('a');
-    $query->range($shskip, $pageSize);
+
+    // The A-Z letter filter is a separate axis from search (which letter
+    // subset), so it stays combinable with either search mode.
     if (!empty($char)) {
       $query->condition('ArtistName', $db->escapeLike($char) . '%', 'LIKE');
     }
-    if (!empty($qSearch)) {
+
+    // Advanced Search takes priority over the plain search box (matches the
+    // WP plugin's mutual-exclusivity rule): if this request submitted the
+    // advanced panel, ignore qSearch entirely.
+    if ($this->advancedSearch->isActiveRequest()) {
+      $advanced_condition = $this->advancedSearch->buildConditionGroup($query, 'artists');
+      if ($advanced_condition) {
+        $query->condition($advanced_condition);
+      }
+    }
+    elseif (!empty($qSearch)) {
       $query->condition('ArtistName', '%' . $db->escapeLike($qSearch) . '%', 'LIKE');
     }
+
     $query->orderBy('ArtistName', $sortDir);
+
+    $countQuery = $query->countQuery();
+    $totalCount = (int) $countQuery->execute()->fetchField();
+
+    $query->range($shskip, $pageSize);
     $artists = $query->execute()->fetchAll();
 
     // Group by first letter.

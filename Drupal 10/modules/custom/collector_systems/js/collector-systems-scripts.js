@@ -14,6 +14,24 @@
 
 
 
+// Advanced Search state lives in the current URL's query string
+// (advSearch=1&adv_*=...); carry it through page/sort navigation the same
+// way qSearch already is, or it silently drops the moment the user pages
+// or re-sorts. Deliberately not read by the plain-search functions
+// (searchingForGroupLevelObjects, applySearchToTopLevelTabs,
+// clearSearchData) -- submitting the plain search box or clearing it is
+// meant to exit Advanced Search mode, not combine with it.
+function csGetAdvSearchParamsFromUrl() {
+  var out = {};
+  var params = new URLSearchParams(window.location.search);
+  params.forEach(function (value, key) {
+    if (key === 'advSearch' || key.indexOf('adv_') === 0) {
+      out[key] = value;
+    }
+  });
+  return out;
+}
+
 function getmoredetailsForArtist(artistactionurl,str){
   $durl = artistactionurl+"/artist-detail?dataId="+str;
   window.location.href= $durl;
@@ -102,7 +120,7 @@ jQuery.ajax({
     url: origin+'/v1/group-level-objects-searching-page',
     type: 'POST',
     dataType: 'json',
-    data: {
+    data: jQuery.extend({
       action: 'groupLevelObjects_searching_page',
       pagename:pagenamevalue,
       groupTypeId:groupTypeId,
@@ -112,7 +130,7 @@ jQuery.ajax({
       groupLevelTopCount:pagetopvalue,
       groupLevelSkipCount:pageskipvalue,
       groupLevelOrderBy:groupLevelOrderBy,
-      groupLevelSearch:searchValue},
+      groupLevelSearch:searchValue}, csGetAdvSearchParamsFromUrl()),
     success: function(data) {
         document.getElementById("groupLevelOrderBy").value =  document.getElementById("dlGroupLevelObjectsOrderBy").value;
         jQuery('#groupLevelObjectsData').html(data.groupLevelSearchHtml);
@@ -132,9 +150,6 @@ return false;
 function applySorting(){
   var baseUrl = window.location.origin + window.location.pathname ;
 
-
-  var pagingUrl = "";
-
   var searchValue=document.getElementById("searchindata").value;
   var sortByValue=document.getElementById("seldataorderby").value;
   var pagerec=document.getElementById("totrec").value;
@@ -148,22 +163,25 @@ function applySorting(){
     searchValue = encodeURIComponent(searchValue);
   }
 
-  if(sortByValue != "" && searchValue == "")
-  {
-    pagingUrl = baseUrl+"?sortBy="+sortByValue;
+  var parts = [];
+  if (sortByValue != "") {
+    parts.push("sortBy=" + sortByValue);
   }
-  if(sortByValue == "" && searchValue != "")
-  {
-    pagingUrl = baseUrl+"?qSearch="+searchValue;
+
+  // Advanced Search takes priority over the plain search box (matches the
+  // mutual-exclusivity rule everywhere else): carry advSearch/adv_* through
+  // if active, otherwise fall back to qSearch as before.
+  var advParams = csGetAdvSearchParamsFromUrl();
+  var advParamKeys = Object.keys(advParams);
+  if (advParamKeys.length > 0) {
+    advParamKeys.forEach(function (key) {
+      parts.push(key + "=" + encodeURIComponent(advParams[key]));
+    });
+  } else if (searchValue != "") {
+    parts.push("qSearch=" + searchValue);
   }
-  if(sortByValue != "" && searchValue != "")
-  {
-    pagingUrl = baseUrl+"?sortBy="+sortByValue+"&qSearch="+searchValue;
-  }
-  if(sortByValue == "" && searchValue == "")
-  {
-    pagingUrl = baseUrl;
-  }
+
+  var pagingUrl = parts.length > 0 ? baseUrl + "?" + parts.join("&") : baseUrl;
   window.location.href = pagingUrl;
 }
 
@@ -275,7 +293,7 @@ jQuery.ajax({
     url: origin+'/v1/group-level-objects-searching-page',
     type: 'POST',
     dataType: 'json',
-    data: {
+    data: jQuery.extend({
       action: 'groupLevelObjects_searching_page',
       pagename:pagenamevalue,
       groupTypeId:groupTypeId,
@@ -285,7 +303,7 @@ jQuery.ajax({
       groupLevelSkipCount:pageskipvalue,
       groupLevelOrderBy:selordrtype,
       searchWord:searchValue
-    },
+    }, csGetAdvSearchParamsFromUrl()),
     success: function(data) {
       jQuery('#groupLevelObjectsData').html(data.groupLevelSearchHtml);
       //document.getElementById("groupLevelTotalCount").value = document.getElementById("hdnTotalGroupLevelObjectCount").value;

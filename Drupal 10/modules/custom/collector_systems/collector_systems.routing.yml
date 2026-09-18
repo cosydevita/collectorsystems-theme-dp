@@ -100,11 +100,11 @@ collector_systems.artists_load_more:
   options:
     no_cache: true
 collector_systems.sync_queue_process:
-  path: '/collector-systems/sync-queue-process'
+  path: '/collector-systems/sync-queue-process/{key}'
   defaults:
     _controller: '\Drupal\collector_systems\Controller\SyncQueueProcessController::run'
   requirements:
-    _access: 'TRUE'
+    _custom_access: '\Drupal\collector_systems\Controller\SyncQueueProcessController::access'
 collector_systems.save_checkbox_options_data_type:
   path: '/collector-systems/save-checkbox-options-data-type'
   defaults:

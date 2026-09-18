@@ -1,0 +1,64 @@
+{#
+/**
+ * @file
+ * Advanced Search: icon-only toggle + popover panel with one input per
+ * searchable field for the current page. Included alongside
+ * search-form.html.twig; renders nothing when Advanced Search is disabled
+ * or the page has no searchable fields (see AdvancedSearchService).
+ *
+ * Expects a single `advanced_search` variable:
+ * - fields: array of field definitions (key, label, type, ...)
+ * - active: bool, whether this request submitted the advanced panel
+ * - values: submitted adv_* values, keyed by request parameter name
+ * - sort_by: current sort value, round-tripped as a hidden field
+ * - data_id: parent record id on detail pages, round-tripped as a hidden
+ *   field and appended to clear_url (unset/NULL on list pages)
+ * - clear_url: URL to return to with no adv_* params
+ */
+#}
+{% if advanced_search.fields is not empty %}
+  <details class="cs-advanced-search-toggle"{{ advanced_search.active ? ' open' : '' }}>
+    <summary class="cs-advanced-search-toggle-icon" aria-label="{{ 'Advanced search'|t }}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="10" cy="10" r="7"></circle>
+        <line x1="10" y1="7" x2="10" y2="13"></line>
+        <line x1="7" y1="10" x2="13" y2="10"></line>
+        <line x1="20" y1="20" x2="15.4" y2="15.4"></line>
+      </svg>
+    </summary>
+    <div class="cs-advanced-search-panel">
+      <form class="cs-advanced-search-form" method="get" action="">
+        <input type="hidden" name="advSearch" value="1">
+        {% if advanced_search.sort_by %}
+          <input type="hidden" name="sortBy" value="{{ advanced_search.sort_by }}">
+        {% endif %}
+        {% if advanced_search.data_id %}
+          <input type="hidden" name="dataId" value="{{ advanced_search.data_id }}">
+        {% endif %}
+        <div class="cs-advanced-search-fields">
+          {% for field in advanced_search.fields %}
+            {% if field.type == 'daterange' %}
+              <div class="cs-advanced-search-field cs-advanced-search-field--daterange">
+                <label>{{ field.label }}</label>
+                <div class="cs-advanced-search-daterange">
+                  <input type="date" name="adv_{{ field.key }}_from" value="{{ advanced_search.values['adv_' ~ field.key ~ '_from'] }}" placeholder="{{ 'From'|t }}">
+                  <span class="cs-advanced-search-daterange-sep">{{ 'to'|t }}</span>
+                  <input type="date" name="adv_{{ field.key }}_to" value="{{ advanced_search.values['adv_' ~ field.key ~ '_to'] }}" placeholder="{{ 'To'|t }}">
+                </div>
+              </div>
+            {% else %}
+              <div class="cs-advanced-search-field">
+                <label for="adv_{{ field.key }}">{{ field.label }}</label>
+                <input type="text" id="adv_{{ field.key }}" name="adv_{{ field.key }}" value="{{ advanced_search.values['adv_' ~ field.key] }}">
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="cs-advanced-search-actions">
+          <a class="btn cs-advanced-search-clear" href="{{ advanced_search.clear_url }}">{{ 'Clear'|t }}</a>
+          <button type="submit" class="btn cs-advanced-search-submit">{{ 'Search'|t }}</button>
+        </div>
+      </form>
+    </div>
+  </details>
+{% endif %}
