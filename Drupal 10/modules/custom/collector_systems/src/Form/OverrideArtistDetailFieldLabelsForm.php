@@ -96,6 +96,7 @@ class OverrideArtistDetailFieldLabelsForm extends ConfigFormBase {
         '#title_display' => 'invisible',
         '#default_value' => $overrides[$fieldname] ?? '',
         '#maxlength' => 150,
+        '#attributes' => ['placeholder' => $default],
       ];
     }
 
