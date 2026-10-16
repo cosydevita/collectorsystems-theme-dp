@@ -3,5 +3,8 @@
 
 <form class="search-form" onsubmit="return chksearchfordata('{{ pagename }}');">
   <input id="searchindata" type="search" class="expand-search" autocomplete="off" name="" value="{{ qSearch }}" placeholder="Search...">
-  <span id="clearInputText" class="clear-search" onclick="return clearSearchData('{{ pagename }}');">&times;</span>
+  <span id="clearInputText" class="clear-search" role="button" aria-label="{{ 'Clear search'|t }}" title="{{ 'Clear search'|t }}" onmousedown="event.preventDefault();" onclick="return clearSearchData('{{ pagename }}');">&times;</span>
+  {% if qSearch %}
+    <span class="cs-search-active-dot" aria-hidden="true"></span>
+  {% endif %}
 </form>

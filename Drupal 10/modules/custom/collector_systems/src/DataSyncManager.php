@@ -286,7 +286,7 @@ class DataSyncManager {
       }
 
 
-      // Derive flat text mirrors of AdditionalAuthors/Creators/Publishers for
+      // Derive flat text mirrors of AdditionalArtists/ArtistMakers/Authors/Creators/Publishers for
       // sorting/searching/display, matching the raw JSON columns above.
       if (in_array('AdditionalAuthors', $field_names)) {
         $AdditionalAuthorsText = '';
@@ -327,6 +327,34 @@ class DataSyncManager {
         }
         if (!empty($AdditionalPublishersText)) {
           $combinedObjectValues['AdditionalPublishersText'] = rtrim($AdditionalPublishersText, ', ');
+        }
+      }
+
+      if (in_array('AdditionalArtists', $field_names)) {
+        $AdditionalArtistsText = '';
+        if (isset($value['AdditionalArtists']) && is_array($value['AdditionalArtists'])) {
+          foreach ($value['AdditionalArtists'] as $additional_artist) {
+            if (isset($additional_artist['Artist']['ArtistName'])) {
+              $AdditionalArtistsText .= $additional_artist['Artist']['ArtistName'] . ', ';
+            }
+          }
+        }
+        if (!empty($AdditionalArtistsText)) {
+          $combinedObjectValues['AdditionalArtistsText'] = rtrim($AdditionalArtistsText, ', ');
+        }
+      }
+
+      if (in_array('AdditionalArtistMakers', $field_names)) {
+        $AdditionalArtistMakersText = '';
+        if (isset($value['AdditionalArtistMakers']) && is_array($value['AdditionalArtistMakers'])) {
+          foreach ($value['AdditionalArtistMakers'] as $additional_maker) {
+            if (isset($additional_maker['ArtistMaker']['ArtistName'])) {
+              $AdditionalArtistMakersText .= $additional_maker['ArtistMaker']['ArtistName'] . ', ';
+            }
+          }
+        }
+        if (!empty($AdditionalArtistMakersText)) {
+          $combinedObjectValues['AdditionalArtistMakersText'] = rtrim($AdditionalArtistMakersText, ', ');
         }
       }
 
@@ -1116,6 +1144,14 @@ class DataSyncManager {
           'not null' => FALSE,
         ],
         'AdditionalPublishersText' => [
+          'type' => 'text',
+          'not null' => FALSE,
+        ],
+        'AdditionalArtistsText' => [
+          'type' => 'text',
+          'not null' => FALSE,
+        ],
+        'AdditionalArtistMakersText' => [
           'type' => 'text',
           'not null' => FALSE,
         ],

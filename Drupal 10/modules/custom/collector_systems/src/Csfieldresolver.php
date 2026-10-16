@@ -223,12 +223,36 @@ class Csfieldresolver {
   }
 
   /**
-   * The single canonical label resolver for the whole module.
+   * Gets the site admin's configured label override for one field, or NULL
+   * if none is set.
    *
-   * Prefers the DB-stored, admin-customized label (set via the object detail
-   * fields settings form), falling back to the static
-   * Csconstants::{field}FieldLabel constant, falling back to $fallback (or
-   * the raw field key if no fallback is given).
+   * Overrides are stored separately from the selected-fields tables (see
+   * the Override Labels tab on each "Customize ... Fields" settings page),
+   * so the original default label is never overwritten and clearing an
+   * override always cleanly reverts to it.
+   *
+   * @param string $bucket
+   *   One of 'object_detail', 'artist_detail', 'object_list'.
+   * @param string $object_field
+   *   The field machine name.
+   *
+   * @return string|null
+   *   The override text, or NULL if none is set for this field.
+   */
+  public static function getLabelOverride(string $bucket, string $object_field): ?string {
+    $overrides = \Drupal::config('collector_systems.field_label_overrides')->get($bucket) ?? [];
+    return !empty($overrides[$object_field]) ? $overrides[$object_field] : NULL;
+  }
+
+  /**
+   * Resolves a field's default label, with no override applied.
+   *
+   * Prefers the DB-stored label (set via the object detail fields settings
+   * form), falling back to the static Csconstants::{field}FieldLabel
+   * constant, falling back to $fallback (or the raw field key if no
+   * fallback is given). Used by getLabel() itself, and by the Override
+   * Labels settings form to show what a field's label would be if no
+   * override were set.
    *
    * @param string $object_field
    *   A Csconstants::X field key.
@@ -237,9 +261,9 @@ class Csfieldresolver {
    *   constant has one. Defaults to the raw field key.
    *
    * @return string
-   *   The resolved label.
+   *   The resolved default label.
    */
-  public static function getLabel(string $object_field, ?string $fallback = NULL): string {
+  public static function getDefaultLabel(string $object_field, ?string $fallback = NULL): string {
     /** @var \Drupal\collector_systems\ObjectFieldsService $objectFieldsService */
     $objectFieldsService = \Drupal::service('customize_object_detail_fields.object_fields_service');
     $dbLabel = $objectFieldsService->getObjectFieldLabelFromDatabase($object_field);
@@ -257,6 +281,26 @@ class Csfieldresolver {
     }
 
     return $fallback ?? $object_field;
+  }
+
+  /**
+   * The single canonical label resolver for the whole module.
+   *
+   * Prefers the admin-configured override (see getLabelOverride()), falling
+   * back to the default label chain (see getDefaultLabel()).
+   *
+   * @param string $object_field
+   *   A Csconstants::X field key.
+   * @param string|null $fallback
+   *   Label to use when no override, DB label, or Csconstants::{field}
+   *   FieldLabel constant exists. Defaults to the raw field key.
+   *
+   * @return string
+   *   The resolved label.
+   */
+  public static function getLabel(string $object_field, ?string $fallback = NULL): string {
+    $override = self::getLabelOverride('object_detail', $object_field);
+    return $override ?? self::getDefaultLabel($object_field, $fallback);
   }
 
 }

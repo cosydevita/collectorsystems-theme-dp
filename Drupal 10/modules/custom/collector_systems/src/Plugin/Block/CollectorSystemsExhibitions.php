@@ -146,6 +146,7 @@ class CollectorSystemsExhibitions extends BlockBase implements ContainerFactoryP
     $build_advanced_search = [
       'fields' => $advanced_search_fields,
       'active' => $this->advancedSearch->isActiveRequest(),
+      'filtered' => $this->advancedSearch->hasActiveFilters('exhibitions'),
       'values' => $this->advancedSearch->getSubmittedValues('exhibitions'),
       'sort_by' => $dataorderby,
       'data_id' => NULL,

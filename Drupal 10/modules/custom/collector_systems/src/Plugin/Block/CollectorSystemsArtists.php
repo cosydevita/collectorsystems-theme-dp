@@ -136,6 +136,7 @@ class CollectorSystemsArtists extends BlockBase implements ContainerFactoryPlugi
     $build_advanced_search = [
       'fields' => $advanced_search_fields,
       'active' => $this->advancedSearch->isActiveRequest(),
+      'filtered' => $this->advancedSearch->hasActiveFilters('artists'),
       'values' => $this->advancedSearch->getSubmittedValues('artists'),
       'sort_by' => $dataorderby,
       'data_id' => NULL,

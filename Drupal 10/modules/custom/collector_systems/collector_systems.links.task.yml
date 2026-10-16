@@ -1,0 +1,32 @@
+customize_object_detail_fields.select_fields_tab:
+  route_name: customize_object_detail_fields.settings_form
+  title: 'Select Fields'
+  base_route: customize_object_detail_fields.settings_form
+  weight: 0
+customize_object_detail_fields.override_labels_tab:
+  route_name: customize_object_detail_fields.override_labels_form
+  title: 'Override Labels'
+  base_route: customize_object_detail_fields.settings_form
+  weight: 1
+
+customize_object_list_fields.select_fields_tab:
+  route_name: customize_object_list_fields.settings_form
+  title: 'Select Fields'
+  base_route: customize_object_list_fields.settings_form
+  weight: 0
+customize_object_list_fields.override_labels_tab:
+  route_name: customize_object_list_fields.override_labels_form
+  title: 'Override Labels'
+  base_route: customize_object_list_fields.settings_form
+  weight: 1
+
+collector_systems.customize_artist_detail_fields.select_fields_tab:
+  route_name: collector_systems.customize_artist_detail_fields
+  title: 'Select Fields'
+  base_route: collector_systems.customize_artist_detail_fields
+  weight: 0
+collector_systems.customize_artist_detail_fields.override_labels_tab:
+  route_name: collector_systems.customize_artist_detail_fields_override_labels
+  title: 'Override Labels'
+  base_route: collector_systems.customize_artist_detail_fields
+  weight: 1

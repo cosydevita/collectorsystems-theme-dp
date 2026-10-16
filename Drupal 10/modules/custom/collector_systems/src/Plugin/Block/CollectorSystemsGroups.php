@@ -121,6 +121,7 @@ class CollectorSystemsGroups extends BlockBase implements ContainerFactoryPlugin
     $build_advanced_search = [
       'fields' => $advanced_search_fields,
       'active' => $this->advancedSearch->isActiveRequest(),
+      'filtered' => $this->advancedSearch->hasActiveFilters('groups'),
       'values' => $this->advancedSearch->getSubmittedValues('groups'),
       'sort_by' => $dataorderby,
       'data_id' => NULL,

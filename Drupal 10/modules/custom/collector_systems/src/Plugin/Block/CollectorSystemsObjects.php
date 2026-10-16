@@ -277,6 +277,7 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
     $build_advanced_search = [
       'fields' => $advanced_search_fields,
       'active' => $this->advancedSearch->isActiveRequest(),
+      'filtered' => $this->advancedSearch->hasActiveFilters('objects'),
       'values' => $this->advancedSearch->getSubmittedValues('objects'),
       'sort_by' => $dataorderby,
       'data_id' => NULL,
@@ -391,29 +392,29 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
    */
   public function cs_get_sorting_params_for_objects_list($dataorderby) {
   
-      $sortParam = "Title";
+      $sortParam = "o.Title";
       $sortOrder = "DESC";
   
       // Define sorting logic
       switch ($dataorderby) {
           case "Title%20asc":
-              $sortParam = "Title";
+              $sortParam = "o.Title";
               $sortOrder = "ASC";
               break;
           case "InventoryNumber%20asc":
-              $sortParam = "InventoryNumber";
+              $sortParam = "o.InventoryNumber";
               $sortOrder = "ASC";
               break;
           case "InventoryNumber%20desc":
-              $sortParam = "InventoryNumber";
+              $sortParam = "o.InventoryNumber";
               $sortOrder = "DESC";
               break;
           case "ObjectDate%20asc":
-              $sortParam = "ObjectDate";
+              $sortParam = "o.ObjectDate";
               $sortOrder = "ASC";
               break;
           case "ObjectDate%20desc":
-              $sortParam = "ObjectDate";
+              $sortParam = "o.ObjectDate";
               $sortOrder = "DESC";
               break;
           case "FullCollectionName%20asc":
@@ -436,31 +437,39 @@ class CollectorSystemsObjects extends BlockBase  implements ContainerFactoryPlug
               break;
           case "AdditionalArtists%20asc":
               // For additional artists, we use the AdditionalArtistsText field which is a concatenated string of all additional artists for sorting purposes
-              $sortParam = "AdditionalArtistsText";
+              $sortParam = "o.AdditionalArtistsText";
               $sortOrder = "ASC";
               break;
           case "AdditionalArtists%20desc":
                  // For additional artists, we use the AdditionalArtistsText field which is a concatenated string of all additional artists for sorting purposes
-              $sortParam = "AdditionalArtistsText";
+              $sortParam = "o.AdditionalArtistsText";
               $sortOrder = "DESC";
               break;
-          case "AdditionalArtistMaker%20asc":
+          case "AdditionalArtistMakers%20asc":
               // For additional artist makers, we use the AdditionalArtistMakersText field which is a concatenated string of all additional artist makers for sorting purposes
-              $sortParam = "AdditionalArtistMakersText";
+              $sortParam = "o.AdditionalArtistMakersText";
               $sortOrder = "ASC";
               break;
-          case "AdditionalArtistMaker%20desc":
+          case "AdditionalArtistMakers%20desc":
               // For additional artist makers, we use the AdditionalArtistMakersText field which is a concatenated string of all additional artist makers for sorting purposes
-              $sortParam = "AdditionalArtistMakersText";
+              $sortParam = "o.AdditionalArtistMakersText";
               $sortOrder = "DESC";
               break;
           default:
               $decoded = rawurldecode($dataorderby);
-              [$field, $order] = explode(' ', $decoded, 2);
+              [$field, $order] = array_pad(explode(' ', $decoded, 2), 2, '');
               $sortOrder = (strtoupper($order) === 'ASC') ? 'ASC' : 'DESC';
-              // Assume field exists on objects table
+              // Sort by the field only if it is a column of the objects table.
               $sortParam = 'o.' . $field;
       }
+
+    // Fall back to Title when an objects-table sort column does not exist.
+    if (strpos($sortParam, 'o.') === 0) {
+      $object_columns = $this->objectsService->cs_get_table_columns('collector_systems_objects');
+      if (!in_array(substr($sortParam, 2), $object_columns, TRUE)) {
+        $sortParam = 'o.Title';
+      }
+    }
   
     return [$sortParam, $sortOrder];
   }

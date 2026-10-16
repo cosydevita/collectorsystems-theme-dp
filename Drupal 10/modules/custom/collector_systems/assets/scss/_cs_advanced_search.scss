@@ -42,6 +42,22 @@
     background-color: #e9ecef;
 }
 
+// Small "filter applied" badge, shared by the compact search icon (anchored to
+// .search-form) and the Advanced Search toggle icon (anchored to
+// .cs-advanced-search-toggle, which stays sized to its 28px summary even when
+// the panel is open, since the panel itself is positioned absolutely).
+.cs-search-active-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #e03131;
+    border: 1.5px solid #fff;
+    pointer-events: none;
+}
+
 .cs-advanced-search-panel {
     position: absolute;
     // Fallback (no anchor positioning support): sized/positioned against the

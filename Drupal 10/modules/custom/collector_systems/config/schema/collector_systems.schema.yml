@@ -1,0 +1,19 @@
+collector_systems.field_label_overrides:
+  type: config_object
+  label: 'Collector Systems field label overrides'
+  mapping:
+    object_detail:
+      type: sequence
+      label: 'Object Detail field label overrides'
+      sequence:
+        type: label
+    artist_detail:
+      type: sequence
+      label: 'Artist Detail field label overrides'
+      sequence:
+        type: label
+    object_list:
+      type: sequence
+      label: 'Object List field label overrides'
+      sequence:
+        type: label

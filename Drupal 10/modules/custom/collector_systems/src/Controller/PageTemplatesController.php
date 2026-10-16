@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Utility\Xss;
 use Drupal\collector_systems\AdvancedSearchService;
+use Drupal\collector_systems\Csfieldresolver;
 
 
 class PageTemplatesController extends ControllerBase
@@ -423,8 +424,12 @@ class PageTemplatesController extends ControllerBase
 
         ];
         if($Latitude && $Longitude){
+          // Resolve via Csfieldresolver, matching CollectorSystemsObjects.
+          $object_record = (array) $object;
           foreach($customized_fields_array as $customized_field){
-            $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+            if(array_key_exists($customized_field, $object_record)){
+              $locations_data['data_selected_fields'][$customized_field] = Csfieldresolver::getValue($customized_field, $object_record);
+            }
           }
           $locations[] =  $locations_data;
         }
@@ -449,6 +454,7 @@ class PageTemplatesController extends ControllerBase
     $build_advanced_search = [
       'fields' => $advanced_search_fields,
       'active' => $this->advancedSearch->isActiveRequest(),
+      'filtered' => $this->advancedSearch->hasActiveFilters('artist-detail'),
       'values' => $this->advancedSearch->getSubmittedValues('artist-detail'),
       'sort_by' => $groupLevelOrderBy,
       'data_id' => $artistId,
@@ -614,8 +620,12 @@ class PageTemplatesController extends ControllerBase
 
         ];
         if($Latitude && $Longitude){
+          // Resolve via Csfieldresolver, matching CollectorSystemsObjects.
+          $object_record = (array) $object;
           foreach($customized_fields_array as $customized_field){
-            $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+            if(array_key_exists($customized_field, $object_record)){
+              $locations_data['data_selected_fields'][$customized_field] = Csfieldresolver::getValue($customized_field, $object_record);
+            }
           }
           $locations[] =  $locations_data;
         }
@@ -641,6 +651,7 @@ class PageTemplatesController extends ControllerBase
     $build_advanced_search = [
       'fields' => $advanced_search_fields,
       'active' => $this->advancedSearch->isActiveRequest(),
+      'filtered' => $this->advancedSearch->hasActiveFilters('exhibition-detail'),
       'values' => $this->advancedSearch->getSubmittedValues('exhibition-detail'),
       'sort_by' => $groupLevelOrderBy,
       'data_id' => $exhibitionID,
@@ -800,8 +811,12 @@ class PageTemplatesController extends ControllerBase
 
         ];
         if($Latitude && $Longitude){
+          // Resolve via Csfieldresolver, matching CollectorSystemsObjects.
+          $object_record = (array) $object;
           foreach($customized_fields_array as $customized_field){
-              $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+            if(array_key_exists($customized_field, $object_record)){
+              $locations_data['data_selected_fields'][$customized_field] = Csfieldresolver::getValue($customized_field, $object_record);
+            }
           }
           $locations[] =  $locations_data;
         }
@@ -826,6 +841,7 @@ class PageTemplatesController extends ControllerBase
     $build_advanced_search = [
       'fields' => $advanced_search_fields,
       'active' => $this->advancedSearch->isActiveRequest(),
+      'filtered' => $this->advancedSearch->hasActiveFilters('group-detail'),
       'values' => $this->advancedSearch->getSubmittedValues('group-detail'),
       'sort_by' => $groupLevelOrderBy,
       'data_id' => $groupID,
@@ -991,8 +1007,12 @@ class PageTemplatesController extends ControllerBase
 
         ];
         if($Latitude && $Longitude){
+          // Resolve via Csfieldresolver, matching CollectorSystemsObjects.
+          $object_record = (array) $object;
           foreach($customized_fields_array as $customized_field){
-            $locations_data['data_selected_fields'][$customized_field] = $object->$customized_field;
+            if(array_key_exists($customized_field, $object_record)){
+              $locations_data['data_selected_fields'][$customized_field] = Csfieldresolver::getValue($customized_field, $object_record);
+            }
           }
           $locations[] =  $locations_data;
         }
@@ -1018,6 +1038,7 @@ class PageTemplatesController extends ControllerBase
     $build_advanced_search = [
       'fields' => $advanced_search_fields,
       'active' => $this->advancedSearch->isActiveRequest(),
+      'filtered' => $this->advancedSearch->hasActiveFilters('collection-detail'),
       'values' => $this->advancedSearch->getSubmittedValues('collection-detail'),
       'sort_by' => $groupLevelOrderBy,
       'data_id' => $collectionID,
@@ -1179,6 +1200,15 @@ class PageTemplatesController extends ControllerBase
     $query = $db->select('collector_systems_artists_selected_fields', 'c')
       ->fields('c', ['fieldname', 'fieldvalue'])
       ->condition('fieldtype', 'ArtistDetail');
-    return $query->execute()->fetchAll();
+    $rows = $query->execute()->fetchAll();
+
+    foreach ($rows as $row) {
+      $override = Csfieldresolver::getLabelOverride('artist_detail', $row->fieldname);
+      if ($override !== NULL) {
+        $row->fieldvalue = $override;
+      }
+    }
+
+    return $rows;
   }
 }

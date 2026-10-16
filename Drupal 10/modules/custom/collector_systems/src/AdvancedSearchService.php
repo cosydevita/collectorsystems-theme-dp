@@ -133,6 +133,27 @@ class AdvancedSearchService {
   }
 
   /**
+   * Whether Advanced Search is actually narrowing this page's results, not
+   * just whether the panel was submitted -- an empty submit shouldn't be
+   * treated as "filtered" (e.g. for a "results are filtered" UI indicator).
+   *
+   * @param string $pagename
+   *
+   * @return bool
+   */
+  public function hasActiveFilters($pagename) {
+    if (!$this->isActiveRequest()) {
+      return FALSE;
+    }
+    foreach ($this->getSubmittedValues($pagename) as $value) {
+      if ($value !== '') {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
    * Reads the submitted adv_* request values for a page's fields.
    *
    * Single source of truth for reading these values -- used both to
@@ -244,6 +265,12 @@ class AdvancedSearchService {
       ->execute()
       ->fetchCol();
 
+    $object_list_fieldnames = $this->database->select('collector_systems_clsobjects_fields', 'c')
+      ->fields('c', ['fieldname'])
+      ->condition('fieldtype', 'ObjectList')
+      ->execute()
+      ->fetchCol();
+
     $object_columns = $this->objectsService->cs_get_table_columns('collector_systems_objects');
     $collection_columns = $collection_alias !== NULL ? $this->objectsService->cs_get_table_columns('collector_systems_collections') : [];
     $artist_columns = $artist_alias !== NULL ? $this->objectsService->cs_get_table_columns('collector_systems_artists') : [];
@@ -266,7 +293,13 @@ class AdvancedSearchService {
         continue;
       }
 
+      // Fields here can come from either the Object Detail or Object List selected-fields
+      // table, so check both override buckets; object_list wins if both are set.
       $label = Csfieldresolver::getLabel($fieldname, $this->prettifyFieldName($fieldname));
+      $objectListOverride = in_array($fieldname, $object_list_fieldnames, TRUE) ? Csfieldresolver::getLabelOverride('object_list', $fieldname) : NULL;
+      if ($objectListOverride !== NULL) {
+        $label = $objectListOverride;
+      }
 
       $fields[] = [
         'key' => $fieldname,

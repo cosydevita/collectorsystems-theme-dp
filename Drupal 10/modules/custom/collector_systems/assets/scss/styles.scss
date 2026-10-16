@@ -18,6 +18,13 @@
 
 }
 
+// Positions .cs-search-active-dot. Not .cs-advanced-search-toggle -- that
+// stays position:static for the anchor-positioning branch below.
+.search-form,
+.cs-advanced-search-toggle-icon {
+  position: relative;
+}
+
 body.cs-disable-transition .collector-systems-wrapper .fadeInDown {
   transition: none !important;
   animation: none !important;

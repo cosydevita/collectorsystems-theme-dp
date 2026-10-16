@@ -9,6 +9,8 @@
  * Expects a single `advanced_search` variable:
  * - fields: array of field definitions (key, label, type, ...)
  * - active: bool, whether this request submitted the advanced panel
+ * - filtered: bool, whether the submission actually has a field filled in
+ *   (as opposed to an empty submit) -- shows the "results are filtered" dot
  * - values: submitted adv_* values, keyed by request parameter name
  * - sort_by: current sort value, round-tripped as a hidden field
  * - data_id: parent record id on detail pages, round-tripped as a hidden
@@ -17,7 +19,7 @@
  */
 #}
 {% if advanced_search.fields is not empty %}
-  <details class="cs-advanced-search-toggle"{{ advanced_search.active ? ' open' : '' }}>
+  <details class="cs-advanced-search-toggle">
     <summary class="cs-advanced-search-toggle-icon" aria-label="{{ 'Advanced search'|t }}">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="10" cy="10" r="7"></circle>
@@ -25,6 +27,9 @@
         <line x1="7" y1="10" x2="13" y2="10"></line>
         <line x1="20" y1="20" x2="15.4" y2="15.4"></line>
       </svg>
+      {% if advanced_search.filtered %}
+        <span class="cs-search-active-dot" aria-hidden="true"></span>
+      {% endif %}
     </summary>
     <div class="cs-advanced-search-panel">
       <form class="cs-advanced-search-form" method="get" action="">
